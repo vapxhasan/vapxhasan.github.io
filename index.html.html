@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+  <!-- Primary Meta Tags -->
+  <title>Hasanur Rahman — Full Stack Developer & UI/UX Designer</title>
+  <meta name="title" content="Hasanur Rahman — Full Stack Developer & UI/UX Designer" />
+  <meta name="description" content="Hasanur Rahman (vapxhasan) — Full Stack Developer and UI/UX Designer crafting high-performance web experiences. Available for freelance projects worldwide." />
+  <meta name="keywords" content="Hasanur Rahman, vapxhasan, Full Stack Developer, UI/UX Designer, Web Developer, Freelancer, Bangladesh" />
+  <meta name="author" content="Hasanur Rahman" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#080B14" />
+  <link rel="canonical" href="https://vapxhasan.github.io/" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://vapxhasan.github.io/" />
+  <meta property="og:title" content="Hasanur Rahman — Full Stack Developer & UI/UX Designer" />
+  <meta property="og:description" content="Crafting high-performance web experiences that convert visitors into clients. Available for freelance worldwide." />
+  <meta property="og:image" content="https://vapxhasan.github.io/assets/images/og-image.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://vapxhasan.github.io/" />
+  <meta name="twitter:title" content="Hasanur Rahman — Full Stack Developer & UI/UX Designer" />
+  <meta name="twitter:description" content="Crafting high-performance web experiences that convert visitors into clients." />
+  <meta name="twitter:image" content="https://vapxhasan.github.io/assets/images/og-image.png" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Hasanur Rahman",
+    "alternateName": "vapxhasan",
+    "url": "https://vapxhasan.github.io/",
+    "jobTitle": "Full Stack Developer & UI/UX Designer",
+    "description": "Full Stack Developer and UI/UX Designer crafting high-performance web experiences.",
+    "sameAs": [
+      "https://github.com/vapxhasan"
+    ],
+    "knowsAbout": ["Web Development", "UI/UX Design", "Frontend Development", "Full Stack Development"],
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Freelance Inquiries",
+      "availableLanguage": ["English"]
+    }
+  }
+  </script>
+</head>
+<body>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen" aria-hidden="true" role="presentation">
+    <div class="loader-inner">
+      <div class="loader-logo">HR</div>
+      <div class="loader-bar"><div class="loader-progress"></div></div>
+    </div>
+  </div>
+
+  <!-- Cursor -->
+  <div id="cursor" aria-hidden="true"></div>
+  <div id="cursor-follower" aria-hidden="true"></div>
+
+  <!-- Scroll Progress -->
+  <div id="scroll-progress" role="progressbar" aria-label="Page scroll progress" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+
+  <!-- Navigation -->
+  <header id="navbar" role="banner">
+    <nav class="nav-container" aria-label="Main navigation">
+      <a href="#hero" class="nav-logo" aria-label="Hasanur Rahman - Home">
+        <span class="logo-mark">HR</span>
+        <span class="logo-text">Hasanur<span class="logo-accent">.</span></span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="#about" class="nav-link" data-section="about">About</a></li>
+        <li><a href="#services" class="nav-link" data-section="services">Services</a></li>
+        <li><a href="#portfolio" class="nav-link" data-section="portfolio">Work</a></li>
+        <li><a href="#experience" class="nav-link" data-section="experience">Experience</a></li>
+        <li><a href="#testimonials" class="nav-link" data-section="testimonials">Reviews</a></li>
+        <li><a href="#contact" class="nav-link nav-cta" data-section="contact">Hire Me</a></li>
+      </ul>
+
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle mobile menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="toggle-bar"></span>
+        <span class="toggle-bar"></span>
+        <span class="toggle-bar"></span>
+      </button>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobile-menu" role="dialog" aria-label="Mobile navigation" aria-hidden="true">
+      <ul class="mobile-links" role="list">
+        <li><a href="#about" class="mobile-link">About</a></li>
+        <li><a href="#services" class="mobile-link">Services</a></li>
+        <li><a href="#portfolio" class="mobile-link">Work</a></li>
+        <li><a href="#experience" class="mobile-link">Experience</a></li>
+        <li><a href="#testimonials" class="mobile-link">Reviews</a></li>
+        <li><a href="#pricing" class="mobile-link">Pricing</a></li>
+        <li><a href="#contact" class="mobile-link mobile-link-cta">Hire Me</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- =========================================
+         HERO SECTION
+    ========================================= -->
+    <section id="hero" class="hero" aria-label="Introduction">
+      <!-- Background Effects -->
+      <div class="hero-bg" aria-hidden="true">
+        <div class="hero-glow hero-glow-1"></div>
+        <div class="hero-glow hero-glow-2"></div>
+        <div class="hero-grid"></div>
+      </div>
+
+      <div class="container">
+        <div class="hero-content">
+          <!-- Status Badge -->
+          <div class="hero-badge" role="status" aria-live="polite">
+            <span class="badge-dot" aria-hidden="true"></span>
+            <span>Available for new projects</span>
+          </div>
+
+          <!-- Headline -->
+          <h1 class="hero-title">
+            <span class="title-line">Building Digital</span>
+            <span class="title-line title-gradient">
+              <span id="typing-text" aria-live="polite" aria-atomic="true"></span><span class="typing-cursor" aria-hidden="true">|</span>
+            </span>
+            <span class="title-line">That Convert.</span>
+          </h1>
+
+          <!-- Subheadline -->
+          <p class="hero-subtitle">
+            I'm <strong>Hasanur Rahman</strong> — a Full Stack Developer & UI/UX Designer who turns ambitious ideas into high-performance, revenue-driving web experiences. 3+ years building products people actually use.
+          </p>
+
+          <!-- CTAs -->
+          <div class="hero-actions">
+            <a href="#contact" class="btn btn-primary btn-magnetic" aria-label="Start a project with Hasanur Rahman">
+              <span>Start a Project</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#portfolio" class="btn btn-ghost" aria-label="View portfolio work">
+              <span>View My Work</span>
+            </a>
+            <a href="#" class="btn btn-outline" id="download-resume" aria-label="Download resume PDF">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+              <span>Resume</span>
+            </a>
+          </div>
+
+          <!-- Trust Stats -->
+          <div class="hero-stats" role="list" aria-label="Key statistics">
+            <div class="stat-item" role="listitem">
+              <span class="stat-number" data-count="50">0</span><span class="stat-suffix">+</span>
+              <span class="stat-label">Projects Done</span>
+            </div>
+            <div class="stat-divider" aria-hidden="true"></div>
+            <div class="stat-item" role="listitem">
+              <span class="stat-number" data-count="30">0</span><span class="stat-suffix">+</span>
+              <span class="stat-label">Happy Clients</span>
+            </div>
+            <div class="stat-divider" aria-hidden="true"></div>
+            <div class="stat-item" role="listitem">
+              <span class="stat-number" data-count="3">0</span><span class="stat-suffix">+</span>
+              <span class="stat-label">Years Experience</span>
+            </div>
+            <div class="stat-divider" aria-hidden="true"></div>
+            <div class="stat-item" role="listitem">
+              <span class="stat-number" data-count="100">0</span><span class="stat-suffix">%</span>
+              <span class="stat-label">Satisfaction</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Visual -->
+        <div class="hero-visual" aria-hidden="true">
+          <div class="hero-card-stack">
+            <!-- Main card -->
+            <div class="hcard hcard-main">
+              <div class="hcard-header">
+                <div class="hcard-dots">
+                  <span></span><span></span><span></span>
+                </div>
+                <span class="hcard-label">portfolio.js</span>
+              </div>
+              <div class="hcard-body">
+                <div class="code-line"><span class="code-keyword">const</span> <span class="code-var">developer</span> <span class="code-op">=</span> {</div>
+                <div class="code-line code-indent"><span class="code-prop">name</span>: <span class="code-str">"Hasanur Rahman"</span>,</div>
+                <div class="code-line code-indent"><span class="code-prop">role</span>: <span class="code-str">"Full Stack Dev"</span>,</div>
+                <div class="code-line code-indent"><span class="code-prop">available</span>: <span class="code-bool">true</span>,</div>
+                <div class="code-line code-indent"><span class="code-prop">passion</span>: <span class="code-str">"great UX"</span></div>
+                <div class="code-line">};</div>
+              </div>
+            </div>
+            <!-- Floating cards -->
+            <div class="hcard hcard-float hcard-skill">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              <span>Full Stack</span>
+            </div>
+            <div class="hcard hcard-float hcard-ui">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#00D4FF" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+              <span>UI/UX Design</span>
+            </div>
+            <div class="hcard hcard-float hcard-perf">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+              <span>Performance</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scroll hint -->
+      <a href="#about" class="scroll-hint" aria-label="Scroll to About section">
+        <div class="scroll-wheel"></div>
+      </a>
+    </section>
+
+    <!-- =========================================
+         AVAILABILITY BANNER
+    ========================================= -->
+    <section class="availability-banner" aria-label="Availability status">
+      <div class="container">
+        <div class="avail-inner">
+          <div class="avail-left">
+            <span class="avail-dot" aria-hidden="true"></span>
+            <span>Available for freelance work</span>
+            <span class="avail-separator" aria-hidden="true">·</span>
+            <span>Response within <strong>24 hours</strong></span>
+          </div>
+          <div class="avail-right">
+            <a href="#contact" class="avail-cta">Get in Touch <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         ABOUT SECTION
+    ========================================= -->
+    <section id="about" class="section" aria-labelledby="about-heading">
+      <div class="container">
+        <div class="about-grid">
+          <!-- Visual Side -->
+          <div class="about-visual reveal-left">
+            <div class="about-img-wrap">
+              <!-- Profile SVG Illustration -->
+              <div class="about-avatar" aria-label="Hasanur Rahman - Developer illustration">
+                <svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Developer workspace illustration">
+                  <rect width="400" height="400" rx="24" fill="#111827"/>
+                  <!-- Background glow -->
+                  <ellipse cx="200" cy="200" rx="120" ry="120" fill="url(#aboutGrad)" opacity="0.15"/>
+                  <!-- Monitor -->
+                  <rect x="80" y="120" width="240" height="160" rx="12" fill="#0D1117" stroke="#1E293B" stroke-width="1.5"/>
+                  <rect x="90" y="130" width="220" height="140" rx="8" fill="#080B14"/>
+                  <!-- Code lines -->
+                  <rect x="104" y="148" width="80" height="6" rx="3" fill="#6C63FF" opacity="0.8"/>
+                  <rect x="104" y="162" width="120" height="5" rx="2.5" fill="#1E293B"/>
+                  <rect x="114" y="174" width="60" height="5" rx="2.5" fill="#00D4FF" opacity="0.6"/>
+                  <rect x="114" y="186" width="90" height="5" rx="2.5" fill="#1E293B"/>
+                  <rect x="114" y="198" width="70" height="5" rx="2.5" fill="#9B5DFF" opacity="0.6"/>
+                  <rect x="104" y="210" width="40" height="5" rx="2.5" fill="#1E293B"/>
+                  <rect x="104" y="224" width="110" height="5" rx="2.5" fill="#22C55E" opacity="0.5"/>
+                  <rect x="104" y="238" width="55" height="5" rx="2.5" fill="#1E293B"/>
+                  <!-- Monitor stand -->
+                  <rect x="185" y="280" width="30" height="20" rx="2" fill="#0D1117"/>
+                  <rect x="160" y="298" width="80" height="8" rx="4" fill="#0D1117"/>
+                  <!-- Avatar circle at bottom -->
+                  <circle cx="200" cy="355" r="30" fill="#111827" stroke="#1E293B" stroke-width="1.5"/>
+                  <circle cx="200" cy="348" r="12" fill="#6C63FF" opacity="0.7"/>
+                  <path d="M178 372 Q200 360 222 372" stroke="#6C63FF" stroke-width="2" fill="none" opacity="0.5"/>
+                  <defs>
+                    <radialGradient id="aboutGrad" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#6C63FF"/>
+                      <stop offset="100%" stop-color="#00D4FF"/>
+                    </radialGradient>
+                  </defs>
+                </svg>
+              </div>
+              <!-- Floating badges -->
+              <div class="about-badge about-badge-1">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Open to Work</span>
+              </div>
+              <div class="about-badge about-badge-2">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2" aria-hidden="true"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <span>Top Rated</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Content Side -->
+          <div class="about-content reveal-right">
+            <div class="section-label">About Me</div>
+            <h2 id="about-heading" class="section-title">Crafting Experiences,<br /><span class="text-gradient">Not Just Websites</span></h2>
+            <p class="about-text">
+              I'm a Full Stack Developer and UI/UX Designer based in Bangladesh, with 3+ years of experience building web products that balance beautiful design with engineering precision.
+            </p>
+            <p class="about-text">
+              My approach is simple: understand your users deeply, solve their problems elegantly, and deliver work that performs. Whether it's a SaaS dashboard, an e-commerce platform, or a marketing site — I build it to convert.
+            </p>
+
+            <!-- Value Points -->
+            <ul class="about-values" aria-label="Core values and approach">
+              <li class="value-item">
+                <div class="value-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                </div>
+                <div>
+                  <strong>Performance-first engineering</strong> — Every project is optimized for speed and conversion from day one.
+                </div>
+              </li>
+              <li class="value-item">
+                <div class="value-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                </div>
+                <div>
+                  <strong>On-time, every time</strong> — I treat your deadlines like they're my own.
+                </div>
+              </li>
+              <li class="value-item">
+                <div class="value-icon" aria-hidden="true">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                </div>
+                <div>
+                  <strong>Clear communication</strong> — No black boxes. You'll always know what's happening.
+                </div>
+              </li>
+            </ul>
+
+            <div class="about-actions">
+              <a href="#contact" class="btn btn-primary">Work With Me</a>
+              <a href="#portfolio" class="btn btn-ghost">See Projects</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         SERVICES SECTION
+    ========================================= -->
+    <section id="services" class="section section-alt" aria-labelledby="services-heading">
+      <div class="container">
+        <div class="section-header reveal-up">
+          <div class="section-label">What I Do</div>
+          <h2 id="services-heading" class="section-title">Services Built for<br /><span class="text-gradient">Real Results</span></h2>
+          <p class="section-subtitle">Every service is engineered to move the needle — more users, better conversions, faster growth.</p>
+        </div>
+
+        <div class="services-grid">
+
+          <article class="service-card reveal-up" style="--delay:0.1s">
+            <div class="service-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </div>
+            <h3 class="service-title">Full Stack Web Engineering</h3>
+            <p class="service-desc">End-to-end development of scalable web applications — from database architecture to polished frontend. React, Node.js, PostgreSQL, and everything in between.</p>
+            <ul class="service-features" aria-label="Service features">
+              <li>Custom Web Applications</li>
+              <li>API Design & Integration</li>
+              <li>Database Architecture</li>
+              <li>Performance Optimization</li>
+            </ul>
+            <div class="service-footer">
+              <a href="#contact" class="service-link" aria-label="Start a Full Stack project">Start a Project <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+          </article>
+
+          <article class="service-card service-card-featured reveal-up" style="--delay:0.2s">
+            <div class="service-featured-badge" aria-label="Most popular service">Most Popular</div>
+            <div class="service-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            </div>
+            <h3 class="service-title">Conversion-Focused UI/UX Design</h3>
+            <p class="service-desc">Interfaces that look stunning and drive action. From wireframes to pixel-perfect design systems, I bridge the gap between beautiful and functional.</p>
+            <ul class="service-features" aria-label="Service features">
+              <li>UI/UX Design & Prototyping</li>
+              <li>Design System Creation</li>
+              <li>User Research & Testing</li>
+              <li>Landing Page Design</li>
+            </ul>
+            <div class="service-footer">
+              <a href="#contact" class="service-link" aria-label="Start a UI/UX design project">Start a Project <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+          </article>
+
+          <article class="service-card reveal-up" style="--delay:0.3s">
+            <div class="service-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <h3 class="service-title">High-Performance Frontend Architecture</h3>
+            <p class="service-desc">Lightning-fast frontends built with clean, maintainable code. Lighthouse 95+ scores, accessibility standards, and smooth animations that delight users.</p>
+            <ul class="service-features" aria-label="Service features">
+              <li>React / Next.js Applications</li>
+              <li>Animation & Micro-interactions</li>
+              <li>Core Web Vitals Optimization</li>
+              <li>Responsive Implementation</li>
+            </ul>
+            <div class="service-footer">
+              <a href="#contact" class="service-link" aria-label="Start a frontend project">Start a Project <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+          </article>
+
+          <article class="service-card reveal-up" style="--delay:0.1s">
+            <div class="service-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+            </div>
+            <h3 class="service-title">E-Commerce & Shopify Development</h3>
+            <p class="service-desc">Revenue-optimized online stores that sell. Custom themes, seamless checkout experiences, and performance tuning to maximize your conversion rate.</p>
+            <ul class="service-features" aria-label="Service features">
+              <li>Custom Shopify Themes</li>
+              <li>WooCommerce Development</li>
+              <li>Payment Gateway Integration</li>
+              <li>CRO Optimization</li>
+            </ul>
+            <div class="service-footer">
+              <a href="#contact" class="service-link" aria-label="Start an e-commerce project">Start a Project <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+          </article>
+
+          <article class="service-card reveal-up" style="--delay:0.2s">
+            <div class="service-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </div>
+            <h3 class="service-title">SaaS Product Development</h3>
+            <p class="service-desc">Full product builds from zero — dashboards, admin panels, user authentication, and everything that makes a SaaS business run smoothly.</p>
+            <ul class="service-features" aria-label="Service features">
+              <li>MVP Development</li>
+              <li>Admin Dashboards</li>
+              <li>Auth & Subscription Systems</li>
+              <li>Third-party Integrations</li>
+            </ul>
+            <div class="service-footer">
+              <a href="#contact" class="service-link" aria-label="Start a SaaS project">Start a Project <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+          </article>
+
+          <article class="service-card reveal-up" style="--delay:0.3s">
+            <div class="service-icon" aria-hidden="true">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <h3 class="service-title">Website Audit & Optimization</h3>
+            <p class="service-desc">Already have a site but it's underperforming? I'll audit your codebase, identify bottlenecks, and deliver measurable improvements in speed and conversions.</p>
+            <ul class="service-features" aria-label="Service features">
+              <li>Performance Audit</li>
+              <li>SEO Technical Audit</li>
+              <li>UX Review & Fixes</li>
+              <li>Lighthouse Optimization</li>
+            </ul>
+            <div class="service-footer">
+              <a href="#contact" class="service-link" aria-label="Request a website audit">Get an Audit <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         SKILLS SECTION
+    ========================================= -->
+    <section id="skills" class="section" aria-labelledby="skills-heading">
+      <div class="container">
+        <div class="section-header reveal-up">
+          <div class="section-label">Tech Stack</div>
+          <h2 id="skills-heading" class="section-title">Tools of the <span class="text-gradient">Trade</span></h2>
+          <p class="section-subtitle">A curated stack built for performance, scalability, and developer experience.</p>
+        </div>
+
+        <div class="skills-categories">
+
+          <div class="skill-category reveal-up" style="--delay:0.1s">
+            <h3 class="skill-cat-title">Frontend</h3>
+            <div class="skill-tags">
+              <span class="skill-tag">HTML5</span>
+              <span class="skill-tag">CSS3</span>
+              <span class="skill-tag skill-tag-primary">JavaScript</span>
+              <span class="skill-tag skill-tag-primary">React</span>
+              <span class="skill-tag">Next.js</span>
+              <span class="skill-tag">TypeScript</span>
+              <span class="skill-tag">Tailwind CSS</span>
+              <span class="skill-tag">GSAP</span>
+              <span class="skill-tag">Framer Motion</span>
+            </div>
+          </div>
+
+          <div class="skill-category reveal-up" style="--delay:0.2s">
+            <h3 class="skill-cat-title">Backend</h3>
+            <div class="skill-tags">
+              <span class="skill-tag skill-tag-secondary">Node.js</span>
+              <span class="skill-tag skill-tag-secondary">Express.js</span>
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">REST APIs</span>
+              <span class="skill-tag">GraphQL</span>
+              <span class="skill-tag">PostgreSQL</span>
+              <span class="skill-tag">MongoDB</span>
+              <span class="skill-tag">Redis</span>
+            </div>
+          </div>
+
+          <div class="skill-category reveal-up" style="--delay:0.3s">
+            <h3 class="skill-cat-title">Design & Tools</h3>
+            <div class="skill-tags">
+              <span class="skill-tag skill-tag-accent">Figma</span>
+              <span class="skill-tag">Adobe XD</span>
+              <span class="skill-tag">Git / GitHub</span>
+              <span class="skill-tag">Docker</span>
+              <span class="skill-tag">Vercel</span>
+              <span class="skill-tag">Netlify</span>
+              <span class="skill-tag">AWS</span>
+              <span class="skill-tag">Webpack</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Skill bars -->
+        <div class="skill-bars reveal-up" style="--delay:0.2s">
+          <div class="skill-bar-item">
+            <div class="skill-bar-info">
+              <span>Frontend Development</span>
+              <span class="skill-bar-pct">95%</span>
+            </div>
+            <div class="skill-bar-track" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" aria-label="Frontend Development proficiency 95%">
+              <div class="skill-bar-fill" data-width="95"></div>
+            </div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-info">
+              <span>UI/UX Design</span>
+              <span class="skill-bar-pct">90%</span>
+            </div>
+            <div class="skill-bar-track" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" aria-label="UI/UX Design proficiency 90%">
+              <div class="skill-bar-fill" data-width="90"></div>
+            </div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-info">
+              <span>Backend Development</span>
+              <span class="skill-bar-pct">80%</span>
+            </div>
+            <div class="skill-bar-track" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" aria-label="Backend Development proficiency 80%">
+              <div class="skill-bar-fill" data-width="80"></div>
+            </div>
+          </div>
+          <div class="skill-bar-item">
+            <div class="skill-bar-info">
+              <span>Performance Optimization</span>
+              <span class="skill-bar-pct">92%</span>
+            </div>
+            <div class="skill-bar-track" role="progressbar" aria-valuenow="92" aria-valuemin="0" aria-valuemax="100" aria-label="Performance Optimization proficiency 92%">
+              <div class="skill-bar-fill" data-width="92"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =========================================
+         PORTFOLIO SECTION
+    ========================================= -->
+    <section id="portfolio" class="section section-alt" aria-labelledby="portfolio-heading">
+      <div class="container">
+        <div class="section-header reveal-up">
+          <div class="section-label">Portfolio</div>
+          <h2 id="portfolio-heading" class="section-title">Work That <span class="text-gradient">Speaks</span></h2>
+          <p class="section-subtitle">A selection of projects that demonstrate what I build and how I think.</p>
+        </div>
+
+        <!-- Filter -->
+        <div class="portfolio-filter reveal-up" role="tablist" aria-label="Portfolio filter">
+          <button class="filter-btn active" data-filter="all" role="tab" aria-selected="true">All</button>
+          <button class="filter-btn" data-filter="fullstack" role="tab" aria-selected="false">Full Stack</button>
+          <button class="filter-btn" data-filter="ui" role="tab" aria-selected="false">UI/UX</button>
+          <button class="filter-btn" data-filter="ecommerce" role="tab" aria-selected="false">E-Commerce</button>
+          <button class="filter-btn" data-filter="saas" role="tab" aria-selected="false">SaaS</button>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="portfolio-grid" id="portfolio-grid">
+
+          <!-- Project 1 -->
+          <article class="project-card reveal-up" data-category="saas" style="--delay:0.1s">
+            <div class="project-img">
+              <svg viewBox="0 0 600 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="SaaS Analytics Dashboard project preview">
+                <rect width="600" height="380" fill="#0D1117"/>
+                <rect x="20" y="20" width="560" height="50" rx="8" fill="#111827"/>
+                <rect x="40" y="35" width="100" height="20" rx="4" fill="#6C63FF" opacity="0.7"/>
+                <rect x="420" y="35" width="80" height="20" rx="10" fill="#22C55E" opacity="0.5"/>
+                <rect x="510" y="35" width="60" height="20" rx="4" fill="#1E293B"/>
+                <rect x="20" y="90" width="180" height="120" rx="8" fill="#111827"/>
+                <rect x="40" y="110" width="60" height="8" rx="4" fill="#6B7280"/>
+                <rect x="40" y="128" width="100" height="32" rx="4" fill="#6C63FF" opacity="0.9"/>
+                <rect x="40" y="170" width="60" height="8" rx="4" fill="#22C55E" opacity="0.6"/>
+                <rect x="220" y="90" width="180" height="120" rx="8" fill="#111827"/>
+                <rect x="240" y="110" width="60" height="8" rx="4" fill="#6B7280"/>
+                <rect x="240" y="128" width="100" height="32" rx="4" fill="#00D4FF" opacity="0.6"/>
+                <rect x="240" y="170" width="80" height="8" rx="4" fill="#F59E0B" opacity="0.6"/>
+                <rect x="420" y="90" width="160" height="120" rx="8" fill="#111827"/>
+                <path d="M440 180 L460 150 L480 165 L500 140 L520 155 L540 135 L560 145" stroke="#6C63FF" stroke-width="2" fill="none"/>
+                <rect x="20" y="230" width="560" height="130" rx="8" fill="#111827"/>
+                <rect x="40" y="250" width="520" height="8" rx="4" fill="#1E293B"/>
+                <rect x="40" y="270" width="400" height="6" rx="3" fill="#1E293B"/>
+                <rect x="40" y="286" width="460" height="6" rx="3" fill="#1E293B"/>
+                <rect x="40" y="302" width="350" height="6" rx="3" fill="#1E293B"/>
+                <rect x="40" y="320" width="480" height="6" rx="3" fill="#1E293B"/>
+              </svg>
+              <div class="project-overlay">
+                <button class="project-view-btn" aria-label="View SaaS Analytics Dashboard details">View Details</button>
+              </div>
+            </div>
+            <div class="project-content">
+              <div class="project-meta">
+                <span class="project-category">SaaS</span>
+                <span class="project-timeline">6 weeks</span>
+              </div>
+              <h3 class="project-title">Analytics SaaS Dashboard</h3>
+              <p class="project-desc">A real-time analytics platform with custom data visualizations, multi-tenant architecture, and role-based access control. Built from scratch for a data intelligence startup.</p>
+              <div class="project-tools">
+                <span>React</span><span>Node.js</span><span>PostgreSQL</span><span>Chart.js</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="project-card reveal-up" data-category="ecommerce" style="--delay:0.2s">
+            <div class="project-img">
+              <svg viewBox="0 0 600 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="E-Commerce Platform project preview">
+                <rect width="600" height="380" fill="#0D1117"/>
+                <rect x="0" y="0" width="600" height="60" fill="#111827"/>
+                <rect x="20" y="20" width="80" height="20" rx="4" fill="#6C63FF" opacity="0.8"/>
+                <rect x="200" y="20" width="60" height="20" rx="4" fill="#1E293B"/>
+                <rect x="280" y="20" width="60" height="20" rx="4" fill="#1E293B"/>
+                <rect x="360" y="20" width="60" height="20" rx="4" fill="#1E293B"/>
+                <rect x="480" y="15" width="100" height="30" rx="15" fill="#6C63FF"/>
+                <rect x="20" y="80" width="270" height="280" rx="8" fill="#111827"/>
+                <rect x="40" y="100" width="230" height="160" rx="6" fill="#0D1117"/>
+                <ellipse cx="155" cy="180" rx="60" ry="60" fill="#6C63FF" opacity="0.2"/>
+                <rect x="60" y="140" width="190" height="40" rx="4" fill="url(#pGrad)" opacity="0.3"/>
+                <rect x="40" y="275" width="100" height="14" rx="4" fill="#6B7280"/>
+                <rect x="40" y="298" width="150" height="24" rx="4" fill="#E6EAF2" opacity="0.9"/>
+                <rect x="40" y="330" width="80" height="10" rx="4" fill="#22C55E" opacity="0.7"/>
+                <rect x="310" y="80" width="270" height="130" rx="8" fill="#111827"/>
+                <rect x="330" y="100" width="230" height="90" rx="4" fill="#0D1117"/>
+                <rect x="350" y="115" width="60" height="8" rx="4" fill="#6B7280"/>
+                <rect x="350" y="133" width="120" height="14" rx="4" fill="#E6EAF2" opacity="0.8"/>
+                <rect x="350" y="157" width="80" height="24" rx="12" fill="#6C63FF"/>
+                <rect x="310" y="225" width="270" height="135" rx="8" fill="#111827"/>
+                <rect x="330" y="245" width="60" height="8" rx="4" fill="#6B7280"/>
+                <rect x="330" y="265" width="100" height="60" rx="4" fill="#0D1117"/>
+                <defs><linearGradient id="pGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#6C63FF"/><stop offset="100%" stop-color="#00D4FF"/></linearGradient></defs>
+              </svg>
+              <div class="project-overlay">
+                <button class="project-view-btn" aria-label="View E-Commerce Platform details">View Details</button>
+              </div>
+            </div>
+            <div class="project-content">
+              <div class="project-meta">
+                <span class="project-category">E-Commerce</span>
+                <span class="project-timeline">8 weeks</span>
+              </div>
+              <h3 class="project-title">Premium E-Commerce Platform</h3>
+              <p class="project-desc">Custom Shopify-alternative built on Next.js with advanced filtering, wishlist, real-time inventory, and a one-click checkout. Achieved 40% higher conversion than the previous store.</p>
+              <div class="project-tools">
+                <span>Next.js</span><span>Stripe</span><span>MongoDB</span><span>Vercel</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="project-card reveal-up" data-category="ui" style="--delay:0.3s">
+            <div class="project-img">
+              <svg viewBox="0 0 600 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Mobile Banking App UI project preview">
+                <rect width="600" height="380" fill="#080B14"/>
+                <rect x="175" y="20" width="250" height="340" rx="24" fill="#111827" stroke="#1E293B" stroke-width="1"/>
+                <rect x="225" y="20" width="150" height="6" rx="3" fill="#0D1117"/>
+                <rect x="190" y="50" width="220" height="310" rx="16" fill="#0D1117"/>
+                <rect x="205" y="68" width="190" height="80" rx="12" fill="#1E293B"/>
+                <rect x="218" y="84" width="70" height="8" rx="4" fill="#6B7280"/>
+                <rect x="218" y="102" width="110" height="24" rx="4" fill="#E6EAF2" opacity="0.9"/>
+                <rect x="218" y="132" width="60" height="6" rx="3" fill="#22C55E" opacity="0.6"/>
+                <rect x="205" y="160" width="90" height="80" rx="8" fill="#1E293B"/>
+                <rect x="215" y="176" width="50" height="8" rx="4" fill="#6B7280"/>
+                <rect x="215" y="196" width="65" height="20" rx="4" fill="#6C63FF" opacity="0.8"/>
+                <rect x="305" y="160" width="90" height="80" rx="8" fill="#1E293B"/>
+                <rect x="315" y="176" width="50" height="8" rx="4" fill="#6B7280"/>
+                <rect x="315" y="196" width="65" height="20" rx="4" fill="#00D4FF" opacity="0.6"/>
+                <rect x="205" y="252" width="190" height="6" rx="3" fill="#1E293B"/>
+                <rect x="205" y="268" width="190" height="30" rx="6" fill="#1E293B"/>
+                <rect x="215" y="278" width="80" height="10" rx="4" fill="#6B7280"/>
+                <rect x="205" y="308" width="190" height="30" rx="6" fill="#1E293B"/>
+                <rect x="215" y="318" width="100" height="10" rx="4" fill="#6B7280"/>
+              </svg>
+              <div class="project-overlay">
+                <button class="project-view-btn" aria-label="View Mobile Banking App UI details">View Details</button>
+              </div>
+            </div>
+            <div class="project-content">
+              <div class="project-meta">
+                <span class="project-category">UI/UX Design</span>
+                <span class="project-timeline">4 weeks</span>
+              </div>
+              <h3 class="project-title">Mobile Banking App UI</h3>
+              <p class="project-desc">Complete UI/UX redesign of a mobile banking application. 40-screen Figma prototype with a full design system, reducing user task time by 35%.</p>
+              <div class="project-tools">
+                <span>Figma</span><span>Prototyping</span><span>Design System</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 4 -->
+          <article class="project-card reveal-up" data-category="fullstack" style="--delay:0.1s">
+            <div class="project-img">
+              <svg viewBox="0 0 600 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Project Management Tool project preview">
+                <rect width="600" height="380" fill="#080B14"/>
+                <rect x="0" y="0" width="180" height="380" fill="#0D1117"/>
+                <rect x="20" y="30" width="140" height="36" rx="8" fill="#6C63FF" opacity="0.2"/>
+                <rect x="36" y="42" width="20" height="20" rx="4" fill="#6C63FF" opacity="0.7"/>
+                <rect x="64" y="47" width="80" height="10" rx="5" fill="#E6EAF2" opacity="0.7"/>
+                <rect x="20" y="78" width="140" height="36" rx="8" fill="#1E293B"/>
+                <rect x="20" y="126" width="140" height="36" rx="8" fill="#1E293B"/>
+                <rect x="20" y="174" width="140" height="36" rx="8" fill="#1E293B"/>
+                <rect x="20" y="222" width="140" height="36" rx="8" fill="#1E293B"/>
+                <rect x="190" y="20" width="390" height="50" rx="8" fill="#0D1117"/>
+                <rect x="210" y="35" width="120" height="20" rx="4" fill="#1E293B"/>
+                <rect x="460" y="30" width="100" height="30" rx="15" fill="#6C63FF"/>
+                <rect x="190" y="90" width="120" height="270" rx="8" fill="#0D1117"/>
+                <rect x="200" y="108" width="100" height="50" rx="6" fill="#1E293B"/>
+                <rect x="208" y="118" width="60" height="8" rx="4" fill="#6B7280"/>
+                <rect x="208" y="134" width="80" height="6" rx="3" fill="#1E293B"/>
+                <rect x="200" y="168" width="100" height="50" rx="6" fill="#6C63FF" opacity="0.2"/>
+                <rect x="200" y="228" width="100" height="50" rx="6" fill="#1E293B"/>
+                <rect x="320" y="90" width="120" height="270" rx="8" fill="#0D1117"/>
+                <rect x="330" y="108" width="100" height="50" rx="6" fill="#1E293B"/>
+                <rect x="330" y="168" width="100" height="50" rx="6" fill="#1E293B"/>
+                <rect x="330" y="228" width="100" height="80" rx="6" fill="#00D4FF" opacity="0.15"/>
+                <rect x="450" y="90" width="120" height="270" rx="8" fill="#0D1117"/>
+                <rect x="460" y="108" width="100" height="50" rx="6" fill="#1E293B"/>
+              </svg>
+              <div class="project-overlay">
+                <button class="project-view-btn" aria-label="View Project Management Tool details">View Details</button>
+              </div>
+            </div>
+            <div class="project-content">
+              <div class="project-meta">
+                <span class="project-category">Full Stack</span>
+                <span class="project-timeline">10 weeks</span>
+              </div>
+              <h3 class="project-title">Team Project Management Tool</h3>
+              <p class="project-desc">A Kanban-based project management tool with real-time collaboration, file uploads, time tracking, and integrations with Slack and GitHub. Used by 500+ teams.</p>
+              <div class="project-tools">
+                <span>React</span><span>Node.js</span><span>Socket.io</span><span>Redis</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 5 -->
+          <article class="project-card reveal-up" data-category="ui" style="--delay:0.2s">
+            <div class="project-img">
+              <svg viewBox="0 0 600 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="SaaS Landing Page design project preview">
+                <rect width="600" height="380" fill="#080B14"/>
+                <rect x="20" y="20" width="560" height="50" rx="8" fill="#0D1117"/>
+                <rect x="40" y="34" width="80" height="22" rx="4" fill="#6C63FF" opacity="0.7"/>
+                <rect x="280" y="34" width="50" height="22" rx="4" fill="#1E293B"/>
+                <rect x="340" y="34" width="50" height="22" rx="4" fill="#1E293B"/>
+                <rect x="480" y="30" width="80" height="30" rx="15" fill="#6C63FF"/>
+                <rect x="150" y="100" width="300" height="20" rx="6" fill="#E6EAF2" opacity="0.8"/>
+                <rect x="180" y="132" width="240" height="20" rx="6" fill="#6C63FF" opacity="0.5"/>
+                <rect x="220" y="168" width="160" height="40" rx="20" fill="#6C63FF"/>
+                <rect x="100" y="240" width="120" height="100" rx="12" fill="#111827"/>
+                <rect x="240" y="240" width="120" height="100" rx="12" fill="#111827"/>
+                <rect x="380" y="240" width="120" height="100" rx="12" fill="#111827"/>
+                <rect x="115" y="260" width="90" height="30" rx="4" fill="#6C63FF" opacity="0.3"/>
+                <rect x="115" y="300" width="60" height="8" rx="4" fill="#6B7280"/>
+                <rect x="115" y="316" width="80" height="10" rx="4" fill="#E6EAF2" opacity="0.5"/>
+              </svg>
+              <div class="project-overlay">
+                <button class="project-view-btn" aria-label="View SaaS Landing Page design details">View Details</button>
+              </div>
+            </div>
+            <div class="project-content">
+              <div class="project-meta">
+                <span class="project-category">UI/UX</span>
+                <span class="project-timeline">3 weeks</span>
+              </div>
+              <h3 class="project-title">SaaS Marketing Landing Page</h3>
+              <p class="project-desc">High-converting landing page design and development for a B2B SaaS company. A/B tested layout achieved 28% improvement in trial signups within the first month.</p>
+              <div class="project-tools">
+                <span>Figma</span><span>HTML/CSS</span><span>JavaScript</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Project 6 -->
+          <article class="project-card reveal-up" data-category="fullstack" style="--delay:0.3s">
+            <div class="project-img">
+              <svg viewBox="0 0 600 380" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Restaurant Booking System project preview">
+                <rect width="600" height="380" fill="#080B14"/>
+                <rect x="20" y="20" width="260" height="340" rx="12" fill="#0D1117"/>
+                <rect x="40" y="40" width="220" height="160" rx="8" fill="#111827"/>
+                <ellipse cx="150" cy="120" rx="60" ry="50" fill="#9B5DFF" opacity="0.2"/>
+                <rect x="60" y="100" width="180" height="3" rx="2" fill="#1E293B"/>
+                <rect x="60" y="114" width="120" height="3" rx="2" fill="#1E293B"/>
+                <rect x="60" y="128" width="150" height="3" rx="2" fill="#1E293B"/>
+                <rect x="40" y="215" width="220" height="40" rx="8" fill="#6C63FF"/>
+                <rect x="80" y="227" width="140" height="16" rx="4" fill="rgba(255,255,255,0.3)"/>
+                <rect x="40" y="265" width="220" height="80" rx="8" fill="#111827"/>
+                <rect x="60" y="280" width="60" height="8" rx="4" fill="#6B7280"/>
+                <rect x="60" y="298" width="100" height="14" rx="4" fill="#E6EAF2" opacity="0.7"/>
+                <rect x="60" y="320" width="80" height="10" rx="4" fill="#22C55E" opacity="0.5"/>
+                <rect x="300" y="20" width="280" height="340" rx="12" fill="#0D1117"/>
+                <rect x="320" y="40" width="240" height="50" rx="8" fill="#111827"/>
+                <rect x="340" y="55" width="80" height="20" rx="4" fill="#6C63FF" opacity="0.5"/>
+                <rect x="320" y="105" width="240" height="240" rx="8" fill="#111827"/>
+                <rect x="340" y="125" width="60" height="8" rx="4" fill="#6B7280"/>
+                <rect x="340" y="145" width="200" height="160" rx="4" fill="#0D1117"/>
+              </svg>
+              <div class="project-overlay">
+                <button class="project-view-btn" aria-label="View Restaurant Booking System details">View Details</button>
+              </div>
+            </div>
+            <div class="project-content">
+              <div class="project-meta">
+                <span class="project-category">Full Stack</span>
+                <span class="project-timeline">5 weeks</span>
+              </div>
+              <h3 class="project-title">Restaurant Booking System</h3>
+              <p class="project-desc">Online reservation system with table management, customer notifications, and an admin panel. Handles 200+ bookings per day for a local restaurant chain.</p>
+              <div class="project-tools">
+                <span>React</span><span>Express</span><span>MySQL</span><span>Twilio</span>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="section-cta reveal-up">
+          <a href="https://github.com/vapxhasan" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" aria-label="View all projects on GitHub">
+            View All on GitHub
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         WORKFLOW / PROCESS
+    ========================================= -->
+    <section id="workflow" class="section" aria-labelledby="workflow-heading">
+      <div class="container">
+        <div class="section-header reveal-up">
+          <div class="section-label">My Process</div>
+          <h2 id="workflow-heading" class="section-title">How I Turn Ideas Into <span class="text-gradient">Results</span></h2>
+          <p class="section-subtitle">A proven 4-step process that keeps projects on-time, on-budget, and above expectations.</p>
+        </div>
+
+        <div class="workflow-steps">
+          <div class="workflow-step reveal-up" style="--delay:0.1s">
+            <div class="step-number" aria-hidden="true">01</div>
+            <div class="step-content">
+              <h3 class="step-title">Discovery & Strategy</h3>
+              <p class="step-desc">We start with a deep-dive conversation about your goals, users, and competitive landscape. I ask the questions you haven't thought of yet.</p>
+            </div>
+          </div>
+          <div class="workflow-connector" aria-hidden="true"></div>
+          <div class="workflow-step reveal-up" style="--delay:0.2s">
+            <div class="step-number" aria-hidden="true">02</div>
+            <div class="step-content">
+              <h3 class="step-title">Design & Prototype</h3>
+              <p class="step-desc">Wireframes → High-fidelity designs → Interactive prototypes. You see exactly what you're getting before a single line of code is written.</p>
+            </div>
+          </div>
+          <div class="workflow-connector" aria-hidden="true"></div>
+          <div class="workflow-step reveal-up" style="--delay:0.3s">
+            <div class="step-number" aria-hidden="true">03</div>
+            <div class="step-content">
+              <h3 class="step-title">Build & Review</h3>
+              <p class="step-desc">Clean, documented code shipped in milestones. Weekly demos, real-time feedback, no surprises. You're involved throughout.</p>
+            </div>
+          </div>
+          <div class="workflow-connector" aria-hidden="true"></div>
+          <div class="workflow-step reveal-up" style="--delay:0.4s">
+            <div class="step-number" aria-hidden="true">04</div>
+            <div class="step-content">
+              <h3 class="step-title">Launch & Support</h3>
+              <p class="step-desc">Thorough QA testing across devices, deployment, and 30 days of post-launch support. I don't disappear after delivery.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         EXPERIENCE TIMELINE
+    ========================================= -->
+    <section id="experience" class="section section-alt" aria-labelledby="experience-heading">
+      <div class="container">
+        <div class="section-header reveal-up">
+          <div class="section-label">Experience</div>
+          <h2 id="experience-heading" class="section-title">The Path That <span class="text-gradient">Built Me</span></h2>
+        </div>
+
+        <div class="timeline">
+
+          <div class="timeline-item reveal-up" style="--delay:0.1s">
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <div class="timeline-meta">
+                <span class="timeline-date">2023 — Present</span>
+                <span class="timeline-badge">Current</span>
+              </div>
+              <h3 class="timeline-title">Senior Freelance Developer & Designer</h3>
+              <p class="timeline-company">Independent · Remote · Worldwide</p>
+              <p class="timeline-desc">Building high-impact web products for startups and businesses globally. Specializing in full stack development and conversion-focused UI/UX design.</p>
+              <div class="timeline-tags">
+                <span>React</span><span>Node.js</span><span>Figma</span><span>Next.js</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item reveal-up" style="--delay:0.2s">
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <div class="timeline-meta">
+                <span class="timeline-date">2022 — 2023</span>
+              </div>
+              <h3 class="timeline-title">Frontend Developer</h3>
+              <p class="timeline-company">Tech Agency · Bangladesh</p>
+              <p class="timeline-desc">Led frontend development for 15+ client projects. Introduced component-driven architecture that cut development time by 40%.</p>
+              <div class="timeline-tags">
+                <span>JavaScript</span><span>React</span><span>CSS3</span><span>REST APIs</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-item reveal-up" style="--delay:0.3s">
+            <div class="timeline-dot" aria-hidden="true"></div>
+            <div class="timeline-content">
+              <div class="timeline-meta">
+                <span class="timeline-date">2021 — 2022</span>
+              </div>
+              <h3 class="timeline-title">UI/UX Designer & Web Developer</h3>
+              <p class="timeline-company">Freelance · Remote</p>
+              <p class="timeline-desc">Started my freelance career designing and building websites for small businesses. Completed 30+ projects across 10 countries in the first year.</p>
+              <div class="timeline-tags">
+                <span>Figma</span><span>HTML/CSS</span><span>WordPress</span><span>JavaScript</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         STATS / ACHIEVEMENTS
+    ========================================= -->
+    <section id="achievements" class="section stats-section" aria-labelledby="stats-heading">
+      <div class="stats-bg" aria-hidden="true"></div>
+      <div class="container">
+        <h2 id="stats-heading" class="sr-only">Achievements and Statistics</h2>
+        <div class="stats-grid">
+          <div class="stats-card reveal-up" style="--delay:0.1s">
+            <div class="stats-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <div class="stats-number" data-count="50">0</div>
+            <div class="stats-suffix">+</div>
+            <div class="stats-label">Projects Delivered</div>
+          </div>
+          <div class="stats-card reveal-up" style="--delay:0.2s">
+            <div class="stats-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div class="stats-number" data-count="30">0</div>
+            <div class="stats-suffix">+</div>
+            <div class="stats-label">Happy Clients</div>
+          </div>
+          <div class="stats-card reveal-up" style="--delay:0.3s">
+            <div class="stats-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="stats-number" data-count="3">0</div>
+            <div class="stats-suffix">+ Yrs</div>
+            <div class="stats-label">Experience</div>
+          </div>
+          <div class="stats-card reveal-up" style="--delay:0.4s">
+            <div class="stats-icon" aria-hidden="true">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="stats-number" data-count="5">0</div>
+            <div class="stats-suffix">★</div>
+            <div class="stats-label">Average Rating</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         TESTIMONIALS
+    ========================================= -->
+    <section id="testimonials" class="section section-alt" aria-labelledby="testimonials-heading">
+      <div class="container">
+        <div class="section-header reveal-up">
+          <div class="section-label">Client Reviews</div>
+          <h2 id="testimonials-heading" class="section-title">What Clients <span class="text-gradient">Say</span></h2>
+          <p class="section-subtitle">Real feedback from real people I've worked with.</p>
+        </div>
+
+        <div class="testimonials-grid">
+
+          <article class="testimonial-card reveal-up" style="--delay:0.1s">
+            <div class="testimonial-stars" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+            <blockquote class="testimonial-text">
+              "Hasanur delivered our dashboard ahead of schedule and the quality far exceeded our expectations. He proactively suggested improvements we hadn't even thought of. Definitely our go-to developer."
+            </blockquote>
+            <div class="testimonial-author">
+              <div class="author-avatar" aria-hidden="true">AK</div>
+              <div>
+                <div class="author-name">Alex K.</div>
+                <div class="author-role">CEO, DataFlow Inc.</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="testimonial-card testimonial-featured reveal-up" style="--delay:0.2s">
+            <div class="testimonial-stars" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+            <blockquote class="testimonial-text">
+              "The redesign Hasanur did for our e-commerce store resulted in a 40% increase in conversions within the first month. He understands both design and business. A rare combination."
+            </blockquote>
+            <div class="testimonial-author">
+              <div class="author-avatar" aria-hidden="true">SM</div>
+              <div>
+                <div class="author-name">Sarah M.</div>
+                <div class="author-role">Founder, Bloom Boutique</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="testimonial-card reveal-up" style="--delay:0.3s">
+            <div class="testimonial-stars" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+            <blockquote class="testimonial-text">
+              "Communication was flawless throughout. Hasanur took our rough wireframes and turned them into a beautiful, functional product. Would hire again in a heartbeat."
+            </blockquote>
+            <div class="testimonial-author">
+              <div class="author-avatar" aria-hidden="true">JP</div>
+              <div>
+                <div class="author-name">James P.</div>
+                <div class="author-role">Product Manager, LaunchBase</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="testimonial-card reveal-up" style="--delay:0.1s">
+            <div class="testimonial-stars" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+            <blockquote class="testimonial-text">
+              "Our SaaS app went from slow and clunky to fast and beautiful. Hasanur optimized our Lighthouse score from 55 to 97 and redesigned the entire UI. Incredible work."
+            </blockquote>
+            <div class="testimonial-author">
+              <div class="author-avatar" aria-hidden="true">RN</div>
+              <div>
+                <div class="author-name">Riya N.</div>
+                <div class="author-role">CTO, TaskFlow Pro</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="testimonial-card reveal-up" style="--delay:0.2s">
+            <div class="testimonial-stars" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+            <blockquote class="testimonial-text">
+              "Professional, skilled, and a genuinely nice person to work with. He built our entire booking platform from scratch in 5 weeks. The code quality is outstanding."
+            </blockquote>
+            <div class="testimonial-author">
+              <div class="author-avatar" aria-hidden="true">TC</div>
+              <div>
+                <div class="author-name">Tom C.</div>
+                <div class="author-role">Owner, The Grand Table</div>
+              </div>
+            </div>
+          </article>
+
+          <article class="testimonial-card reveal-up" style="--delay:0.3s">
+            <div class="testimonial-stars" aria-label="5 out of 5 stars">
+              ★★★★★
+            </div>
+            <blockquote class="testimonial-text">
+              "Hasanur doesn't just build what you ask for — he builds what you actually need. His understanding of UX and business goals sets him apart from other developers."
+            </blockquote>
+            <div class="testimonial-author">
+              <div class="author-avatar" aria-hidden="true">LP</div>
+              <div>
+                <div class="author-name">Lisa P.</div>
+                <div class="author-role">Marketing Director, GrowthHQ</div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         PRICING SECTION
+    ========================================= -->
+    <section id="pricing" class="section" aria-labelledby="pricing-heading">
+      <div class="container">
+        <div class="section-header reveal-up">
+          <div class="section-label">Pricing</div>
+          <h2 id="pricing-heading" class="section-title">Clear Pricing, <span class="text-gradient">No Surprises</span></h2>
+          <p class="section-subtitle">Flexible packages to match your project scope. Custom quotes available for larger builds.</p>
+        </div>
+
+        <div class="pricing-grid">
+
+          <article class="pricing-card reveal-up" style="--delay:0.1s" aria-label="Starter pricing plan">
+            <div class="pricing-header">
+              <div class="pricing-plan">Starter</div>
+              <div class="pricing-price">
+                <span class="price-currency">$</span>
+                <span class="price-amount">499</span>
+              </div>
+              <div class="pricing-desc">Perfect for small businesses and personal brands needing a clean, professional online presence.</div>
+            </div>
+            <ul class="pricing-features" aria-label="Starter plan features">
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Up to 5-page website</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Mobile Responsive Design</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Contact Form Integration</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Basic SEO Setup</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>14-day Support</li>
+              <li class="unavailable"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Custom Backend</li>
+              <li class="unavailable"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>E-Commerce Features</li>
+            </ul>
+            <a href="#contact" class="btn btn-ghost btn-block">Get Started</a>
+          </article>
+
+          <article class="pricing-card pricing-card-featured reveal-up" style="--delay:0.2s" aria-label="Professional pricing plan - Most Popular">
+            <div class="pricing-popular" aria-label="Most popular plan">Most Popular</div>
+            <div class="pricing-header">
+              <div class="pricing-plan">Professional</div>
+              <div class="pricing-price">
+                <span class="price-currency">$</span>
+                <span class="price-amount">1,299</span>
+              </div>
+              <div class="pricing-desc">Full-featured website or web application for growing businesses ready to scale.</div>
+            </div>
+            <ul class="pricing-features" aria-label="Professional plan features">
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Up to 15-page website / Web App</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Custom UI/UX Design</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Backend Development</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Database Setup</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Advanced SEO Optimization</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>30-day Support</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Performance Optimization</li>
+            </ul>
+            <a href="#contact" class="btn btn-primary btn-block">Start a Project</a>
+          </article>
+
+          <article class="pricing-card reveal-up" style="--delay:0.3s" aria-label="Enterprise pricing plan">
+            <div class="pricing-header">
+              <div class="pricing-plan">Enterprise</div>
+              <div class="pricing-price">
+                <span class="price-currency"></span>
+                <span class="price-amount" style="font-size:2rem;">Custom</span>
+              </div>
+              <div class="pricing-desc">For complex platforms, SaaS products, and teams who need ongoing development.</div>
+            </div>
+            <ul class="pricing-features" aria-label="Enterprise plan features">
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Full SaaS / Platform Build</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Design System Creation</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Scalable Architecture</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Third-party Integrations</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Priority Support & Maintenance</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Dedicated Communication</li>
+              <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Monthly Retainer Available</li>
+            </ul>
+            <a href="#contact" class="btn btn-ghost btn-block">Get a Quote</a>
+          </article>
+
+        </div>
+
+        <p class="pricing-note reveal-up">All prices are starting points. Final quotes depend on project requirements. <a href="#contact">Let's talk about your project.</a></p>
+      </div>
+    </section>
+
+    <!-- =========================================
+         FAQ SECTION
+    ========================================= -->
+    <section id="faq" class="section section-alt" aria-labelledby="faq-heading">
+      <div class="container">
+        <div class="section-header reveal-up">
+          <div class="section-label">FAQ</div>
+          <h2 id="faq-heading" class="section-title">Questions <span class="text-gradient">Answered</span></h2>
+        </div>
+
+        <div class="faq-grid">
+          <div class="faq-list" role="list">
+
+            <div class="faq-item reveal-up" style="--delay:0.1s" role="listitem">
+              <button class="faq-question" aria-expanded="false" aria-controls="faq-1" id="faq-btn-1">
+                <span>How long does a typical project take?</span>
+                <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer" id="faq-1" role="region" aria-labelledby="faq-btn-1">
+                <p>Project timelines vary based on scope. A landing page typically takes 1–2 weeks, a full website 3–6 weeks, and a complex web application 6–12 weeks. I'll give you a detailed timeline estimate during our initial call.</p>
+              </div>
+            </div>
+
+            <div class="faq-item reveal-up" style="--delay:0.15s" role="listitem">
+              <button class="faq-question" aria-expanded="false" aria-controls="faq-2" id="faq-btn-2">
+                <span>What's your payment structure?</span>
+                <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer" id="faq-2" role="region" aria-labelledby="faq-btn-2">
+                <p>I typically work with a 50% upfront deposit and 50% on completion. For larger projects, we can split into milestones. I accept payments via PayPal, bank transfer, and most major platforms.</p>
+              </div>
+            </div>
+
+            <div class="faq-item reveal-up" style="--delay:0.2s" role="listitem">
+              <button class="faq-question" aria-expanded="false" aria-controls="faq-3" id="faq-btn-3">
+                <span>Do you work with clients outside Bangladesh?</span>
+                <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer" id="faq-3" role="region" aria-labelledby="faq-btn-3">
+                <p>Absolutely. Most of my clients are based in the US, UK, Canada, and Europe. I'm comfortable working across time zones and use async communication tools to keep everything smooth regardless of location.</p>
+              </div>
+            </div>
+
+            <div class="faq-item reveal-up" style="--delay:0.25s" role="listitem">
+              <button class="faq-question" aria-expanded="false" aria-controls="faq-4" id="faq-btn-4">
+                <span>Will I be able to update the website myself after launch?</span>
+                <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer" id="faq-4" role="region" aria-labelledby="faq-btn-4">
+                <p>Yes. I'll build your site to be easy to maintain and provide documentation and a handover session so you can make common updates yourself. I also offer ongoing maintenance retainers if you'd prefer I handle it.</p>
+              </div>
+            </div>
+
+            <div class="faq-item reveal-up" style="--delay:0.3s" role="listitem">
+              <button class="faq-question" aria-expanded="false" aria-controls="faq-5" id="faq-btn-5">
+                <span>What information do you need to start?</span>
+                <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer" id="faq-5" role="region" aria-labelledby="faq-btn-5">
+                <p>At minimum: your project goals, target audience, rough timeline, and budget range. The more context you share, the more accurately I can scope and quote. We'll dig into the details together on our discovery call.</p>
+              </div>
+            </div>
+
+            <div class="faq-item reveal-up" style="--delay:0.35s" role="listitem">
+              <button class="faq-question" aria-expanded="false" aria-controls="faq-6" id="faq-btn-6">
+                <span>Do you offer revisions?</span>
+                <svg class="faq-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="faq-answer" id="faq-6" role="region" aria-labelledby="faq-btn-6">
+                <p>Yes — all packages include revision rounds built in. Design phases get 3 rounds of revisions. Development includes 2 rounds. Additional revisions beyond scope are billed at my hourly rate, which we'll agree on upfront.</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         CONTACT SECTION
+    ========================================= -->
+    <section id="contact" class="section" aria-labelledby="contact-heading">
+      <div class="container">
+        <div class="section-header reveal-up">
+          <div class="section-label">Contact</div>
+          <h2 id="contact-heading" class="section-title">Let's Build Something <span class="text-gradient">Great</span></h2>
+          <p class="section-subtitle">Have a project in mind? I'd love to hear about it. Send me a message and I'll reply within 24 hours.</p>
+        </div>
+
+        <div class="contact-grid">
+
+          <!-- Contact Info -->
+          <div class="contact-info reveal-left">
+            <div class="contact-card">
+              <div class="contact-status">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span>Available for new projects</span>
+              </div>
+
+              <div class="contact-items">
+                <div class="contact-item">
+                  <div class="contact-item-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  </div>
+                  <div>
+                    <div class="contact-item-label">Email</div>
+                    <a href="mailto:vapxhasan@gmail.com" class="contact-item-value">vapxhasan@gmail.com</a>
+                    <button class="copy-btn" id="copy-email-btn" data-copy="vapxhasan@gmail.com" aria-label="Copy email address">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                      <span>Copy</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="contact-item">
+                  <div class="contact-item-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+                  </div>
+                  <div>
+                    <div class="contact-item-label">WhatsApp</div>
+                    <a href="https://wa.me/message/YOUR_WHATSAPP" target="_blank" rel="noopener noreferrer" class="contact-item-value whatsapp-btn">
+                      Message on WhatsApp
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3"/></svg>
+                    </a>
+                  </div>
+                </div>
+
+                <div class="contact-item">
+                  <div class="contact-item-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  </div>
+                  <div>
+                    <div class="contact-item-label">Response Time</div>
+                    <div class="contact-item-value">Within 24 hours</div>
+                  </div>
+                </div>
+
+                <div class="contact-item">
+                  <div class="contact-item-icon" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  </div>
+                  <div>
+                    <div class="contact-item-label">Location</div>
+                    <div class="contact-item-value">Bangladesh · Remote Worldwide</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Social Links -->
+              <div class="contact-socials">
+                <a href="https://github.com/vapxhasan" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub profile">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn profile">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+                </a>
+                <a href="#" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Twitter profile">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" stroke="currentColor" stroke-width="1.5" fill="none"/></svg>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Contact Form -->
+          <div class="contact-form-wrap reveal-right">
+            <form class="contact-form" id="contact-form" novalidate aria-label="Contact form">
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="contact-name" class="form-label">Your Name <span aria-hidden="true">*</span></label>
+                  <input type="text" id="contact-name" name="name" class="form-input" placeholder="John Smith" required autocomplete="name" aria-required="true" />
+                  <span class="form-error" id="name-error" role="alert"></span>
+                </div>
+                <div class="form-group">
+                  <label for="contact-email" class="form-label">Email Address <span aria-hidden="true">*</span></label>
+                  <input type="email" id="contact-email" name="email" class="form-input" placeholder="john@company.com" required autocomplete="email" aria-required="true" />
+                  <span class="form-error" id="email-error" role="alert"></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="contact-service" class="form-label">Service Needed</label>
+                <select id="contact-service" name="service" class="form-input form-select" aria-label="Select service needed">
+                  <option value="">Select a service...</option>
+                  <option value="fullstack">Full Stack Development</option>
+                  <option value="ui">UI/UX Design</option>
+                  <option value="frontend">Frontend Development</option>
+                  <option value="ecommerce">E-Commerce</option>
+                  <option value="saas">SaaS Development</option>
+                  <option value="audit">Website Audit</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="contact-message" class="form-label">Project Details <span aria-hidden="true">*</span></label>
+                <textarea id="contact-message" name="message" class="form-input form-textarea" placeholder="Tell me about your project — goals, timeline, budget range..." required rows="5" aria-required="true"></textarea>
+                <span class="form-error" id="message-error" role="alert"></span>
+              </div>
+              <button type="submit" class="btn btn-primary btn-block btn-submit" id="form-submit" aria-label="Send message">
+                <span class="btn-text">Send Message</span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+              <div class="form-success" id="form-success" role="status" aria-live="polite" style="display:none">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                Message sent! I'll get back to you within 24 hours.
+              </div>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================================
+         CTA BANNER
+    ========================================= -->
+    <section class="cta-banner" aria-label="Call to action">
+      <div class="cta-bg" aria-hidden="true"></div>
+      <div class="container">
+        <div class="cta-inner reveal-up">
+          <h2 class="cta-title">Ready to Start Your Project?</h2>
+          <p class="cta-subtitle">Let's turn your vision into a high-performing digital product. Spots are limited — book yours today.</p>
+          <div class="cta-actions">
+            <a href="#contact" class="btn btn-primary btn-lg">Start a Project</a>
+            <a href="mailto:vapxhasan@gmail.com" class="btn btn-ghost btn-lg">Send an Email</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================
+       FOOTER
+  ========================================= -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#hero" class="footer-logo" aria-label="Hasanur Rahman Home">
+            <span class="logo-mark">HR</span>
+            <span class="logo-text">Hasanur<span class="logo-accent">.</span></span>
+          </a>
+          <p class="footer-tagline">Building premium web experiences that drive real business results.</p>
+          <div class="footer-socials">
+            <a href="https://github.com/vapxhasan" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22"/></svg>
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="LinkedIn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+            </a>
+            <a href="#" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Twitter">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <nav class="footer-nav" aria-label="Footer navigation">
+          <h3 class="footer-nav-title">Navigation</h3>
+          <ul role="list">
+            <li><a href="#about">About</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#portfolio">Portfolio</a></li>
+            <li><a href="#experience">Experience</a></li>
+            <li><a href="#testimonials">Reviews</a></li>
+          </ul>
+        </nav>
+
+        <div class="footer-nav" aria-label="Services footer links">
+          <h3 class="footer-nav-title">Services</h3>
+          <ul role="list">
+            <li><a href="#services">Full Stack Dev</a></li>
+            <li><a href="#services">UI/UX Design</a></li>
+            <li><a href="#services">Frontend Dev</a></li>
+            <li><a href="#services">E-Commerce</a></li>
+            <li><a href="#services">SaaS Builds</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-contact" aria-label="Contact information">
+          <h3 class="footer-nav-title">Get In Touch</h3>
+          <a href="mailto:vapxhasan@gmail.com" class="footer-email">vapxhasan@gmail.com</a>
+          <a href="#contact" class="btn btn-primary" style="margin-top:1.5rem">Hire Me</a>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; <span id="footer-year">2024</span> Hasanur Rahman. All rights reserved.</p>
+        <p class="footer-credit">Designed & Built with ♥ by Hasanur Rahman</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Floating Buttons -->
+  <button id="back-to-top" class="back-to-top" aria-label="Back to top" title="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
+  <!-- Skip Link (Accessibility) -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- Project Modal -->
+  <div id="project-modal" class="modal" role="dialog" aria-modal="true" aria-label="Project details" aria-hidden="true">
+    <div class="modal-backdrop" id="modal-backdrop"></div>
+    <div class="modal-content">
+      <button class="modal-close" id="modal-close" aria-label="Close modal">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="modal-body" id="modal-body">
+        <!-- Dynamically inserted -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Main JavaScript -->
+  <script src="js/main.js" defer></script>
+<script src="js/main.js"></script> 
+</body>
+</html>
