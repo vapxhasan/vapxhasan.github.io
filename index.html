@@ -2437,6 +2437,14 @@ async function handleSubmit(btn) {
     // Public কে auto-reply যাবে
     await emailjs.send('service_tfcdfkh', 'template_6r0z0rk', templateParams);
 
+    // Google Sheets-এ data save করো
+    fetch('https://script.google.com/macros/s/AKfycbyByiJazUQrjOuxE0xOjl7YaHSAn7nYF1fWaMXfAMOGVa91cQn_crerlWeRl4SY9WB4/exec', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(templateParams),
+      mode: 'no-cors'
+    }).catch(err => console.warn('Sheets save failed:', err));
+
     // Success
     btn.textContent = '✅ Sent!';
     btn.style.background = 'linear-gradient(135deg, #16a34a, #15803d)';
