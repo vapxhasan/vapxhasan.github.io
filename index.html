@@ -2115,6 +2115,15 @@ footer {
       <!-- videos injected by JS -->
     </div>
 
+    <!-- Load More -->
+    <div id="ytLoadMoreWrap" style="display:none;flex-direction:column;align-items:center;gap:16px;margin-top:40px;">
+      <div id="ytVideoCount" style="font-size:13px;color:var(--muted);font-family:var(--font-mono);"></div>
+      <div style="display:flex;gap:12px;">
+        <button id="ytLoadMoreBtn" onclick="ytLoadMore()" style="display:none;align-items:center;gap:8px;padding:12px 28px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(108,99,255,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">▶ Load More Videos</button>
+        <button id="ytShowLessBtn" onclick="ytShowLess()" style="display:none;align-items:center;gap:8px;padding:12px 22px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='var(--white)';this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">↑ Show Less</button>
+      </div>
+    </div>
+
     <div id="ytEmpty" class="yt-empty reveal">
       <div class="yt-empty-icon">🎬</div>
       <div class="yt-empty-txt">No videos added yet. Click "+ Add Video" to add your YouTube videos.</div>
@@ -2166,6 +2175,16 @@ footer {
     <div id="blogGrid" class="blog-grid">
       <!-- blog cards injected by JS -->
     </div>
+
+    <!-- Load More -->
+    <div id="blogLoadMoreWrap" style="display:none;flex-direction:column;align-items:center;gap:16px;margin-top:40px;">
+      <div id="blogPostCount" style="font-size:13px;color:var(--muted);font-family:var(--font-mono);"></div>
+      <div style="display:flex;gap:12px;">
+        <button id="blogLoadMoreBtn" onclick="blogLoadMore()" style="display:none;align-items:center;gap:8px;padding:12px 28px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(108,99,255,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">📝 Load More Posts</button>
+        <button id="blogShowLessBtn" onclick="blogShowLess()" style="display:none;align-items:center;gap:8px;padding:12px 22px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='var(--white)';this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">↑ Show Less</button>
+      </div>
+    </div>
+
     <div id="blogEmpty" class="blog-empty reveal">
       <div class="blog-empty-icon">📝</div>
       <div class="blog-empty-txt">No blog posts yet. Click "Write Post" to publish your first article!</div>
@@ -2409,16 +2428,20 @@ function renderYtChannel() {
   document.getElementById('ytChUrlInput').value = ytChannel.url;
 }
 
+let ytShowCount = 6;
 function renderYtVideos() {
   const grid = document.getElementById('ytVideosGrid');
   const empty = document.getElementById('ytEmpty');
+  const loadMoreWrap = document.getElementById('ytLoadMoreWrap');
   if (ytVideos.length === 0) {
     grid.innerHTML = '';
     empty.style.display = 'block';
+    if(loadMoreWrap) loadMoreWrap.style.display = 'none';
     return;
   }
   empty.style.display = 'none';
-  grid.innerHTML = ytVideos.map((v, i) => `
+  const visible = ytVideos.slice(0, ytShowCount);
+  grid.innerHTML = visible.map((v, i) => `
     <div class="yt-video-card reveal visible">
       <div class="yt-thumb-wrap">
         <iframe src="https://www.youtube.com/embed/${v.id}" title="${v.title || 'YouTube Video'}" allowfullscreen loading="lazy"></iframe>
@@ -2432,7 +2455,14 @@ function renderYtVideos() {
       </div>
     </div>
   `).join('');
+  if (!loadMoreWrap) return;
+  loadMoreWrap.style.display = 'flex';
+  document.getElementById('ytVideoCount').textContent = `Showing ${Math.min(ytShowCount, ytVideos.length)} of ${ytVideos.length} video${ytVideos.length !== 1 ? 's' : ''}`;
+  document.getElementById('ytLoadMoreBtn').style.display = ytVideos.length > ytShowCount ? 'inline-flex' : 'none';
+  document.getElementById('ytShowLessBtn').style.display = ytShowCount > 6 ? 'inline-flex' : 'none';
 }
+function ytLoadMore() { ytShowCount += 6; renderYtVideos(); }
+function ytShowLess() { ytShowCount = 6; renderYtVideos(); document.getElementById('youtube').scrollIntoView({behavior:'smooth'}); }
 
 function addYtVideo() {
   const url = document.getElementById('ytUrlInput').value.trim();
@@ -2476,16 +2506,20 @@ renderYtVideos();
 // ===== BLOG SECTION =====
 let blogPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
 
+let blogShowCount = 6;
 function renderBlog() {
   const grid = document.getElementById('blogGrid');
   const empty = document.getElementById('blogEmpty');
+  const loadMoreWrap = document.getElementById('blogLoadMoreWrap');
   if (blogPosts.length === 0) {
     grid.innerHTML = '';
     empty.style.display = 'block';
+    if(loadMoreWrap) loadMoreWrap.style.display = 'none';
     return;
   }
   empty.style.display = 'none';
-  grid.innerHTML = blogPosts.map((p, i) => `
+  const visible = blogPosts.slice(0, blogShowCount);
+  grid.innerHTML = visible.map((p, i) => `
     <div class="blog-card reveal visible">
       <div class="blog-thumb">
         <div class="blog-thumb-glow" style="background:rgba(108,99,255,0.35)"></div>
@@ -2505,7 +2539,14 @@ function renderBlog() {
       </div>
     </div>
   `).join('');
+  if (!loadMoreWrap) return;
+  loadMoreWrap.style.display = 'flex';
+  document.getElementById('blogPostCount').textContent = `Showing ${Math.min(blogShowCount, blogPosts.length)} of ${blogPosts.length} post${blogPosts.length !== 1 ? 's' : ''}`;
+  document.getElementById('blogLoadMoreBtn').style.display = blogPosts.length > blogShowCount ? 'inline-flex' : 'none';
+  document.getElementById('blogShowLessBtn').style.display = blogShowCount > 6 ? 'inline-flex' : 'none';
 }
+function blogLoadMore() { blogShowCount += 6; renderBlog(); }
+function blogShowLess() { blogShowCount = 6; renderBlog(); document.getElementById('blog').scrollIntoView({behavior:'smooth'}); }
 
 function publishBlog() {
   const title = document.getElementById('blogTitleInput').value.trim();
