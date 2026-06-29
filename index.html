@@ -1269,6 +1269,8 @@ footer {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 </style>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('e0awi-tK6bi_VJHzU');</script>
 </head>
 <body>
 
@@ -2096,24 +2098,30 @@ footer {
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">YOUR NAME</label>
-            <input type="text" class="form-input" placeholder="Alex Johnson">
+            <input type="text" id="cf_name" class="form-input" placeholder="Alex Johnson">
           </div>
           <div class="form-group">
             <label class="form-label">YOUR EMAIL</label>
-            <input type="email" class="form-input" placeholder="alex@company.com">
+            <input type="email" id="cf_email" class="form-input" placeholder="alex@company.com">
           </div>
         </div>
         <div class="form-group">
           <label class="form-label">SERVICE NEEDED</label>
-          <input type="text" class="form-input" placeholder="e.g. AI Automation, Graphic Design...">
+          <input type="text" id="cf_service" class="form-input" placeholder="e.g. AI Automation, Graphic Design...">
         </div>
         <div class="form-group">
           <label class="form-label">YOUR BUDGET (USD)</label>
-          <input type="text" class="form-input" placeholder="e.g. $200 – $500">
+          <input type="text" id="cf_budget" class="form-input" placeholder="e.g. $200 – $500">
         </div>
         <div class="form-group">
           <label class="form-label">PROJECT DETAILS</label>
-          <textarea class="form-textarea" placeholder="Tell me about your project, goals, and timeline..."></textarea>
+          <textarea id="cf_message" class="form-textarea" placeholder="Tell me about your project, goals, and timeline..."></textarea>
+        </div>
+        <div id="cf_success" style="display:none;padding:14px 18px;background:rgba(22,163,74,0.12);border:1px solid rgba(22,163,74,0.35);border-radius:10px;color:#4ade80;font-size:14px;text-align:center;">
+          ✅ Message sent successfully! I'll get back to you soon.
+        </div>
+        <div id="cf_error" style="display:none;padding:14px 18px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;color:#f87171;font-size:14px;text-align:center;">
+          ❌ Something went wrong. Please try again or email directly.
         </div>
         <button class="form-submit" onclick="handleSubmit(this)">Send Message →</button>
       </div>
@@ -2385,19 +2393,76 @@ document.querySelectorAll('.faq-q').forEach(q => {
 });
 
 // ===== FORM SUBMIT =====
-function handleSubmit(btn) {
+async function handleSubmit(btn) {
+  const name    = document.getElementById('cf_name').value.trim();
+  const email   = document.getElementById('cf_email').value.trim();
+  const service = document.getElementById('cf_service').value.trim();
+  const budget  = document.getElementById('cf_budget').value.trim();
+  const message = document.getElementById('cf_message').value.trim();
+  const successEl = document.getElementById('cf_success');
+  const errorEl   = document.getElementById('cf_error');
+
+  // Validation
+  if (!name || !email || !message) {
+    errorEl.textContent = '⚠️ Please fill in Name, Email and Project Details.';
+    errorEl.style.display = 'block';
+    successEl.style.display = 'none';
+    return;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errorEl.textContent = '⚠️ Please enter a valid email address.';
+    errorEl.style.display = 'block';
+    successEl.style.display = 'none';
+    return;
+  }
+
   const original = btn.textContent;
-  btn.textContent = 'Sending...';
+  btn.textContent = '⏳ Sending...';
   btn.disabled = true;
-  setTimeout(() => {
-    btn.textContent = '✓ Message Sent!';
+  successEl.style.display = 'none';
+  errorEl.style.display = 'none';
+
+  const templateParams = {
+    from_name:       name,
+    from_email:      email,
+    service:         service || 'Not specified',
+    budget:          budget  || 'Not specified',
+    project_details: message,
+    message:         message,
+  };
+
+  try {
+    // তোমার কাছে email যাবে (Contact Us template)
+    await emailjs.send('service_tfcdfkh', 'template_z8eqf3f', templateParams);
+    // Public কে auto-reply যাবে
+    await emailjs.send('service_tfcdfkh', 'template_6r0z0rk', templateParams);
+
+    // Success
+    btn.textContent = '✅ Sent!';
     btn.style.background = 'linear-gradient(135deg, #16a34a, #15803d)';
+    successEl.style.display = 'block';
+
+    // Form clear করো
+    document.getElementById('cf_name').value = '';
+    document.getElementById('cf_email').value = '';
+    document.getElementById('cf_service').value = '';
+    document.getElementById('cf_budget').value = '';
+    document.getElementById('cf_message').value = '';
+
     setTimeout(() => {
       btn.textContent = original;
       btn.style.background = '';
       btn.disabled = false;
-    }, 3000);
-  }, 1200);
+      successEl.style.display = 'none';
+    }, 5000);
+
+  } catch(err) {
+    console.error('EmailJS error:', err);
+    btn.textContent = original;
+    btn.disabled = false;
+    errorEl.textContent = '❌ Failed to send. Please try again or email vapxhasan@gmail.com directly.';
+    errorEl.style.display = 'block';
+  }
 }
 
 // ===== STAT COUNTER =====
