@@ -182,6 +182,8 @@ nav.scrolled {
   align-items: center;
   position: relative;
   overflow: hidden;
+  padding-top: 120px;
+  padding-bottom: 50px;
 }
 .hero-orb {
   position: absolute;
@@ -356,12 +358,12 @@ nav.scrolled {
   white-space: nowrap;
 }
 .fc-icon { font-size: 14px; }
-.fc1 { top: 14%; right: 8%; animation: floatChip 7s ease-in-out infinite; border-color: rgba(108,99,255,0.3); }
-.fc2 { top: 38%; right: 18%; animation: floatChip 8s ease-in-out infinite .8s; border-color: rgba(0,212,255,0.3); }
-.fc3 { top: 60%; right: 6%; animation: floatChip 6.5s ease-in-out infinite 1.4s; border-color: rgba(155,93,255,0.3); }
-.fc4 { top: 80%; right: 22%; animation: floatChip 7.5s ease-in-out infinite .4s; border-color: rgba(0,212,255,0.3); }
+.fc1 { top: 2%; right: 4%; animation: floatChip 7s ease-in-out infinite; border-color: rgba(108,99,255,0.3); }
+.fc2 { top: 18%; right: 1%; animation: floatChip 8s ease-in-out infinite .8s; border-color: rgba(0,212,255,0.3); }
+.fc3 { bottom: 16%; right: 2%; animation: floatChip 6.5s ease-in-out infinite 1.4s; border-color: rgba(155,93,255,0.3); }
+.fc4 { bottom: 0%; right: 5%; animation: floatChip 7.5s ease-in-out infinite .4s; border-color: rgba(0,212,255,0.3); }
 @keyframes floatChip { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
-@media (max-width: 1180px) { .float-chip { display: none; } }
+@media (max-width: 1340px) { .float-chip { display: none; } }
 .float-icon {
   position: absolute;
   width: 44px; height: 44px;
@@ -866,6 +868,345 @@ footer {
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
+/* ===== PROFILE IMAGE UPLOAD ===== */
+.avatar-upload-label {
+  cursor: pointer;
+  position: relative;
+  display: block;
+  width: 250px; height: 250px;
+  border-radius: 50%;
+}
+.avatar-upload-label:hover .avatar-overlay { opacity: 1; }
+.avatar-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(108,99,255,0.55);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .25s;
+  z-index: 10;
+  gap: 6px;
+}
+.avatar-overlay-icon { font-size: 28px; }
+.avatar-overlay-txt { font-size: 11px; color: #fff; font-family: var(--font-mono); letter-spacing: 1px; }
+.avatar-img {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+.avatar-placeholder {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 90px;
+  background: linear-gradient(135deg, var(--card) 0%, var(--card2) 100%);
+}
+
+/* ===== YOUTUBE SECTION ===== */
+#youtube { background: var(--bg); }
+.yt-section-top { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 48px; }
+.yt-channel-card {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--card);
+  border: 1px solid rgba(255,0,0,0.25);
+  border-radius: 14px;
+  padding: 18px 24px;
+  margin-bottom: 40px;
+  transition: all .3s;
+  cursor: pointer;
+}
+.yt-channel-card:hover { border-color: rgba(255,0,0,0.5); box-shadow: 0 0 30px rgba(255,0,0,0.1); transform: translateY(-3px); }
+.yt-channel-logo {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff0000, #cc0000);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.yt-channel-logo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; display: none; }
+.yt-channel-logo img.loaded { display: block; }
+.yt-channel-info { flex: 1; }
+.yt-channel-name { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--white); margin-bottom: 3px; }
+.yt-channel-sub { font-size: 12px; color: var(--muted); font-family: var(--font-mono); }
+.yt-subscribe-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 22px;
+  background: #ff0000;
+  color: #fff;
+  border-radius: 8px;
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all .2s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.yt-subscribe-btn:hover { background: #cc0000; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,0,0,0.3); }
+.yt-videos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+.yt-video-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  transition: all .3s;
+}
+.yt-video-card:hover { transform: translateY(-6px); border-color: rgba(255,0,0,0.3); box-shadow: 0 20px 50px rgba(255,0,0,0.08); }
+.yt-thumb-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  background: var(--card2);
+  overflow: hidden;
+}
+.yt-thumb-wrap iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  border: none;
+}
+.yt-thumb-placeholder {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: linear-gradient(135deg, var(--card2), var(--bg));
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+  transition: all .2s;
+}
+.yt-thumb-placeholder:hover { background: rgba(255,0,0,0.08); color: var(--white); }
+.yt-play-icon { font-size: 48px; opacity: .6; }
+.yt-video-body { padding: 16px; }
+.yt-video-title { font-size: 14px; font-weight: 600; color: var(--white); margin-bottom: 6px; line-height: 1.4; }
+.yt-video-meta { font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
+.yt-add-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px;
+  background: rgba(255,0,0,0.1);
+  border: 1px solid rgba(255,0,0,0.3);
+  color: #ff6666;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .2s;
+  font-family: var(--font-display);
+}
+.yt-add-btn:hover { background: rgba(255,0,0,0.18); border-color: #ff0000; }
+.yt-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s;
+}
+.yt-modal-overlay.open { opacity: 1; pointer-events: all; }
+.yt-modal {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 32px;
+  width: 100%;
+  max-width: 480px;
+  transform: translateY(20px);
+  transition: transform .3s;
+}
+.yt-modal-overlay.open .yt-modal { transform: translateY(0); }
+.yt-modal-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.yt-modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+.yt-modal-input {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: var(--white);
+  outline: none;
+  font-family: var(--font-body);
+  margin-bottom: 12px;
+  transition: border-color .2s;
+}
+.yt-modal-input:focus { border-color: var(--indigo); }
+.yt-modal-btns { display: flex; gap: 10px; margin-top: 8px; }
+.yt-modal-add {
+  flex: 1; padding: 12px;
+  background: linear-gradient(135deg, #ff0000, #cc0000);
+  color: #fff; border: none; border-radius: 8px;
+  font-family: var(--font-display); font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+}
+.yt-modal-add:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,0,0,0.3); }
+.yt-modal-cancel { padding: 12px 20px; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; cursor: pointer; font-family: var(--font-display); font-size: 14px; transition: all .2s; }
+.yt-modal-cancel:hover { border-color: var(--white); color: var(--white); }
+.yt-empty {
+  text-align: center;
+  padding: 60px 24px;
+  border: 2px dashed rgba(255,0,0,0.2);
+  border-radius: 16px;
+  color: var(--muted);
+}
+.yt-empty-icon { font-size: 48px; margin-bottom: 12px; }
+.yt-empty-txt { font-size: 14px; margin-bottom: 16px; }
+
+/* ===== CHANNEL EDIT ===== */
+.yt-channel-edit-btn {
+  font-size: 11px; color: var(--muted); font-family: var(--font-mono);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border); border-radius: 6px;
+  padding: 4px 10px; cursor: pointer; margin-left: auto;
+  transition: all .2s;
+}
+.yt-channel-edit-btn:hover { color: var(--white); border-color: rgba(255,255,255,0.2); }
+
+/* ===== BLOG SECTION ===== */
+#blog { background: var(--bg2); }
+.blog-top { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 48px; }
+.blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; }
+.blog-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all .3s;
+  display: flex; flex-direction: column;
+}
+.blog-card:hover { transform: translateY(-6px); border-color: rgba(108,99,255,0.3); box-shadow: 0 20px 60px rgba(108,99,255,0.1); }
+.blog-thumb {
+  height: 180px;
+  background: linear-gradient(135deg, var(--card2), var(--bg));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 56px;
+  position: relative;
+  overflow: hidden;
+}
+.blog-thumb-img { width: 100%; height: 100%; object-fit: cover; }
+.blog-thumb-glow { position: absolute; width: 100px; height: 100px; border-radius: 50%; filter: blur(30px); }
+.blog-body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
+.blog-cat {
+  font-size: 10px; font-family: var(--font-mono); color: var(--indigo);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px;
+}
+.blog-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 10px; line-height: 1.4; }
+.blog-excerpt { font-size: 13px; color: var(--muted); line-height: 1.7; flex: 1; margin-bottom: 16px; }
+.blog-meta { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); font-family: var(--font-mono); }
+.blog-read-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 600; color: var(--indigo);
+  background: rgba(108,99,255,0.08);
+  border: 1px solid rgba(108,99,255,0.2);
+  border-radius: 6px;
+  padding: 5px 12px;
+  transition: all .2s;
+  cursor: pointer;
+}
+.blog-read-btn:hover { background: rgba(108,99,255,0.18); border-color: var(--indigo); }
+.blog-write-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 20px;
+  background: rgba(108,99,255,0.1);
+  border: 1px solid rgba(108,99,255,0.3);
+  color: var(--indigo);
+  border-radius: 8px;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all .2s;
+  font-family: var(--font-display);
+}
+.blog-write-btn:hover { background: rgba(108,99,255,0.18); border-color: var(--indigo); }
+.blog-empty {
+  text-align: center; padding: 60px 24px;
+  border: 2px dashed var(--border); border-radius: 16px; color: var(--muted);
+}
+.blog-empty-icon { font-size: 48px; margin-bottom: 12px; }
+.blog-empty-txt { font-size: 14px; margin-bottom: 16px; }
+
+/* Blog Write Modal */
+.blog-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(10px);
+  z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s;
+}
+.blog-modal-overlay.open { opacity: 1; pointer-events: all; }
+.blog-modal {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 36px;
+  width: 100%; max-width: 600px;
+  max-height: 90vh; overflow-y: auto;
+  transform: translateY(24px);
+  transition: transform .3s;
+}
+.blog-modal-overlay.open .blog-modal { transform: translateY(0); }
+.blog-modal-title { font-family: var(--font-display); font-size: 20px; font-weight: 800; color: var(--white); margin-bottom: 6px; }
+.blog-modal-sub { font-size: 13px; color: var(--muted); margin-bottom: 24px; }
+.blog-modal-label { font-size: 11px; color: var(--muted); font-family: var(--font-mono); letter-spacing: 1px; margin-bottom: 6px; display: block; }
+.blog-modal-field {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 14px; color: var(--white);
+  outline: none; font-family: var(--font-body);
+  margin-bottom: 16px; transition: border-color .2s;
+  resize: none;
+}
+.blog-modal-field:focus { border-color: var(--indigo); }
+.blog-modal-btns { display: flex; gap: 10px; margin-top: 8px; }
+.blog-modal-publish {
+  flex: 1; padding: 13px;
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  color: #fff; border: none; border-radius: 8px;
+  font-family: var(--font-display); font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .2s; box-shadow: 0 4px 20px rgba(108,99,255,0.35);
+}
+.blog-modal-publish:hover { transform: translateY(-1px); box-shadow: 0 8px 30px rgba(108,99,255,0.5); }
+.blog-modal-cancel { padding: 13px 20px; background: transparent; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; cursor: pointer; font-family: var(--font-display); font-size: 14px; transition: all .2s; }
+.blog-modal-cancel:hover { border-color: var(--white); color: var(--white); }
+
+/* Blog Read Modal */
+.blog-read-modal {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 20px; padding: 36px;
+  width: 100%; max-width: 680px;
+  max-height: 85vh; overflow-y: auto;
+  transform: translateY(24px); transition: transform .3s;
+}
+.blog-read-modal-overlay.open .blog-read-modal { transform: translateY(0); }
+.blog-read-modal-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.75); backdrop-filter: blur(10px);
+  z-index: 2001; display: flex; align-items: center; justify-content: center;
+  padding: 20px; opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+.blog-read-modal-overlay.open { opacity: 1; pointer-events: all; }
+.blog-rm-cat { font-size: 10px; font-family: var(--font-mono); color: var(--indigo); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+.blog-rm-title { font-family: var(--font-display); font-size: 24px; font-weight: 800; color: var(--white); margin-bottom: 12px; line-height: 1.3; }
+.blog-rm-meta { font-size: 12px; color: var(--muted); font-family: var(--font-mono); margin-bottom: 24px; }
+.blog-rm-content { font-size: 14px; color: var(--muted); line-height: 1.85; white-space: pre-wrap; }
+
 /* ===== BACK TO TOP ===== */
 #btt {
   position: fixed;
@@ -903,19 +1244,21 @@ footer {
 @media (max-width: 900px) {
   .about-grid { grid-template-columns: 1fr; gap: 48px; }
   .about-visual { display: none; }
-  .skills-grid { grid-template-columns: 1fr; }
   .contact-grid { grid-template-columns: 1fr; }
   .process-steps { flex-wrap: wrap; }
   .process-steps::before { display: none; }
   .process-step { flex: 0 0 calc(50% - 10px); }
-}
-@media (max-width: 768px) {
-  .section { padding: 70px 0; }
   .nav-links { display: none; }
   .nav-cta { display: none; }
   .hamburger { display: flex; }
-  .hero-h1 { letter-spacing: -1px; }
   .hero-floats { display: none; }
+}
+@media (max-width: 540px) {
+  .skills-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 768px) {
+  .section { padding: 70px 0; }
+  .hero-h1 { letter-spacing: -1px; }
   .hero-stat-divider { display: none; }
   .process-step { flex: 0 0 100%; }
   .form-row { grid-template-columns: 1fr; }
@@ -945,6 +1288,8 @@ footer {
         <li><a href="#services">Services</a></li>
         <li><a href="#portfolio">Work</a></li>
         <li><a href="#skills">Skills</a></li>
+        <li><a href="#youtube">YouTube</a></li>
+        <li><a href="#blog">Blog</a></li>
         <li><a href="#process">Process</a></li>
         <li><a href="#pricing">Pricing</a></li>
         <li><a href="#testimonials">Reviews</a></li>
@@ -965,6 +1310,8 @@ footer {
   <a href="#services" class="mm-link">Services</a>
   <a href="#portfolio" class="mm-link">Work</a>
   <a href="#skills" class="mm-link">Skills</a>
+  <a href="#youtube" class="mm-link">YouTube</a>
+  <a href="#blog" class="mm-link">Blog</a>
   <a href="#process" class="mm-link">Process</a>
   <a href="#pricing" class="mm-link">Pricing</a>
   <a href="#testimonials" class="mm-link">Reviews</a>
@@ -976,13 +1323,13 @@ footer {
   <div class="hero-orb orb1"></div>
   <div class="hero-orb orb2"></div>
   <div class="hero-orb orb3"></div>
-  <div class="hero-floats">
-    <div class="float-chip fc1"><span class="fc-icon">🧠</span>Prompt Engineering</div>
-    <div class="float-chip fc2"><span class="fc-icon">⚙️</span>AI Automation</div>
-    <div class="float-chip fc3"><span class="fc-icon">🎨</span>Graphic Design</div>
-    <div class="float-chip fc4"><span class="fc-icon">🎬</span>Video Editing</div>
-  </div>
-  <div class="container">
+  <div class="container" style="position:relative;">
+    <div class="hero-floats">
+      <div class="float-chip fc1"><span class="fc-icon">🧠</span>Prompt Engineering</div>
+      <div class="float-chip fc2"><span class="fc-icon">⚙️</span>AI Automation</div>
+      <div class="float-chip fc3"><span class="fc-icon">🎨</span>Graphic Design</div>
+      <div class="float-chip fc4"><span class="fc-icon">🎬</span>Video Editing</div>
+    </div>
     <div class="hero-content">
       <div class="hero-badge">
         <span class="hero-badge-dot"></span>
@@ -1068,7 +1415,17 @@ footer {
             <span class="ring-dot"></span>
             <span class="ring-dot"></span>
           </div>
-          <div class="about-avatar-inner">🧑‍💻</div>
+          <div class="about-avatar-inner" style="position:relative;overflow:visible;">
+            <label class="avatar-upload-label" for="avatarInput" title="Click to upload your photo">
+              <div id="avatarPlaceholder" class="avatar-placeholder">🧑‍💻</div>
+              <img id="avatarImg" class="avatar-img" style="display:none;" alt="Profile Photo">
+              <div class="avatar-overlay">
+                <span class="avatar-overlay-icon">📷</span>
+                <span class="avatar-overlay-txt">Upload Photo</span>
+              </div>
+            </label>
+            <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+          </div>
           <div class="about-badge-cards">
             <div class="about-badge-card">
               <span class="badge-icon">⚡</span>
@@ -1725,6 +2082,131 @@ footer {
   </div>
 </section>
 
+<!-- YOUTUBE SECTION -->
+<section id="youtube" class="section">
+  <div class="container">
+    <div class="yt-section-top reveal">
+      <div>
+        <div class="section-label">My Channel</div>
+        <h2 class="section-title">YouTube <span>Videos</span></h2>
+        <p class="section-sub">Watch my latest tutorials, tips, and content on AI, design, and creative workflows.</p>
+      </div>
+      <button class="yt-add-btn" id="openYtModal">▶ + Add Video</button>
+    </div>
+
+    <!-- Channel Info Card -->
+    <div class="yt-channel-card reveal" id="ytChannelCard">
+      <div class="yt-channel-logo" id="ytChannelLogoWrap">
+        <img id="ytChannelLogoImg" alt="Channel Logo">
+        <span id="ytChannelLogoEmoji">▶</span>
+      </div>
+      <div class="yt-channel-info">
+        <div class="yt-channel-name" id="ytChannelName">@vapxhasan</div>
+        <div class="yt-channel-sub" id="ytChannelSub">YouTube Channel · Click to set up your channel info</div>
+      </div>
+      <button class="yt-channel-edit-btn" id="openChannelEdit">✏ Edit Channel</button>
+      <a class="yt-subscribe-btn" id="ytSubscribeLink" href="https://youtube.com/@vapxhasan" target="_blank">
+        🔔 Subscribe
+      </a>
+    </div>
+
+    <!-- Videos Grid -->
+    <div id="ytVideosGrid" class="yt-videos-grid">
+      <!-- videos injected by JS -->
+    </div>
+
+    <div id="ytEmpty" class="yt-empty reveal">
+      <div class="yt-empty-icon">🎬</div>
+      <div class="yt-empty-txt">No videos added yet. Click "+ Add Video" to add your YouTube videos.</div>
+      <button class="yt-add-btn" onclick="document.getElementById('openYtModal').click()">+ Add First Video</button>
+    </div>
+  </div>
+</section>
+
+<!-- Add Video Modal -->
+<div class="yt-modal-overlay" id="ytModal">
+  <div class="yt-modal">
+    <div class="yt-modal-title">▶ Add YouTube Video</div>
+    <div class="yt-modal-sub">Paste your YouTube video URL or embed ID below</div>
+    <input class="yt-modal-input" id="ytUrlInput" placeholder="e.g. https://youtube.com/watch?v=dQw4w9WgXcQ" type="text">
+    <input class="yt-modal-input" id="ytTitleInput" placeholder="Video title (optional)" type="text">
+    <div class="yt-modal-btns">
+      <button class="yt-modal-cancel" id="closeYtModal">Cancel</button>
+      <button class="yt-modal-add" onclick="addYtVideo()">Add Video →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Channel Modal -->
+<div class="yt-modal-overlay" id="ytChannelModal">
+  <div class="yt-modal">
+    <div class="yt-modal-title">✏ Edit Channel Info</div>
+    <div class="yt-modal-sub">Set your YouTube channel details</div>
+    <input class="yt-modal-input" id="ytChNameInput" placeholder="Channel name e.g. @vapxhasan" type="text">
+    <input class="yt-modal-input" id="ytChSubInput" placeholder="Subscriber count or tagline" type="text">
+    <input class="yt-modal-input" id="ytChUrlInput" placeholder="Channel URL e.g. https://youtube.com/@vapxhasan" type="text">
+    <div class="yt-modal-btns">
+      <button class="yt-modal-cancel" id="closeChannelModal">Cancel</button>
+      <button class="yt-modal-add" onclick="saveChannelInfo()">Save →</button>
+    </div>
+  </div>
+</div>
+
+<!-- BLOG SECTION -->
+<section id="blog" class="section">
+  <div class="container">
+    <div class="blog-top reveal">
+      <div>
+        <div class="section-label">My Articles</div>
+        <h2 class="section-title">Blog & <span>Insights</span></h2>
+        <p class="section-sub">Thoughts on AI, design, automation, and the future of creative work.</p>
+      </div>
+      <button class="blog-write-btn" id="openBlogModal">✍ Write Post</button>
+    </div>
+    <div id="blogGrid" class="blog-grid">
+      <!-- blog cards injected by JS -->
+    </div>
+    <div id="blogEmpty" class="blog-empty reveal">
+      <div class="blog-empty-icon">📝</div>
+      <div class="blog-empty-txt">No blog posts yet. Click "Write Post" to publish your first article!</div>
+      <button class="blog-write-btn" onclick="document.getElementById('openBlogModal').click()">✍ Write First Post</button>
+    </div>
+  </div>
+</section>
+
+<!-- Blog Write Modal -->
+<div class="blog-modal-overlay" id="blogModal">
+  <div class="blog-modal">
+    <div class="blog-modal-title">✍ Write Blog Post</div>
+    <div class="blog-modal-sub">Share your knowledge, tips, and experiences</div>
+    <label class="blog-modal-label">POST TITLE</label>
+    <input class="blog-modal-field" id="blogTitleInput" placeholder="e.g. 10 AI Tools That Changed My Workflow" type="text">
+    <label class="blog-modal-label">CATEGORY</label>
+    <input class="blog-modal-field" id="blogCatInput" placeholder="e.g. AI Tips, Design, Tutorial..." type="text">
+    <label class="blog-modal-label">EMOJI / COVER</label>
+    <input class="blog-modal-field" id="blogEmojiInput" placeholder="e.g. 🤖 or 🎨" type="text" value="📝">
+    <label class="blog-modal-label">CONTENT</label>
+    <textarea class="blog-modal-field" id="blogContentInput" rows="8" placeholder="Write your blog post content here..."></textarea>
+    <div class="blog-modal-btns">
+      <button class="blog-modal-cancel" id="closeBlogModal">Cancel</button>
+      <button class="blog-modal-publish" onclick="publishBlog()">Publish →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Blog Read Modal -->
+<div class="blog-read-modal-overlay" id="blogReadModal">
+  <div class="blog-read-modal">
+    <div id="blogReadCat" class="blog-rm-cat"></div>
+    <div id="blogReadTitle" class="blog-rm-title"></div>
+    <div id="blogReadMeta" class="blog-rm-meta"></div>
+    <div id="blogReadContent" class="blog-rm-content"></div>
+    <div style="margin-top:24px;">
+      <button class="blog-modal-cancel" onclick="closeBlogRead()" style="padding:11px 24px;">← Close</button>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER -->
 <footer>
   <div class="container">
@@ -1752,6 +2234,8 @@ footer {
         <div class="footer-links-title">Navigate</div>
         <a href="#about">About Me</a>
         <a href="#portfolio">Portfolio</a>
+        <a href="#youtube">YouTube</a>
+        <a href="#blog">Blog</a>
         <a href="#testimonials">Reviews</a>
         <a href="#process">Process</a>
         <a href="#faq">FAQ</a>
@@ -1884,7 +2368,184 @@ const statObs = new IntersectionObserver((entries) => {
 const heroStats = document.querySelector('.hero-stats');
 if (heroStats) statObs.observe(heroStats);
 
-// ===== SMOOTH ANCHOR SCROLL =====
+// ===== PROFILE IMAGE UPLOAD =====
+const avatarInput = document.getElementById('avatarInput');
+const avatarImg = document.getElementById('avatarImg');
+const avatarPlaceholder = document.getElementById('avatarPlaceholder');
+avatarInput.addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    avatarImg.src = e.target.result;
+    avatarImg.style.display = 'block';
+    avatarPlaceholder.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+});
+
+// ===== YOUTUBE SECTION =====
+let ytVideos = JSON.parse(localStorage.getItem('ytVideos') || '[]');
+let ytChannel = JSON.parse(localStorage.getItem('ytChannel') || '{"name":"@vapxhasan","sub":"YouTube Channel · Click to set up your channel info","url":"https://youtube.com/@vapxhasan"}');
+
+function getYtId(url) {
+  const patterns = [
+    /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([A-Za-z0-9_-]{11})/,
+    /^([A-Za-z0-9_-]{11})$/
+  ];
+  for (const p of patterns) {
+    const m = url.match(p);
+    if (m) return m[1];
+  }
+  return null;
+}
+
+function renderYtChannel() {
+  document.getElementById('ytChannelName').textContent = ytChannel.name;
+  document.getElementById('ytChannelSub').textContent = ytChannel.sub;
+  document.getElementById('ytSubscribeLink').href = ytChannel.url;
+  document.getElementById('ytChNameInput').value = ytChannel.name;
+  document.getElementById('ytChSubInput').value = ytChannel.sub;
+  document.getElementById('ytChUrlInput').value = ytChannel.url;
+}
+
+function renderYtVideos() {
+  const grid = document.getElementById('ytVideosGrid');
+  const empty = document.getElementById('ytEmpty');
+  if (ytVideos.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = ytVideos.map((v, i) => `
+    <div class="yt-video-card reveal visible">
+      <div class="yt-thumb-wrap">
+        <iframe src="https://www.youtube.com/embed/${v.id}" title="${v.title || 'YouTube Video'}" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <div class="yt-video-body">
+        <div class="yt-video-title">${v.title || 'YouTube Video'}</div>
+        <div class="yt-video-meta" style="display:flex;justify-content:space-between;align-items:center;">
+          <span>${v.date}</span>
+          <button onclick="removeYtVideo(${i})" style="background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);color:#ff6666;border-radius:5px;padding:3px 9px;cursor:pointer;font-size:11px;">✕ Remove</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addYtVideo() {
+  const url = document.getElementById('ytUrlInput').value.trim();
+  const title = document.getElementById('ytTitleInput').value.trim();
+  if (!url) return;
+  const id = getYtId(url);
+  if (!id) { alert('Invalid YouTube URL. Please paste a valid video link.'); return; }
+  ytVideos.unshift({ id, title: title || 'YouTube Video', date: new Date().toLocaleDateString('en-US', {year:'numeric',month:'short',day:'numeric'}) });
+  localStorage.setItem('ytVideos', JSON.stringify(ytVideos));
+  document.getElementById('ytUrlInput').value = '';
+  document.getElementById('ytTitleInput').value = '';
+  document.getElementById('ytModal').classList.remove('open');
+  renderYtVideos();
+}
+
+function removeYtVideo(i) {
+  ytVideos.splice(i, 1);
+  localStorage.setItem('ytVideos', JSON.stringify(ytVideos));
+  renderYtVideos();
+}
+
+function saveChannelInfo() {
+  ytChannel.name = document.getElementById('ytChNameInput').value.trim() || ytChannel.name;
+  ytChannel.sub = document.getElementById('ytChSubInput').value.trim() || ytChannel.sub;
+  ytChannel.url = document.getElementById('ytChUrlInput').value.trim() || ytChannel.url;
+  localStorage.setItem('ytChannel', JSON.stringify(ytChannel));
+  renderYtChannel();
+  document.getElementById('ytChannelModal').classList.remove('open');
+}
+
+document.getElementById('openYtModal').addEventListener('click', () => document.getElementById('ytModal').classList.add('open'));
+document.getElementById('closeYtModal').addEventListener('click', () => document.getElementById('ytModal').classList.remove('open'));
+document.getElementById('ytModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
+document.getElementById('openChannelEdit').addEventListener('click', () => document.getElementById('ytChannelModal').classList.add('open'));
+document.getElementById('closeChannelModal').addEventListener('click', () => document.getElementById('ytChannelModal').classList.remove('open'));
+document.getElementById('ytChannelModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
+
+renderYtChannel();
+renderYtVideos();
+
+// ===== BLOG SECTION =====
+let blogPosts = JSON.parse(localStorage.getItem('blogPosts') || '[]');
+
+function renderBlog() {
+  const grid = document.getElementById('blogGrid');
+  const empty = document.getElementById('blogEmpty');
+  if (blogPosts.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = blogPosts.map((p, i) => `
+    <div class="blog-card reveal visible">
+      <div class="blog-thumb">
+        <div class="blog-thumb-glow" style="background:rgba(108,99,255,0.35)"></div>
+        ${p.emoji || '📝'}
+      </div>
+      <div class="blog-body">
+        <div class="blog-cat">${p.cat || 'Article'}</div>
+        <div class="blog-title">${p.title}</div>
+        <div class="blog-excerpt">${(p.content || '').substring(0, 120)}${p.content && p.content.length > 120 ? '...' : ''}</div>
+        <div class="blog-meta">
+          <span>${p.date}</span>
+          <div style="display:flex;gap:8px;">
+            <span class="blog-read-btn" onclick="openBlogRead(${i})">Read More →</span>
+            <button onclick="removeBlogPost(${i})" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;font-family:var(--font-mono);">✕</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function publishBlog() {
+  const title = document.getElementById('blogTitleInput').value.trim();
+  const cat = document.getElementById('blogCatInput').value.trim();
+  const emoji = document.getElementById('blogEmojiInput').value.trim();
+  const content = document.getElementById('blogContentInput').value.trim();
+  if (!title || !content) { alert('Please fill in the title and content.'); return; }
+  blogPosts.unshift({ title, cat: cat || 'Article', emoji: emoji || '📝', content, date: new Date().toLocaleDateString('en-US', {year:'numeric',month:'long',day:'numeric'}) });
+  localStorage.setItem('blogPosts', JSON.stringify(blogPosts));
+  document.getElementById('blogTitleInput').value = '';
+  document.getElementById('blogCatInput').value = '';
+  document.getElementById('blogEmojiInput').value = '📝';
+  document.getElementById('blogContentInput').value = '';
+  document.getElementById('blogModal').classList.remove('open');
+  renderBlog();
+}
+
+function removeBlogPost(i) {
+  if (!confirm('Delete this post?')) return;
+  blogPosts.splice(i, 1);
+  localStorage.setItem('blogPosts', JSON.stringify(blogPosts));
+  renderBlog();
+}
+
+function openBlogRead(i) {
+  const p = blogPosts[i];
+  document.getElementById('blogReadCat').textContent = p.cat || 'Article';
+  document.getElementById('blogReadTitle').textContent = p.title;
+  document.getElementById('blogReadMeta').textContent = p.date;
+  document.getElementById('blogReadContent').textContent = p.content;
+  document.getElementById('blogReadModal').classList.add('open');
+}
+function closeBlogRead() { document.getElementById('blogReadModal').classList.remove('open'); }
+document.getElementById('blogReadModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeBlogRead(); });
+
+document.getElementById('openBlogModal').addEventListener('click', () => document.getElementById('blogModal').classList.add('open'));
+document.getElementById('closeBlogModal').addEventListener('click', () => document.getElementById('blogModal').classList.remove('open'));
+document.getElementById('blogModal').addEventListener('click', (e) => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
+
+renderBlog();
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     const target = document.querySelector(a.getAttribute('href'));
