@@ -2125,7 +2125,7 @@ footer {
         <h2 class="section-title">YouTube <span>Videos</span></h2>
         <p class="section-sub">Watch my latest tutorials, tips, and content on AI, design, and creative workflows.</p>
       </div>
-      <button class="yt-add-btn" id="openYtModal">▶ + Add Video</button>
+      <button class="yt-add-btn admin-only" id="openYtModal" style="display:none;">▶ + Add Video</button>
     </div>
 
     <!-- Channel Info Card -->
@@ -2138,7 +2138,7 @@ footer {
         <div class="yt-channel-name" id="ytChannelName">@vapxhasan</div>
         <div class="yt-channel-sub" id="ytChannelSub">YouTube Channel · Click to set up your channel info</div>
       </div>
-      <button class="yt-channel-edit-btn" id="openChannelEdit">✏ Edit Channel</button>
+      <button class="yt-channel-edit-btn admin-only" id="openChannelEdit" style="display:none;">✏ Edit Channel</button>
       <a class="yt-subscribe-btn" id="ytSubscribeLink" href="https://youtube.com/@vapxhasan" target="_blank">
         🔔 Subscribe
       </a>
@@ -2160,8 +2160,8 @@ footer {
 
     <div id="ytEmpty" class="yt-empty reveal">
       <div class="yt-empty-icon">🎬</div>
-      <div class="yt-empty-txt">No videos added yet. Click "+ Add Video" to add your YouTube videos.</div>
-      <button class="yt-add-btn" onclick="document.getElementById('openYtModal').click()">+ Add First Video</button>
+      <div class="yt-empty-txt">No videos yet. Check back soon!</div>
+      <button class="yt-add-btn admin-only" onclick="document.getElementById('openYtModal').click()" style="display:none;">+ Add First Video</button>
     </div>
   </div>
 </section>
@@ -2204,7 +2204,7 @@ footer {
         <h2 class="section-title">Blog & <span>Insights</span></h2>
         <p class="section-sub">Thoughts on AI, design, automation, and the future of creative work.</p>
       </div>
-      <button class="blog-write-btn" id="openBlogModal">✍ Write Post</button>
+      <button class="blog-write-btn admin-only" id="openBlogModal" style="display:none;">✍ Write Post</button>
     </div>
     <div id="blogGrid" class="blog-grid">
       <!-- blog cards injected by JS -->
@@ -2221,8 +2221,8 @@ footer {
 
     <div id="blogEmpty" class="blog-empty reveal">
       <div class="blog-empty-icon">📝</div>
-      <div class="blog-empty-txt">No blog posts yet. Click "Write Post" to publish your first article!</div>
-      <button class="blog-write-btn" onclick="document.getElementById('openBlogModal').click()">✍ Write First Post</button>
+      <div class="blog-empty-txt">No posts yet. Check back soon!</div>
+      <button class="blog-write-btn admin-only" onclick="document.getElementById('openBlogModal').click()" style="display:none;">✍ Write First Post</button>
     </div>
   </div>
 </section>
@@ -2620,12 +2620,14 @@ function adminLogout() {
 function showAdminUI() {
   document.getElementById('adminBar').style.display = 'flex';
   document.getElementById('adminLoginBtn').style.display = 'none';
-  document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'inline-flex');
+  document.querySelectorAll('.admin-only').forEach(el => {
+    // button → inline-flex, অন্য elements → তাদের natural display
+    el.style.display = el.tagName === 'BUTTON' ? 'inline-flex' : 'flex';
+  });
 }
 
 function hideAdminUI() {
   document.getElementById('adminBar').style.display = 'none';
-  // Logout করলে admin button আর দেখাবে না — public view-এ ফিরে যাবে
   document.getElementById('adminLoginBtn').style.display = 'none';
   document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
 }
