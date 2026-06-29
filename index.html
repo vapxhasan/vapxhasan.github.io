@@ -2514,7 +2514,7 @@ let _record = { yt_videos: [], yt_channel: { name: '@vapxhasan', sub: 'YouTube C
 // ===================================================
 // SECRET URL CHECK — শুধু ?login=true URL-এ admin button দেখাবে
 // ===================================================
-const _isLoginRoute = new URLSearchParams(window.location.search).get('login') === 'true';
+const _isLoginRoute = new URLSearchParams(window.location.search).get('AdminH@san') === '1042004';
 
 // ===================================================
 // ADMIN PASSWORD SYSTEM
@@ -2603,7 +2603,7 @@ async function doAdminLogin() {
 
   // URL থেকে ?login=true সরিয়ে দাও (clean URL)
   const url = new URL(window.location.href);
-  url.searchParams.delete('login');
+  url.searchParams.delete('AdminH@san');
   window.history.replaceState({}, '', url.pathname);
 }
 
