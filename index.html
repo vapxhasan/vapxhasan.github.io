@@ -1283,8 +1283,28 @@ footer {
   </div>
 </div>
 
-<!-- ===== ADMIN LOGIN BUTTON (always visible, bottom-left) ===== -->
-<button id="adminLoginBtn" onclick="adminLogin()" title="Admin Login" style="position:fixed;bottom:28px;left:28px;z-index:900;width:44px;height:44px;border-radius:50%;background:rgba(13,17,32,0.85);border:1px solid rgba(108,99,255,0.3);color:var(--muted);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.3);transition:all .25s;backdrop-filter:blur(8px);" onmouseover="this.style.borderColor='var(--indigo)';this.style.color='var(--white)'" onmouseout="this.style.borderColor='rgba(108,99,255,0.3)';this.style.color='var(--muted)'">🔐</button>
+<!-- ===== ADMIN LOGIN BUTTON (hidden by default — only shown on ?login=true) ===== -->
+<button id="adminLoginBtn" onclick="openAdminLoginModal()" title="Admin Login" style="position:fixed;bottom:28px;left:28px;z-index:900;width:44px;height:44px;border-radius:50%;background:rgba(13,17,32,0.85);border:1px solid rgba(108,99,255,0.3);color:var(--muted);font-size:18px;cursor:pointer;display:none;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,0.3);transition:all .25s;backdrop-filter:blur(8px);" onmouseover="this.style.borderColor='var(--indigo)';this.style.color='var(--white)'" onmouseout="this.style.borderColor='rgba(108,99,255,0.3)';this.style.color='var(--muted)'">🔐</button>
+
+<!-- ===== ADMIN LOGIN MODAL ===== -->
+<div id="adminLoginModal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
+  <div style="background:#111827;border:1px solid rgba(108,99,255,0.3);border-radius:16px;padding:36px 32px;width:100%;max-width:400px;margin:16px;box-shadow:0 0 40px rgba(108,99,255,0.2);position:relative;">
+    <button onclick="closeAdminLoginModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#8B95B0;font-size:20px;cursor:pointer;line-height:1;">✕</button>
+    <div style="font-size:28px;margin-bottom:8px;">🔐</div>
+    <div style="font-size:18px;font-weight:700;color:#E8EAF0;margin-bottom:4px;">Admin Login</div>
+    <div style="font-size:13px;color:#8B95B0;margin-bottom:24px;">Enter your credentials to access the admin panel.</div>
+    <div style="margin-bottom:14px;">
+      <label style="font-size:12px;color:#8B95B0;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">Password</label>
+      <input id="adminPassInput" type="password" placeholder="Admin password" style="width:100%;padding:10px 14px;background:#0D1120;border:1px solid rgba(108,99,255,0.25);border-radius:8px;color:#E8EAF0;font-size:14px;outline:none;font-family:inherit;" onkeydown="if(event.key==='Enter')document.getElementById('adminMkInput').focus()">
+    </div>
+    <div style="margin-bottom:22px;">
+      <label style="font-size:12px;color:#8B95B0;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">JSONBin Master Key</label>
+      <input id="adminMkInput" type="password" placeholder="$2a$10$..." style="width:100%;padding:10px 14px;background:#0D1120;border:1px solid rgba(108,99,255,0.25);border-radius:8px;color:#E8EAF0;font-size:14px;outline:none;font-family:inherit;" onkeydown="if(event.key==='Enter')doAdminLogin()">
+    </div>
+    <div id="adminLoginError" style="display:none;color:#ff6666;font-size:13px;margin-bottom:14px;padding:8px 12px;background:rgba(255,0,0,0.08);border-radius:6px;border:1px solid rgba(255,0,0,0.15);">❌ Wrong password or invalid Master Key.</div>
+    <button onclick="doAdminLogin()" id="adminLoginSubmit" style="width:100%;padding:12px;background:linear-gradient(135deg,#6C63FF,#9B5DFF);border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .2s;">Login to Admin Panel →</button>
+  </div>
+</div>
 
 <!-- Cursor glow -->
 <div class="cursor-glow" id="cursorGlow"></div>
@@ -2492,43 +2512,99 @@ async function cloudSet(record) {
 let _record = { yt_videos: [], yt_channel: { name: '@vapxhasan', sub: 'YouTube Channel · AI, Design & Automation', url: 'https://youtube.com/@vapxhasan' }, blog_posts: [] };
 
 // ===================================================
+// SECRET URL CHECK — শুধু ?login=true URL-এ admin button দেখাবে
+// ===================================================
+const _isLoginRoute = new URLSearchParams(window.location.search).get('login') === 'true';
+
+// ===================================================
 // ADMIN PASSWORD SYSTEM
 // ===================================================
-const ADMIN_PASS_HASH = 'H@san1042004'; // password এখানে
+const ADMIN_PASS_HASH = 'H@san1042004';
 let isAdmin = false;
 
 function checkAdmin() {
   const stored = sessionStorage.getItem('vapx_admin_ok');
   if (stored === '1') {
-    // session থেকে master key ফিরিয়ে আনো (sessionStorage-এ obfuscated রাখা হয়েছে)
     const mk = sessionStorage.getItem('vapx_mk');
-    if (mk) { _masterKey = atob(mk); isAdmin = true; showAdminUI(); }
+    if (mk) {
+      _masterKey = atob(mk);
+      isAdmin = true;
+      showAdminUI();
+    }
+  } else if (_isLoginRoute) {
+    // Secret URL-এ এসেছে — login button দেখাও
+    const btn = document.getElementById('adminLoginBtn');
+    if (btn) btn.style.display = 'flex';
   }
 }
 
-async function adminLogin() {
-  const pass = prompt('🔐 Enter Admin Password:');
-  if (!pass) return;
-  if (pass !== ADMIN_PASS_HASH) { alert('❌ Wrong password!'); return; }
+// Modal open/close
+function openAdminLoginModal() {
+  const modal = document.getElementById('adminLoginModal');
+  modal.style.display = 'flex';
+  document.getElementById('adminPassInput').value = '';
+  document.getElementById('adminMkInput').value = '';
+  document.getElementById('adminLoginError').style.display = 'none';
+  setTimeout(() => document.getElementById('adminPassInput').focus(), 100);
+}
+function closeAdminLoginModal() {
+  document.getElementById('adminLoginModal').style.display = 'none';
+}
+// Click outside modal to close
+document.getElementById('adminLoginModal').addEventListener('click', function(e) {
+  if (e.target === this) closeAdminLoginModal();
+});
 
-  // Password সঠিক — এখন Master Key চাও
-  const mk = prompt('🔑 Enter your JSONBin Master Key:');
-  if (!mk || !mk.startsWith('$2a$')) { alert('❌ Invalid Master Key format!'); return; }
+async function doAdminLogin() {
+  const pass = document.getElementById('adminPassInput').value.trim();
+  const mk   = document.getElementById('adminMkInput').value.trim();
+  const errEl = document.getElementById('adminLoginError');
+  const btn   = document.getElementById('adminLoginSubmit');
+
+  errEl.style.display = 'none';
+  if (pass !== ADMIN_PASS_HASH) {
+    errEl.textContent = '❌ Wrong password!';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (!mk || !mk.startsWith('$2a$')) {
+    errEl.textContent = '❌ Invalid Master Key format! Should start with $2a$';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  btn.textContent = 'Connecting...';
+  btn.disabled = true;
 
   _masterKey = mk;
-  // Session-এ encode করে রাখো (page reload-এও admin থাকবে)
   sessionStorage.setItem('vapx_admin_ok', '1');
   sessionStorage.setItem('vapx_mk', btoa(mk));
   isAdmin = true;
 
-  // Bin না থাকলে তৈরি করো
   const binId = await getOrCreateBin();
-  if (!binId) { alert('❌ Failed to connect to JSONBin. Check your Master Key.'); return; }
+  if (!binId) {
+    errEl.textContent = '❌ Failed to connect to JSONBin. Check your Master Key.';
+    errEl.style.display = 'block';
+    btn.textContent = 'Login to Admin Panel →';
+    btn.disabled = false;
+    _masterKey = null;
+    sessionStorage.removeItem('vapx_admin_ok');
+    sessionStorage.removeItem('vapx_mk');
+    isAdmin = false;
+    return;
+  }
 
+  closeAdminLoginModal();
   showAdminUI();
   renderYtVideos();
   renderBlog();
-  alert('✅ Admin mode activated! Data synced to cloud.');
+  btn.textContent = 'Login to Admin Panel →';
+  btn.disabled = false;
+
+  // URL থেকে ?login=true সরিয়ে দাও (clean URL)
+  const url = new URL(window.location.href);
+  url.searchParams.delete('login');
+  window.history.replaceState({}, '', url.pathname);
 }
 
 function adminLogout() {
@@ -2549,7 +2625,8 @@ function showAdminUI() {
 
 function hideAdminUI() {
   document.getElementById('adminBar').style.display = 'none';
-  document.getElementById('adminLoginBtn').style.display = 'flex';
+  // Logout করলে admin button আর দেখাবে না — public view-এ ফিরে যাবে
+  document.getElementById('adminLoginBtn').style.display = 'none';
   document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
 }
 
