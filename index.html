@@ -394,20 +394,23 @@ nav.scrolled {
 .marquee-track {
   display: flex;
   gap: 0;
-  animation: marquee 30s linear infinite;
+  animation: marquee 40s linear infinite;
   width: max-content;
+  will-change: transform;
 }
+.marquee-wrap:hover .marquee-track { animation-play-state: paused; }
 .marquee-item {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 0 32px;
+  padding: 0 28px;
   font-family: var(--font-mono);
   font-size: 12px;
   color: var(--muted);
   letter-spacing: 2px;
   white-space: nowrap;
   text-transform: uppercase;
+  flex-shrink: 0;
 }
 .marquee-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--indigo); flex-shrink: 0; }
 @keyframes marquee { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
@@ -1426,6 +1429,10 @@ footer {
     <span class="marquee-item"><span class="marquee-dot"></span>Content Creation</span>
     <span class="marquee-item"><span class="marquee-dot"></span>AI Video Generation</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Brand Identity</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>UI/UX Design</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Thumbnail Design</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Social Media</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Freelancing</span>
     <span class="marquee-item"><span class="marquee-dot"></span>AI Automation</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Prompt Engineering</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Graphic Design</span>
@@ -1436,6 +1443,10 @@ footer {
     <span class="marquee-item"><span class="marquee-dot"></span>Content Creation</span>
     <span class="marquee-item"><span class="marquee-dot"></span>AI Video Generation</span>
     <span class="marquee-item"><span class="marquee-dot"></span>Brand Identity</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>UI/UX Design</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Thumbnail Design</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Social Media</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>Freelancing</span>
   </div>
 </div>
 
@@ -1450,7 +1461,7 @@ footer {
             <span class="ring-dot"></span>
           </div>
           <div class="about-avatar-inner" style="position:relative;overflow:visible;">
-            <label class="avatar-upload-label" for="avatarInput" title="Click to upload your photo">
+            <label class="avatar-upload-label" id="avatarUploadLabel" for="avatarInput" title="Click to upload your photo" style="cursor:default;pointer-events:none;">
               <div id="avatarPlaceholder" class="avatar-placeholder">🧑‍💻</div>
               <img id="avatarImg" class="avatar-img" style="display:none;" alt="Profile Photo">
               <div class="avatar-overlay">
@@ -2436,7 +2447,23 @@ const avatarPlaceholder = document.getElementById('avatarPlaceholder');
   }
 })();
 
+// Admin হলে avatar upload enable করো
+function updateAvatarUploadAccess() {
+  const label = document.getElementById('avatarUploadLabel');
+  if (!label) return;
+  if (isAdmin) {
+    label.style.pointerEvents = 'auto';
+    label.style.cursor = 'pointer';
+    label.title = 'Click to upload your photo';
+  } else {
+    label.style.pointerEvents = 'none';
+    label.style.cursor = 'default';
+    label.title = '';
+  }
+}
+
 avatarInput.addEventListener('change', function() {
+  if (!isAdmin) return;
   const file = this.files[0];
   if (!file) return;
   const reader = new FileReader();
@@ -2621,15 +2648,16 @@ function showAdminUI() {
   document.getElementById('adminBar').style.display = 'flex';
   document.getElementById('adminLoginBtn').style.display = 'none';
   document.querySelectorAll('.admin-only').forEach(el => {
-    // button → inline-flex, অন্য elements → তাদের natural display
     el.style.display = el.tagName === 'BUTTON' ? 'inline-flex' : 'flex';
   });
+  updateAvatarUploadAccess();
 }
 
 function hideAdminUI() {
   document.getElementById('adminBar').style.display = 'none';
   document.getElementById('adminLoginBtn').style.display = 'none';
   document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+  updateAvatarUploadAccess();
 }
 
 // ===================================================
