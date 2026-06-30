@@ -422,64 +422,147 @@ nav.scrolled {
 }
 .about-avatar-wrap {
   position: relative;
-  width: 320px;
-  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
 }
+
+/* ── Dual image row ── */
+.about-images-row {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* AI Avatar slot */
 .about-avatar-ring {
-  width: 320px; height: 320px;
+  width: 200px; height: 200px;
   border-radius: 50%;
-  border: 2px solid var(--border);
   position: relative;
   display: flex; align-items: center; justify-content: center;
-  animation: spin-slow 20s linear infinite;
+  flex-shrink: 0;
+}
+.about-avatar-ring::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: conic-gradient(var(--indigo), var(--cyan), var(--violet), var(--indigo));
+  z-index: 0;
+}
+.about-avatar-ring::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  background: var(--bg2);
+  z-index: 1;
 }
 @keyframes spin-slow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-.ring-dot {
-  position: absolute;
-  width: 10px; height: 10px;
-  border-radius: 50%;
-  background: var(--indigo);
-  box-shadow: 0 0 12px var(--indigo);
-}
-.ring-dot:nth-child(1) { top: -5px; left: 50%; transform: translateX(-50%); }
-.ring-dot:nth-child(2) { bottom: -5px; right: 20px; background: var(--cyan); box-shadow: 0 0 12px var(--cyan); }
+.ring-dot { display: none; }
+
 .about-avatar-inner {
-  position: absolute;
-  width: 250px; height: 250px;
+  position: relative;
+  z-index: 2;
+  width: 188px; height: 188px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--card) 0%, var(--card2) 100%);
   border: 1px solid rgba(108,99,255,0.2);
   display: flex; align-items: center; justify-content: center;
-  font-size: 90px;
+  font-size: 72px;
   overflow: hidden;
 }
-.about-badge-cards {
-  position: absolute;
+
+/* Image label */
+.about-img-label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--indigo);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Professional photo slot */
+.about-photo-slot {
+  width: 160px; height: 200px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--card), var(--card2));
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  transition: border-color .3s, box-shadow .3s;
+}
+.about-photo-slot:hover { border-color: rgba(0,212,255,0.4); box-shadow: 0 0 24px rgba(0,212,255,0.12); }
+.about-photo-slot img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: none;
+}
+.about-photo-placeholder {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  right: -30px;
-  top: 50%;
-  transform: translateY(-50%);
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: center;
+  padding: 12px;
+}
+.about-photo-placeholder span { font-size: 36px; }
+.photo-slot-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Stats row below images */
+.about-badge-cards {
+  position: static;
+  transform: none;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
 }
 .about-badge-card {
-  background: var(--card);
+  background: rgba(17,24,39,0.8);
   border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 10px 14px;
+  border-radius: 12px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   gap: 10px;
   font-size: 12px;
   white-space: nowrap;
-  opacity: 1;
-  transform: translateX(0);
-  transition: box-shadow .3s, border-color .3s;
+  backdrop-filter: blur(8px);
+  transition: box-shadow .3s, border-color .3s, transform .2s;
+  flex: 1;
+  min-width: 120px;
+  max-width: 160px;
 }
-.about-badge-card:hover { border-color: rgba(108,99,255,0.4); box-shadow: 0 4px 20px rgba(108,99,255,0.12); }
+.about-badge-card:hover {
+  border-color: rgba(108,99,255,0.5);
+  box-shadow: 0 4px 20px rgba(108,99,255,0.15);
+  transform: translateY(-2px);
+}
 .badge-icon { font-size: 18px; }
-.badge-label { color: var(--white); font-weight: 500; }
-.badge-val { color: var(--indigo); font-family: var(--font-mono); font-weight: 600; }
+.badge-label { color: var(--muted); font-weight: 500; font-size: 11px; }
+.badge-val { color: var(--indigo); font-family: var(--font-mono); font-weight: 700; font-size: 13px; }
 .about-text .section-label { margin-top: 0; }
 .about-desc { color: var(--muted); font-size: 15px; line-height: 1.8; margin-bottom: 16px; }
 .about-desc strong { color: var(--white); font-weight: 500; }
@@ -584,6 +667,138 @@ nav.scrolled {
   width: 120px; height: 120px;
   border-radius: 50%;
   filter: blur(40px);
+}
+/* ===== PROJECT MEDIA ===== */
+.project-media-wrap {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+  background: var(--card2);
+  display: flex; align-items: center; justify-content: center;
+}
+.project-media-img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.project-media-video {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.project-media-pdf {
+  width: 100%; height: 100%;
+  border: none;
+  display: block;
+}
+.project-media-emoji {
+  font-size: 52px;
+  display: flex; align-items: center; justify-content: center;
+  width: 100%; height: 100%;
+  position: relative;
+}
+.project-media-type-badge {
+  position: absolute; top: 8px; right: 8px;
+  font-size: 10px; font-family: var(--font-mono);
+  background: rgba(108,99,255,0.85);
+  color: #fff; padding: 3px 8px; border-radius: 5px;
+  letter-spacing: 1px; text-transform: uppercase;
+  backdrop-filter: blur(4px);
+}
+/* Pricing edit modal */
+.pricing-edit-modal {
+  display: none; position: fixed; inset: 0; z-index: 3000;
+  background: rgba(0,0,0,0.75); backdrop-filter: blur(6px);
+  align-items: center; justify-content: center; padding: 20px;
+}
+.pricing-edit-modal.open { display: flex; }
+.pricing-edit-inner {
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 18px; padding: 32px 28px;
+  max-width: 520px; width: 100%;
+  max-height: 90vh; overflow-y: auto;
+}
+.pricing-edit-inner h3 {
+  font-family: var(--font-display); font-size: 18px; font-weight: 800;
+  color: var(--white); margin-bottom: 20px;
+}
+.pef-row { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.pef-label { font-size: 11px; color: var(--muted); font-family: var(--font-mono); letter-spacing: 1px; }
+.pef-input {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 14px;
+  color: var(--white); font-size: 13px; outline: none;
+  font-family: inherit; width: 100%; transition: border .2s;
+}
+.pef-input:focus { border-color: var(--indigo); }
+.pef-textarea {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; padding: 10px 14px;
+  color: var(--white); font-size: 13px; outline: none;
+  font-family: inherit; width: 100%; min-height: 90px;
+  resize: vertical; transition: border .2s;
+}
+.pef-textarea:focus { border-color: var(--indigo); }
+.pef-section-title {
+  font-size: 11px; font-family: var(--font-mono); color: var(--cyan);
+  letter-spacing: 2px; text-transform: uppercase; margin: 16px 0 8px;
+}
+.pef-feature-row {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.pef-feature-row input {
+  flex: 1; background: var(--card); border: 1px solid var(--border);
+  border-radius: 7px; padding: 8px 12px; color: var(--white);
+  font-size: 13px; outline: none; font-family: inherit;
+}
+.pef-feature-row input:focus { border-color: var(--indigo); }
+.pef-feature-check {
+  width: 18px; height: 18px; accent-color: var(--indigo); cursor: pointer; flex-shrink: 0;
+}
+.pef-add-feat-btn {
+  font-size: 12px; color: var(--cyan); background: none; border: 1px dashed rgba(0,212,255,0.3);
+  border-radius: 7px; padding: 6px 14px; cursor: pointer; font-family: var(--font-mono);
+  width: 100%; margin-bottom: 8px; transition: all .2s;
+}
+.pef-add-feat-btn:hover { background: rgba(0,212,255,0.07); }
+.pricing-admin-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-family: var(--font-mono);
+  background: rgba(108,99,255,0.1); border: 1px solid rgba(108,99,255,0.25);
+  color: var(--indigo); border-radius: 7px; padding: 5px 12px;
+  cursor: pointer; margin-top: 10px; transition: all .2s;
+}
+.pricing-admin-btn:hover { background: rgba(108,99,255,0.2); }
+/* Client custom pricing */
+.client-pricing-section {
+  margin-top: 40px; padding-top: 30px;
+  border-top: 1px solid var(--border);
+  display: none;
+}
+.client-pricing-section.visible { display: block; }
+.client-pricing-card {
+  background: var(--card2); border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 14px; padding: 24px; margin-bottom: 16px;
+  position: relative;
+}
+.client-pricing-label {
+  font-size: 10px; font-family: var(--font-mono); color: var(--cyan);
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px;
+}
+.client-pricing-name { font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
+.client-pricing-price { font-size: 28px; font-weight: 800; color: var(--white); margin-bottom: 8px; }
+.client-pricing-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 12px; }
+.client-pricing-remove {
+  position: absolute; top: 14px; right: 14px;
+  background: rgba(255,50,50,0.1); border: 1px solid rgba(255,50,50,0.2);
+  color: #ff7777; border-radius: 6px; padding: 4px 10px;
+  font-size: 11px; cursor: pointer; font-family: var(--font-mono);
+}
+@media (max-width: 600px) {
+  .pricing-edit-inner { padding: 20px 16px; }
+  .project-media-wrap { height: 140px; }
 }
 .project-body { padding: 22px; }
 .project-type {
@@ -719,6 +934,140 @@ nav.scrolled {
 .pricing-features svg { flex-shrink: 0; }
 .pricing-cta { display: block; text-align: center; }
 @media (max-width: 900px) { .pricing-grid { grid-template-columns: 1fr; } .pricing-card-featured { transform: none; } }
+
+/* ===== FIVERR-STYLE TAB PRICING ===== */
+#fivPricing { background: var(--bg2); }
+.fiv-wrap { max-width: 480px; margin: 0 auto; }
+.fiv-tab-bar {
+  display: flex;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 0;
+  background: var(--card);
+  border-radius: 14px 14px 0 0;
+  overflow: hidden;
+}
+.fiv-tab {
+  flex: 1;
+  padding: 14px 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all .2s;
+  font-family: var(--font-display);
+  letter-spacing: .3px;
+  position: relative;
+}
+.fiv-tab.active {
+  color: var(--white);
+  border-bottom-color: var(--indigo);
+  background: rgba(108,99,255,0.06);
+}
+.fiv-tab:hover:not(.active) { color: var(--white); background: rgba(255,255,255,0.03); }
+.fiv-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 14px 14px;
+  overflow: hidden;
+  animation: fivFade .2s ease;
+}
+@keyframes fivFade { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform:none; } }
+.fiv-header { padding: 22px 24px 0; }
+.fiv-tier { font-size: 13px; font-weight: 700; color: var(--white); margin-bottom: 2px; }
+.fiv-price { font-size: 36px; font-weight: 800; color: var(--white); margin: 6px 0; font-family: var(--font-display); }
+.fiv-price sup { font-size: 16px; vertical-align: top; margin-top: 8px; display: inline-block; color: var(--muted); }
+.fiv-desc { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 14px; }
+.fiv-meta {
+  display: flex; gap: 20px;
+  padding: 12px 24px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.fiv-meta-item { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 600; color: var(--white); }
+.fiv-meta-icon { font-size: 15px; }
+.fiv-svcs { padding: 16px 24px; display: flex; flex-direction: column; gap: 2px; }
+.fiv-svc {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; padding: 7px 0;
+  color: var(--white);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.fiv-svc:last-child { border-bottom: none; }
+.fiv-svc.off { color: var(--muted); opacity: .55; }
+.fiv-svc-icon { font-size: 15px; flex-shrink: 0; }
+.fiv-svc-icon.ok { color: #1AB65D; }
+.fiv-svc-icon.no { color: #6B7280; }
+.fiv-cta-wrap { padding: 16px 24px 22px; }
+.fiv-cta {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 14px;
+  background: var(--white); color: #0a0a0a;
+  border: none; border-radius: 10px;
+  font-family: var(--font-display); font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: all .2s; text-decoration: none;
+}
+.fiv-cta:hover { background: #ddd; transform: translateY(-1px); }
+/* Admin edit button */
+.fiv-edit-btn {
+  display: none; align-items: center; gap: 6px;
+  margin-top: 10px; width: 100%; padding: 9px;
+  background: rgba(108,99,255,0.12); border: 1px solid rgba(108,99,255,0.3);
+  color: var(--indigo); border-radius: 8px;
+  font-family: var(--font-display); font-size: 12px; font-weight: 600;
+  cursor: pointer; justify-content: center; transition: all .2s;
+}
+.fiv-edit-btn:hover { background: rgba(108,99,255,0.22); }
+/* Fiverr Pricing Modal */
+.fiv-modal {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.8); backdrop-filter: blur(12px);
+  z-index: 4000; align-items: center; justify-content: center; padding: 20px;
+}
+.fiv-modal.open { display: flex; }
+.fiv-modal-inner {
+  background: #111827; border: 1px solid rgba(108,99,255,0.3);
+  border-radius: 20px; padding: 32px; width: 100%; max-width: 520px;
+  max-height: 90vh; overflow-y: auto; position: relative;
+  box-shadow: 0 0 60px rgba(108,99,255,0.2);
+}
+.fiv-modal-title { font-size: 18px; font-weight: 800; color: var(--white); margin-bottom: 20px; }
+.fiv-modal-close {
+  position: absolute; top: 16px; right: 18px;
+  background: none; border: none; color: var(--muted); font-size: 22px; cursor: pointer;
+}
+.fiv-field { margin-bottom: 14px; }
+.fiv-field label { display: block; font-size: 11px; color: var(--muted); font-family: var(--font-mono); letter-spacing: 1px; margin-bottom: 5px; text-transform: uppercase; }
+.fiv-field input, .fiv-field textarea {
+  width: 100%; padding: 9px 13px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--white); font-size: 13px;
+  font-family: var(--font-body); outline: none;
+}
+.fiv-field input:focus, .fiv-field textarea:focus { border-color: var(--indigo); }
+.fiv-field textarea { min-height: 70px; resize: vertical; }
+.fiv-field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.fiv-svc-edit-row { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; }
+.fiv-svc-edit-row input[type=text] { flex: 1; padding: 7px 10px; background: var(--card); border: 1px solid var(--border); border-radius: 7px; color: var(--white); font-size: 12px; font-family: var(--font-body); outline: none; }
+.fiv-svc-edit-row input[type=text]:focus { border-color: var(--indigo); }
+.fiv-toggle { position: relative; width: 38px; height: 21px; flex-shrink: 0; }
+.fiv-toggle input { opacity: 0; width: 0; height: 0; }
+.fiv-toggle-slider { position: absolute; inset: 0; background: rgba(255,255,255,0.12); border-radius: 21px; cursor: pointer; transition: .2s; }
+.fiv-toggle input:checked + .fiv-toggle-slider { background: var(--indigo); }
+.fiv-toggle-slider::before { content:''; position:absolute; width:15px; height:15px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.2s; }
+.fiv-toggle input:checked + .fiv-toggle-slider::before { transform: translateX(17px); }
+.fiv-del-btn { background: none; border: none; color: var(--muted); cursor: pointer; font-size: 16px; padding: 2px 4px; transition: color .15s; }
+.fiv-del-btn:hover { color: #ff6b6b; }
+.fiv-add-svc-btn { font-size: 12px; color: var(--cyan); background: rgba(0,212,255,0.06); border: 1px solid rgba(0,212,255,0.2); border-radius: 7px; padding: 5px 12px; cursor: pointer; margin-top: 6px; transition: all .15s; }
+.fiv-add-svc-btn:hover { background: rgba(0,212,255,0.12); }
+.fiv-save-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 13px; background: linear-gradient(135deg,var(--indigo),var(--violet)); color:#fff; border:none; border-radius:10px; font-family:var(--font-display); font-size:14px; font-weight:700; cursor:pointer; margin-top:20px; transition: all .2s; }
+.fiv-save-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 24px rgba(108,99,255,.35); }
+.fiv-cancel-btn { width:100%; padding:11px; background:transparent; border:1px solid var(--border); color:var(--muted); border-radius:10px; font-family:var(--font-display); font-size:14px; cursor:pointer; margin-top:8px; transition: all .15s; }
+.fiv-cancel-btn:hover { color: var(--white); border-color: rgba(255,255,255,.2); }
+@media (max-width: 600px) { .fiv-wrap { max-width: 100%; } }
 
 /* ===== FAQ ===== */
 #faq { background: var(--bg2); }
@@ -1243,7 +1592,12 @@ footer {
 /* ===== RESPONSIVE ===== */
 @media (max-width: 900px) {
   .about-grid { grid-template-columns: 1fr; gap: 48px; }
-  .about-visual { display: none; }
+  .about-visual { display: block; }
+  .about-images-row { gap: 16px; }
+  .about-avatar-ring { width: 160px; height: 160px; }
+  .about-avatar-inner { width: 152px; height: 152px; font-size: 56px; }
+  .about-photo-slot { width: 130px; height: 165px; }
+  .about-badge-card { min-width: 100px; padding: 10px 12px; }
   .contact-grid { grid-template-columns: 1fr; }
   .process-steps { flex-wrap: wrap; }
   .process-steps::before { display: none; }
@@ -1452,25 +1806,49 @@ footer {
     <div class="about-grid">
       <div class="about-visual">
         <div class="about-avatar-wrap">
-          <div class="about-avatar-ring">
-            <span class="ring-dot"></span>
-            <span class="ring-dot"></span>
-          </div>
-          <div class="about-avatar-inner" style="position:relative;overflow:visible;">
-            <label class="avatar-upload-label" id="avatarUploadLabel" for="avatarInput" title="Click to upload your photo" style="cursor:default;pointer-events:none;">
-              <div id="avatarPlaceholder" class="avatar-placeholder">🧑‍💻</div>
-              <img id="avatarImg" class="avatar-img" style="display:none;" alt="Profile Photo">
-              <div class="avatar-overlay">
-                <span class="avatar-overlay-icon">📷</span>
-                <span class="avatar-overlay-txt">Upload Photo</span>
+
+          <!-- ── Two images row ── -->
+          <div class="about-images-row">
+
+            <!-- AI Avatar (left) -->
+            <div>
+              <div class="about-avatar-ring">
+                <div class="about-avatar-inner" style="position:relative;overflow:visible;">
+                  <label class="avatar-upload-label" id="avatarUploadLabel" for="avatarInput" title="Click to upload your photo" style="cursor:default;pointer-events:none;">
+                    <div id="avatarPlaceholder" class="avatar-placeholder">🧑‍💻</div>
+                    <img id="avatarImg" class="avatar-img" style="display:none;" alt="Profile Photo">
+                    <div class="avatar-overlay">
+                      <span class="avatar-overlay-icon">📷</span>
+                      <span class="avatar-overlay-txt">Upload Photo</span>
+                    </div>
+                  </label>
+                  <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+                </div>
               </div>
-            </label>
-            <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+              <div class="about-img-label">AI Avatar</div>
+            </div>
+
+            <!-- Professional Photo (right) -->
+            <div>
+              <div class="about-photo-slot" id="proPhotoSlot">
+                <img id="proPhotoImg" alt="Professional Photo">
+                <label for="proPhotoInput" class="about-photo-placeholder" id="proPhotoPlaceholder" style="cursor:pointer;">
+                  <span>📸</span>
+                  <span>Professional<br>Photo</span>
+                </label>
+                <input type="file" id="proPhotoInput" accept="image/*" style="display:none;">
+              </div>
+              <div class="photo-slot-label">Real Photo</div>
+            </div>
+
           </div>
+          <!-- ── end images row ── -->
+
+          <!-- Stats row below -->
           <div class="about-badge-cards">
             <div class="about-badge-card">
               <span class="badge-icon">⚡</span>
-              <div><div class="badge-label">Response Time</div><div class="badge-val">&lt; 1 hours</div></div>
+              <div><div class="badge-label">Response Time</div><div class="badge-val">&lt; 1hr</div></div>
             </div>
             <div class="about-badge-card">
               <span class="badge-icon">🌍</span>
@@ -1481,6 +1859,7 @@ footer {
               <div><div class="badge-label">Delivery Rate</div><div class="badge-val">100% On Time</div></div>
             </div>
           </div>
+
         </div>
       </div>
       <div class="about-text reveal">
@@ -1672,127 +2051,165 @@ footer {
 <!-- PORTFOLIO -->
 <section id="portfolio" class="section">
   <div class="container">
-    <div class="reveal">
-      <div class="section-label">My Work</div>
-      <h2 class="section-title">Selected <span>Projects</span></h2>
-      <p class="section-sub">Real work, real results. A curated look at projects that made a difference.</p>
+    <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:48px;">
+      <div>
+        <div class="section-label">My Work</div>
+        <h2 class="section-title">Selected <span>Projects</span></h2>
+        <p class="section-sub">Real work, real results. A curated look at projects that made a difference.</p>
+      </div>
+      <button class="admin-only" id="openProjectModal" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(108,99,255,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">＋ Add Project</button>
     </div>
-    <div class="portfolio-grid">
-
-      <div class="project-card reveal">
-        <div class="project-thumb">
-          <div class="project-thumb-glow" style="background:rgba(108,99,255,0.4)"></div>
-          🤖
-        </div>
-        <div class="project-body">
-          <div class="project-type">AI Automation</div>
-          <div class="project-title">E-commerce AI Content Pipeline</div>
-          <div class="project-desc">Built a full automation pipeline generating product descriptions, social posts, and ad copy for a UK-based e-commerce brand — 300 SKUs in under 2 hours.</div>
-          <div class="project-tools">
-            <span class="project-tool">Make.com</span>
-            <span class="project-tool">ChatGPT API</span>
-            <span class="project-tool">Airtable</span>
-            <span class="project-tool">Zapier</span>
-          </div>
-          <div class="project-result"><span class="result-arrow">↑</span> 74% time reduction · Client saves $2,000/mo</div>
-        </div>
+    <div class="portfolio-grid" id="projectGrid"><!-- injected by JS --></div>
+    <div id="projectEmpty" style="display:none;text-align:center;padding:60px 24px;border:2px dashed var(--border);border-radius:16px;color:var(--muted);">
+      <div style="font-size:48px;margin-bottom:12px;">📁</div>
+      <div style="font-size:14px;margin-bottom:16px;">No projects yet. Login as admin to add your first project!</div>
+    </div>
+    <!-- Load more -->
+    <div id="projectLoadMoreWrap" style="display:none;flex-direction:column;align-items:center;gap:16px;margin-top:40px;">
+      <div id="projectCount" style="font-size:13px;color:var(--muted);font-family:var(--font-mono);"></div>
+      <div style="display:flex;gap:12px;">
+        <button id="projectLoadMoreBtn" onclick="projectLoadMore()" style="display:none;align-items:center;gap:8px;padding:12px 28px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(108,99,255,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">Load More →</button>
+        <button id="projectShowLessBtn" onclick="projectShowLess()" style="display:none;align-items:center;gap:8px;padding:12px 22px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='var(--white)';this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">↑ Show Less</button>
       </div>
-
-      <div class="project-card reveal">
-        <div class="project-thumb">
-          <div class="project-thumb-glow" style="background:rgba(0,212,255,0.35)"></div>
-          🎨
-        </div>
-        <div class="project-body">
-          <div class="project-type">Brand Identity</div>
-          <div class="project-title">SaaS Brand Identity System</div>
-          <div class="project-desc">Complete visual identity for a US-based SaaS startup — logo, color system, typography, UI kit, and social media templates across 15 brand touchpoints.</div>
-          <div class="project-tools">
-            <span class="project-tool">Figma</span>
-            <span class="project-tool">Illustrator</span>
-            <span class="project-tool">Photoshop</span>
-          </div>
-          <div class="project-result"><span class="result-arrow">↑</span> Brand raised $500K seed round after rebrand</div>
-        </div>
-      </div>
-
-      <div class="project-card reveal">
-        <div class="project-thumb">
-          <div class="project-thumb-glow" style="background:rgba(155,93,255,0.4)"></div>
-          🎬
-        </div>
-        <div class="project-body">
-          <div class="project-type">Video Production</div>
-          <div class="project-title">YouTube Channel Overhaul</div>
-          <div class="project-desc">Complete visual overhaul for a 500K subscriber tech channel — thumbnail templates, intro animations, editing style guide, and a 20-video backlog edit.</div>
-          <div class="project-tools">
-            <span class="project-tool">Premiere Pro</span>
-            <span class="project-tool">After Effects</span>
-            <span class="project-tool">Photoshop</span>
-          </div>
-          <div class="project-result"><span class="result-arrow">↑</span> CTR improved from 4.2% to 9.8% in 30 days</div>
-        </div>
-      </div>
-
-      <div class="project-card reveal">
-        <div class="project-thumb">
-          <div class="project-thumb-glow" style="background:rgba(0,212,255,0.3)"></div>
-          🖼️
-        </div>
-        <div class="project-body">
-          <div class="project-type">AI Image Generation</div>
-          <div class="project-title">AI Product Visualization Campaign</div>
-          <div class="project-desc">Generated 200+ cinematic product visuals for a fashion brand's Ramadan campaign using Midjourney + Photoshop compositing. Replaced a $8,000 photoshoot.</div>
-          <div class="project-tools">
-            <span class="project-tool">Midjourney</span>
-            <span class="project-tool">Photoshop</span>
-            <span class="project-tool">Firefly</span>
-          </div>
-          <div class="project-result"><span class="result-arrow">↑</span> 3x ROAS on Meta Ads campaign</div>
-        </div>
-      </div>
-
-      <div class="project-card reveal">
-        <div class="project-thumb">
-          <div class="project-thumb-glow" style="background:rgba(108,99,255,0.35)"></div>
-          🎵
-        </div>
-        <div class="project-body">
-          <div class="project-type">AI Audio + Video</div>
-          <div class="project-title">Podcast AI Production Suite</div>
-          <div class="project-desc">End-to-end podcast production setup for a business coach — AI voiceover intros, custom music, auto-transcription, short-form clip automation, and audiograms.</div>
-          <div class="project-tools">
-            <span class="project-tool">ElevenLabs</span>
-            <span class="project-tool">Suno</span>
-            <span class="project-tool">Descript</span>
-            <span class="project-tool">Make.com</span>
-          </div>
-          <div class="project-result"><span class="result-arrow">↑</span> 8 hrs/week saved · 200% more content output</div>
-        </div>
-      </div>
-
-      <div class="project-card reveal">
-        <div class="project-thumb">
-          <div class="project-thumb-glow" style="background:rgba(0,212,255,0.35)"></div>
-          📈
-        </div>
-        <div class="project-body">
-          <div class="project-type">Digital Marketing</div>
-          <div class="project-title">Social Media Growth System</div>
-          <div class="project-desc">Built a full 90-day content strategy + AI-assisted creation system for a Dubai-based lifestyle brand — posts, Reels scripts, ad creatives, and analytics.</div>
-          <div class="project-tools">
-            <span class="project-tool">ChatGPT</span>
-            <span class="project-tool">Canva Pro</span>
-            <span class="project-tool">Buffer</span>
-            <span class="project-tool">Meta Ads</span>
-          </div>
-          <div class="project-result"><span class="result-arrow">↑</span> 0 → 12K followers in 90 days</div>
-        </div>
-      </div>
-
     </div>
   </div>
 </section>
+
+<!-- PROJECT ADD/EDIT MODAL -->
+<div id="projectModal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);z-index:3000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#111827;border:1px solid rgba(108,99,255,0.3);border-radius:20px;padding:32px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 0 60px rgba(108,99,255,0.2);">
+    <button onclick="closeProjectModal()" style="position:absolute;top:16px;right:18px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;">✕</button>
+    <div style="font-size:13px;font-family:var(--font-mono);color:var(--cyan);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;" id="projectModalLabel">// ADD PROJECT</div>
+    <div style="font-size:20px;font-weight:800;color:var(--white);margin-bottom:24px;" id="projectModalTitle">New Project</div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">EMOJI / ICON</label>
+        <input id="pEmojiInput" type="text" placeholder="🤖" maxlength="4" style="width:80px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:22px;outline:none;font-family:inherit;text-align:center;">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">PROJECT TYPE / CATEGORY</label>
+        <input id="pTypeInput" type="text" placeholder="e.g. AI Automation, Video Editing..." style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">PROJECT TITLE *</label>
+        <input id="pTitleInput" type="text" placeholder="e.g. E-commerce AI Pipeline" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">DESCRIPTION *</label>
+        <textarea id="pDescInput" placeholder="Describe the project, what you did, and the outcome..." style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;resize:vertical;min-height:90px;line-height:1.6;"></textarea>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">TOOLS USED (comma separated)</label>
+        <input id="pToolsInput" type="text" placeholder="e.g. Figma, Premiere Pro, ChatGPT" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">RESULT / IMPACT</label>
+        <input id="pResultInput" type="text" placeholder="e.g. 74% time reduction · Client saves $2,000/mo" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">PROJECT LINK (optional)</label>
+        <input id="pLinkInput" type="url" placeholder="https://..." style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
+
+      <!-- MEDIA UPLOAD -->
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">MEDIA — IMAGE / VIDEO / PDF (optional)</label>
+        <label id="pMediaUploadLabel" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px;border:2px dashed rgba(108,99,255,0.35);border-radius:10px;cursor:pointer;transition:all .2s;background:rgba(108,99,255,0.04);" onmouseover="this.style.borderColor='var(--indigo)'" onmouseout="this.style.borderColor='rgba(108,99,255,0.35)'">
+          <span style="font-size:26px;">📎</span>
+          <span style="font-size:12px;font-family:var(--font-mono);color:var(--muted);">Click to upload image, video or PDF</span>
+          <span id="pMediaFileName" style="font-size:11px;color:var(--cyan);font-family:var(--font-mono);display:none;word-break:break-all;text-align:center;"></span>
+          <input id="pMediaInput" type="file" accept="image/*,video/*,.pdf" style="display:none;" onchange="handleProjectMediaSelect(this)">
+        </label>
+        <!-- Preview -->
+        <div id="pMediaPreview" style="display:none;margin-top:10px;border-radius:10px;overflow:hidden;max-height:160px;position:relative;">
+          <img id="pMediaPreviewImg" style="width:100%;height:160px;object-fit:cover;display:none;" alt="preview">
+          <video id="pMediaPreviewVid" style="width:100%;height:160px;object-fit:cover;display:none;" muted playsinline></video>
+          <div id="pMediaPreviewPdf" style="display:none;background:rgba(108,99,255,0.1);border:1px solid var(--border);border-radius:8px;padding:14px;text-align:center;font-size:13px;color:var(--muted);font-family:var(--font-mono);">📄 PDF Selected</div>
+          <button onclick="clearProjectMedia()" style="position:absolute;top:6px;right:6px;background:rgba(255,50,50,0.75);color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:22px;">
+      <button id="pSaveBtn" onclick="saveProject()" style="flex:1;padding:13px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;">Save Project →</button>
+      <button onclick="closeProjectModal()" style="padding:13px 20px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;transition:all .2s;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRICING EDIT MODAL -->
+<div class="pricing-edit-modal" id="pricingEditModal">
+  <div class="pricing-edit-inner">
+    <h3 id="pricingEditTitle">✏ Edit Plan</h3>
+    <input type="hidden" id="pricingEditIndex">
+
+    <div class="pef-row">
+      <div class="pef-label">PLAN NAME</div>
+      <input class="pef-input" id="pef_plan" placeholder="e.g. Starter, Creator, Pro...">
+    </div>
+    <div class="pef-row">
+      <div class="pef-label">PRICE (number or text like "Custom")</div>
+      <input class="pef-input" id="pef_price" placeholder="e.g. 99 or Custom">
+    </div>
+    <div class="pef-row">
+      <div class="pef-label">CURRENCY SYMBOL</div>
+      <input class="pef-input" id="pef_currency" placeholder="e.g. $" style="max-width:80px;">
+    </div>
+    <div class="pef-row">
+      <div class="pef-label">DESCRIPTION</div>
+      <textarea class="pef-textarea" id="pef_desc" placeholder="Short plan description..."></textarea>
+    </div>
+    <div class="pef-row">
+      <div class="pef-label">CTA BUTTON TEXT</div>
+      <input class="pef-input" id="pef_cta" placeholder="e.g. Get Started, Let's Talk...">
+    </div>
+    <div class="pef-row">
+      <div class="pef-label">POPULAR BADGE (leave empty to hide)</div>
+      <input class="pef-input" id="pef_badge" placeholder="e.g. Most Popular">
+    </div>
+
+    <div class="pef-section-title">// FEATURES (check = available, uncheck = unavailable)</div>
+    <div id="pef_features_list"></div>
+    <button class="pef-add-feat-btn" onclick="addPricingFeature()">+ Add Feature</button>
+
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button onclick="savePricingEdit()" style="flex:1;padding:12px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;">Save Changes →</button>
+      <button onclick="closePricingEdit()" style="padding:12px 18px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- CLIENT CUSTOM PRICING MODAL -->
+<div class="pricing-edit-modal" id="clientPricingModal">
+  <div class="pricing-edit-inner">
+    <h3>👤 Add Custom Client Pricing</h3>
+    <div class="pef-row">
+      <div class="pef-label">CLIENT NAME / LABEL</div>
+      <input class="pef-input" id="cpf_label" placeholder="e.g. VIP Client, Agency Deal...">
+    </div>
+    <div class="pef-row">
+      <div class="pef-label">PLAN NAME</div>
+      <input class="pef-input" id="cpf_plan" placeholder="e.g. Enterprise Package">
+    </div>
+    <div class="pef-row">
+      <div class="pef-label">PRICE</div>
+      <input class="pef-input" id="cpf_price" placeholder="e.g. $499 or Custom">
+    </div>
+    <div class="pef-row">
+      <div class="pef-label">DESCRIPTION</div>
+      <textarea class="pef-textarea" id="cpf_desc" placeholder="What's included for this client..."></textarea>
+    </div>
+    <div class="pef-row">
+      <div class="pef-label">DELIVERY TIME</div>
+      <input class="pef-input" id="cpf_delivery" placeholder="e.g. 3-day delivery">
+    </div>
+    <div style="display:flex;gap:10px;margin-top:20px;">
+      <button onclick="saveClientPricing()" style="flex:1;padding:12px;background:linear-gradient(135deg,var(--cyan),var(--indigo));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;">Add Custom Pricing →</button>
+      <button onclick="closeClientPricingModal()" style="padding:12px 18px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;">Cancel</button>
+    </div>
+  </div>
+</div>
 
 <!-- TESTIMONIALS -->
 <section id="testimonials" class="section">
@@ -1943,7 +2360,7 @@ footer {
       <h2 class="section-title" style="text-align:center">Simple <span>Pricing</span></h2>
       <p class="section-sub" style="margin:0 auto">Pick a package, or message me for a custom quote on combined services.</p>
     </div>
-    <div class="pricing-grid">
+    <div class="pricing-grid" id="pricingGrid">
 
       <div class="pricing-card reveal">
         <div class="pricing-plan">Starter</div>
@@ -1958,6 +2375,7 @@ footer {
           <li class="unavailable"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>Priority support</li>
         </ul>
         <a href="#contact" class="btn-ghost pricing-cta">Get Started</a>
+        <button class="pricing-admin-btn admin-only" style="display:none;" onclick="openPricingEdit(0)">✏ Edit Plan</button>
       </div>
 
       <div class="pricing-card pricing-card-featured reveal">
@@ -1974,6 +2392,7 @@ footer {
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6C63FF" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Priority support</li>
         </ul>
         <a href="#contact" class="btn-primary pricing-cta"><span>Get Started</span></a>
+        <button class="pricing-admin-btn admin-only" style="display:none;" onclick="openPricingEdit(1)">✏ Edit Plan</button>
       </div>
 
       <div class="pricing-card reveal">
@@ -1988,11 +2407,98 @@ footer {
           <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1AB65D" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>Monthly retainer available</li>
         </ul>
         <a href="#contact" class="btn-ghost pricing-cta">Let's Talk</a>
+        <button class="pricing-admin-btn admin-only" style="display:none;" onclick="openPricingEdit(2)">✏ Edit Plan</button>
       </div>
 
     </div>
+
+    <!-- CLIENT CUSTOM PRICING -->
+    <div class="client-pricing-section" id="clientPricingSection">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+        <div>
+          <div class="section-label" style="margin-bottom:4px;">Custom Deals</div>
+          <h3 style="font-size:20px;font-weight:800;color:var(--white);">Client <span style="background:linear-gradient(90deg,var(--cyan),var(--indigo));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Custom Pricing</span></h3>
+        </div>
+        <button class="admin-only" onclick="openClientPricingModal()" style="display:none;padding:10px 20px;background:linear-gradient(135deg,var(--cyan),var(--indigo));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;">+ Add Custom Deal</button>
+      </div>
+      <div id="clientPricingGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+      <div id="clientPricingEmpty" style="display:block;text-align:center;color:var(--muted);font-size:13px;font-family:var(--font-mono);padding:20px;">No custom pricing yet. Admin can add client-specific deals here.</div>
+    </div>
   </div>
 </section>
+
+<!-- FIVERR-STYLE TAB PRICING -->
+<section id="fivPricing" class="section">
+  <div class="container">
+    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto 48px;">
+      <div class="section-label" style="justify-content:center">Service Packages</div>
+      <h2 class="section-title" style="text-align:center">Fiverr-Style <span>Packages</span></h2>
+      <p class="section-sub" style="margin:0 auto">Transparent pricing — pick a tier, or message me for a custom deal.</p>
+    </div>
+    <div class="fiv-wrap reveal">
+      <!-- Tab bar -->
+      <div class="fiv-tab-bar" id="fivTabBar"></div>
+      <!-- Card -->
+      <div class="fiv-card" id="fivCard"></div>
+    </div>
+  </div>
+</section>
+
+<!-- FIVERR PRICING EDIT MODAL -->
+<div class="fiv-modal" id="fivModal">
+  <div class="fiv-modal-inner">
+    <button class="fiv-modal-close" onclick="fivCloseModal()">✕</button>
+    <div class="fiv-modal-title" id="fivModalTitle">Edit Package</div>
+
+    <div class="fiv-field-row">
+      <div class="fiv-field">
+        <label>Tab name</label>
+        <input type="text" id="fiv_tab" placeholder="Basic">
+      </div>
+      <div class="fiv-field">
+        <label>Tier label</label>
+        <input type="text" id="fiv_tier" placeholder="Silver">
+      </div>
+    </div>
+    <div class="fiv-field-row">
+      <div class="fiv-field">
+        <label>Price</label>
+        <input type="text" id="fiv_price" placeholder="25">
+      </div>
+      <div class="fiv-field">
+        <label>Currency symbol</label>
+        <input type="text" id="fiv_currency" placeholder="$" style="width:70px">
+      </div>
+    </div>
+    <div class="fiv-field">
+      <label>Description</label>
+      <textarea id="fiv_desc" placeholder="Short package description..."></textarea>
+    </div>
+    <div class="fiv-field-row">
+      <div class="fiv-field">
+        <label>Delivery (days)</label>
+        <input type="number" id="fiv_delivery" placeholder="2">
+      </div>
+      <div class="fiv-field">
+        <label>Revisions</label>
+        <input type="number" id="fiv_revisions" placeholder="3">
+      </div>
+    </div>
+    <div class="fiv-field">
+      <label>CTA button text</label>
+      <input type="text" id="fiv_cta" placeholder="Continue">
+    </div>
+
+    <div class="fiv-field">
+      <label>Services (toggle = included / cross = excluded)</label>
+      <div id="fivSvcList"></div>
+      <button class="fiv-add-svc-btn" onclick="fivAddSvc()">+ Add service</button>
+    </div>
+
+    <button class="fiv-save-btn" onclick="fivSave()">Save Package →</button>
+    <button class="fiv-cancel-btn" onclick="fivCloseModal()">Cancel</button>
+  </div>
+</div>
 
 <!-- FAQ -->
 <section id="faq" class="section">
@@ -2525,6 +3031,7 @@ function updateAvatarUploadAccess() {
     label.style.cursor = 'default';
     label.title = '';
   }
+  updateProPhotoAccess();
 }
 
 avatarInput.addEventListener('change', function() {
@@ -2537,6 +3044,48 @@ avatarInput.addEventListener('change', function() {
     avatarImg.style.display = 'block';
     avatarPlaceholder.style.display = 'none';
     try { localStorage.setItem('vapx_avatar', e.target.result); } catch(err) { console.warn('Avatar too large for localStorage'); }
+  };
+  reader.readAsDataURL(file);
+});
+
+// ===== PROFESSIONAL PHOTO UPLOAD =====
+const proPhotoInput = document.getElementById('proPhotoInput');
+const proPhotoImg = document.getElementById('proPhotoImg');
+const proPhotoPlaceholder = document.getElementById('proPhotoPlaceholder');
+
+// Load saved pro photo
+(function() {
+  const saved = localStorage.getItem('vapx_pro_photo');
+  if (saved) {
+    proPhotoImg.src = saved;
+    proPhotoImg.style.display = 'block';
+    proPhotoPlaceholder.style.display = 'none';
+  }
+})();
+
+// Admin হলে pro photo upload enable
+function updateProPhotoAccess() {
+  const label = document.getElementById('proPhotoPlaceholder');
+  if (!label) return;
+  if (isAdmin) {
+    label.style.pointerEvents = 'auto';
+    label.style.cursor = 'pointer';
+  } else {
+    label.style.pointerEvents = 'none';
+    label.style.cursor = 'default';
+  }
+}
+
+proPhotoInput.addEventListener('change', function() {
+  if (!isAdmin) return;
+  const file = this.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    proPhotoImg.src = e.target.result;
+    proPhotoImg.style.display = 'block';
+    proPhotoPlaceholder.style.display = 'none';
+    try { localStorage.setItem('vapx_pro_photo', e.target.result); } catch(err) { console.warn('Pro photo too large for localStorage'); }
   };
   reader.readAsDataURL(file);
 });
@@ -2678,6 +3227,11 @@ async function doAdminLogin() {
   showAdminUI();
   renderYtVideos();
   renderBlog();
+  renderProjects();
+  renderPricingGrid();
+  renderClientPricing();
+  fivRenderTabs();
+  fivRenderCard();
   btn.textContent = 'Login to Admin Panel →';
   btn.disabled = false;
 
@@ -2695,6 +3249,11 @@ function adminLogout() {
   hideAdminUI();
   renderYtVideos();
   renderBlog();
+  renderProjects();
+  renderPricingGrid();
+  renderClientPricing();
+  fivRenderTabs();
+  fivRenderCard();
 }
 
 function showAdminUI() {
@@ -2930,29 +3489,580 @@ document.getElementById('closeBlogModal').addEventListener('click', () => docume
 document.getElementById('blogModal').addEventListener('click', e => { if (e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
 
 // ===================================================
+// PORTFOLIO / PROJECTS SYSTEM
+// ===================================================
+let projects = [];
+let projectShowCount = 6;
+let editingProjectIndex = null;
+
+const glowColors = [
+  'rgba(108,99,255,0.4)',
+  'rgba(0,212,255,0.35)',
+  'rgba(155,93,255,0.4)',
+  'rgba(0,212,255,0.3)',
+  'rgba(108,99,255,0.35)',
+  'rgba(0,212,255,0.35)',
+];
+
+function renderProjects() {
+  const grid = document.getElementById('projectGrid');
+  const empty = document.getElementById('projectEmpty');
+  const lmw = document.getElementById('projectLoadMoreWrap');
+  if (!projects.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    if (lmw) lmw.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  const visible = projects.slice(0, projectShowCount);
+  grid.innerHTML = visible.map((p, i) => {
+    const glow = glowColors[i % glowColors.length];
+    const tools = (p.tools || '').split(',').map(t => t.trim()).filter(Boolean);
+
+    // Build media section
+    let mediaHtml = '';
+    if (p.media && p.media.data) {
+      const mt = p.media.type || '';
+      if (mt.startsWith('image/')) {
+        mediaHtml = `<div class="project-media-wrap"><img class="project-media-img" src="${p.media.data}" alt="${p.title}" loading="lazy"><span class="project-media-type-badge">IMAGE</span></div>`;
+      } else if (mt.startsWith('video/')) {
+        mediaHtml = `<div class="project-media-wrap"><video class="project-media-video" src="${p.media.data}" muted playsinline loop autoplay></video><span class="project-media-type-badge">VIDEO</span></div>`;
+      } else if (mt === 'application/pdf') {
+        mediaHtml = `<div class="project-media-wrap"><div class="project-media-emoji" style="flex-direction:column;gap:8px;"><span style="font-size:48px">📄</span><span style="font-size:12px;font-family:var(--font-mono);color:var(--muted);">PDF Document</span></div><span class="project-media-type-badge">PDF</span></div>`;
+      }
+    } else {
+      mediaHtml = `<div class="project-thumb"><div class="project-thumb-glow" style="background:${glow}"></div>${p.emoji || '📁'}</div>`;
+    }
+
+    return `
+    <div class="project-card reveal visible">
+      ${mediaHtml}
+      <div class="project-body">
+        <div class="project-type">${p.type || 'Project'}</div>
+        <div class="project-title">${p.title}</div>
+        <div class="project-desc">${p.desc || ''}</div>
+        ${tools.length ? `<div class="project-tools">${tools.map(t=>`<span class="project-tool">${t}</span>`).join('')}</div>` : ''}
+        ${p.result ? `<div class="project-result"><span class="result-arrow">↑</span> ${p.result}</div>` : ''}
+        ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:12px;color:var(--cyan);font-family:var(--font-mono);">View Project →</a>` : ''}
+        ${isAdmin ? `
+        <div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
+          <button onclick="openEditProject(${i})" style="flex:1;padding:7px;background:rgba(108,99,255,0.1);border:1px solid rgba(108,99,255,0.25);color:var(--indigo);border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(108,99,255,0.2)'" onmouseout="this.style.background='rgba(108,99,255,0.1)'">✏ Edit</button>
+          <button onclick="removeProject(${i})" style="padding:7px 14px;background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(255,50,50,0.16)'" onmouseout="this.style.background='rgba(255,50,50,0.08)'">✕</button>
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  if (!lmw) return;
+  lmw.style.display = 'flex';
+  document.getElementById('projectCount').textContent = `Showing ${Math.min(projectShowCount, projects.length)} of ${projects.length} project${projects.length !== 1 ? 's' : ''}`;
+  document.getElementById('projectLoadMoreBtn').style.display = projects.length > projectShowCount ? 'inline-flex' : 'none';
+  document.getElementById('projectShowLessBtn').style.display = projectShowCount > 6 ? 'inline-flex' : 'none';
+}
+
+function projectLoadMore() { projectShowCount += 6; renderProjects(); }
+function projectShowLess() { projectShowCount = 6; renderProjects(); document.getElementById('portfolio').scrollIntoView({behavior:'smooth'}); }
+
+function openProjectModal() {
+  if (!isAdmin) { alert('🔐 Admin login required.'); return; }
+  editingProjectIndex = null;
+  document.getElementById('projectModalLabel').textContent = '// ADD PROJECT';
+  document.getElementById('projectModalTitle').textContent = 'New Project';
+  document.getElementById('pSaveBtn').textContent = 'Save Project →';
+  ['pEmojiInput','pTypeInput','pTitleInput','pDescInput','pToolsInput','pResultInput','pLinkInput'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('pEmojiInput').value = '📁';
+  clearProjectMedia();
+  document.getElementById('projectModal').style.display = 'flex';
+}
+
+function openEditProject(i) {
+  if (!isAdmin) return;
+  editingProjectIndex = i;
+  const p = projects[i];
+  document.getElementById('projectModalLabel').textContent = '// EDIT PROJECT';
+  document.getElementById('projectModalTitle').textContent = 'Edit Project';
+  document.getElementById('pSaveBtn').textContent = 'Update Project →';
+  document.getElementById('pEmojiInput').value = p.emoji || '📁';
+  document.getElementById('pTypeInput').value = p.type || '';
+  document.getElementById('pTitleInput').value = p.title || '';
+  document.getElementById('pDescInput').value = p.desc || '';
+  document.getElementById('pToolsInput').value = p.tools || '';
+  document.getElementById('pResultInput').value = p.result || '';
+  document.getElementById('pLinkInput').value = p.link || '';
+  // restore existing media preview
+  clearProjectMedia();
+  if (p.media && p.media.data) {
+    _currentProjectMedia = p.media;
+    const fn = document.getElementById('pMediaFileName');
+    fn.textContent = '✅ Existing media loaded';
+    fn.style.display = 'block';
+    const prev = document.getElementById('pMediaPreview');
+    prev.style.display = 'block';
+    if (p.media.type && p.media.type.startsWith('image/')) {
+      const img = document.getElementById('pMediaPreviewImg');
+      img.src = p.media.data; img.style.display = 'block';
+    } else if (p.media.type && p.media.type.startsWith('video/')) {
+      const vid = document.getElementById('pMediaPreviewVid');
+      vid.src = p.media.data; vid.style.display = 'block';
+    } else {
+      document.getElementById('pMediaPreviewPdf').style.display = 'block';
+    }
+  }
+  document.getElementById('projectModal').style.display = 'flex';
+}
+
+function closeProjectModal() {
+  document.getElementById('projectModal').style.display = 'none';
+  editingProjectIndex = null;
+}
+
+async function saveProject() {
+  if (!isAdmin) return;
+  const title = document.getElementById('pTitleInput').value.trim();
+  const desc  = document.getElementById('pDescInput').value.trim();
+  if (!title || !desc) { alert('Title and Description are required!'); return; }
+
+  const btn = document.getElementById('pSaveBtn');
+  const orig = btn.textContent;
+  btn.textContent = 'Saving...'; btn.disabled = true;
+
+  const proj = {
+    emoji:  document.getElementById('pEmojiInput').value.trim() || '📁',
+    type:   document.getElementById('pTypeInput').value.trim() || 'Project',
+    title,
+    desc,
+    tools:  document.getElementById('pToolsInput').value.trim(),
+    result: document.getElementById('pResultInput').value.trim(),
+    link:   document.getElementById('pLinkInput').value.trim(),
+    date:   new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}),
+    media:  _currentProjectMedia || null,
+  };
+
+  if (editingProjectIndex !== null) {
+    projects[editingProjectIndex] = proj;
+  } else {
+    projects.unshift(proj);
+  }
+
+  await sharedSet('projects', projects);
+  closeProjectModal();
+  btn.textContent = orig; btn.disabled = false;
+  renderProjects();
+}
+
+async function removeProject(i) {
+  if (!isAdmin) return;
+  if (!confirm('Delete this project?')) return;
+  projects.splice(i, 1);
+  await sharedSet('projects', projects);
+  renderProjects();
+}
+
+// modal backdrop click
+document.getElementById('projectModal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeProjectModal();
+});
+
+document.getElementById('openProjectModal').addEventListener('click', openProjectModal);
+
+// ===================================================
+// PROJECT MEDIA HANDLING (image/video/pdf — unlimited)
+// ===================================================
+let _currentProjectMedia = null;
+
+function handleProjectMediaSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const fn = document.getElementById('pMediaFileName');
+  fn.textContent = '⏳ Loading: ' + file.name;
+  fn.style.display = 'block';
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    _currentProjectMedia = { data: e.target.result, type: file.type, name: file.name };
+    fn.textContent = '✅ ' + file.name;
+
+    const prev = document.getElementById('pMediaPreview');
+    const img  = document.getElementById('pMediaPreviewImg');
+    const vid  = document.getElementById('pMediaPreviewVid');
+    const pdf  = document.getElementById('pMediaPreviewPdf');
+    img.style.display = 'none'; vid.style.display = 'none'; pdf.style.display = 'none';
+    prev.style.display = 'block';
+
+    if (file.type.startsWith('image/')) {
+      img.src = e.target.result; img.style.display = 'block';
+    } else if (file.type.startsWith('video/')) {
+      vid.src = e.target.result; vid.style.display = 'block';
+    } else if (file.type === 'application/pdf') {
+      pdf.style.display = 'block';
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearProjectMedia() {
+  _currentProjectMedia = null;
+  const fn = document.getElementById('pMediaFileName');
+  if (fn) { fn.textContent = ''; fn.style.display = 'none'; }
+  const prev = document.getElementById('pMediaPreview');
+  if (prev) prev.style.display = 'none';
+  const img = document.getElementById('pMediaPreviewImg');
+  if (img) { img.src = ''; img.style.display = 'none'; }
+  const vid = document.getElementById('pMediaPreviewVid');
+  if (vid) { vid.src = ''; vid.style.display = 'none'; }
+  const pdf = document.getElementById('pMediaPreviewPdf');
+  if (pdf) pdf.style.display = 'none';
+  const input = document.getElementById('pMediaInput');
+  if (input) input.value = '';
+}
+
+// ===================================================
+// PRICING SYSTEM — Admin editable
+// ===================================================
+let pricingPlans = [
+  { plan:'Starter', price:'99', currency:'$', desc:'Perfect for a single deliverable — a logo, a thumbnail set, or a prompt pack.', cta:'Get Started', badge:'', featured:false,
+    features:[{text:'1 design or content deliverable',available:true},{text:'Up to 10 AI-generated visuals',available:true},{text:'2 revision rounds',available:true},{text:'3-day delivery',available:true},{text:'AI automation setup',available:false},{text:'Priority support',available:false}] },
+  { plan:'Creator', price:'349', currency:'$', desc:'For creators and small brands who need ongoing content, design, or video.', cta:'Get Started', badge:'Most Popular', featured:true,
+    features:[{text:'Full brand kit or 1-month content batch',available:true},{text:'1 video edit (up to 5 min)',available:true},{text:'AI voiceover or music add-on',available:true},{text:'3 revision rounds',available:true},{text:'5-day delivery',available:true},{text:'Priority support',available:true}] },
+  { plan:'Automation Pro', price:'Custom', currency:'', desc:'For businesses that want a full AI-powered content & automation system.', cta:"Let's Talk", badge:'', featured:false,
+    features:[{text:'Everything in Creator',available:true},{text:'Custom AI automation workflow',available:true},{text:'Ongoing monthly content pipeline',available:true},{text:'24–48hr priority turnaround',available:true},{text:'Monthly retainer available',available:true}] }
+];
+let clientPricings = [];
+
+function renderPricingGrid() {
+  const grid = document.getElementById('pricingGrid');
+  if (!grid) return;
+  const checkIcon = (color) => `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>`;
+  const crossIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  grid.innerHTML = pricingPlans.map((p, i) => {
+    const fColor = p.featured ? 'var(--indigo)' : '#1AB65D';
+    const priceHtml = isNaN(parseFloat(p.price))
+      ? `<div class="pricing-price">${p.price}</div>`
+      : `<div class="pricing-price"><span class="price-currency">${p.currency}</span>${p.price}</div>`;
+    const featuresHtml = p.features.map(f => `
+      <li class="${f.available?'':'unavailable'}">${f.available ? checkIcon(fColor) : crossIcon}${f.text}</li>`).join('');
+    const ctaBtn = p.featured
+      ? `<a href="#contact" class="btn-primary pricing-cta"><span>${p.cta}</span></a>`
+      : `<a href="#contact" class="btn-ghost pricing-cta">${p.cta}</a>`;
+    return `<div class="pricing-card ${p.featured?'pricing-card-featured':''} reveal">
+      ${p.badge ? `<div class="pricing-popular">${p.badge}</div>` : ''}
+      <div class="pricing-plan">${p.plan}</div>
+      ${priceHtml}
+      <div class="pricing-desc">${p.desc}</div>
+      <ul class="pricing-features">${featuresHtml}</ul>
+      ${ctaBtn}
+      <button class="pricing-admin-btn admin-only" style="display:${isAdmin?'inline-flex':'none'};" onclick="openPricingEdit(${i})">✏ Edit Plan</button>
+    </div>`;
+  }).join('');
+}
+
+function openPricingEdit(idx) {
+  if (!isAdmin) return;
+  const p = pricingPlans[idx];
+  document.getElementById('pricingEditIndex').value = idx;
+  document.getElementById('pricingEditTitle').textContent = `✏ Edit — ${p.plan}`;
+  document.getElementById('pef_plan').value = p.plan;
+  document.getElementById('pef_price').value = p.price;
+  document.getElementById('pef_currency').value = p.currency;
+  document.getElementById('pef_desc').value = p.desc;
+  document.getElementById('pef_cta').value = p.cta;
+  document.getElementById('pef_badge').value = p.badge || '';
+  // Render features
+  const fl = document.getElementById('pef_features_list');
+  fl.innerHTML = p.features.map((f,fi) => `
+    <div class="pef-feature-row" id="pef_fr_${fi}">
+      <input type="checkbox" class="pef-feature-check" id="pef_fc_${fi}" ${f.available?'checked':''}>
+      <input type="text" value="${f.text}" id="pef_ft_${fi}" placeholder="Feature text...">
+      <button onclick="removePricingFeature(${fi})" style="background:rgba(255,50,50,0.1);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:6px;padding:5px 9px;cursor:pointer;font-size:12px;">✕</button>
+    </div>`).join('');
+  document.getElementById('pricingEditModal').classList.add('open');
+}
+
+function closePricingEdit() { document.getElementById('pricingEditModal').classList.remove('open'); }
+
+function addPricingFeature() {
+  const fl = document.getElementById('pef_features_list');
+  const idx = fl.children.length;
+  const row = document.createElement('div');
+  row.className = 'pef-feature-row'; row.id = `pef_fr_${idx}`;
+  row.innerHTML = `<input type="checkbox" class="pef-feature-check" id="pef_fc_${idx}" checked><input type="text" id="pef_ft_${idx}" placeholder="New feature..."><button onclick="removePricingFeature(${idx})" style="background:rgba(255,50,50,0.1);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:6px;padding:5px 9px;cursor:pointer;font-size:12px;">✕</button>`;
+  fl.appendChild(row);
+}
+
+function removePricingFeature(fi) {
+  const row = document.getElementById(`pef_fr_${fi}`);
+  if (row) row.remove();
+}
+
+async function savePricingEdit() {
+  const idx = parseInt(document.getElementById('pricingEditIndex').value);
+  const fl = document.getElementById('pef_features_list');
+  const features = [];
+  fl.querySelectorAll('.pef-feature-row').forEach((row) => {
+    const check = row.querySelector('input[type=checkbox]');
+    const text  = row.querySelector('input[type=text]');
+    if (text && text.value.trim()) features.push({ text: text.value.trim(), available: check ? check.checked : true });
+  });
+  pricingPlans[idx] = {
+    ...pricingPlans[idx],
+    plan:     document.getElementById('pef_plan').value.trim() || pricingPlans[idx].plan,
+    price:    document.getElementById('pef_price').value.trim(),
+    currency: document.getElementById('pef_currency').value.trim(),
+    desc:     document.getElementById('pef_desc').value.trim(),
+    cta:      document.getElementById('pef_cta').value.trim() || 'Get Started',
+    badge:    document.getElementById('pef_badge').value.trim(),
+    features,
+  };
+  await sharedSet('pricing_plans', pricingPlans);
+  closePricingEdit();
+  renderPricingGrid();
+}
+
+// ===== Client Custom Pricing =====
+function renderClientPricing() {
+  const grid = document.getElementById('clientPricingGrid');
+  const empty = document.getElementById('clientPricingEmpty');
+  const section = document.getElementById('clientPricingSection');
+  if (clientPricings.length || isAdmin) {
+    section.classList.add('visible');
+  }
+  if (!clientPricings.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = clientPricings.map((c, i) => `
+    <div class="client-pricing-card">
+      ${isAdmin ? `<button class="client-pricing-remove" onclick="removeClientPricing(${i})">✕ Remove</button>` : ''}
+      <div class="client-pricing-label">${c.label || 'Custom Deal'}</div>
+      <div class="client-pricing-name">${c.plan || ''}</div>
+      <div class="client-pricing-price">${c.price || ''}</div>
+      <div class="client-pricing-desc">${c.desc || ''}</div>
+      ${c.delivery ? `<div style="font-size:12px;font-family:var(--font-mono);color:var(--cyan);">⏱ ${c.delivery}</div>` : ''}
+      <a href="#contact" style="display:inline-flex;margin-top:14px;padding:10px 20px;background:linear-gradient(135deg,var(--cyan),var(--indigo));color:#fff;border-radius:9px;font-size:13px;font-weight:700;font-family:var(--font-display);">Claim Deal →</a>
+    </div>`).join('');
+}
+
+function openClientPricingModal() {
+  if (!isAdmin) return;
+  ['cpf_label','cpf_plan','cpf_price','cpf_desc','cpf_delivery'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('clientPricingModal').classList.add('open');
+}
+function closeClientPricingModal() { document.getElementById('clientPricingModal').classList.remove('open'); }
+
+async function saveClientPricing() {
+  if (!isAdmin) return;
+  const label    = document.getElementById('cpf_label').value.trim();
+  const plan     = document.getElementById('cpf_plan').value.trim();
+  const price    = document.getElementById('cpf_price').value.trim();
+  const desc     = document.getElementById('cpf_desc').value.trim();
+  const delivery = document.getElementById('cpf_delivery').value.trim();
+  if (!plan || !price) { alert('Plan name and price required!'); return; }
+  clientPricings.push({ label, plan, price, desc, delivery });
+  await sharedSet('client_pricings', clientPricings);
+  closeClientPricingModal();
+  renderClientPricing();
+}
+
+async function removeClientPricing(i) {
+  if (!isAdmin) return;
+  if (!confirm('Remove this custom pricing?')) return;
+  clientPricings.splice(i, 1);
+  await sharedSet('client_pricings', clientPricings);
+  renderClientPricing();
+}
+
+// Close pricing modals on backdrop click
+document.getElementById('pricingEditModal').addEventListener('click', e => { if (e.target === e.currentTarget) closePricingEdit(); });
+document.getElementById('clientPricingModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeClientPricingModal(); });
+
+// ===================================================
+// FIVERR-STYLE TAB PRICING SYSTEM
+// ===================================================
+let fivPlans = [
+  {
+    tab: 'Basic', tier: 'Silver', price: '25', currency: '$',
+    desc: 'Clean editing for 2 minutes, trimming, transition, background music',
+    delivery: 2, revisions: 3, cta: 'Continue',
+    services: [
+      { label: 'Up to 15 minutes of footage provided', on: true },
+      { label: 'Up to 2 minutes running time', on: true },
+      { label: 'Color grading', on: true },
+      { label: 'Sound design & mixing', on: true },
+      { label: 'Motion graphics', on: false },
+      { label: 'Subtitles', on: false },
+    ]
+  },
+  {
+    tab: 'Standard', tier: 'Gold', price: '55', currency: '$',
+    desc: 'Professional editing up to 5 minutes with motion graphics',
+    delivery: 4, revisions: 5, cta: 'Continue',
+    services: [
+      { label: 'Up to 30 minutes of footage provided', on: true },
+      { label: 'Up to 5 minutes running time', on: true },
+      { label: 'Color grading', on: true },
+      { label: 'Sound design & mixing', on: true },
+      { label: 'Motion graphics', on: true },
+      { label: 'Subtitles', on: false },
+    ]
+  },
+  {
+    tab: 'Premium', tier: 'Platinum', price: '99', currency: '$',
+    desc: 'Full cinematic edit up to 10 minutes — all features included',
+    delivery: 7, revisions: 10, cta: 'Continue',
+    services: [
+      { label: 'Unlimited footage', on: true },
+      { label: 'Up to 10 minutes running time', on: true },
+      { label: 'Color grading', on: true },
+      { label: 'Sound design & mixing', on: true },
+      { label: 'Motion graphics', on: true },
+      { label: 'Subtitles', on: true },
+    ]
+  }
+];
+let fivActive = 0;
+let fivEditIdx = 0;
+
+function fivRenderTabs() {
+  document.getElementById('fivTabBar').innerHTML = fivPlans.map((p, i) =>
+    `<button class="fiv-tab${i === fivActive ? ' active' : ''}" onclick="fivSwitch(${i})">${p.tab}</button>`
+  ).join('');
+}
+
+function fivRenderCard() {
+  const p = fivPlans[fivActive];
+  const checkSvg = `<svg class="fiv-svc-icon ok" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+  const crossSvg = `<svg class="fiv-svc-icon no" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+  document.getElementById('fivCard').innerHTML = `
+    <div class="fiv-header">
+      <div class="fiv-tier">${p.tier}</div>
+      <div class="fiv-price"><sup>${p.currency}</sup>${p.price}</div>
+      <div class="fiv-desc">${p.desc}</div>
+    </div>
+    <div class="fiv-meta">
+      <div class="fiv-meta-item"><span class="fiv-meta-icon">⏱</span> ${p.delivery}-day delivery</div>
+      <div class="fiv-meta-item"><span class="fiv-meta-icon">🔄</span> ${p.revisions} Revisions</div>
+    </div>
+    <div class="fiv-svcs">
+      ${p.services.map(s => `<div class="fiv-svc${s.on ? '' : ' off'}">${s.on ? checkSvg : crossSvg} ${s.label}</div>`).join('')}
+    </div>
+    <div class="fiv-cta-wrap">
+      <a href="#contact" class="fiv-cta">${p.cta} →</a>
+      <button class="fiv-edit-btn admin-only" style="display:${isAdmin ? 'flex' : 'none'};" onclick="fivOpenModal(${fivActive})">✏ Edit Package</button>
+    </div>`;
+}
+
+function fivSwitch(i) {
+  fivActive = i;
+  fivRenderTabs();
+  fivRenderCard();
+}
+
+function fivOpenModal(idx) {
+  if (!isAdmin) return;
+  fivEditIdx = idx;
+  const p = fivPlans[idx];
+  document.getElementById('fivModalTitle').textContent = '✏ Edit — ' + p.tab;
+  document.getElementById('fiv_tab').value = p.tab;
+  document.getElementById('fiv_tier').value = p.tier;
+  document.getElementById('fiv_price').value = p.price;
+  document.getElementById('fiv_currency').value = p.currency;
+  document.getElementById('fiv_desc').value = p.desc;
+  document.getElementById('fiv_delivery').value = p.delivery;
+  document.getElementById('fiv_revisions').value = p.revisions;
+  document.getElementById('fiv_cta').value = p.cta;
+  fivRenderSvcList(p.services);
+  document.getElementById('fivModal').classList.add('open');
+}
+
+function fivRenderSvcList(svcs) {
+  document.getElementById('fivSvcList').innerHTML = svcs.map((s, i) => `
+    <div class="fiv-svc-edit-row" id="fivsr_${i}">
+      <input type="text" value="${s.label}" id="fivst_${i}" placeholder="Service name...">
+      <label class="fiv-toggle" title="${s.on ? 'Included' : 'Not included'}">
+        <input type="checkbox" id="fivsc_${i}" ${s.on ? 'checked' : ''}>
+        <span class="fiv-toggle-slider"></span>
+      </label>
+      <button class="fiv-del-btn" onclick="fivDelSvc(${i})" aria-label="Remove">✕</button>
+    </div>`).join('');
+}
+
+function fivAddSvc() {
+  const list = document.getElementById('fivSvcList');
+  const i = list.children.length;
+  const row = document.createElement('div');
+  row.className = 'fiv-svc-edit-row'; row.id = `fivsr_${i}`;
+  row.innerHTML = `<input type="text" id="fivst_${i}" placeholder="New service..."><label class="fiv-toggle"><input type="checkbox" id="fivsc_${i}" checked><span class="fiv-toggle-slider"></span></label><button class="fiv-del-btn" onclick="fivDelSvc(${i})">✕</button>`;
+  list.appendChild(row);
+}
+
+function fivDelSvc(i) {
+  const row = document.getElementById(`fivsr_${i}`);
+  if (row) row.remove();
+}
+
+async function fivSave() {
+  const list = document.getElementById('fivSvcList');
+  const svcs = [];
+  list.querySelectorAll('.fiv-svc-edit-row').forEach((row, ri) => {
+    const txt = row.querySelector('input[type=text]');
+    const chk = row.querySelector('input[type=checkbox]');
+    if (txt && txt.value.trim()) svcs.push({ label: txt.value.trim(), on: chk ? chk.checked : true });
+  });
+  fivPlans[fivEditIdx] = {
+    tab:       document.getElementById('fiv_tab').value.trim() || fivPlans[fivEditIdx].tab,
+    tier:      document.getElementById('fiv_tier').value.trim(),
+    price:     document.getElementById('fiv_price').value.trim(),
+    currency:  document.getElementById('fiv_currency').value.trim(),
+    desc:      document.getElementById('fiv_desc').value.trim(),
+    delivery:  parseInt(document.getElementById('fiv_delivery').value) || 1,
+    revisions: parseInt(document.getElementById('fiv_revisions').value) || 1,
+    cta:       document.getElementById('fiv_cta').value.trim() || 'Continue',
+    services:  svcs,
+  };
+  await sharedSet('fiv_plans', fivPlans);
+  fivCloseModal();
+  fivRenderTabs();
+  fivRenderCard();
+}
+
+function fivCloseModal() { document.getElementById('fivModal').classList.remove('open'); }
+document.getElementById('fivModal').addEventListener('click', e => { if (e.target === e.currentTarget) fivCloseModal(); });
+
+// ===================================================
 // INIT — load from JSONBin cloud, then render
 // ===================================================
 async function initSharedData() {
   document.getElementById('ytVideosGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);">☁️ Loading from cloud...</div>';
   document.getElementById('blogGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);">☁️ Loading from cloud...</div>';
+  document.getElementById('projectGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);">☁️ Loading from cloud...</div>';
 
-  // Admin session check (master key sessionStorage-এ থাকলে restore করো)
+  // Admin session check
   checkAdmin();
 
   const record = await cloudGet();
   if (record) {
     _record = record;
-    if (record.yt_videos)  ytVideos  = record.yt_videos;
-    if (record.yt_channel) ytChannel = record.yt_channel;
-    if (record.blog_posts) blogPosts = record.blog_posts;
+    if (record.yt_videos)      ytVideos       = record.yt_videos;
+    if (record.yt_channel)     ytChannel      = record.yt_channel;
+    if (record.blog_posts)     blogPosts      = record.blog_posts;
+    if (record.projects)       projects       = record.projects;
+    if (record.pricing_plans)  pricingPlans   = record.pricing_plans;
+    if (record.client_pricings) clientPricings = record.client_pricings;
+    if (record.fiv_plans)      fivPlans        = record.fiv_plans;
   }
 
   renderYtChannel();
   renderYtVideos();
   renderBlog();
-}
-
-// ===== MARQUEE — JS controlled (PC slow, mobile fast) =====
+  renderProjects();
+  renderPricingGrid();
+  renderClientPricing();
+  fivRenderTabs();
+  fivRenderCard();
+} — JS controlled (PC slow, mobile fast) =====
 (function() {
   const track = document.getElementById('marqueeTrack');
   if (!track) return;
