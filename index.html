@@ -850,6 +850,27 @@ nav.scrolled {
   padding: 3px 8px;
   border-radius: 4px;
 }
+.testi-top { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+.testi-add-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  color: #fff; border: none; border-radius: 10px;
+  font-family: var(--font-display); font-size: 13px; font-weight: 700;
+  cursor: pointer; box-shadow: 0 4px 16px rgba(108,99,255,0.35);
+  transition: all .2s;
+}
+.testi-add-btn:hover { transform: translateY(-2px); }
+.testi-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 8px; line-height: 1.4; }
+.testi-thumb { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 16px; border: 1px solid var(--border); }
+.testi-admin-row { display: flex; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+.testi-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+}
+.testi-empty-icon { font-size: 48px; margin-bottom: 12px; }
+.testi-empty-txt { font-size: 14px; margin-bottom: 16px; }
 
 /* ===== PROCESS ===== */
 .process-steps { display: flex; align-items: flex-start; gap: 0; margin-top: 60px; position: relative; }
@@ -2201,100 +2222,91 @@ footer {
 <!-- TESTIMONIALS -->
 <section id="testimonials" class="section">
   <div class="container">
-    <div class="reveal">
-      <div class="section-label">Client Reviews</div>
-      <h2 class="section-title">What Clients <span>Say</span></h2>
-      <p class="section-sub">Don't take my word for it — hear from the people I've worked with.</p>
+    <div class="testi-top reveal">
+      <div>
+        <div class="section-label">Client Reviews</div>
+        <h2 class="section-title">What Clients <span>Say</span></h2>
+        <p class="section-sub">Don't take my word for it — hear from the people I've worked with.</p>
+      </div>
+      <button class="testi-add-btn admin-only" id="openReviewModal" style="display:none;">＋ Add Review</button>
     </div>
-    <div class="testi-grid">
 
-      <div class="testi-card reveal">
-        <div class="testi-platform">Fiverr ⭐</div>
-        <div class="testi-quote-mark">"</div>
-        <div class="testi-stars">★★★★★</div>
-        <div class="testi-text">Hasanur is an absolute wizard with AI automation. He built a content system for our agency that now generates 50 pieces of content per week automatically. The ROI on this was immediate and massive. Will definitely hire again.</div>
-        <div class="testi-author">
-          <div class="testi-avatar" style="background:rgba(108,99,255,0.15)">🇺🇸</div>
-          <div>
-            <div class="testi-name">Marcus J.</div>
-            <div class="testi-role">Agency Owner · New York, USA</div>
-          </div>
-        </div>
-      </div>
+    <div id="reviewsGrid" class="testi-grid"><!-- review cards injected by JS --></div>
 
-      <div class="testi-card reveal">
-        <div class="testi-platform">Upwork ⭐</div>
-        <div class="testi-quote-mark">"</div>
-        <div class="testi-stars">★★★★★</div>
-        <div class="testi-text">The brand identity Hasanur designed for our startup was nothing short of exceptional. He understood our vision immediately and delivered work that looked like it came from a top-tier design studio. Highly recommend!</div>
-        <div class="testi-author">
-          <div class="testi-avatar" style="background:rgba(0,212,255,0.12)">🇬🇧</div>
-          <div>
-            <div class="testi-name">Sarah L.</div>
-            <div class="testi-role">SaaS Founder · London, UK</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="testi-card reveal">
-        <div class="testi-platform">Direct 💬</div>
-        <div class="testi-quote-mark">"</div>
-        <div class="testi-stars">★★★★★</div>
-        <div class="testi-text">My YouTube channel went from struggling thumbnails to a consistent, professional look. My click-through rate doubled within a month. Hasanur's video editing and design skills are genuinely top-tier for the price.</div>
-        <div class="testi-author">
-          <div class="testi-avatar" style="background:rgba(155,93,255,0.15)">🇨🇦</div>
-          <div>
-            <div class="testi-name">Priya K.</div>
-            <div class="testi-role">YouTuber · 280K Subscribers · Canada</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="testi-card reveal">
-        <div class="testi-platform">Fiverr ⭐</div>
-        <div class="testi-quote-mark">"</div>
-        <div class="testi-stars">★★★★★</div>
-        <div class="testi-text">His prompt engineering work saved our team weeks of trial and error. The custom prompts he created for our Midjourney workflow are still producing incredible results 6 months later. A true expert in this space.</div>
-        <div class="testi-author">
-          <div class="testi-avatar" style="background:rgba(0,212,255,0.1)">🇩🇪</div>
-          <div>
-            <div class="testi-name">Thomas R.</div>
-            <div class="testi-role">Creative Director · Berlin, Germany</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="testi-card reveal">
-        <div class="testi-platform">Upwork ⭐</div>
-        <div class="testi-quote-mark">"</div>
-        <div class="testi-stars">★★★★★</div>
-        <div class="testi-text">We hired Hasanur for an AI-generated product photography campaign. The results were photorealistic, on-brand, and delivered on time. Saved us thousands compared to a real photoshoot. Outstanding work!</div>
-        <div class="testi-author">
-          <div class="testi-avatar" style="background:rgba(108,99,255,0.12)">🇦🇪</div>
-          <div>
-            <div class="testi-name">Aisha M.</div>
-            <div class="testi-role">E-commerce Brand Owner · Dubai, UAE</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="testi-card reveal">
-        <div class="testi-platform">Direct 💬</div>
-        <div class="testi-quote-mark">"</div>
-        <div class="testi-stars">★★★★★</div>
-        <div class="testi-text">Fast, communicative, creative, and delivers beyond expectations. Hasanur set up our entire podcast production pipeline with AI tools and now our output is 3x what it was. Best freelancer I've worked with this year.</div>
-        <div class="testi-author">
-          <div class="testi-avatar" style="background:rgba(0,212,255,0.12)">🇦🇺</div>
-          <div>
-            <div class="testi-name">David O.</div>
-            <div class="testi-role">Business Coach & Podcaster · Australia</div>
-          </div>
-        </div>
-      </div>
-
+    <div id="reviewsEmpty" class="testi-empty" style="display:none;">
+      <div class="testi-empty-icon">⭐</div>
+      <div class="testi-empty-txt">No reviews yet. Check back soon!</div>
+      <button class="testi-add-btn admin-only" onclick="document.getElementById('openReviewModal').click()" style="display:none;">＋ Add First Review</button>
     </div>
   </div>
 </section>
+
+<!-- REVIEW ADD/EDIT MODAL -->
+<div id="reviewModal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);z-index:3000;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#111827;border:1px solid rgba(108,99,255,0.3);border-radius:20px;padding:32px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 0 60px rgba(108,99,255,0.2);">
+    <button onclick="closeReviewModal()" style="position:absolute;top:16px;right:18px;background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;">✕</button>
+    <div style="font-size:13px;font-family:var(--font-mono);color:var(--cyan);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;" id="reviewModalLabel">// ADD REVIEW</div>
+    <div style="font-size:20px;font-weight:800;color:var(--white);margin-bottom:24px;" id="reviewModalTitle">New Review</div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">REVIEW TITLE *</label>
+        <input id="rTitleInput" type="text" placeholder="e.g. Outstanding AI Automation Work" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">REVIEW TEXT *</label>
+        <textarea id="rTextInput" placeholder="What did the client say about the work..." style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;resize:vertical;min-height:90px;line-height:1.6;"></textarea>
+      </div>
+      <div style="display:flex;gap:14px;">
+        <div style="flex:1;">
+          <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">CLIENT NAME</label>
+          <input id="rNameInput" type="text" placeholder="e.g. Marcus J." style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+        </div>
+        <div style="flex:1;">
+          <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">ROLE / LOCATION</label>
+          <input id="rRoleInput" type="text" placeholder="e.g. Agency Owner · USA" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+        </div>
+      </div>
+      <div style="display:flex;gap:14px;">
+        <div style="flex:1;">
+          <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">PLATFORM</label>
+          <input id="rPlatformInput" type="text" placeholder="e.g. Fiverr, Upwork, Direct..." style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+        </div>
+        <div style="flex:1;">
+          <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">RATING</label>
+          <select id="rRatingInput" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+            <option value="5">★★★★★ (5)</option>
+            <option value="4">★★★★☆ (4)</option>
+            <option value="3">★★★☆☆ (3)</option>
+            <option value="2">★★☆☆☆ (2)</option>
+            <option value="1">★☆☆☆☆ (1)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- SCREENSHOT UPLOAD -->
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">REVIEW SCREENSHOT (optional)</label>
+        <label id="rMediaUploadLabel" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px;border:2px dashed rgba(108,99,255,0.35);border-radius:10px;cursor:pointer;transition:all .2s;background:rgba(108,99,255,0.04);" onmouseover="this.style.borderColor='var(--indigo)'" onmouseout="this.style.borderColor='rgba(108,99,255,0.35)'">
+          <span style="font-size:26px;">📎</span>
+          <span style="font-size:12px;font-family:var(--font-mono);color:var(--muted);">Click to upload a screenshot image</span>
+          <span id="rMediaFileName" style="font-size:11px;color:var(--cyan);font-family:var(--font-mono);display:none;word-break:break-all;text-align:center;"></span>
+          <input id="rMediaInput" type="file" accept="image/*" style="display:none;" onchange="handleReviewMediaSelect(this)">
+        </label>
+        <!-- Preview -->
+        <div id="rMediaPreview" style="display:none;margin-top:10px;border-radius:10px;overflow:hidden;max-height:160px;position:relative;">
+          <img id="rMediaPreviewImg" style="width:100%;height:160px;object-fit:cover;display:block;" alt="preview">
+          <button onclick="clearReviewMedia()" style="position:absolute;top:6px;right:6px;background:rgba(255,50,50,0.75);color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-top:22px;">
+      <button id="rSaveBtn" onclick="saveReview()" style="flex:1;padding:13px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;">Save Review →</button>
+      <button onclick="closeReviewModal()" style="padding:13px 20px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;transition:all .2s;">Cancel</button>
+    </div>
+  </div>
+</div>
 
 <!-- PROCESS -->
 <section id="process" class="section" style="background:var(--bg2)">
@@ -3096,7 +3108,7 @@ async function cloudSet(record) {
 }
 
 // In-memory cache (পুরো record একসাথে)
-let _record = { yt_videos: [], yt_channel: { name: '@vapxhasan', sub: 'YouTube Channel · AI, Design & Automation', url: 'https://youtube.com/@vapxhasan' }, blog_posts: [] };
+let _record = { yt_videos: [], yt_channel: { name: '@vapxhasan', sub: 'YouTube Channel · AI, Design & Automation', url: 'https://youtube.com/@vapxhasan' }, blog_posts: [], reviews: [] };
 
 // ===================================================
 // SECRET URL CHECK — শুধু ?login=true URL-এ admin button দেখাবে
@@ -3121,7 +3133,7 @@ function checkAdmin() {
         _masterKey = 'firebase-admin';
         isAdmin = true;
         showAdminUI();
-        renderYtVideos(); renderBlog(); renderProjects();
+        renderYtVideos(); renderBlog(); renderProjects(); renderReviews();
         renderClientPricing(); fivRenderTabs(); fivRenderCard();
       } else {
         isAdmin = false;
@@ -3188,6 +3200,7 @@ async function doAdminLogin() {
   renderYtVideos();
   renderBlog();
   renderProjects();
+  renderReviews();
   renderClientPricing();
   fivRenderTabs();
   fivRenderCard();
@@ -3212,6 +3225,7 @@ async function adminLogout() {
   renderYtVideos();
   renderBlog();
   renderProjects();
+  renderReviews();
   renderClientPricing();
   fivRenderTabs();
   fivRenderCard();
@@ -3448,6 +3462,168 @@ document.getElementById('openBlogModal').addEventListener('click', () => {
 });
 document.getElementById('closeBlogModal').addEventListener('click', () => document.getElementById('blogModal').classList.remove('open'));
 document.getElementById('blogModal').addEventListener('click', e => { if (e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
+
+// ===================================================
+// CLIENT REVIEWS SYSTEM (admin managed — title/edit/delete)
+// ===================================================
+let reviews = [];
+let editingReviewIndex = null;
+let _currentReviewMedia = null;
+
+function renderReviews() {
+  const grid = document.getElementById('reviewsGrid');
+  const empty = document.getElementById('reviewsEmpty');
+  if (!grid || !empty) return;
+  if (!reviews.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = reviews.map((r, i) => {
+    const stars = '★'.repeat(r.rating || 5) + '☆'.repeat(5 - (r.rating || 5));
+    return `
+    <div class="testi-card reveal visible">
+      ${r.platform ? `<div class="testi-platform">${r.platform}</div>` : ''}
+      ${r.media && r.media.data ? `<img class="testi-thumb" src="${r.media.data}" alt="${r.title || 'Review screenshot'}" loading="lazy">` : ''}
+      <div class="testi-quote-mark">"</div>
+      <div class="testi-stars">${stars}</div>
+      ${r.title ? `<div class="testi-title">${r.title}</div>` : ''}
+      <div class="testi-text">${r.text || ''}</div>
+      <div class="testi-author">
+        <div class="testi-avatar" style="background:rgba(108,99,255,0.15)">👤</div>
+        <div>
+          <div class="testi-name">${r.name || 'Anonymous'}</div>
+          <div class="testi-role">${r.role || ''}</div>
+        </div>
+      </div>
+      ${isAdmin ? `
+      <div class="testi-admin-row">
+        <button onclick="openEditReview(${i})" class="admin-only" style="flex:1;padding:7px;background:rgba(108,99,255,0.1);border:1px solid rgba(108,99,255,0.25);color:var(--indigo);border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;">✏ Edit</button>
+        <button onclick="removeReview(${i})" class="admin-only" style="padding:7px 14px;background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;">✕</button>
+      </div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function openReviewModal() {
+  if (!isAdmin) { alert('🔐 Admin login required.'); return; }
+  editingReviewIndex = null;
+  document.getElementById('reviewModalLabel').textContent = '// ADD REVIEW';
+  document.getElementById('reviewModalTitle').textContent = 'New Review';
+  document.getElementById('rSaveBtn').textContent = 'Save Review →';
+  ['rTitleInput','rTextInput','rNameInput','rRoleInput','rPlatformInput'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('rRatingInput').value = '5';
+  clearReviewMedia();
+  document.getElementById('reviewModal').style.display = 'flex';
+}
+
+function openEditReview(i) {
+  if (!isAdmin) return;
+  editingReviewIndex = i;
+  const r = reviews[i];
+  document.getElementById('reviewModalLabel').textContent = '// EDIT REVIEW';
+  document.getElementById('reviewModalTitle').textContent = 'Edit Review';
+  document.getElementById('rSaveBtn').textContent = 'Update Review →';
+  document.getElementById('rTitleInput').value = r.title || '';
+  document.getElementById('rTextInput').value = r.text || '';
+  document.getElementById('rNameInput').value = r.name || '';
+  document.getElementById('rRoleInput').value = r.role || '';
+  document.getElementById('rPlatformInput').value = r.platform || '';
+  document.getElementById('rRatingInput').value = r.rating || 5;
+  clearReviewMedia();
+  if (r.media && r.media.data) {
+    _currentReviewMedia = r.media;
+    const fn = document.getElementById('rMediaFileName');
+    fn.textContent = '✅ Existing screenshot loaded';
+    fn.style.display = 'block';
+    const prev = document.getElementById('rMediaPreview');
+    const img = document.getElementById('rMediaPreviewImg');
+    prev.style.display = 'block';
+    img.src = r.media.data;
+  }
+  document.getElementById('reviewModal').style.display = 'flex';
+}
+
+function closeReviewModal() {
+  document.getElementById('reviewModal').style.display = 'none';
+  editingReviewIndex = null;
+}
+
+async function saveReview() {
+  if (!isAdmin) return;
+  const title = document.getElementById('rTitleInput').value.trim();
+  const text  = document.getElementById('rTextInput').value.trim();
+  if (!title || !text) { alert('Review Title and Review Text are required!'); return; }
+
+  const btn = document.getElementById('rSaveBtn');
+  const orig = btn.textContent;
+  btn.textContent = 'Saving...'; btn.disabled = true;
+
+  const rev = {
+    title,
+    text,
+    name:     document.getElementById('rNameInput').value.trim(),
+    role:     document.getElementById('rRoleInput').value.trim(),
+    platform: document.getElementById('rPlatformInput').value.trim(),
+    rating:   parseInt(document.getElementById('rRatingInput').value) || 5,
+    date:     new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}),
+    media:    _currentReviewMedia || null,
+  };
+
+  if (editingReviewIndex !== null) {
+    reviews[editingReviewIndex] = rev;
+  } else {
+    reviews.unshift(rev);
+  }
+
+  await sharedSet('reviews', reviews);
+  closeReviewModal();
+  btn.textContent = orig; btn.disabled = false;
+  renderReviews();
+}
+
+async function removeReview(i) {
+  if (!isAdmin) return;
+  if (!confirm('Delete this review?')) return;
+  reviews.splice(i, 1);
+  await sharedSet('reviews', reviews);
+  renderReviews();
+}
+
+function handleReviewMediaSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const fn = document.getElementById('rMediaFileName');
+  fn.textContent = '⏳ Loading: ' + file.name;
+  fn.style.display = 'block';
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    _currentReviewMedia = { data: e.target.result, type: file.type, name: file.name };
+    fn.textContent = '✅ ' + file.name;
+    const prev = document.getElementById('rMediaPreview');
+    const img  = document.getElementById('rMediaPreviewImg');
+    img.src = e.target.result;
+    prev.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearReviewMedia() {
+  _currentReviewMedia = null;
+  const fn = document.getElementById('rMediaFileName');
+  if (fn) { fn.textContent = ''; fn.style.display = 'none'; }
+  const prev = document.getElementById('rMediaPreview');
+  if (prev) prev.style.display = 'none';
+  const img = document.getElementById('rMediaPreviewImg');
+  if (img) img.src = '';
+  const input = document.getElementById('rMediaInput');
+  if (input) input.value = '';
+}
+
+document.getElementById('reviewModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeReviewModal(); });
+document.getElementById('openReviewModal').addEventListener('click', openReviewModal);
 
 // ===================================================
 // PORTFOLIO / PROJECTS SYSTEM
@@ -3904,6 +4080,7 @@ async function initSharedData() {
   document.getElementById('ytVideosGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);">☁️ Loading from cloud...</div>';
   document.getElementById('blogGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);">☁️ Loading from cloud...</div>';
   document.getElementById('projectGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);">☁️ Loading from cloud...</div>';
+  document.getElementById('reviewsGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);">☁️ Loading from cloud...</div>';
 
   // Admin session check
   checkAdmin();
@@ -3917,12 +4094,14 @@ async function initSharedData() {
     if (record.projects)       projects       = record.projects;
     if (record.client_pricings) clientPricings = record.client_pricings;
     if (record.fiv_plans)      fivPlans        = record.fiv_plans;
+    if (record.reviews)        reviews         = record.reviews;
   }
 
   renderYtChannel();
   renderYtVideos();
   renderBlog();
   renderProjects();
+  renderReviews();
   renderClientPricing();
   fivRenderTabs();
   fivRenderCard();
