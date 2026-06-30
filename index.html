@@ -471,7 +471,10 @@ nav.scrolled {
   position: relative;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
+  filter: drop-shadow(0 8px 28px rgba(108,99,255,0.22));
+  transition: filter .3s ease;
 }
+.about-avatar-ring:hover { filter: drop-shadow(0 10px 36px rgba(0,212,255,0.28)); }
 .about-avatar-ring::before {
   content: '';
   position: absolute;
@@ -497,11 +500,14 @@ nav.scrolled {
   width: 188px; height: 188px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--card) 0%, var(--card2) 100%);
-  border: 1px solid rgba(108,99,255,0.2);
+  border: 1px solid rgba(108,99,255,0.25);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.03), inset 0 2px 18px rgba(0,0,0,0.25);
   display: flex; align-items: center; justify-content: center;
   font-size: 72px;
   overflow: hidden;
+  transition: border-color .3s ease;
 }
+.about-avatar-ring:hover .about-avatar-inner { border-color: rgba(0,212,255,0.35); }
 
 /* Image label */
 .about-img-label {
@@ -1855,7 +1861,7 @@ footer {
             <div>
               <div class="about-photo-slot" id="proPhotoSlot">
                 <img id="proPhotoImg" alt="Professional Photo">
-                <label for="proPhotoInput" class="about-photo-placeholder" id="proPhotoPlaceholder" style="cursor:pointer;">
+                <label for="proPhotoInput" class="about-photo-placeholder" id="proPhotoPlaceholder" title="Admin only" style="cursor:default;pointer-events:none;">
                   <span>📸</span>
                   <span>Professional<br>Photo</span>
                 </label>
@@ -2987,9 +2993,11 @@ function updateProPhotoAccess() {
   if (isAdmin) {
     label.style.pointerEvents = 'auto';
     label.style.cursor = 'pointer';
+    label.title = 'Click to upload your photo';
   } else {
     label.style.pointerEvents = 'none';
     label.style.cursor = 'default';
+    label.title = '';
   }
 }
 
