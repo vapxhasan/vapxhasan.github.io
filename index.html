@@ -14,6 +14,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDb5Q289UUYHkXSa4wYP74hisA5g9vzH8A",
@@ -25,11 +26,13 @@
     appId: "1:174861521382:web:698270169877af5b8f4627"
   };
 
-  const fbApp = initializeApp(firebaseConfig);
-  const fbDb  = getDatabase(fbApp);
+  const fbApp  = initializeApp(firebaseConfig);
+  const fbDb   = getDatabase(fbApp);
+  const fbAuth = getAuth(fbApp);
 
   // expose to the regular (non-module) script below
   window._fb = { ref, get, set, db: fbDb };
+  window._fbAuth = { auth: fbAuth, signIn: signInWithEmailAndPassword, signOut, onAuthStateChanged };
   window._fbReady = true;
   window.dispatchEvent(new Event('firebase-ready'));
 </script>
@@ -3092,18 +3095,32 @@ let _record = { yt_videos: [], yt_channel: { name: '@vapxhasan', sub: 'YouTube C
 const _isLoginRoute = new URLSearchParams(window.location.search).get('AdminH@san') === '1042004';
 
 // ===================================================
-// ADMIN PASSWORD SYSTEM
+// ADMIN PASSWORD SYSTEM (Firebase Authentication-backed)
 // ===================================================
 const ADMIN_PASS_HASH = 'H@san1042004';
+const ADMIN_EMAIL = 'hasanur.rahman.editor@gmail.com';
 let isAdmin = false;
 
 function checkAdmin() {
-  const stored = sessionStorage.getItem('vapx_admin_ok');
-  if (stored === '1') {
-    _masterKey = 'firebase-admin';
-    isAdmin = true;
-    showAdminUI();
-  } else if (_isLoginRoute) {
+  // Firebase নিজে থেকেই session persist করে (localStorage ভিত্তিক) —
+  // তাই page reload হলে onAuthStateChanged স্বয়ংক্রিয়ভাবে ফায়ার হবে।
+  fbWaitReady().then(() => {
+    const { auth, onAuthStateChanged } = window._fbAuth;
+    onAuthStateChanged(auth, (user) => {
+      if (user && user.email === ADMIN_EMAIL) {
+        _masterKey = 'firebase-admin';
+        isAdmin = true;
+        showAdminUI();
+        renderYtVideos(); renderBlog(); renderProjects();
+        renderClientPricing(); fivRenderTabs(); fivRenderCard();
+      } else {
+        isAdmin = false;
+        _masterKey = null;
+      }
+    });
+  });
+
+  if (_isLoginRoute) {
     // Secret URL-এ এসেছে — login button দেখাও
     const btn = document.getElementById('adminLoginBtn');
     if (btn) btn.style.display = 'flex';
@@ -3141,9 +3158,20 @@ async function doAdminLogin() {
   btn.textContent = 'Connecting...';
   btn.disabled = true;
 
-  _masterKey = 'firebase-admin'; // write-permission gate হিসেবে ব্যবহৃত (password-ই আসল security)
-  sessionStorage.setItem('vapx_admin_ok', '1');
-  isAdmin = true;
+  try {
+    await fbWaitReady();
+    const { auth, signIn } = window._fbAuth;
+    await signIn(auth, ADMIN_EMAIL, pass); // Firebase real authentication — Database Rules এ enforce হবে
+    _masterKey = 'firebase-admin';
+    isAdmin = true;
+  } catch (e) {
+    console.error('Firebase auth failed:', e);
+    errEl.textContent = '❌ Login failed. Try again.';
+    errEl.style.display = 'block';
+    btn.textContent = 'Login to Admin Panel →';
+    btn.disabled = false;
+    return;
+  }
 
   closeAdminLoginModal();
   showAdminUI();
@@ -3162,8 +3190,12 @@ async function doAdminLogin() {
   window.history.replaceState({}, '', url.pathname);
 }
 
-function adminLogout() {
-  sessionStorage.removeItem('vapx_admin_ok');
+async function adminLogout() {
+  try {
+    await fbWaitReady();
+    const { auth, signOut } = window._fbAuth;
+    await signOut(auth);
+  } catch (e) { console.error('Sign out failed:', e); }
   _masterKey = null;
   isAdmin = false;
   hideAdminUI();
