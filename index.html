@@ -14,7 +14,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDb5Q289UUYHkXSa4wYP74hisA5g9vzH8A",
@@ -29,6 +29,7 @@
   const fbApp  = initializeApp(firebaseConfig);
   const fbDb   = getDatabase(fbApp);
   const fbAuth = getAuth(fbApp);
+  setPersistence(fbAuth, browserSessionPersistence); // tab বন্ধ হলেই session শেষ — অন্য কেউ URL জানলেও admin থাকবে না
 
   // expose to the regular (non-module) script below
   window._fb = { ref, get, set, db: fbDb };
@@ -3102,8 +3103,9 @@ const ADMIN_EMAIL = 'hasanur.rahman.editor@gmail.com';
 let isAdmin = false;
 
 function checkAdmin() {
-  // Firebase নিজে থেকেই session persist করে (localStorage ভিত্তিক) —
-  // তাই page reload হলে onAuthStateChanged স্বয়ংক্রিয়ভাবে ফায়ার হবে।
+  // Firebase session-only persistence ব্যবহার করছে (browserSessionPersistence) —
+  // মানে শুধু এই ট্যাব/browser session-এই admin থাকবে, ট্যাব বন্ধ করলে বা নতুন
+  // browser/device থেকে normal URL-এ আসলে admin mode চালু হবে না।
   fbWaitReady().then(() => {
     const { auth, onAuthStateChanged } = window._fbAuth;
     onAuthStateChanged(auth, (user) => {
