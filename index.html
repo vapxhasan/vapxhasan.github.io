@@ -127,7 +127,8 @@ nav.scrolled {
   border-bottom: 1px solid var(--border);
   padding: 12px 0;
 }
-.nav-inner { display: flex; align-items: center; justify-content: space-between; }
+nav .container { max-width: 1300px; }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
 .nav-logo {
   font-family: var(--font-display);
   font-size: 22px;
@@ -136,14 +137,28 @@ nav.scrolled {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .nav-logo span { font-family: var(--font-mono); font-size: 14px; opacity: .5; }
-.nav-links { display: flex; gap: 24px; list-style: none; }
+.nav-links {
+  display: flex;
+  gap: 15px;
+  list-style: none;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  white-space: nowrap;
+}
+.nav-links::-webkit-scrollbar { display: none; }
+.nav-links li { flex-shrink: 0; }
 .nav-links a {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 500;
   color: var(--muted);
-  letter-spacing: .5px;
+  letter-spacing: .3px;
   transition: color .2s;
   position: relative;
 }
@@ -159,21 +174,23 @@ nav.scrolled {
 .nav-links a:hover { color: var(--white); }
 .nav-links a:hover::after { transform: scaleX(1); }
 .nav-cta {
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
-  padding: 9px 22px;
+  padding: 9px 18px;
   border-radius: 8px;
   border: 1px solid var(--indigo);
   color: var(--indigo);
   transition: all .2s;
   font-family: var(--font-display);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .nav-cta:hover { background: var(--indigo); color: #fff; box-shadow: var(--glow-i); }
 .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
 .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all .3s; }
 
 /* SETTINGS BTN in nav */
-.nav-settings-wrap { position: relative; display: block; }
+.nav-settings-wrap { position: relative; display: block; flex-shrink: 0; }
 .nav-settings-btn {
   width: 36px; height: 36px;
   border-radius: 50%;
@@ -1049,7 +1066,7 @@ nav.scrolled {
 
 /* ===== FIVERR-STYLE TAB PRICING ===== */
 #pricing { background: var(--bg2); }
-.fiv-wrap { max-width: 520px; margin: 0 auto; }
+.fiv-wrap { max-width: 560px; margin: 0 auto; }
 
 /* CATEGORY BAR */
 .fiv-cat-bar {
@@ -1057,8 +1074,9 @@ nav.scrolled {
   flex-wrap: wrap;
   gap: 8px;
   justify-content: center;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
+.fiv-cat-chip { position: relative; display: inline-flex; align-items: center; gap: 4px; }
 .fiv-cat-btn {
   padding: 8px 18px;
   border-radius: 50px;
@@ -1081,6 +1099,18 @@ nav.scrolled {
   color: #fff;
   box-shadow: var(--glow-i);
 }
+.fiv-cat-edit-btn {
+  width: 26px; height: 26px; flex-shrink: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--muted);
+  font-size: 11px;
+  cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: all .2s;
+}
+.fiv-cat-edit-btn:hover { border-color: var(--indigo); color: var(--white); background: rgba(108,99,255,0.15); }
 /* ADMIN ADD CATEGORY BTN */
 .fiv-add-cat-btn {
   padding: 8px 16px;
@@ -1093,10 +1123,43 @@ nav.scrolled {
   font-family: var(--font-display);
   cursor: pointer;
   transition: all .2s;
-  display: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
 }
 .fiv-add-cat-btn:hover { background: rgba(108,99,255,0.1); }
-.admin-active .fiv-add-cat-btn { display: inline-flex; align-items: center; gap: 5px; }
+
+/* GIG HEADLINE (professional "gig name" area above tiers) */
+.fiv-cat-headline {
+  display: flex; align-items: center; gap: 14px;
+  padding: 16px 20px;
+  margin-bottom: 18px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+}
+.fiv-cat-headline-icon {
+  width: 44px; height: 44px; flex-shrink: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(108,99,255,0.18), rgba(0,212,255,0.14));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+}
+.fiv-cat-headline-body { flex: 1; min-width: 0; }
+.fiv-cat-headline-title { font-family: var(--font-display); font-size: 16px; font-weight: 800; color: var(--white); margin-bottom: 2px; }
+.fiv-cat-headline-sub { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+.fiv-headline-edit-btn {
+  flex-shrink: 0;
+  display: flex; align-items: center; gap: 5px;
+  padding: 7px 12px;
+  background: rgba(108,99,255,0.12); border: 1px solid rgba(108,99,255,0.3);
+  color: var(--indigo); border-radius: 8px;
+  font-family: var(--font-display); font-size: 11.5px; font-weight: 600;
+  cursor: pointer; transition: all .2s;
+}
+.fiv-headline-edit-btn:hover { background: rgba(108,99,255,0.22); }
+@media (max-width: 480px) { .fiv-cat-headline { flex-wrap: wrap; } }
+
 .fiv-tab-bar {
   display: flex;
   border-bottom: 2px solid var(--border);
@@ -1126,6 +1189,14 @@ nav.scrolled {
   background: rgba(108,99,255,0.06);
 }
 .fiv-tab:hover:not(.active) { color: var(--white); background: rgba(255,255,255,0.03); }
+.fiv-tab-badge {
+  display: inline-block; margin-left: 6px;
+  font-size: 9px; padding: 2px 6px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--indigo), var(--cyan));
+  color: #fff; font-weight: 700; letter-spacing: .3px;
+  vertical-align: middle;
+}
 .fiv-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -1133,6 +1204,7 @@ nav.scrolled {
   border-radius: 0 0 14px 14px;
   overflow: hidden;
   animation: fivFade .2s ease;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.18);
 }
 @keyframes fivFade { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform:none; } }
 .fiv-header { padding: 22px 24px 0; }
@@ -2946,6 +3018,8 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
     <div class="fiv-wrap reveal">
       <!-- Category bar -->
       <div class="fiv-cat-bar" id="fivCatBar"></div>
+      <!-- Gig headline / custom gig name -->
+      <div class="fiv-cat-headline" id="fivCatHeadline"></div>
       <!-- Tab bar -->
       <div class="fiv-tab-bar" id="fivTabBar"></div>
       <!-- Card -->
@@ -3034,6 +3108,38 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
     <button class="fiv-cancel-btn" onclick="fivCloseModal()">Cancel</button>
   </div>
 </div>
+
+<!-- CATEGORY / GIG EDIT MODAL -->
+<div class="fiv-modal" id="fivCatModal">
+  <div class="fiv-modal-inner">
+    <button class="fiv-modal-close" onclick="fivCloseCatModal()">✕</button>
+    <div class="fiv-modal-title" id="fivCatModalTitle">✏ Edit Category</div>
+
+    <div class="fiv-field-row">
+      <div class="fiv-field">
+        <label>Icon (emoji)</label>
+        <input type="text" id="fivCat_icon" placeholder="🎬" maxlength="4">
+      </div>
+      <div class="fiv-field">
+        <label>Category label (shown on tab)</label>
+        <input type="text" id="fivCat_name" placeholder="e.g. Video Editing">
+      </div>
+    </div>
+    <div class="fiv-field">
+      <label>Gig name / headline</label>
+      <input type="text" id="fivCat_title" placeholder="e.g. Professional Video Editing">
+    </div>
+    <div class="fiv-field">
+      <label>Gig tagline (short description)</label>
+      <textarea id="fivCat_subtitle" placeholder="A short line describing this service..."></textarea>
+    </div>
+
+    <button class="fiv-save-btn" onclick="fivSaveCat()">Save Category →</button>
+    <button class="fiv-cancel-btn" id="fivCatDeleteBtn" style="display:none;color:#ff7777;border-color:rgba(255,80,80,0.3);" onclick="fivDeleteCat()">🗑 Delete Category</button>
+    <button class="fiv-cancel-btn" onclick="fivCloseCatModal()">Cancel</button>
+  </div>
+</div>
+
 
 <!-- FAQ -->
 <section id="faq" class="section">
@@ -3728,7 +3834,7 @@ function checkAdmin() {
         isAdmin = true;
         showAdminUI();
         renderYtVideos(); renderBlog(); renderProjects(); renderReviews();
-        renderClientPricing(); fivRenderTabs(); fivRenderCard();
+        renderClientPricing(); fivRenderCats(); fivRenderHeadline(); fivRenderTabs(); fivRenderCard();
       } else {
         isAdmin = false;
         _masterKey = null;
@@ -3796,6 +3902,8 @@ async function doAdminLogin() {
   renderProjects();
   renderReviews();
   renderClientPricing();
+  fivRenderCats();
+  fivRenderHeadline();
   fivRenderTabs();
   fivRenderCard();
   btn.textContent = 'Login to Admin Panel →';
@@ -3821,6 +3929,8 @@ async function adminLogout() {
   renderProjects();
   renderReviews();
   renderClientPricing();
+  fivRenderCats();
+  fivRenderHeadline();
   fivRenderTabs();
   fivRenderCard();
 }
@@ -4520,6 +4630,7 @@ document.getElementById('clientPricingModal').addEventListener('click', e => { i
 let fivCategories = [
   {
     name: 'Video Editing', icon: '🎬',
+    title: 'Professional Video Editing', subtitle: 'Cinematic edits that keep your audience watching till the end.',
     plans: [
       { tab: 'Basic', tier: 'Silver', price: '25', currency: '$', desc: 'Clean editing up to 2 minutes, trimming, transitions, background music', delivery: 2, revisions: 3, cta: 'Continue', services: [{ label: 'Up to 2 min running time', on: true },{ label: 'Color grading', on: true },{ label: 'Sound design & mixing', on: true },{ label: 'Motion graphics', on: false },{ label: 'Subtitles', on: false }] },
       { tab: 'Standard', tier: 'Gold', price: '55', currency: '$', desc: 'Professional editing up to 5 minutes with motion graphics', delivery: 4, revisions: 5, cta: 'Continue', services: [{ label: 'Up to 5 min running time', on: true },{ label: 'Color grading', on: true },{ label: 'Sound design & mixing', on: true },{ label: 'Motion graphics', on: true },{ label: 'Subtitles', on: false }] },
@@ -4528,6 +4639,7 @@ let fivCategories = [
   },
   {
     name: 'Flyer Design', icon: '🖼️',
+    title: 'Eye-Catching Flyer Design', subtitle: 'Designs that grab attention and get results.',
     plans: [
       { tab: 'Basic', tier: 'Silver', price: '15', currency: '$', desc: 'Simple, clean flyer design — 1 concept, quick turnaround', delivery: 1, revisions: 2, cta: 'Continue', services: [{ label: '1 design concept', on: true },{ label: 'Print-ready file', on: true },{ label: 'Source file', on: false },{ label: 'Social media size', on: false }] },
       { tab: 'Standard', tier: 'Gold', price: '35', currency: '$', desc: 'Professional flyer with 2 concepts and social media sizes', delivery: 2, revisions: 4, cta: 'Continue', services: [{ label: '2 design concepts', on: true },{ label: 'Print-ready file', on: true },{ label: 'Source file', on: false },{ label: 'Social media size', on: true }] },
@@ -4536,6 +4648,7 @@ let fivCategories = [
   },
   {
     name: 'Business Card', icon: '💳',
+    title: 'Premium Business Card Design', subtitle: 'Make a strong first impression that people remember.',
     plans: [
       { tab: 'Basic', tier: 'Silver', price: '10', currency: '$', desc: 'Clean business card design, front side only', delivery: 1, revisions: 2, cta: 'Continue', services: [{ label: 'Front side only', on: true },{ label: 'Print-ready PDF', on: true },{ label: 'Back side design', on: false },{ label: 'Source file', on: false }] },
       { tab: 'Standard', tier: 'Gold', price: '25', currency: '$', desc: 'Front + back design with brand matching', delivery: 2, revisions: 4, cta: 'Continue', services: [{ label: 'Front side', on: true },{ label: 'Back side design', on: true },{ label: 'Print-ready PDF', on: true },{ label: 'Source file', on: false }] },
@@ -4544,6 +4657,7 @@ let fivCategories = [
   },
   {
     name: 'SEO', icon: '📈',
+    title: 'Result-Driven SEO Services', subtitle: 'Rank higher, get found, and grow your traffic organically.',
     plans: [
       { tab: 'Basic', tier: 'Silver', price: '30', currency: '$', desc: 'On-page SEO audit + keyword research for 5 pages', delivery: 3, revisions: 2, cta: 'Continue', services: [{ label: 'Keyword research', on: true },{ label: 'On-page SEO (5 pages)', on: true },{ label: 'Competitor analysis', on: false },{ label: 'Monthly report', on: false }] },
       { tab: 'Standard', tier: 'Gold', price: '70', currency: '$', desc: 'Full SEO setup with competitor analysis for 10 pages', delivery: 5, revisions: 3, cta: 'Continue', services: [{ label: 'Keyword research', on: true },{ label: 'On-page SEO (10 pages)', on: true },{ label: 'Competitor analysis', on: true },{ label: 'Monthly report', on: false }] },
@@ -4552,6 +4666,7 @@ let fivCategories = [
   },
   {
     name: 'AI Automation', icon: '🤖',
+    title: 'Smart AI Automation Solutions', subtitle: 'Save hours every week with powerful automated workflows.',
     plans: [
       { tab: 'Basic', tier: 'Silver', price: '50', currency: '$', desc: 'Simple automation workflow for 1 task using Make or Zapier', delivery: 3, revisions: 2, cta: 'Continue', services: [{ label: '1 automation workflow', on: true },{ label: 'Make / Zapier setup', on: true },{ label: 'n8n workflow', on: false },{ label: 'Documentation', on: false }] },
       { tab: 'Standard', tier: 'Gold', price: '120', currency: '$', desc: 'Multi-step automation for 3 workflows with testing', delivery: 5, revisions: 3, cta: 'Continue', services: [{ label: 'Up to 3 workflows', on: true },{ label: 'Make / Zapier / n8n', on: true },{ label: 'Testing & debugging', on: true },{ label: 'Documentation', on: false }] },
@@ -4562,21 +4677,39 @@ let fivCategories = [
 let fivCatActive = 0;
 let fivActive = 0;
 let fivEditIdx = 0;
+let fivCatEditIdx = -1; // -1 = adding a new category, >=0 = editing existing index
 
 function fivGetPlans() { return fivCategories[fivCatActive].plans; }
 
+const editPencilSvg = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
 function fivRenderCats() {
   const bar = document.getElementById('fivCatBar');
   if (!bar) return;
   bar.innerHTML = fivCategories.map((c, i) =>
-    `<button class="fiv-cat-btn${i === fivCatActive ? ' active' : ''}" onclick="fivSwitchCat(${i})">${c.icon} ${c.name}</button>`
-  ).join('') + (isAdmin ? `<button class="fiv-add-cat-btn" onclick="fivAddCategory()">＋ Add Category</button>` : '');
+    `<div class="fiv-cat-chip">
+      <button class="fiv-cat-btn${i === fivCatActive ? ' active' : ''}" onclick="fivSwitchCat(${i})">${c.icon} ${c.name}</button>
+      ${isAdmin ? `<button class="fiv-cat-edit-btn" onclick="fivOpenCatModal(${i})" title="Edit category" aria-label="Edit category">${editPencilSvg}</button>` : ''}
+    </div>`
+  ).join('') + (isAdmin ? `<button class="fiv-add-cat-btn" onclick="fivOpenCatModal(-1)">＋ Add Category</button>` : '');
+}
+
+function fivRenderHeadline() {
+  const wrap = document.getElementById('fivCatHeadline');
+  if (!wrap) return;
+  const c = fivCategories[fivCatActive];
+  wrap.innerHTML = `
+    <div class="fiv-cat-headline-icon">${c.icon}</div>
+    <div class="fiv-cat-headline-body">
+      <div class="fiv-cat-headline-title">${c.title || c.name}</div>
+      <div class="fiv-cat-headline-sub">${c.subtitle || ''}</div>
+    </div>
+    ${isAdmin ? `<button class="fiv-headline-edit-btn" onclick="fivOpenCatModal(${fivCatActive})">${editPencilSvg} Edit</button>` : ''}`;
 }
 
 function fivRenderTabs() {
   const plans = fivGetPlans();
   document.getElementById('fivTabBar').innerHTML = plans.map((p, i) =>
-    `<button class="fiv-tab${i === fivActive ? ' active' : ''}" onclick="fivSwitch(${i})">${p.tab}</button>`
+    `<button class="fiv-tab${i === fivActive ? ' active' : ''}" onclick="fivSwitch(${i})">${p.tab}${(plans.length === 3 && i === 1) ? '<span class="fiv-tab-badge">Popular</span>' : ''}</button>`
   ).join('');
 }
 
@@ -4607,6 +4740,7 @@ function fivSwitchCat(i) {
   fivCatActive = i;
   fivActive = 0;
   fivRenderCats();
+  fivRenderHeadline();
   fivRenderTabs();
   fivRenderCard();
 }
@@ -4617,23 +4751,70 @@ function fivSwitch(i) {
   fivRenderCard();
 }
 
-function fivAddCategory() {
+// ===== CATEGORY (GIG) ADD / EDIT / DELETE MODAL =====
+function fivOpenCatModal(idx) {
   if (!isAdmin) return;
-  const name = prompt('Category name (e.g. Graphic Design):');
-  if (!name || !name.trim()) return;
-  const icon = prompt('Emoji icon (e.g. 🎨):') || '📦';
-  fivCategories.push({
-    name: name.trim(), icon: icon.trim(),
-    plans: [
-      { tab: 'Basic', tier: 'Silver', price: '20', currency: '$', desc: 'Basic package', delivery: 2, revisions: 2, cta: 'Continue', services: [{ label: 'Feature 1', on: true },{ label: 'Feature 2', on: false }] },
-      { tab: 'Standard', tier: 'Gold', price: '45', currency: '$', desc: 'Standard package', delivery: 4, revisions: 4, cta: 'Continue', services: [{ label: 'Feature 1', on: true },{ label: 'Feature 2', on: true }] },
-      { tab: 'Premium', tier: 'Platinum', price: '90', currency: '$', desc: 'Premium package', delivery: 7, revisions: 10, cta: 'Continue', services: [{ label: 'Feature 1', on: true },{ label: 'Feature 2', on: true }] }
-    ]
-  });
-  fivCatActive = fivCategories.length - 1;
+  fivCatEditIdx = idx;
+  const isNew = idx === -1;
+  const c = isNew ? { icon: '📦', name: '', title: '', subtitle: '' } : fivCategories[idx];
+  document.getElementById('fivCatModalTitle').textContent = isNew ? '＋ Add Category' : '✏ Edit — ' + c.name;
+  document.getElementById('fivCat_icon').value = c.icon || '';
+  document.getElementById('fivCat_name').value = c.name || '';
+  document.getElementById('fivCat_title').value = c.title || '';
+  document.getElementById('fivCat_subtitle').value = c.subtitle || '';
+  document.getElementById('fivCatDeleteBtn').style.display = (!isNew && fivCategories.length > 1) ? 'block' : 'none';
+  document.getElementById('fivCatModal').classList.add('open');
+  setTimeout(() => document.getElementById('fivCat_name').focus(), 50);
+}
+
+function fivCloseCatModal() { document.getElementById('fivCatModal').classList.remove('open'); }
+document.getElementById('fivCatModal').addEventListener('click', e => { if (e.target === e.currentTarget) fivCloseCatModal(); });
+
+async function fivSaveCat() {
+  if (!isAdmin) return;
+  const icon = document.getElementById('fivCat_icon').value.trim() || '📦';
+  const name = document.getElementById('fivCat_name').value.trim();
+  const title = document.getElementById('fivCat_title').value.trim();
+  const subtitle = document.getElementById('fivCat_subtitle').value.trim();
+  if (!name) { alert('Category label is required.'); return; }
+
+  if (fivCatEditIdx === -1) {
+    fivCategories.push({
+      name, icon, title, subtitle,
+      plans: [
+        { tab: 'Basic', tier: 'Silver', price: '20', currency: '$', desc: 'Basic package', delivery: 2, revisions: 2, cta: 'Continue', services: [{ label: 'Feature 1', on: true },{ label: 'Feature 2', on: false }] },
+        { tab: 'Standard', tier: 'Gold', price: '45', currency: '$', desc: 'Standard package', delivery: 4, revisions: 4, cta: 'Continue', services: [{ label: 'Feature 1', on: true },{ label: 'Feature 2', on: true }] },
+        { tab: 'Premium', tier: 'Platinum', price: '90', currency: '$', desc: 'Premium package', delivery: 7, revisions: 10, cta: 'Continue', services: [{ label: 'Feature 1', on: true },{ label: 'Feature 2', on: true }] }
+      ]
+    });
+    fivCatActive = fivCategories.length - 1;
+    fivActive = 0;
+  } else {
+    const c = fivCategories[fivCatEditIdx];
+    c.name = name; c.icon = icon; c.title = title; c.subtitle = subtitle;
+  }
+
+  await sharedSet('fiv_categories', fivCategories);
+  fivCloseCatModal();
+  fivRenderCats();
+  fivRenderHeadline();
+  fivRenderTabs();
+  fivRenderCard();
+}
+
+async function fivDeleteCat() {
+  if (!isAdmin || fivCatEditIdx === -1 || fivCategories.length <= 1) return;
+  const c = fivCategories[fivCatEditIdx];
+  if (!confirm(`Delete "${c.name}" and all its packages? This can't be undone.`)) return;
+  fivCategories.splice(fivCatEditIdx, 1);
+  fivCatActive = 0;
   fivActive = 0;
-  sharedSet('fiv_categories', fivCategories);
-  fivRenderCats(); fivRenderTabs(); fivRenderCard();
+  await sharedSet('fiv_categories', fivCategories);
+  fivCloseCatModal();
+  fivRenderCats();
+  fivRenderHeadline();
+  fivRenderTabs();
+  fivRenderCard();
 }
 
 function fivOpenModal(idx) {
@@ -4739,6 +4920,7 @@ async function initSharedData() {
   renderReviews();
   renderClientPricing();
   fivRenderCats();
+  fivRenderHeadline();
   fivRenderTabs();
   fivRenderCard();
   renderProfileImages();
