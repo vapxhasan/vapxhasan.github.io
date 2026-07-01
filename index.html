@@ -169,36 +169,148 @@ nav.scrolled {
   font-family: var(--font-display);
 }
 .nav-cta:hover { background: var(--indigo); color: #fff; box-shadow: var(--glow-i); }
-.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
 .hamburger span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all .3s; }
-.mobile-menu {
+
+/* SETTINGS BTN in nav */
+.nav-settings-wrap { position: relative; display: block; }
+.nav-settings-btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(108,99,255,0.12);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-size: 17px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+.nav-settings-btn:hover { background: rgba(108,99,255,0.25); border-color: var(--indigo); }
+.nav-settings-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 180px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  z-index: 1200;
+  animation: dropIn .2s ease;
+}
+.nav-settings-dropdown.open { display: block; }
+@keyframes dropIn {
+  from { opacity:0; transform: translateY(-6px); }
+  to   { opacity:1; transform: translateY(0); }
+}
+.settings-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.settings-item:hover { background: rgba(108,99,255,0.12); }
+.settings-item-label { font-size: 13px; font-weight: 500; color: var(--white); }
+.settings-item-icon { font-size: 16px; }
+
+/* MOBILE DRAWER BACKDROP */
+.drawer-backdrop {
   display: none;
   position: fixed;
   inset: 0;
+  z-index: 998;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+}
+.drawer-backdrop.open { display: block; }
+
+/* MOBILE DRAWER */
+.mobile-menu {
+  position: fixed;
+  top: 0; left: 0; bottom: 0;
+  width: 78vw;
+  max-width: 300px;
+  z-index: 999;
   background: rgba(8,11,20,0.98);
   backdrop-filter: blur(20px);
-  z-index: 999;
+  border-right: 1px solid var(--border);
+  padding: 28px 24px;
+  display: flex;
   flex-direction: column;
+  gap: 0;
+  transform: translateX(-105%);
+  transition: transform .35s cubic-bezier(.4,0,.2,1);
+}
+.mobile-menu.open { transform: translateX(0); }
+
+.drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 36px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.drawer-logo {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--indigo), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.mobile-menu .close-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: rgba(108,99,255,0.12);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
   align-items: center;
   justify-content: center;
-  gap: 32px;
+  position: static;
+  transition: all .2s;
+  flex-shrink: 0;
 }
-.mobile-menu.open { display: flex; }
+.mobile-menu .close-btn:hover { background: rgba(108,99,255,0.25); }
 .mobile-menu a {
   font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   color: var(--muted);
-  transition: color .2s;
+  padding: 13px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  transition: color .2s, padding-left .2s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-.mobile-menu a:hover { color: var(--white); }
-.mobile-menu .close-btn {
-  position: absolute;
-  top: 24px; right: 24px;
-  font-size: 28px;
-  cursor: pointer;
-  color: var(--muted);
-  background: none; border: none;
+.mobile-menu a:last-of-type { border-bottom: none; }
+.mobile-menu a:hover { color: var(--white); padding-left: 6px; }
+.drawer-hire-btn {
+  margin-top: 28px;
+  padding: 13px 20px;
+  background: linear-gradient(135deg, var(--indigo), var(--violet));
+  color: #fff !important;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: 700 !important;
+  font-size: 14px !important;
+  border-bottom: none !important;
+  padding-left: 20px !important;
+  box-shadow: var(--glow-i);
 }
 
 /* ===== HERO ===== */
@@ -1662,6 +1774,8 @@ footer {
   .nav-links { display: none; }
   .nav-cta { display: none; }
   .hamburger { display: flex; }
+  .nav-inner { gap: 12px; }
+  .nav-logo { flex: 1; }
   .hero-floats { display: none; }
 }
 @media (max-width: 540px) {
@@ -1680,6 +1794,63 @@ footer {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 
+/* ===== TOOLS SECTION ===== */
+.tools-categories { display: flex; flex-direction: column; gap: 48px; margin-top: 56px; }
+.tools-category-title {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 20px;
+}
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 14px;
+}
+.tool-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  transition: all .25s;
+  cursor: default;
+}
+.tool-card:hover {
+  border-color: var(--indigo);
+  transform: translateY(-6px) scale(1.04);
+  box-shadow: 0 12px 32px rgba(108,99,255,0.35), var(--glow-i);
+  background: var(--card2);
+}
+.tool-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  flex-shrink: 0;
+}
+.tool-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.3;
+}
+@media (max-width: 600px) {
+  .tools-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
+  .tool-card { padding: 16px 10px 12px; }
+  .tool-icon { width: 40px; height: 40px; font-size: 22px; }
+  .tool-name { font-size: 11px; }
+}
+
 /* ===== NEW FEATURE: LIGHT MODE OVERRIDES ===== */
 body.light-mode {
   --bg: #F5F6FA;
@@ -1694,31 +1865,6 @@ body.light-mode {
 body.light-mode::before { background-image: radial-gradient(rgba(108,99,255,0.06) 1px, transparent 1px); }
 body.light-mode nav.scrolled { background: rgba(245,246,250,0.92); }
 body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
-
-/* ===== NEW FEATURE: THEME TOGGLE BUTTON ===== */
-.theme-toggle-btn {
-  position: fixed;
-  top: 18px;
-  right: 24px;
-  z-index: 1100;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: rgba(13,17,32,0.6);
-  border: 1px solid var(--border);
-  color: var(--white);
-  font-size: 16px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(8px);
-  transition: all .25s;
-}
-.theme-toggle-btn:hover { border-color: var(--indigo); box-shadow: var(--glow-i); }
-@media (max-width: 900px) {
-  .theme-toggle-btn { top: 14px; right: 64px; width: 34px; height: 34px; font-size: 14px; }
-}
 
 /* ===== NEW FEATURE: WHATSAPP FLOATING BUTTON ===== */
 .wa-float-btn {
@@ -1838,9 +1984,6 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
 </head>
 <body>
 
-<!-- ===== NEW FEATURE: DARK/LIGHT MODE TOGGLE (corner, header) ===== -->
-<button class="theme-toggle-btn" id="themeToggleBtn" onclick="toggleThemeMode()" aria-label="Toggle dark/light mode" title="Toggle dark/light mode">🌙</button>
-
 <!-- ===== NEW FEATURE: WHATSAPP FLOATING BUTTON (bottom-right) ===== -->
 <a class="wa-float-btn" href="https://wa.me/8801521731046" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" title="Chat on WhatsApp">
   <svg viewBox="0 0 32 32" fill="#fff"><path d="M16.001 3C9.107 3 3.5 8.607 3.5 15.5c0 2.43.683 4.7 1.866 6.633L3 29l7.05-2.317A12.43 12.43 0 0 0 16.001 28C22.894 28 28.5 22.394 28.5 15.5S22.894 3 16.001 3zm0 22.65a10.1 10.1 0 0 1-5.16-1.413l-.37-.22-4.186 1.376 1.394-4.08-.24-.39A10.1 10.1 0 0 1 5.85 15.5c0-5.6 4.55-10.15 10.151-10.15S26.15 9.9 26.15 15.5 21.602 25.65 16.001 25.65zm5.55-7.59c-.304-.152-1.795-.886-2.073-.987-.278-.102-.48-.152-.683.152-.202.305-.78.987-.957 1.19-.176.203-.353.228-.657.076-.304-.152-1.284-.473-2.446-1.51-.904-.806-1.514-1.802-1.692-2.106-.177-.305-.019-.47.133-.622.137-.136.304-.354.456-.532.152-.177.202-.304.304-.507.101-.203.05-.38-.025-.532-.076-.152-.683-1.646-.936-2.255-.247-.593-.498-.513-.683-.522l-.583-.01c-.202 0-.531.076-.81.38-.278.305-1.06 1.036-1.06 2.528 0 1.492 1.085 2.934 1.236 3.137.151.203 2.135 3.26 5.173 4.572.723.312 1.287.499 1.727.638.726.231 1.387.198 1.91.12.583-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.444-.076-.126-.278-.202-.582-.354z"/></svg>
@@ -1902,6 +2045,9 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
 <nav id="navbar">
   <div class="container">
     <div class="nav-inner">
+      <div class="hamburger" id="hamburger" aria-label="Open menu">
+        <span></span><span></span><span></span>
+      </div>
       <a href="#hero" class="nav-logo">Hasanur Rahman<span>Portfolio</span></a>
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
@@ -1916,26 +2062,40 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
         <li><a href="#contact">Contact</a></li>
       </ul>
       <a href="#contact" class="nav-cta">Hire Me →</a>
-      <div class="hamburger" id="hamburger" aria-label="Open menu">
-        <span></span><span></span><span></span>
+      <div class="nav-settings-wrap" id="navSettingsWrap">
+        <button class="nav-settings-btn" id="navSettingsBtn" aria-label="Settings">⚙️</button>
+        <div class="nav-settings-dropdown" id="navSettingsDropdown">
+          <div class="settings-item" onclick="toggleThemeMode()">
+            <span class="settings-item-label" id="themeLabel">Dark Mode</span>
+            <span class="settings-item-icon" id="themeIcon">🌙</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </nav>
 
-<!-- Mobile Menu -->
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+<!-- Mobile Side Drawer -->
 <div class="mobile-menu" id="mobileMenu">
-  <button class="close-btn" id="closeMenu" aria-label="Close menu">✕</button>
-  <a href="#about" class="mm-link">About</a>
-  <a href="#services" class="mm-link">Services</a>
-  <a href="#portfolio" class="mm-link">Work</a>
-  <a href="#skills" class="mm-link">Skills</a>
-  <a href="#youtube" class="mm-link">YouTube</a>
-  <a href="#blog" class="mm-link">Blog</a>
-  <a href="#process" class="mm-link">Process</a>
-  <a href="#pricing" class="mm-link">Pricing</a>
-  <a href="#testimonials" class="mm-link">Reviews</a>
-  <a href="#contact" class="mm-link">Contact</a>
+  <div class="drawer-header">
+    <span class="drawer-logo">Hasanur Rahman</span>
+    <button class="close-btn" id="closeMenu" aria-label="Close menu">✕</button>
+  </div>
+  <a href="#about" class="mm-link">📌 About</a>
+  <a href="#services" class="mm-link">🛠️ Services</a>
+  <a href="#portfolio" class="mm-link">💼 Work</a>
+  <a href="#skills" class="mm-link">⚡ Skills</a>
+  <a href="#tools" class="mm-link">🧰 Tools</a>
+  <a href="#youtube" class="mm-link">▶️ YouTube</a>
+  <a href="#blog" class="mm-link">📝 Blog</a>
+  <a href="#process" class="mm-link">🔄 Process</a>
+  <a href="#pricing" class="mm-link">💰 Pricing</a>
+  <a href="#testimonials" class="mm-link">⭐ Reviews</a>
+  <a href="#contact" class="mm-link">📩 Contact</a>
+  <a href="#contact" class="mm-link drawer-hire-btn">🚀 Hire Me</a>
 </div>
 
 <!-- HERO -->
@@ -2272,6 +2432,203 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
           <div class="skill-bar-bg"><div class="skill-bar-fill" data-pct="82"></div></div>
         </div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TOOLS I USE ===== -->
+<section id="tools" class="section" style="background:var(--bg2)">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">My Arsenal</div>
+      <h2 class="section-title">Tools I <span>Use Daily</span></h2>
+      <p class="section-sub">The exact tools I rely on to deliver world-class results across AI, design, video, and marketing.</p>
+    </div>
+
+    <div class="tools-categories reveal">
+
+      <!-- AI TOOLS -->
+      <div>
+        <div class="tools-category-title">// AI Tools</div>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#10a37f22,#10a37f44)">🤖</div>
+            <div class="tool-name">ChatGPT</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#6c63ff22,#6c63ff44)">🧠</div>
+            <div class="tool-name">Claude AI</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#e55b4d22,#e55b4d44)">🎨</div>
+            <div class="tool-name">Midjourney</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#00b4d822,#00b4d844)">🖼️</div>
+            <div class="tool-name">DALL·E</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#ff6b3522,#ff6b3544)">✍️</div>
+            <div class="tool-name">Gemini</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#9b59b622,#9b59b644)">🔮</div>
+            <div class="tool-name">Grok</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#64748b22,#64748b44)">🌐</div>
+            <div class="tool-name">Others AI</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI IMAGE & VIDEO -->
+      <div>
+        <div class="tools-category-title">// AI Image & Video</div>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#10a37f22,#10a37f44)">🤖</div>
+            <div class="tool-name">ChatGPT</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#ff6eb422,#ff6eb444)">🌸</div>
+            <div class="tool-name">Dreamina AI</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#ff405022,#ff405044)">🎬</div>
+            <div class="tool-name">Runway ML</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#0ea5e922,#0ea5e944)">🌊</div>
+            <div class="tool-name">Kling AI</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#22c55e22,#22c55e44)">🎥</div>
+            <div class="tool-name">HeyGen</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#f59e0b22,#f59e0b44)">⚡</div>
+            <div class="tool-name">Stable Diffusion</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#8b5cf622,#8b5cf644)">🎞️</div>
+            <div class="tool-name">Pika Labs</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#ec489922,#ec489944)">✨</div>
+            <div class="tool-name">Adobe Firefly</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI AUDIO -->
+      <div>
+        <div class="tools-category-title">// AI Audio</div>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#f97316 22,#f9731644)">🎙️</div>
+            <div class="tool-name">ElevenLabs</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#06b6d422,#06b6d444)">🎵</div>
+            <div class="tool-name">Suno AI</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#a78bfa22,#a78bfa44)">🎶</div>
+            <div class="tool-name">Udio</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#34d39922,#34d39944)">🔊</div>
+            <div class="tool-name">Murf AI</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#4285f422,#4285f444)">🎤</div>
+            <div class="tool-name">Google AI Studio</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DESIGN TOOLS -->
+      <div>
+        <div class="tools-category-title">// Design</div>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#00c4cc22,#00c4cc44)">🖌️</div>
+            <div class="tool-name">Canva</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#31a8ff22,#31a8ff44)">📸</div>
+            <div class="tool-name">Photoshop</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#ff9a0022,#ff9a0044)">🎭</div>
+            <div class="tool-name">Illustrator</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#f24e1e22,#f24e1e44)">🖼️</div>
+            <div class="tool-name">Figma</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIDEO EDITING -->
+      <div>
+        <div class="tools-category-title">// Video Editing</div>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#9999ff22,#9999ff44)">🎬</div>
+            <div class="tool-name">Premiere Pro</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#ff6b0022,#ff6b0044)">✂️</div>
+            <div class="tool-name">CapCut</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#ff8c0022,#ff8c0044)">🎞️</div>
+            <div class="tool-name">DaVinci Resolve</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#0066ff22,#0066ff44)">🎥</div>
+            <div class="tool-name">After Effects</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AUTOMATION & MARKETING -->
+      <div>
+        <div class="tools-category-title">// Automation & Marketing</div>
+        <div class="tools-grid">
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#ea4b7122,#ea4b7144)">🔴</div>
+            <div class="tool-name">n8n</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#ff620022,#ff620044)">⚙️</div>
+            <div class="tool-name">Make</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#ff4a0022,#ff4a0044)">🔗</div>
+            <div class="tool-name">Zapier</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#ef444422,#ef444444)">🔵</div>
+            <div class="tool-name">Meta Ads</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#4285f422,#4285f444)">📊</div>
+            <div class="tool-name">Google Ads</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#ffe01b22,#ffe01b44)">📧</div>
+            <div class="tool-name">Mailchimp</div>
+          </div>
+          <div class="tool-card">
+            <div class="tool-icon" style="background:linear-gradient(135deg,#25d36622,#25d36644)">💬</div>
+            <div class="tool-name">WhatsApp Business</div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -2961,19 +3318,27 @@ window.addEventListener('scroll', () => {
   document.getElementById('btt').classList.toggle('show', window.scrollY > 400);
 });
 
-// ===== MOBILE MENU =====
-document.getElementById('hamburger').addEventListener('click', () => {
-  document.getElementById('mobileMenu').classList.add('open');
-});
-document.getElementById('closeMenu').addEventListener('click', () => {
-  document.getElementById('mobileMenu').classList.remove('open');
-});
+// ===== MOBILE MENU (SIDE DRAWER) =====
+const mobileMenu = document.getElementById('mobileMenu');
+const drawerBackdrop = document.getElementById('drawerBackdrop');
+function openDrawer() {
+  mobileMenu.classList.add('open');
+  drawerBackdrop.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeDrawer() {
+  mobileMenu.classList.remove('open');
+  drawerBackdrop.classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.getElementById('hamburger').addEventListener('click', openDrawer);
+document.getElementById('closeMenu').addEventListener('click', closeDrawer);
+drawerBackdrop.addEventListener('click', closeDrawer);
 document.querySelectorAll('.mm-link').forEach(link => {
-  link.addEventListener('click', () => {
-    document.getElementById('mobileMenu').classList.remove('open');
-  });
+  link.addEventListener('click', closeDrawer);
 });
 
+// Drawer open/close
 // ===== BACK TO TOP =====
 document.getElementById('btt').addEventListener('click', () => {
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -4328,20 +4693,36 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   });
 });
 
-// ===================================================
-// NEW FEATURE: DARK / LIGHT MODE TOGGLE
-// ===================================================
+// ===== SETTINGS DROPDOWN =====
 (function() {
-  const btn = document.getElementById('themeToggleBtn');
+  const btn = document.getElementById('navSettingsBtn');
+  const drop = document.getElementById('navSettingsDropdown');
+  if (!btn || !drop) return;
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    drop.classList.toggle('open');
+  });
+  document.addEventListener('click', () => drop.classList.remove('open'));
+  drop.addEventListener('click', (e) => e.stopPropagation());
+})();
+
+// ===== DARK / LIGHT MODE TOGGLE =====
+(function() {
   const saved = localStorage.getItem('themeMode');
   if (saved === 'light') {
     document.body.classList.add('light-mode');
-    if (btn) btn.textContent = '☀️';
+    const lbl = document.getElementById('themeLabel');
+    const ico = document.getElementById('themeIcon');
+    if (lbl) lbl.textContent = 'Light Mode';
+    if (ico) ico.textContent = '☀️';
   }
 })();
 function toggleThemeMode() {
   const isLight = document.body.classList.toggle('light-mode');
-  document.getElementById('themeToggleBtn').textContent = isLight ? '☀️' : '🌙';
+  const lbl = document.getElementById('themeLabel');
+  const ico = document.getElementById('themeIcon');
+  if (lbl) lbl.textContent = isLight ? 'Light Mode' : 'Dark Mode';
+  if (ico) ico.textContent = isLight ? '☀️' : '🌙';
   localStorage.setItem('themeMode', isLight ? 'light' : 'dark');
 }
 
