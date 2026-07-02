@@ -1963,13 +1963,13 @@ footer {
 /* ===== BACK TO TOP ===== */
 #btt {
   position: fixed;
-  bottom: 100px; right: 28px;
-  width: 58px; height: 58px;
+  bottom: 90px; right: 30px;
+  width: 46px; height: 46px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--indigo), var(--violet));
   border: none;
   color: #fff;
-  font-size: 22px;
+  font-size: 18px;
   cursor: pointer;
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 4px 20px rgba(108,99,255,0.4);
@@ -1981,7 +1981,7 @@ footer {
 #btt.show { opacity: 1; transform: translateY(0); }
 #btt:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(108,99,255,0.6); }
 @media (max-width: 600px) {
-  #btt { bottom: 80px; right: 18px; width: 50px; height: 50px; font-size: 19px; }
+  #btt { bottom: 68px; right: 22px; width: 38px; height: 38px; font-size: 15px; }
 }
 
 /* ===== CURSOR GLOW ===== */
@@ -2124,32 +2124,186 @@ body.light-mode nav.scrolled { background: rgba(245,246,250,0.92); }
 body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
 
 /* ===== NEW FEATURE: WHATSAPP FLOATING BUTTON ===== */
-.wa-float-btn {
+.wa-float-wrap {
   position: fixed;
   bottom: 28px;
   right: 28px;
   z-index: 950;
-  width: 58px;
-  height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.wa-float-btn {
+  position: relative;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
-  background: #25D366;
+  background: linear-gradient(135deg, var(--indigo), var(--cyan));
+  border: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 6px 22px rgba(37,211,102,0.45);
-  transition: transform .25s, box-shadow .25s;
+  box-shadow: 0 6px 22px rgba(108,99,255,0.45);
+  transition: transform .25s, box-shadow .25s, background .35s;
   animation: waPulse 2.4s infinite;
+  flex-shrink: 0;
 }
-.wa-float-btn:hover { transform: scale(1.08); box-shadow: 0 8px 28px rgba(37,211,102,0.6); }
-.wa-float-btn svg { width: 30px; height: 30px; }
+.wa-float-btn:hover {
+  transform: scale(1.08);
+  background: linear-gradient(135deg, #25D366, #1ebd5a);
+  box-shadow: 0 8px 28px rgba(37,211,102,0.55);
+}
+.wa-float-btn svg { width: 23px; height: 23px; position: relative; z-index: 1; }
 @keyframes waPulse {
-  0%   { box-shadow: 0 0 0 0 rgba(37,211,102,0.45); }
-  70%  { box-shadow: 0 0 0 14px rgba(37,211,102,0); }
-  100% { box-shadow: 0 0 0 0 rgba(37,211,102,0); }
+  0%   { box-shadow: 0 0 0 0 rgba(108,99,255,0.45); }
+  70%  { box-shadow: 0 0 0 14px rgba(108,99,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(108,99,255,0); }
+}
+/* notification badge */
+.wa-badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #FF4B4B;
+  border: 2px solid var(--bg, #0A0E1A);
+  z-index: 2;
+  animation: waBadgePulse 1.8s infinite;
+}
+@keyframes waBadgePulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.25); }
+  100% { transform: scale(1); }
+}
+/* tooltip / text label */
+.wa-tooltip {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--white);
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: 10px;
+  white-space: nowrap;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.35);
+  opacity: 0;
+  transform: translateX(8px);
+  pointer-events: none;
+  transition: opacity .25s, transform .25s;
+  font-family: var(--font-body);
+}
+.wa-tooltip::after {
+  content: '';
+  position: absolute;
+  right: -5px; top: 50%;
+  transform: translateY(-50%) rotate(45deg);
+  width: 9px; height: 9px;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.wa-float-wrap:hover .wa-tooltip,
+.wa-tooltip.wa-tooltip-show {
+  opacity: 1;
+  transform: translateX(0);
 }
 @media (max-width: 600px) {
-  .wa-float-btn { width: 50px; height: 50px; bottom: 18px; right: 18px; }
-  .wa-float-btn svg { width: 26px; height: 26px; }
+  .wa-float-wrap { bottom: 18px; right: 18px; gap: 8px; }
+  .wa-float-btn { width: 42px; height: 42px; }
+  .wa-float-btn svg { width: 19px; height: 19px; }
+  .wa-tooltip { font-size: 12px; padding: 7px 12px; max-width: 42vw; white-space: normal; }
+}
+
+/* ===== WHATSAPP CHAT WIDGET POPUP ===== */
+.wa-widget {
+  position: fixed;
+  bottom: 90px;
+  right: 28px;
+  z-index: 960;
+  width: 300px;
+  max-width: calc(100vw - 36px);
+  background: linear-gradient(160deg, var(--card), var(--card2));
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 20px 55px rgba(0,0,0,0.5), var(--glow-i);
+  overflow: hidden;
+  display: none;
+  animation: waWidgetIn .3s ease;
+}
+.wa-widget.show { display: block; }
+@keyframes waWidgetIn {
+  from { opacity: 0; transform: translateY(14px) scale(.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.wa-widget-header {
+  background: linear-gradient(90deg, var(--indigo), var(--cyan));
+  padding: 16px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+.wa-widget-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  border: 2px solid rgba(255,255,255,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 15px;
+  color: #fff;
+  flex-shrink: 0;
+}
+.wa-widget-name { color: #fff; font-weight: 700; font-size: 14.5px; }
+.wa-widget-status { color: rgba(255,255,255,0.85); font-size: 12px; display: flex; align-items: center; gap: 5px; }
+.wa-widget-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: #4CFF4C; box-shadow: 0 0 6px #4CFF4C; }
+.wa-widget-close {
+  position: absolute;
+  top: 10px; right: 12px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: .85;
+  line-height: 1;
+}
+.wa-widget-close:hover { opacity: 1; }
+.wa-widget-body { padding: 18px 16px 16px; }
+.wa-widget-bubble {
+  background: var(--card2);
+  border: 1px solid var(--border);
+  border-radius: 12px 12px 12px 4px;
+  padding: 12px 14px;
+  font-size: 13.5px;
+  color: var(--white);
+  line-height: 1.55;
+  margin-bottom: 16px;
+}
+.wa-widget-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  width: 100%;
+  padding: 12px 18px;
+  background: #25D366;
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all .25s;
+}
+.wa-widget-cta:hover { background: #1ebd5a; box-shadow: 0 6px 20px rgba(37,211,102,0.4); }
+.wa-widget-cta svg { width: 18px; height: 18px; flex-shrink: 0; }
+@media (max-width: 600px) {
+  .wa-widget { right: 18px; bottom: 68px; width: 280px; }
 }
 
 /* ===== NEW FEATURE: EXIT-INTENT POPUP ===== */
@@ -2242,9 +2396,32 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
 <body>
 
 <!-- ===== NEW FEATURE: WHATSAPP FLOATING BUTTON (bottom-right) ===== -->
-<a class="wa-float-btn" href="https://wa.me/8801521731046" target="_blank" rel="noopener" aria-label="Chat on WhatsApp" title="Chat on WhatsApp">
-  <svg viewBox="0 0 32 32" fill="#fff"><path d="M16.001 3C9.107 3 3.5 8.607 3.5 15.5c0 2.43.683 4.7 1.866 6.633L3 29l7.05-2.317A12.43 12.43 0 0 0 16.001 28C22.894 28 28.5 22.394 28.5 15.5S22.894 3 16.001 3zm0 22.65a10.1 10.1 0 0 1-5.16-1.413l-.37-.22-4.186 1.376 1.394-4.08-.24-.39A10.1 10.1 0 0 1 5.85 15.5c0-5.6 4.55-10.15 10.151-10.15S26.15 9.9 26.15 15.5 21.602 25.65 16.001 25.65zm5.55-7.59c-.304-.152-1.795-.886-2.073-.987-.278-.102-.48-.152-.683.152-.202.305-.78.987-.957 1.19-.176.203-.353.228-.657.076-.304-.152-1.284-.473-2.446-1.51-.904-.806-1.514-1.802-1.692-2.106-.177-.305-.019-.47.133-.622.137-.136.304-.354.456-.532.152-.177.202-.304.304-.507.101-.203.05-.38-.025-.532-.076-.152-.683-1.646-.936-2.255-.247-.593-.498-.513-.683-.522l-.583-.01c-.202 0-.531.076-.81.38-.278.305-1.06 1.036-1.06 2.528 0 1.492 1.085 2.934 1.236 3.137.151.203 2.135 3.26 5.173 4.572.723.312 1.287.499 1.727.638.726.231 1.387.198 1.91.12.583-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.444-.076-.126-.278-.202-.582-.354z"/></svg>
-</a>
+<div class="wa-float-wrap" id="waFloatWrap">
+  <div class="wa-tooltip" id="waTooltip">Chat with me! 👋</div>
+  <button class="wa-float-btn" id="waFloatBtn" aria-label="Chat on WhatsApp" title="Chat on WhatsApp" onclick="toggleWaWidget()">
+    <span class="wa-badge"></span>
+    <svg viewBox="0 0 32 32" fill="#fff"><path d="M16.001 3C9.107 3 3.5 8.607 3.5 15.5c0 2.43.683 4.7 1.866 6.633L3 29l7.05-2.317A12.43 12.43 0 0 0 16.001 28C22.894 28 28.5 22.394 28.5 15.5S22.894 3 16.001 3zm0 22.65a10.1 10.1 0 0 1-5.16-1.413l-.37-.22-4.186 1.376 1.394-4.08-.24-.39A10.1 10.1 0 0 1 5.85 15.5c0-5.6 4.55-10.15 10.151-10.15S26.15 9.9 26.15 15.5 21.602 25.65 16.001 25.65zm5.55-7.59c-.304-.152-1.795-.886-2.073-.987-.278-.102-.48-.152-.683.152-.202.305-.78.987-.957 1.19-.176.203-.353.228-.657.076-.304-.152-1.284-.473-2.446-1.51-.904-.806-1.514-1.802-1.692-2.106-.177-.305-.019-.47.133-.622.137-.136.304-.354.456-.532.152-.177.202-.304.304-.507.101-.203.05-.38-.025-.532-.076-.152-.683-1.646-.936-2.255-.247-.593-.498-.513-.683-.522l-.583-.01c-.202 0-.531.076-.81.38-.278.305-1.06 1.036-1.06 2.528 0 1.492 1.085 2.934 1.236 3.137.151.203 2.135 3.26 5.173 4.572.723.312 1.287.499 1.727.638.726.231 1.387.198 1.91.12.583-.087 1.795-.734 2.048-1.443.253-.71.253-1.317.177-1.444-.076-.126-.278-.202-.582-.354z"/></svg>
+  </button>
+</div>
+
+<!-- ===== WHATSAPP CHAT WIDGET POPUP ===== -->
+<div class="wa-widget" id="waWidget">
+  <div class="wa-widget-header">
+    <div class="wa-widget-avatar">HR</div>
+    <div>
+      <div class="wa-widget-name">Hasanur Rahman</div>
+      <div class="wa-widget-status">Online now</div>
+    </div>
+    <button class="wa-widget-close" onclick="toggleWaWidget()" aria-label="Close">✕</button>
+  </div>
+  <div class="wa-widget-body">
+    <div class="wa-widget-bubble">Hi there 👋 I'm Hasanur — I help brands grow with Video Editing, Graphic Design, AI Automation, AI Content Generation &amp; Digital Marketing. What can I help you with today?</div>
+    <a class="wa-widget-cta" href="https://wa.me/8801521731046?text=Hi%20Hasanur%2C%20I%27d%20like%20to%20talk%20about%20a%20project." target="_blank" rel="noopener">
+      <svg viewBox="0 0 32 32" fill="#fff"><path d="M16.001 3C9.107 3 3.5 8.607 3.5 15.5c0 2.43.683 4.7 1.866 6.633L3 29l7.05-2.317A12.43 12.43 0 0 0 16.001 28C22.894 28 28.5 22.394 28.5 15.5S22.894 3 16.001 3zm0 22.65a10.1 10.1 0 0 1-5.16-1.413l-.37-.22-4.186 1.376 1.394-4.08-.24-.39A10.1 10.1 0 0 1 5.85 15.5c0-5.6 4.55-10.15 10.151-10.15S26.15 9.9 26.15 15.5 21.602 25.65 16.001 25.65z"/></svg>
+      Start Chat
+    </a>
+  </div>
+</div>
 
 <!-- ===== NEW FEATURE: EXIT-INTENT POPUP ===== -->
 <div class="exit-popup-overlay" id="exitPopupOverlay">
@@ -5555,6 +5732,32 @@ function closeExitPopup() {
 }
 document.getElementById('exitPopupOverlay').addEventListener('click', function(e) {
   if (e.target === e.currentTarget) closeExitPopup();
+});
+
+// ===================================================
+// NEW FEATURE: WHATSAPP CHAT WIDGET POPUP
+// ===================================================
+function toggleWaWidget() {
+  const widget = document.getElementById('waWidget');
+  const badge = document.querySelector('.wa-badge');
+  widget.classList.toggle('show');
+  if (widget.classList.contains('show') && badge) {
+    badge.style.display = 'none';
+  }
+}
+document.addEventListener('click', function(e) {
+  const widget = document.getElementById('waWidget');
+  const wrap = document.getElementById('waFloatWrap');
+  if (widget.classList.contains('show') && !widget.contains(e.target) && !wrap.contains(e.target)) {
+    widget.classList.remove('show');
+  }
+});
+// Auto-peek tooltip a couple seconds after page load, then fade out
+window.addEventListener('load', function() {
+  const tip = document.getElementById('waTooltip');
+  if (!tip) return;
+  setTimeout(() => { tip.classList.add('wa-tooltip-show'); }, 1800);
+  setTimeout(() => { tip.classList.remove('wa-tooltip-show'); }, 5500);
 });
 </script>
 </body>
