@@ -434,8 +434,8 @@ nav .container { max-width: 1300px; }
 .hero-badge-dot {
   width: 7px; height: 7px;
   border-radius: 50%;
-  background: var(--cyan);
-  box-shadow: 0 0 8px var(--cyan);
+  background: #2ECC71;
+  box-shadow: 0 0 8px #2ECC71;
   animation: pulse 2s ease infinite;
 }
 @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.3; } }
@@ -2095,6 +2095,23 @@ footer {
   height: 100%;
   object-fit: contain;
 }
+/* Adobe app brand-color badges (Ps / Ai / Pr / Ae) */
+.tool-icon.adobe-badge {
+  background: var(--badge-bg) !important;
+  color: var(--badge-fg);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -.5px;
+  padding: 0;
+}
+.tool-icon.tool-icon-ps { --badge-bg: #001E36; --badge-fg: #31A8FF; }
+.tool-icon.tool-icon-ai { --badge-bg: #330000; --badge-fg: #FF9A00; }
+.tool-icon.tool-icon-pr { --badge-bg: #00005B; --badge-fg: #9999FF; }
+.tool-icon.tool-icon-ae { --badge-bg: #00005B; --badge-fg: #9999FF; }
+@media (max-width: 600px) {
+  .tool-icon.adobe-badge { font-size: 14px; }
+}
 .tool-name {
   font-size: 12px;
   font-weight: 600;
@@ -3003,11 +3020,11 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
             <div class="tool-name">Canva</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=adobe.com&sz=128" alt="Photoshop logo" loading="lazy"></div>
+            <div class="tool-icon adobe-badge tool-icon-ps">Ps</div>
             <div class="tool-name">Photoshop</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=adobe.com&sz=128" alt="Illustrator logo" loading="lazy"></div>
+            <div class="tool-icon adobe-badge tool-icon-ai">Ai</div>
             <div class="tool-name">Illustrator</div>
           </div>
           <div class="tool-card">
@@ -3022,7 +3039,7 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
         <div class="tools-category-title">// Video Editing</div>
         <div class="tools-grid">
           <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=adobe.com&sz=128" alt="Premiere Pro logo" loading="lazy"></div>
+            <div class="tool-icon adobe-badge tool-icon-pr">Pr</div>
             <div class="tool-name">Premiere Pro</div>
           </div>
           <div class="tool-card">
@@ -3034,7 +3051,7 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
             <div class="tool-name">DaVinci Resolve</div>
           </div>
           <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=adobe.com&sz=128" alt="After Effects logo" loading="lazy"></div>
+            <div class="tool-icon adobe-badge tool-icon-ae">Ae</div>
             <div class="tool-name">After Effects</div>
           </div>
         </div>
