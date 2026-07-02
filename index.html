@@ -745,6 +745,27 @@ nav .container { max-width: 1300px; }
   padding: 12px;
 }
 .about-photo-placeholder span { font-size: 36px; }
+.about-photo-change-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(8,11,20,0.72);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .2s;
+  cursor: pointer;
+  z-index: 3;
+}
+.about-photo-change-overlay span:first-child { font-size: 22px; }
+.about-photo-slot.is-admin:hover .about-photo-change-overlay { opacity: 1; pointer-events: auto; }
 .photo-slot-label {
   font-family: var(--font-mono);
   font-size: 10px;
@@ -2682,7 +2703,10 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
             <!-- Professional Photo (right) -->
             <div>
               <div class="about-photo-slot" id="proPhotoSlot">
-                <img id="proPhotoImg" alt="Professional Photo">
+                <img id="proPhotoImg" alt="Professional Photo" onclick="if(isAdmin){document.getElementById('proPhotoInput').click();}">
+                <div class="about-photo-change-overlay" id="proPhotoChangeOverlay" onclick="if(isAdmin){document.getElementById('proPhotoInput').click();}">
+                  <span>📷</span><span>Change Photo</span>
+                </div>
                 <label for="proPhotoInput" class="about-photo-placeholder" id="proPhotoPlaceholder" title="Admin only" style="cursor:default;pointer-events:none;">
                   <span>📸</span>
                   <span>Professional<br>Photo</span>
@@ -4146,15 +4170,21 @@ function updateAvatarUploadAccess() {
 
 function updateProPhotoAccess() {
   const label = document.getElementById('proPhotoPlaceholder');
+  const slot = document.getElementById('proPhotoSlot');
+  const img = document.getElementById('proPhotoImg');
   if (!label) return;
   if (isAdmin) {
     label.style.pointerEvents = 'auto';
     label.style.cursor = 'pointer';
     label.title = 'Click to upload your photo';
+    if (slot) slot.classList.add('is-admin');
+    if (img) img.style.cursor = 'pointer';
   } else {
     label.style.pointerEvents = 'none';
     label.style.cursor = 'default';
     label.title = '';
+    if (slot) slot.classList.remove('is-admin');
+    if (img) img.style.cursor = 'default';
   }
 }
 
