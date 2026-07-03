@@ -4133,6 +4133,20 @@ const proPhotoInput = document.getElementById('proPhotoInput');
 const proPhotoImg = document.getElementById('proPhotoImg');
 const proPhotoPlaceholder = document.getElementById('proPhotoPlaceholder');
 
+// ===================================================
+// FAST PROFILE IMAGE PAINT — এই দুইটা ছবি সাইট ওপেন হওয়ার সাথে সাথেই
+// আগের visit-এ localStorage-এ cache করা থাকলে সেটা সাথে সাথে দেখিয়ে দেয়,
+// পুরো cloud record (blog/project/reviews ইত্যাদি) লোড হওয়া পর্যন্ত অপেক্ষা করতে হয় না।
+// ===================================================
+(function paintCachedProfileImagesInstantly() {
+  try {
+    const av = localStorage.getItem('cached_avatar_img');
+    const pp = localStorage.getItem('cached_pro_photo_img');
+    if (av) { avatarImg.src = av; avatarImg.style.display = 'block'; avatarPlaceholder.style.display = 'none'; }
+    if (pp) { proPhotoImg.src = pp; proPhotoImg.style.display = 'block'; proPhotoPlaceholder.style.display = 'none'; }
+  } catch (e) {}
+})();
+
 // ছোট করে compress করে base64 বানায় (cloud-এ ছোট রাখার জন্য)
 function compressImageFile(file, maxDim, quality) {
   return new Promise((resolve, reject) => {
@@ -4193,6 +4207,28 @@ function updateProPhotoAccess() {
 }
 
 // cloud থেকে avatar/pro-photo load করে দেখায় (সব device-এ same দেখাবে)
+// দুইটা ছবির key সরাসরি আলাদাভাবে fetch করে — পুরো site_data blob (blog/project/
+// reviews সহ) এর জন্য অপেক্ষা না করেই ছবি দুটো যত দ্রুত সম্ভব দেখানো যায়।
+async function loadProfileImagesFast() {
+  try {
+    await fbWaitReady();
+    const { ref, get, db } = window._fb;
+    const [avSnap, ppSnap] = await Promise.all([
+      get(ref(db, FB_ROOT_PATH + '/avatar_img')),
+      get(ref(db, FB_ROOT_PATH + '/pro_photo_img'))
+    ]);
+    const av = avSnap.exists() ? avSnap.val() : null;
+    const pp = ppSnap.exists() ? ppSnap.val() : null;
+    if (av) { _record.avatar_img = av; }
+    if (pp) { _record.pro_photo_img = pp; }
+    if (av || pp) renderProfileImages();
+    try {
+      if (av) localStorage.setItem('cached_avatar_img', av); else localStorage.removeItem('cached_avatar_img');
+      if (pp) localStorage.setItem('cached_pro_photo_img', pp); else localStorage.removeItem('cached_pro_photo_img');
+    } catch (e) {}
+  } catch (e) { console.error('Fast profile image load failed:', e); }
+}
+
 function renderProfileImages() {
   const av = _record['avatar_img'];
   if (av) {
@@ -5723,6 +5759,7 @@ async function initSharedData() {
 })();
 
 initSharedData();
+loadProfileImagesFast();
 document.querySelectorAll('a[href^="#"]').forEach(a => {
   a.addEventListener('click', e => {
     const target = document.querySelector(a.getAttribute('href'));
