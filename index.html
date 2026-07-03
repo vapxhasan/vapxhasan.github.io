@@ -2499,10 +2499,14 @@ body.light-mode .mobile-menu { background: rgba(245,246,250,0.98); }
     <div style="font-size:18px;font-weight:700;color:#E8EAF0;margin-bottom:4px;">Admin Login</div>
     <div style="font-size:13px;color:#8B95B0;margin-bottom:24px;">Enter your credentials to access the admin panel.</div>
     <div style="margin-bottom:14px;">
-      <label style="font-size:12px;color:#8B95B0;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">Password</label>
-      <input id="adminPassInput" type="password" placeholder="Admin password" style="width:100%;padding:10px 14px;background:#0D1120;border:1px solid rgba(108,99,255,0.25);border-radius:8px;color:#E8EAF0;font-size:14px;outline:none;font-family:inherit;" onkeydown="if(event.key==='Enter')doAdminLogin()">
+      <label style="font-size:12px;color:#8B95B0;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">Email</label>
+      <input id="adminEmailInput" type="email" placeholder="Admin email" autocomplete="off" style="width:100%;padding:10px 14px;background:#0D1120;border:1px solid rgba(108,99,255,0.25);border-radius:8px;color:#E8EAF0;font-size:14px;outline:none;font-family:inherit;" onkeydown="if(event.key==='Enter')document.getElementById('adminPassInput').focus()">
     </div>
-    <div id="adminLoginError" style="display:none;color:#ff6666;font-size:13px;margin-bottom:14px;padding:8px 12px;background:rgba(255,0,0,0.08);border-radius:6px;border:1px solid rgba(255,0,0,0.15);">❌ Wrong password.</div>
+    <div style="margin-bottom:14px;">
+      <label style="font-size:12px;color:#8B95B0;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;">Password</label>
+      <input id="adminPassInput" type="password" placeholder="Admin password" autocomplete="off" style="width:100%;padding:10px 14px;background:#0D1120;border:1px solid rgba(108,99,255,0.25);border-radius:8px;color:#E8EAF0;font-size:14px;outline:none;font-family:inherit;" onkeydown="if(event.key==='Enter')doAdminLogin()">
+    </div>
+    <div id="adminLoginError" style="display:none;color:#ff6666;font-size:13px;margin-bottom:14px;padding:8px 12px;background:rgba(255,0,0,0.08);border-radius:6px;border:1px solid rgba(255,0,0,0.15);">❌ Invalid email or password.</div>
     <button onclick="doAdminLogin()" id="adminLoginSubmit" style="width:100%;padding:12px;background:linear-gradient(135deg,#6C63FF,#9B5DFF);border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .2s;">Login to Admin Panel →</button>
   </div>
 </div>
@@ -4293,9 +4297,14 @@ const _isLoginRoute = new URLSearchParams(window.location.search).get('AdminH@sa
 // ===================================================
 // ADMIN PASSWORD SYSTEM (Firebase Authentication-backed)
 // ===================================================
-const ADMIN_PASS_HASH = 'H@san1042004';
+// নিরাপত্তা নোট: এখানে কোনো password client-side এ hardcode করা নেই।
+// Login form থেকে email + password সরাসরি Firebase Authentication এ পাঠানো হয়,
+// Firebase ই আসল validation করে (rate-limited, brute-force protected)।
+// এখানে শুধু নিশ্চিত করা হয় যে সফল login টা সঠিক admin email দিয়েই হয়েছে।
 const ADMIN_EMAIL = 'hasanur.rahman.editor@gmail.com';
 let isAdmin = false;
+let _loginAttempts = 0;
+let _loginLockUntil = 0;
 
 function checkAdmin() {
   // Firebase session-only persistence ব্যবহার করছে (browserSessionPersistence) —
@@ -4329,9 +4338,10 @@ function checkAdmin() {
 function openAdminLoginModal() {
   const modal = document.getElementById('adminLoginModal');
   modal.style.display = 'flex';
+  document.getElementById('adminEmailInput').value = '';
   document.getElementById('adminPassInput').value = '';
   document.getElementById('adminLoginError').style.display = 'none';
-  setTimeout(() => document.getElementById('adminPassInput').focus(), 100);
+  setTimeout(() => document.getElementById('adminEmailInput').focus(), 100);
 }
 function closeAdminLoginModal() {
   document.getElementById('adminLoginModal').style.display = 'none';
@@ -4342,13 +4352,25 @@ document.getElementById('adminLoginModal').addEventListener('click', function(e)
 });
 
 async function doAdminLogin() {
-  const pass = document.getElementById('adminPassInput').value.trim();
+  const email = document.getElementById('adminEmailInput').value.trim();
+  const pass  = document.getElementById('adminPassInput').value.trim();
   const errEl = document.getElementById('adminLoginError');
   const btn   = document.getElementById('adminLoginSubmit');
 
   errEl.style.display = 'none';
-  if (pass !== ADMIN_PASS_HASH) {
-    errEl.textContent = '❌ Wrong password!';
+
+  // simple client-side lockout against rapid repeated attempts (extra layer;
+  // Firebase Auth itself already rate-limits/blocks brute-force on its end)
+  const now = Date.now();
+  if (now < _loginLockUntil) {
+    const secs = Math.ceil((_loginLockUntil - now) / 1000);
+    errEl.textContent = `⏳ Too many attempts. Try again in ${secs}s.`;
+    errEl.style.display = 'block';
+    return;
+  }
+
+  if (!email || !pass) {
+    errEl.textContent = '❌ Please enter both email and password.';
     errEl.style.display = 'block';
     return;
   }
@@ -4358,13 +4380,26 @@ async function doAdminLogin() {
 
   try {
     await fbWaitReady();
-    const { auth, signIn } = window._fbAuth;
-    await signIn(auth, ADMIN_EMAIL, pass); // Firebase real authentication — Database Rules এ enforce হবে
+    const { auth, signIn, signOut } = window._fbAuth;
+    const cred = await signIn(auth, email, pass); // real Firebase authentication
+
+    if (!cred.user || cred.user.email !== ADMIN_EMAIL) {
+      // logged in as *some* valid Firebase user, but not the admin account
+      await signOut(auth);
+      throw new Error('not-admin');
+    }
+
     _masterKey = 'firebase-admin';
     isAdmin = true;
+    _loginAttempts = 0;
   } catch (e) {
-    console.error('Firebase auth failed:', e);
-    errEl.textContent = '❌ Login failed. Try again.';
+    console.error('Admin login failed:', e && e.code ? e.code : e);
+    _loginAttempts++;
+    if (_loginAttempts >= 5) {
+      _loginLockUntil = Date.now() + 30000; // 30s cooldown after 5 failed tries
+      _loginAttempts = 0;
+    }
+    errEl.textContent = '❌ Invalid email or password.';
     errEl.style.display = 'block';
     btn.textContent = 'Login to Admin Panel →';
     btn.disabled = false;
