@@ -1560,6 +1560,7 @@ nav .container { max-width: 1300px; }
   font-size: 20px;
   flex-shrink: 0;
 }
+.cl-icon img { width: 22px; height: 22px; object-fit: contain; }
 .cl-label { font-size: 11px; color: var(--muted); font-family: var(--font-mono); margin-bottom: 2px; }
 .cl-val { font-size: 14px; font-weight: 600; color: var(--white); }
 .cl-arrow { margin-left: auto; color: var(--muted); font-size: 18px; transition: transform .2s; }
@@ -2061,6 +2062,18 @@ footer {
 }
 @media (max-width: 540px) {
   .skills-grid { grid-template-columns: 1fr; }
+  .about-badge-cards { gap: 8px; flex-wrap: nowrap; }
+  .about-badge-card {
+    min-width: 0;
+    max-width: none;
+    flex: 1 1 0;
+    padding: 8px 6px;
+    gap: 6px;
+    white-space: normal;
+  }
+  .badge-icon { font-size: 15px; }
+  .badge-label { font-size: 9.5px; line-height: 1.2; }
+  .badge-val { font-size: 11px; line-height: 1.2; }
 }
 @media (max-width: 768px) {
   .section { padding: 70px 0; }
@@ -3694,7 +3707,7 @@ body, body *, body *::before, body *::after {
     <div class="contact-grid">
       <div class="contact-info reveal">
         <a href="mailto:vapxhasan@gmail.com" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(37,99,235,0.15)">✉️</div>
+          <div class="cl-icon" style="background:rgba(234,67,53,0.12)"><img src="https://cdn.simpleicons.org/gmail/EA4335" alt="Email" width="22" height="22" loading="lazy"></div>
           <div>
             <div class="cl-label">EMAIL</div>
             <div class="cl-val">vapxhasan@gmail.com</div>
@@ -3702,7 +3715,7 @@ body, body *, body *::before, body *::after {
           <span class="cl-arrow">→</span>
         </a>
         <a href="https://wa.me/8801327675833" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(37,211,102,0.12)">💬</div>
+          <div class="cl-icon" style="background:rgba(37,211,102,0.12)"><img src="https://cdn.simpleicons.org/whatsapp/25D366" alt="WhatsApp" width="22" height="22" loading="lazy"></div>
           <div>
             <div class="cl-label">WHATSAPP</div>
             <div class="cl-val">Chat on WhatsApp</div>
@@ -3710,7 +3723,7 @@ body, body *, body *::before, body *::after {
           <span class="cl-arrow">→</span>
         </a>
         <a href="https://fiverr.com/vapxhasan" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(26,182,93,0.12)">🟢</div>
+          <div class="cl-icon" style="background:rgba(26,182,93,0.12)"><img src="https://cdn.simpleicons.org/fiverr/1DBF73" alt="Fiverr" width="22" height="22" loading="lazy"></div>
           <div>
             <div class="cl-label">FIVERR</div>
             <div class="cl-val">fiverr.com/vapxhasan</div>
@@ -3718,7 +3731,7 @@ body, body *, body *::before, body *::after {
           <span class="cl-arrow">→</span>
         </a>
         <a href="https://upwork.com/freelancers/vapxhasan" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(20,171,98,0.1)">💼</div>
+          <div class="cl-icon" style="background:rgba(20,171,98,0.1)"><img src="https://cdn.simpleicons.org/upwork/14A800" alt="Upwork" width="22" height="22" loading="lazy"></div>
           <div>
             <div class="cl-label">UPWORK</div>
             <div class="cl-val">Hire on Upwork</div>
@@ -3726,7 +3739,7 @@ body, body *, body *::before, body *::after {
           <span class="cl-arrow">→</span>
         </a>
         <a href="https://instagram.com/vapxhasan" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(225,48,108,0.1)">📸</div>
+          <div class="cl-icon" style="background:rgba(225,48,108,0.1)"><img src="https://cdn.simpleicons.org/instagram/E4405F" alt="Instagram" width="22" height="22" loading="lazy"></div>
           <div>
             <div class="cl-label">INSTAGRAM</div>
             <div class="cl-val">@vapxhasan</div>
