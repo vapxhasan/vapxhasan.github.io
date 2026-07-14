@@ -4151,7 +4151,7 @@ async function handleSubmit(btn) {
     await emailjs.send('service_tfcdfkh', 'template_z8eqf3f', templateParams);
 
     // Google Sheets-এ data save করো
-    fetch('https://script.google.com/macros/s/AKfycbyByiJazUQrjOuxE0xOjl7YaHSAn7nYF1fWaMXfAMOGVa91cQn_crerlWeRl4SY9WB4/exec', {
+    fetch('https://script.google.com/macros/s/AKfycby9ihFMaDTmSZRQ5WBlctdeL2edz7ou9UbJVVIzg0SPhC3_GJEqJ5RjAHTH5_xIr34/exec', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(templateParams),
