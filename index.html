@@ -3745,6 +3745,10 @@ body, body *, body *::before, body *::after {
             <input type="email" id="cf_email" class="form-input" placeholder="alex@company.com">
           </div>
         </div>
+        <div class="form-group" id="cf_package_group" style="display:none;">
+          <label class="form-label">SELECTED PACKAGE</label>
+          <input type="text" id="cf_package_custom" class="form-input" placeholder="Package name..." oninput="document.getElementById('cf_package').value=this.value.trim();">
+        </div>
         <div class="form-group">
           <label class="form-label">SERVICE NEEDED</label>
           <select id="cf_service_select" class="form-input" onchange="cfSyncService()">
@@ -5699,22 +5703,22 @@ function fillPricingLead(el) {
   if (priceEl) priceEl.value = price;
   if (leadEl)  leadEl.value  = 'Pricing';
 
-  // Auto-match the Budget dropdown to the package price — client doesn't need to pick it
-  const numericPrice = parseFloat(String(price).replace(/[^0-9.]/g, ''));
-  if (!isNaN(numericPrice)) {
-    let matchedBudget = '$1000+';
-    if (numericPrice < 100) matchedBudget = 'Under $100';
-    else if (numericPrice < 300) matchedBudget = '$100–300';
-    else if (numericPrice < 500) matchedBudget = '$300–500';
-    else if (numericPrice < 1000) matchedBudget = '$500–1000';
+  // Show the package name in its own visible box
+  const pkgGroup  = document.getElementById('cf_package_group');
+  const pkgCustom = document.getElementById('cf_package_custom');
+  if (pkg && pkgGroup && pkgCustom) {
+    pkgGroup.style.display = 'block';
+    pkgCustom.value = pkg;
+  }
 
-    const budgetSel = document.getElementById('cf_budget_select');
-    if (budgetSel) {
-      for (const opt of budgetSel.options) {
-        if (opt.value === matchedBudget) { budgetSel.value = matchedBudget; break; }
-      }
-      if (typeof cfSyncBudget === 'function') cfSyncBudget();
-    }
+  // Put the exact price straight into Budget's Custom field — no range guessing
+  const budgetSel    = document.getElementById('cf_budget_select');
+  const budgetCustom = document.getElementById('cf_budget_custom');
+  if (price && budgetSel && budgetCustom) {
+    budgetSel.value = 'Custom';
+    budgetCustom.value = price;
+    budgetCustom.style.display = 'block';
+    if (typeof cfSyncBudget === 'function') cfSyncBudget();
   }
 }
 
