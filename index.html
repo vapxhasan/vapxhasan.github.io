@@ -4133,17 +4133,41 @@ async function handleSubmit(btn) {
   successEl.style.display = 'none';
   errorEl.style.display = 'none';
 
+  // Build package/price row(s) only when the client actually provided them.
+  // If nothing was selected from the pricing tiers, this stays empty and the
+  // whole "Package / Price" card disappears from the auto-reply email.
+  const hasPkg   = pkg   && pkg   !== 'None' && pkg   !== 'Not specified';
+  const hasPrice = price && price !== 'None' && price !== 'Not specified';
+  let package_price_block = '';
+  if (hasPkg || hasPrice) {
+    const pkgRow = hasPkg
+      ? `<tr><td style="font-size:13.5px;line-height:19px;color:#6b7488;padding:4px 0;">Selected Package</td><td style="font-size:13.5px;line-height:19px;color:#0b0f1e;font-weight:bold;padding:4px 0;" align="right">${pkg}</td></tr>`
+      : '';
+    const priceRow = hasPrice
+      ? `<tr><td style="font-size:13.5px;line-height:19px;color:#6b7488;padding:4px 0;${hasPkg ? 'border-top:1px solid #e6eaf3;' : ''}">Price</td><td style="font-size:13.5px;line-height:19px;color:#0b0f1e;font-weight:bold;padding:4px 0;${hasPkg ? 'border-top:1px solid #e6eaf3;' : ''}" align="right">${price}</td></tr>`
+      : '';
+    package_price_block =
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f7f8fc;border:1px solid #e3e8f0;border-radius:12px;margin-bottom:18px;">' +
+        '<tr><td style="padding:16px 20px;">' +
+          '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">' +
+            pkgRow + priceRow +
+          '</table>' +
+        '</td></tr>' +
+      '</table>';
+  }
+
   const templateParams = {
-    from_name:       name,
-    from_email:      email,
-    service:         service || 'Not specified',
-    budget:          budget  || 'Not specified',
-    project_details: message,
-    message:         message,
-    lead_source:     leadSource || 'Contact Form',
-    package:         pkg   || 'None',
-    price:           price || 'None',
-    status:          'New',
+    from_name:            name,
+    from_email:           email,
+    service:              service || 'Not specified',
+    budget:                budget  || 'Not specified',
+    project_details:      message,
+    message:              message,
+    lead_source:          leadSource || 'Contact Form',
+    package:               pkg   || 'None',
+    price:                 price || 'None',
+    package_price_block:  package_price_block,
+    status:                'New',
   };
 
   try {
