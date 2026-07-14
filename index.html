@@ -5698,6 +5698,24 @@ function fillPricingLead(el) {
   if (pkgEl)   pkgEl.value   = pkg;
   if (priceEl) priceEl.value = price;
   if (leadEl)  leadEl.value  = 'Pricing';
+
+  // Auto-match the Budget dropdown to the package price — client doesn't need to pick it
+  const numericPrice = parseFloat(String(price).replace(/[^0-9.]/g, ''));
+  if (!isNaN(numericPrice)) {
+    let matchedBudget = '$1000+';
+    if (numericPrice < 100) matchedBudget = 'Under $100';
+    else if (numericPrice < 300) matchedBudget = '$100–300';
+    else if (numericPrice < 500) matchedBudget = '$300–500';
+    else if (numericPrice < 1000) matchedBudget = '$500–1000';
+
+    const budgetSel = document.getElementById('cf_budget_select');
+    if (budgetSel) {
+      for (const opt of budgetSel.options) {
+        if (opt.value === matchedBudget) { budgetSel.value = matchedBudget; break; }
+      }
+      if (typeof cfSyncBudget === 'function') cfSyncBudget();
+    }
+  }
 }
 
 function fivSwitchCat(i) {
