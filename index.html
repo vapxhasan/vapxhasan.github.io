@@ -4282,6 +4282,19 @@ async function handleSubmit(btn) {
       '</table>';
   }
 
+  // Client-facing version (dark-theme styled), also hidden entirely when no package was picked.
+  let client_package_line = '';
+  if (hasPkg) {
+    const hasPrice = price && price !== 'None' && price !== 'Not specified';
+    client_package_line =
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0b0f1e;border:1px solid #232b3d;border-radius:10px;margin:16px 0;">' +
+        '<tr><td style="padding:14px 18px;">' +
+          `<span style="font-size:13px;color:#6b7488;">Selected Package: </span><span style="font-size:13px;color:#e5e9f0;font-weight:700;">${pkg}</span>` +
+          (hasPrice ? `<span style="font-size:13px;color:#6b7488;"> &nbsp;|&nbsp; Price: </span><span style="font-size:13px;color:#e5e9f0;font-weight:700;">${price}</span>` : '') +
+        '</td></tr>' +
+      '</table>';
+  }
+
   const templateParams = {
     from_name:            name,
     from_email:           email,
@@ -4293,12 +4306,18 @@ async function handleSubmit(btn) {
     package:               pkg   || 'None',
     price:                 price || 'None',
     package_price_block:  package_price_block,
+    client_package_line:  client_package_line,
     status:                'New',
   };
 
   try {
-    // তোমার কাছে email যাবে + EmailJS Auto-Reply client কে পাঠাবে
+    // ১) তোমার (admin) কাছে notification email যাবে
     await emailjs.send('service_tfcdfkh', 'template_z8eqf3f', templateParams);
+
+    // ২) client-কে confirmation/auto-reply email যাবে — EmailJS-এ এই নামে
+    // একটা নতুন template বানিয়ে নিচের ID-টা বসিয়ে দিন (client-confirmation-email-template.html দেখুন)
+    emailjs.send('service_tfcdfkh', 'template_client_reply', templateParams)
+      .catch(err => console.warn('Client confirmation email failed:', err));
 
     // Google Sheets-এ data save করো
     fetch('https://script.google.com/macros/s/AKfycby9ihFMaDTmSZRQ5WBlctdeL2edz7ou9UbJVVIzg0SPhC3_GJEqJ5RjAHTH5_xIr34/exec', {
@@ -4328,6 +4347,10 @@ async function handleSubmit(btn) {
     if (pkgEl) pkgEl.value = 'None';
     if (priceEl) priceEl.value = 'None';
     if (leadSrcEl) leadSrcEl.value = 'Contact Form';
+    const pkgGroupReset  = document.getElementById('cf_package_group');
+    const pkgCustomReset = document.getElementById('cf_package_custom');
+    if (pkgGroupReset)  pkgGroupReset.style.display = 'none';
+    if (pkgCustomReset) pkgCustomReset.value = '';
 
     setTimeout(() => {
       btn.textContent = original;
