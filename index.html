@@ -6,8 +6,54 @@
 <title>Hasanur Rahman | Professional Video Editor</title>
 <meta name="description" content="Hasanur Rahman (vapxhasan) — Professional Video Editor specializing in cinematic edits, commercial ads, and YouTube content, plus Graphic Design, AI Automation, Prompt Engineering & Digital Marketing.">
 <meta name="keywords" content="video editing, video editor, graphic design, AI automation, prompt engineer, digital marketing, freelancer, vapxhasan, Hasanur Rahman">
+<meta name="robots" content="index, follow">
+<meta name="author" content="Hasanur Rahman">
+<link rel="canonical" href="https://vapxhasan.github.io/">
+<link rel="icon" type="image/png" href="favicon.png">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vapxhasan.github.io/">
+<meta property="og:site_name" content="Hasanur Rahman | vapxhasan">
 <meta property="og:title" content="Hasanur Rahman | Professional Video Editor">
 <meta property="og:description" content="Cinematic video editing, commercial ads & YouTube content — plus Graphic Design, AI Automation & Digital Marketing. Premium freelance services for global clients.">
+<meta property="og:image" content="https://vapxhasan.github.io/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hasanur Rahman | Professional Video Editor">
+<meta name="twitter:description" content="Cinematic video editing, commercial ads & YouTube content — plus Graphic Design, AI Automation & Digital Marketing.">
+<meta name="twitter:image" content="https://vapxhasan.github.io/og-image.jpg">
+
+<!-- Structured Data (JSON-LD) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Hasanur Rahman (vapxhasan)",
+  "url": "https://vapxhasan.github.io/",
+  "description": "Professional Video Editor specializing in cinematic edits, commercial ads, and YouTube content, plus Graphic Design, AI Automation, Prompt Engineering & Digital Marketing.",
+  "founder": {
+    "@type": "Person",
+    "name": "Hasanur Rahman",
+    "alternateName": "vapxhasan",
+    "email": "vapxhasan@gmail.com",
+    "sameAs": [
+      "https://fiverr.com/vapxhasan",
+      "https://www.upwork.com/freelancers/~0117eaa6462f5ba09c",
+      "https://instagram.com/vapxhasan",
+      "https://twitter.com/vapxhasan",
+      "https://linkedin.com/in/vapxhasan",
+      "https://youtube.com/@vapxhasan"
+    ]
+  },
+  "areaServed": "Worldwide",
+  "priceRange": "$$"
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -3656,47 +3702,27 @@ body, body *, body *::before, body *::after {
       <div class="section-label" style="justify-content:center">FAQ</div>
       <h2 class="section-title" style="text-align:center">Common <span>Questions</span></h2>
       <p class="section-sub" style="margin:0 auto">Everything you need to know before we start working together.</p>
+      <button class="blog-write-btn admin-only" id="openFaqModal" style="display:none;margin-top:16px;">+ Add FAQ</button>
     </div>
-    <div class="faq-list reveal">
-
-      <div class="faq-item">
-        <div class="faq-q">How long does it take to complete a project? <span class="faq-arrow">▾</span></div>
-        <div class="faq-a">It depends on scope, but most projects are delivered within 2–7 business days. Rush delivery is available. I'll give you a clear timeline after reviewing your brief before any work starts.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q">Do you offer revisions? <span class="faq-arrow">▾</span></div>
-        <div class="faq-a">Yes. Standard packages include 2–3 revision rounds. I aim to nail the brief in the first delivery, but revisions are part of a healthy creative process — your satisfaction is the goal.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q">What payment methods do you accept? <span class="faq-arrow">▾</span></div>
-        <div class="faq-a">I accept payments through Fiverr, Upwork, PayPal, and direct bank transfer. All platforms offer buyer protection. Pricing is project-based and agreed upfront — no hidden fees.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q">Can I see examples of your previous work? <span class="faq-arrow">▾</span></div>
-        <div class="faq-a">Absolutely! The portfolio section above shows selected projects. I can also share additional, niche-specific samples relevant to your industry during our initial conversation. Just ask!</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q">Do you work with international clients? <span class="faq-arrow">▾</span></div>
-        <div class="faq-a">Yes, 100%. I work with clients from the US, UK, Europe, Middle East, Canada, and Australia. I'm fluent in English and communicate clearly across time zones. Remote-first is my default.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q">What AI tools do you use? <span class="faq-arrow">▾</span></div>
-        <div class="faq-a">I work with the best tools in each category: Midjourney, DALL·E, Stable Diffusion for images; Sora, Runway, Kling for video; ElevenLabs, Suno for audio; ChatGPT, Claude for automation; Make.com, Zapier, n8n for workflows.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q">Will I own the rights to the final work? <span class="faq-arrow">▾</span></div>
-        <div class="faq-a">Yes. Upon full payment, all rights to the final delivered files transfer to you. I retain the right to display work in my portfolio unless you require confidentiality, which I fully respect.</div>
-      </div>
-
-    </div>
+    <div class="faq-list reveal" id="faqList"></div>
   </div>
 </section>
+
+<!-- FAQ ADD MODAL -->
+<div class="blog-modal-overlay" id="faqModal">
+  <div class="blog-modal">
+    <div class="blog-modal-title">❓ Add FAQ</div>
+    <div class="blog-modal-sub">Add a new question your clients often ask</div>
+    <label class="blog-modal-label">QUESTION</label>
+    <input class="blog-modal-field" id="faqQInput" placeholder="e.g. Do you offer refunds?" type="text">
+    <label class="blog-modal-label">ANSWER</label>
+    <textarea class="blog-modal-field" id="faqAInput" rows="5" placeholder="Write a clear, helpful answer..."></textarea>
+    <div class="blog-modal-btns">
+      <button class="blog-modal-cancel" id="closeFaqModal">Cancel</button>
+      <button class="blog-modal-publish" onclick="publishFaq()">Add FAQ →</button>
+    </div>
+  </div>
+</div>
 
 <!-- CONTACT -->
 <section id="contact" class="section" style="background:var(--bg2)">
@@ -3951,8 +3977,20 @@ body, body *, body *::before, body *::after {
     <input class="blog-modal-field" id="blogTitleInput" placeholder="e.g. 10 AI Tools That Changed My Workflow" type="text">
     <label class="blog-modal-label">CATEGORY</label>
     <input class="blog-modal-field" id="blogCatInput" placeholder="e.g. AI Tips, Design, Tutorial..." type="text">
-    <label class="blog-modal-label">EMOJI / COVER</label>
+    <label class="blog-modal-label">EMOJI / COVER (fallback if no image)</label>
     <input class="blog-modal-field" id="blogEmojiInput" placeholder="e.g. 🤖 or 🎨" type="text" value="📝">
+    <label class="blog-modal-label">COVER IMAGE (optional)</label>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+      <div id="blogImgPreviewWrap" style="width:64px;height:64px;border-radius:10px;overflow:hidden;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <img id="blogImgPreview" style="width:100%;height:100%;object-fit:cover;display:none;">
+        <span id="blogImgPreviewEmpty" style="font-size:11px;color:var(--muted);">No image</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" onclick="document.getElementById('blogImgInput').click()">📷 Upload Image</button>
+        <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" id="blogImgRemoveBtn" onclick="removeBlogImgSelection()">✕ Remove</button>
+      </div>
+      <input type="file" id="blogImgInput" accept="image/*" style="display:none;">
+    </div>
     <label class="blog-modal-label">CONTENT</label>
     <textarea class="blog-modal-field" id="blogContentInput" rows="8" placeholder="Write your blog post content here..."></textarea>
     <div class="blog-modal-btns">
@@ -3968,6 +4006,7 @@ body, body *, body *::before, body *::after {
     <div id="blogReadCat" class="blog-rm-cat"></div>
     <div id="blogReadTitle" class="blog-rm-title"></div>
     <div id="blogReadMeta" class="blog-rm-meta"></div>
+    <img id="blogReadImg" style="width:100%;max-height:320px;object-fit:cover;border-radius:12px;margin:16px 0;display:none;" alt="">
     <div id="blogReadContent" class="blog-rm-content"></div>
     <div style="margin-top:24px;">
       <button class="blog-modal-cancel" onclick="closeBlogRead()" style="padding:11px 24px;">← Close</button>
@@ -4096,14 +4135,71 @@ const skillObserver = new IntersectionObserver((entries) => {
 const sg = document.getElementById('skillsGrid');
 if (sg) skillObserver.observe(sg);
 
-// ===== FAQ =====
-document.querySelectorAll('.faq-q').forEach(q => {
-  q.addEventListener('click', () => {
-    const item = q.closest('.faq-item');
-    const isOpen = item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-    if (!isOpen) item.classList.add('open');
-  });
+// ===================================================
+// FAQ SECTION (admin can add new questions; original 7 ship as defaults)
+// ===================================================
+let faqs = [
+  { q: 'How long does it take to complete a project?', a: "It depends on scope, but most projects are delivered within 2–7 business days. Rush delivery is available. I'll give you a clear timeline after reviewing your brief before any work starts." },
+  { q: 'Do you offer revisions?', a: 'Yes. Standard packages include 2–3 revision rounds. I aim to nail the brief in the first delivery, but revisions are part of a healthy creative process — your satisfaction is the goal.' },
+  { q: 'What payment methods do you accept?', a: 'I accept payments through Fiverr, Upwork, PayPal, and direct bank transfer. All platforms offer buyer protection. Pricing is project-based and agreed upfront — no hidden fees.' },
+  { q: 'Can I see examples of your previous work?', a: 'Absolutely! The portfolio section above shows selected projects. I can also share additional, niche-specific samples relevant to your industry during our initial conversation. Just ask!' },
+  { q: 'Do you work with international clients?', a: "Yes, 100%. I work with clients from the US, UK, Europe, Middle East, Canada, and Australia. I'm fluent in English and communicate clearly across time zones. Remote-first is my default." },
+  { q: 'What AI tools do you use?', a: 'I work with the best tools in each category: Midjourney, DALL·E, Stable Diffusion for images; Sora, Runway, Kling for video; ElevenLabs, Suno for audio; ChatGPT, Claude for automation; Make.com, Zapier, n8n for workflows.' },
+  { q: 'Will I own the rights to the final work?', a: 'Yes. Upon full payment, all rights to the final delivered files transfer to you. I retain the right to display work in my portfolio unless you require confidentiality, which I fully respect.' },
+];
+
+function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function renderFaq() {
+  const list = document.getElementById('faqList');
+  if (!list) return;
+  list.innerHTML = faqs.map((f, i) => `
+    <div class="faq-item">
+      <div class="faq-q">${escHtml(f.q)} <span class="faq-arrow">▾</span></div>
+      <div class="faq-a">${escHtml(f.a)}${isAdmin ? `<div style="margin-top:10px;"><button onclick="removeFaq(${i})" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;">✕ Remove</button></div>` : ''}</div>
+    </div>
+  `).join('');
+}
+
+async function publishFaq() {
+  if (!isAdmin) return;
+  const q = document.getElementById('faqQInput').value.trim();
+  const a = document.getElementById('faqAInput').value.trim();
+  if (!q || !a) { alert('Please fill in both the question and the answer!'); return; }
+  const btn = document.querySelector('#faqModal .blog-modal-publish');
+  btn.textContent = 'Adding...'; btn.disabled = true;
+  faqs.push({ q, a });
+  await sharedSet('faqs', faqs);
+  document.getElementById('faqQInput').value = '';
+  document.getElementById('faqAInput').value = '';
+  document.getElementById('faqModal').classList.remove('open');
+  btn.textContent = 'Add FAQ →'; btn.disabled = false;
+  renderFaq();
+}
+
+async function removeFaq(i) {
+  if (!isAdmin) return;
+  if (!confirm('Delete this FAQ?')) return;
+  faqs.splice(i, 1);
+  await sharedSet('faqs', faqs);
+  renderFaq();
+}
+
+document.getElementById('openFaqModal').addEventListener('click', () => {
+  if (!isAdmin) { alert('🔐 Admin login required. Click the 🔐 Admin button.'); return; }
+  document.getElementById('faqModal').classList.add('open');
+});
+document.getElementById('closeFaqModal').addEventListener('click', () => document.getElementById('faqModal').classList.remove('open'));
+document.getElementById('faqModal').addEventListener('click', e => { if (e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
+
+// ===== FAQ (delegated so it works with dynamically added items) =====
+document.getElementById('faqList').addEventListener('click', (e) => {
+  const q = e.target.closest('.faq-q');
+  if (!q) return;
+  const item = q.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
 });
 
 // ===== SERVICE / BUDGET DROPDOWN SYNC (feeds hidden fields used by handleSubmit) =====
@@ -4512,7 +4608,7 @@ function checkAdmin() {
         showAdminUI();
         renderYtVideos(); renderBlog(); renderProjects(); renderReviews();
         renderClientPricing(); fivRenderCats(); fivRenderHeadline(); fivRenderTabs(); fivRenderCard();
-        renderCertifications(); renderResumeButtons();
+        renderCertifications(); renderResumeButtons(); renderFaq();
       } else {
         isAdmin = false;
         _masterKey = null;
@@ -4612,6 +4708,7 @@ async function doAdminLogin() {
   fivRenderCard();
   renderCertifications();
   renderResumeButtons();
+  renderFaq();
   btn.textContent = 'Login to Admin Panel →';
   btn.disabled = false;
 
@@ -4641,6 +4738,7 @@ async function adminLogout() {
   fivRenderCard();
   renderCertifications();
   renderResumeButtons();
+  renderFaq();
 }
 
 function showAdminUI() {
@@ -4816,7 +4914,7 @@ function renderBlog() {
     <div class="blog-card reveal visible">
       <div class="blog-thumb">
         <div class="blog-thumb-glow" style="background:rgba(37,99,235,0.35)"></div>
-        ${p.emoji||'📝'}
+        ${p.img ? `<img class="blog-thumb-img" src="${p.img}" alt="${(p.title||'Blog post').replace(/"/g,'&quot;')}" loading="lazy">` : (p.emoji||'📝')}
       </div>
       <div class="blog-body">
         <div class="blog-cat">${p.cat||'Article'}</div>
@@ -4841,6 +4939,24 @@ function renderBlog() {
 function blogLoadMore() { blogShowCount += 6; renderBlog(); }
 function blogShowLess() { blogShowCount = 6; renderBlog(); document.getElementById('blog').scrollIntoView({behavior:'smooth'}); }
 
+let blogImgDataUrl = '';
+document.getElementById('blogImgInput').addEventListener('change', async function() {
+  const file = this.files[0];
+  if (!file) return;
+  try {
+    blogImgDataUrl = await compressImageFile(file, 900, 0.8);
+    document.getElementById('blogImgPreview').src = blogImgDataUrl;
+    document.getElementById('blogImgPreview').style.display = 'block';
+    document.getElementById('blogImgPreviewEmpty').style.display = 'none';
+  } catch (e) { console.warn('Blog image compress failed:', e); }
+});
+function removeBlogImgSelection() {
+  blogImgDataUrl = '';
+  document.getElementById('blogImgInput').value = '';
+  document.getElementById('blogImgPreview').style.display = 'none';
+  document.getElementById('blogImgPreviewEmpty').style.display = 'block';
+}
+
 async function publishBlog() {
   if (!isAdmin) return;
   const title   = document.getElementById('blogTitleInput').value.trim();
@@ -4850,12 +4966,13 @@ async function publishBlog() {
   if (!title || !content) { alert('Please fill title and content!'); return; }
   const btn = document.querySelector('#blogModal .blog-modal-publish');
   btn.textContent = 'Publishing...'; btn.disabled = true;
-  blogPosts.unshift({ title, cat: cat||'Article', emoji: emoji||'📝', content, date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) });
+  blogPosts.unshift({ title, cat: cat||'Article', emoji: emoji||'📝', img: blogImgDataUrl||'', content, date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) });
   await sharedSet('blog_posts', blogPosts);
   document.getElementById('blogTitleInput').value = '';
   document.getElementById('blogCatInput').value = '';
   document.getElementById('blogEmojiInput').value = '📝';
   document.getElementById('blogContentInput').value = '';
+  removeBlogImgSelection();
   document.getElementById('blogModal').classList.remove('open');
   btn.textContent = 'Publish →'; btn.disabled = false;
   renderBlog();
@@ -4874,6 +4991,9 @@ function openBlogRead(i) {
   document.getElementById('blogReadCat').textContent = p.cat||'Article';
   document.getElementById('blogReadTitle').textContent = p.title;
   document.getElementById('blogReadMeta').textContent = p.date;
+  const imgEl = document.getElementById('blogReadImg');
+  if (p.img) { imgEl.src = p.img; imgEl.alt = p.title||''; imgEl.style.display = 'block'; }
+  else { imgEl.style.display = 'none'; imgEl.src = ''; }
   document.getElementById('blogReadContent').textContent = p.content;
   document.getElementById('blogReadModal').classList.add('open');
 }
@@ -4882,6 +5002,7 @@ document.getElementById('blogReadModal').addEventListener('click', e => { if (e.
 
 document.getElementById('openBlogModal').addEventListener('click', () => {
   if (!isAdmin) { alert('🔐 Admin login required. Click the 🔐 Admin button.'); return; }
+  removeBlogImgSelection();
   document.getElementById('blogModal').classList.add('open');
 });
 document.getElementById('closeBlogModal').addEventListener('click', () => document.getElementById('blogModal').classList.remove('open'));
@@ -5932,6 +6053,7 @@ async function initSharedData() {
     if (record.reviews)        reviews         = record.reviews;
     if (record.certifications) certifications  = record.certifications;
     if (record.resume !== undefined) resumeData = record.resume;
+    if (record.faqs)           faqs            = record.faqs;
   }
 
   renderYtChannel();
@@ -5947,6 +6069,7 @@ async function initSharedData() {
   renderProfileImages();
   renderCertifications();
   renderResumeButtons();
+  renderFaq();
 }
 
 // ===== MARQUEE — JS controlled (PC slow, mobile fast) =====
