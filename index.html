@@ -4266,24 +4266,17 @@ async function handleSubmit(btn) {
   successEl.style.display = 'none';
   errorEl.style.display = 'none';
 
-  // Build package/price row(s) only when the client actually provided them.
-  // If nothing was selected from the pricing tiers, this stays empty and the
-  // whole "Package / Price" card disappears from the auto-reply email.
+  // Build the package badge only when the client actually selected one from the
+  // pricing tiers. Budget already carries the exact price in that case (it gets
+  // auto-filled into Budget's Custom field), so we don't repeat "Price" here.
   const hasPkg   = pkg   && pkg   !== 'None' && pkg   !== 'Not specified';
-  const hasPrice = price && price !== 'None' && price !== 'Not specified';
   let package_price_block = '';
-  if (hasPkg || hasPrice) {
-    const pkgRow = hasPkg
-      ? `<tr><td style="font-size:13.5px;line-height:19px;color:#6b7488;padding:4px 0;">Selected Package</td><td style="font-size:13.5px;line-height:19px;color:#0b0f1e;font-weight:bold;padding:4px 0;" align="right">${pkg}</td></tr>`
-      : '';
-    const priceRow = hasPrice
-      ? `<tr><td style="font-size:13.5px;line-height:19px;color:#6b7488;padding:4px 0;${hasPkg ? 'border-top:1px solid #e6eaf3;' : ''}">Price</td><td style="font-size:13.5px;line-height:19px;color:#0b0f1e;font-weight:bold;padding:4px 0;${hasPkg ? 'border-top:1px solid #e6eaf3;' : ''}" align="right">${price}</td></tr>`
-      : '';
+  if (hasPkg) {
     package_price_block =
       '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f7f8fc;border:1px solid #e3e8f0;border-radius:12px;margin-bottom:18px;">' +
         '<tr><td style="padding:16px 20px;">' +
           '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">' +
-            pkgRow + priceRow +
+            `<tr><td style="font-size:13.5px;line-height:19px;color:#6b7488;padding:4px 0;">Selected Package</td><td style="font-size:13.5px;line-height:19px;color:#0b0f1e;font-weight:bold;padding:4px 0;" align="right">${pkg}</td></tr>` +
           '</table>' +
         '</td></tr>' +
       '</table>';
@@ -4548,7 +4541,7 @@ proPhotoInput.addEventListener('change', async function() {
 // ===================================================
 let _masterKey = null; // admin login-এর পর memory-তে থাকবে (password gate হিসেবে ব্যবহৃত)
 
-// সব data এই একটাই path-এ থাকবে (JSONBin _record-এর সমতুল্য)
+// সব data এই একটাই path-এ থাকবে (Firebase Realtime Database)
 const FB_ROOT_PATH = 'site_data';
 
 async function fbWaitReady() {
@@ -4758,7 +4751,7 @@ function hideAdminUI() {
 }
 
 // ===================================================
-// SHARED STORAGE HELPERS (JSONBin cloud — GitHub Pages compatible)
+// SHARED STORAGE HELPERS (Firebase Realtime Database)
 // ===================================================
 async function sharedGet(key) {
   // _record থেকেই দাও (initSharedData তে লোড হয়েছে)
@@ -6029,7 +6022,7 @@ function fivCloseModal() { document.getElementById('fivModal').classList.remove(
 document.getElementById('fivModal').addEventListener('click', e => { if (e.target === e.currentTarget) fivCloseModal(); });
 
 // ===================================================
-// INIT — load from JSONBin cloud, then render
+// INIT — load from Firebase cloud, then render
 // ===================================================
 async function initSharedData() {
   document.getElementById('ytVideosGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);">☁️ Loading from cloud...</div>';
