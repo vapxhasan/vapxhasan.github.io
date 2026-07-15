@@ -4332,25 +4332,33 @@ async function handleSubmit(btn) {
     btn.style.background = 'linear-gradient(135deg, #16a34a, #15803d)';
     successEl.style.display = 'block';
 
-    // Form clear করো
-    document.getElementById('cf_name').value = '';
-    document.getElementById('cf_email').value = '';
-    document.getElementById('cf_service').value = '';
-    document.getElementById('cf_budget').value = '';
-    document.getElementById('cf_message').value = '';
-    document.getElementById('cf_service_select').selectedIndex = 0;
-    document.getElementById('cf_budget_select').selectedIndex = 0;
-    document.getElementById('cf_service_custom').style.display = 'none';
-    document.getElementById('cf_service_custom').value = '';
-    document.getElementById('cf_budget_custom').style.display = 'none';
-    document.getElementById('cf_budget_custom').value = '';
-    if (pkgEl) pkgEl.value = 'None';
-    if (priceEl) priceEl.value = 'None';
-    if (leadSrcEl) leadSrcEl.value = 'Contact Form';
+    // Package box hide it FIRST, on its own — so it always gets hidden even if
+    // something below throws and jumps to the catch block.
     const pkgGroupReset  = document.getElementById('cf_package_group');
     const pkgCustomReset = document.getElementById('cf_package_custom');
     if (pkgGroupReset)  pkgGroupReset.style.display = 'none';
     if (pkgCustomReset) pkgCustomReset.value = '';
+    if (pkgEl) pkgEl.value = 'None';
+    if (priceEl) priceEl.value = 'None';
+    if (leadSrcEl) leadSrcEl.value = 'Contact Form';
+
+    // Form clear করো (each wrapped defensively so one missing element can't
+    // block the rest of the reset)
+    try {
+      document.getElementById('cf_name').value = '';
+      document.getElementById('cf_email').value = '';
+      document.getElementById('cf_service').value = '';
+      document.getElementById('cf_budget').value = '';
+      document.getElementById('cf_message').value = '';
+      document.getElementById('cf_service_select').selectedIndex = 0;
+      document.getElementById('cf_budget_select').selectedIndex = 0;
+      document.getElementById('cf_service_custom').style.display = 'none';
+      document.getElementById('cf_service_custom').value = '';
+      document.getElementById('cf_budget_custom').style.display = 'none';
+      document.getElementById('cf_budget_custom').value = '';
+    } catch (resetErr) {
+      console.warn('Non-critical form reset error:', resetErr);
+    }
 
     setTimeout(() => {
       btn.textContent = original;
