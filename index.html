@@ -4250,9 +4250,9 @@ async function handleSubmit(btn) {
       .catch(err => console.warn('Client confirmation email failed:', err));
 
     // Google Sheets-এ data save করো
-    fetch('https://script.google.com/macros/s/AKfycby9ihFMaDTmSZRQ5WBlctdeL2edz7ou9UbJVVIzg0SPhC3_GJEqJ5RjAHTH5_xIr34/exec', {
+    fetch('https://script.google.com/macros/s/AKfycbzyah_6V91jFMOxSfph4Cm3bCnK2Nv_J5szv0m17Q9e5bZilugVrocbJFQFGHnjpzwH/exec', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(templateParams),
       mode: 'no-cors'
     }).catch(err => console.warn('Sheets save failed:', err));
