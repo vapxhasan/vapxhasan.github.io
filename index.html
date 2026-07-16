@@ -3791,7 +3791,7 @@ body, body *, body *::before, body *::after {
           <span class="cl-arrow">→</span>
         </a>
       </div>
-      <div class="contact-form reveal">
+      <div class="contact-form reveal" id="contactFormBox">
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">YOUR NAME</label>
@@ -5905,12 +5905,11 @@ function fillPricingLead(el, evt) {
     if (typeof cfSyncBudget === 'function') cfSyncBudget();
   }
 
-  // Force-scroll to the contact form every time — native anchor jump is prevented
-  // above, so this is now the only thing moving the page. A short delay lets the
-  // just-revealed package/budget fields finish laying out first (matters most on
-  // mobile, where the browser also needs a beat to settle after the tap), so the
-  // scroll target position is measured correctly.
-  const contactSection = document.getElementById('contact');
+  // Force-scroll straight to the form itself (not just the #contact section) —
+  // on mobile the Email/WhatsApp/Fiverr/etc. contact cards are stacked above the
+  // form, so landing on the section top still left the form out of view and
+  // needed an extra manual scroll. Targeting the form box directly fixes that.
+  const contactSection = document.getElementById('contactFormBox') || document.getElementById('contact');
   if (contactSection) {
     setTimeout(() => {
       const navEl  = document.querySelector('nav');
