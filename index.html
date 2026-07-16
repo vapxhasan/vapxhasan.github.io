@@ -2171,16 +2171,16 @@ footer {
   background: var(--card2);
 }
 .tool-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 26px;
+  font-size: 20px;
   flex-shrink: 0;
   background: rgba(255,255,255,0.96) !important;
-  padding: 9px;
+  padding: 7px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.18);
 }
 .tool-icon img {
@@ -2194,7 +2194,7 @@ footer {
   color: var(--badge-fg);
   font-family: var(--font-display);
   font-weight: 800;
-  font-size: 17px;
+  font-size: 14px;
   letter-spacing: -.5px;
   padding: 0;
 }
@@ -2202,8 +2202,9 @@ footer {
 .tool-icon.tool-icon-ai { --badge-bg: #330000; --badge-fg: #FF9A00; }
 .tool-icon.tool-icon-pr { --badge-bg: #00005B; --badge-fg: #9999FF; }
 .tool-icon.tool-icon-ae { --badge-bg: #00005B; --badge-fg: #9999FF; }
+.tool-icon.tool-icon-au { --badge-bg: #300000; --badge-fg: #FF7C7C; }
 @media (max-width: 600px) {
-  .tool-icon.adobe-badge { font-size: 14px; }
+  .tool-icon.adobe-badge { font-size: 12px; }
 }
 .tool-name {
   font-size: 12px;
@@ -2212,9 +2213,9 @@ footer {
   line-height: 1.3;
 }
 @media (max-width: 600px) {
-  .tools-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 10px; }
-  .tool-card { padding: 16px 10px 12px; }
-  .tool-icon { width: 40px; height: 40px; font-size: 22px; padding: 7px; }
+  .tools-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; }
+  .tool-card { padding: 14px 8px 10px; }
+  .tool-icon { width: 32px; height: 32px; font-size: 17px; padding: 6px; }
   .tool-name { font-size: 11px; }
 }
 
@@ -2509,7 +2510,17 @@ body, body *, body *::before, body *::after {
 .exit-popup-cta svg { width: 20px; height: 20px; }
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>emailjs.init('e0awi-tK6bi_VJHzU');</script>
+  <script>
+    // limitRate blocks the SDK from actually dispatching a second request for
+    // 8 seconds after the first one — a hard, built-in guarantee against
+    // duplicate sends (accidental double-click, double-tap, etc.), regardless
+    // of what caused it. This doesn't affect legitimate normal use since one
+    // person submitting the contact form once is nowhere near 8 seconds apart.
+    emailjs.init({
+      publicKey: 'e0awi-tK6bi_VJHzU',
+      limitRate: { id: 'contact_form', throttle: 8000 },
+    });
+  </script>
 </head>
 <body>
 
@@ -3042,185 +3053,83 @@ body, body *, body *::before, body *::after {
 
     <div class="tools-categories reveal">
 
-      <!-- AI TOOLS -->
       <div>
         <div class="tools-category-title">// AI Tools</div>
         <div class="tools-grid">
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=chatgpt.com&sz=128" alt="ChatGPT logo" loading="lazy"></div>
-            <div class="tool-name">ChatGPT</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=claude.ai&sz=128" alt="Claude AI logo" loading="lazy"></div>
-            <div class="tool-name">Claude AI</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=midjourney.com&sz=128" alt="Midjourney logo" loading="lazy"></div>
-            <div class="tool-name">Midjourney</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=128" alt="DALL·E logo" loading="lazy"></div>
-            <div class="tool-name">DALL·E</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=gemini.google.com&sz=128" alt="Gemini logo" loading="lazy"></div>
-            <div class="tool-name">Gemini</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=grok.com&sz=128" alt="Grok logo" loading="lazy"></div>
-            <div class="tool-name">Grok</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon" style="background:linear-gradient(135deg,#64748b22,#64748b44)"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div>
-            <div class="tool-name">Others AI</div>
-          </div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=chatgpt.com&sz=128" alt="ChatGPT logo" loading="lazy"></div><div class="tool-name">ChatGPT</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=claude.ai&sz=128" alt="Claude AI logo" loading="lazy"></div><div class="tool-name">Claude AI</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=perplexity.ai&sz=128" alt="Perplexity AI logo" loading="lazy"></div><div class="tool-name">Perplexity AI</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=midjourney.com&sz=128" alt="Midjourney logo" loading="lazy"></div><div class="tool-name">Midjourney</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=openai.com&sz=128" alt="DALL·E logo" loading="lazy"></div><div class="tool-name">DALL·E</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=gemini.google.com&sz=128" alt="Gemini logo" loading="lazy"></div><div class="tool-name">Gemini</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=grok.com&sz=128" alt="Grok logo" loading="lazy"></div><div class="tool-name">Grok</div></div>
+          <div class="tool-card"><div class="tool-icon" style="background:linear-gradient(135deg,#64748b22,#64748b44)"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></div><div class="tool-name">Others AI</div></div>
         </div>
       </div>
 
-      <!-- AI IMAGE & VIDEO -->
       <div>
         <div class="tools-category-title">// AI Image & Video</div>
         <div class="tools-grid">
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=chatgpt.com&sz=128" alt="ChatGPT logo" loading="lazy"></div>
-            <div class="tool-name">ChatGPT</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=dreamina.capcut.com&sz=128" alt="Dreamina AI logo" loading="lazy"></div>
-            <div class="tool-name">Dreamina AI</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=runwayml.com&sz=128" alt="Runway ML logo" loading="lazy"></div>
-            <div class="tool-name">Runway ML</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=klingai.com&sz=128" alt="Kling AI logo" loading="lazy"></div>
-            <div class="tool-name">Kling AI</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=heygen.com&sz=128" alt="HeyGen logo" loading="lazy"></div>
-            <div class="tool-name">HeyGen</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=stability.ai&sz=128" alt="Stable Diffusion logo" loading="lazy"></div>
-            <div class="tool-name">Stable Diffusion</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=pika.art&sz=128" alt="Pika Labs logo" loading="lazy"></div>
-            <div class="tool-name">Pika Labs</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=firefly.adobe.com&sz=128" alt="Adobe Firefly logo" loading="lazy"></div>
-            <div class="tool-name">Adobe Firefly</div>
-          </div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=chatgpt.com&sz=128" alt="ChatGPT logo" loading="lazy"></div><div class="tool-name">ChatGPT</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=vids.google.com&sz=128" alt="Google Vids logo" loading="lazy"></div><div class="tool-name">Google Vids</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=pixverse.ai&sz=128" alt="PixVerse AI logo" loading="lazy"></div><div class="tool-name">PixVerse AI</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=openart.ai&sz=128" alt="OpenArt logo" loading="lazy"></div><div class="tool-name">OpenArt</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=dreamina.capcut.com&sz=128" alt="Dreamina AI logo" loading="lazy"></div><div class="tool-name">Dreamina AI</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=runwayml.com&sz=128" alt="Runway ML logo" loading="lazy"></div><div class="tool-name">Runway ML</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=bing.com&sz=128" alt="Bing Image & Video Creator logo" loading="lazy"></div><div class="tool-name">Bing Image & Video Creator</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=klingai.com&sz=128" alt="Kling AI logo" loading="lazy"></div><div class="tool-name">Kling AI</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=heygen.com&sz=128" alt="HeyGen logo" loading="lazy"></div><div class="tool-name">HeyGen</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=stability.ai&sz=128" alt="Stable Diffusion logo" loading="lazy"></div><div class="tool-name">Stable Diffusion</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=pika.art&sz=128" alt="Pika Labs logo" loading="lazy"></div><div class="tool-name">Pika Labs</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=firefly.adobe.com&sz=128" alt="Adobe Firefly logo" loading="lazy"></div><div class="tool-name">Adobe Firefly</div></div>
         </div>
       </div>
 
-      <!-- AI AUDIO -->
       <div>
         <div class="tools-category-title">// AI Audio</div>
         <div class="tools-grid">
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=elevenlabs.io&sz=128" alt="ElevenLabs logo" loading="lazy"></div>
-            <div class="tool-name">ElevenLabs</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=suno.com&sz=128" alt="Suno AI logo" loading="lazy"></div>
-            <div class="tool-name">Suno AI</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=udio.com&sz=128" alt="Udio logo" loading="lazy"></div>
-            <div class="tool-name">Udio</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=murf.ai&sz=128" alt="Murf AI logo" loading="lazy"></div>
-            <div class="tool-name">Murf AI</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=aistudio.google.com&sz=128" alt="Google AI Studio logo" loading="lazy"></div>
-            <div class="tool-name">Google AI Studio</div>
-          </div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=elevenlabs.io&sz=128" alt="ElevenLabs logo" loading="lazy"></div><div class="tool-name">ElevenLabs</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=aistudio.google.com&sz=128" alt="Google AI Studio logo" loading="lazy"></div><div class="tool-name">Google AI Studio</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=suno.com&sz=128" alt="Suno AI logo" loading="lazy"></div><div class="tool-name">Suno AI</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=udio.com&sz=128" alt="Udio logo" loading="lazy"></div><div class="tool-name">Udio</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=murf.ai&sz=128" alt="Murf AI logo" loading="lazy"></div><div class="tool-name">Murf AI</div></div>
         </div>
       </div>
 
-      <!-- DESIGN TOOLS -->
       <div>
         <div class="tools-category-title">// Design</div>
         <div class="tools-grid">
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=canva.com&sz=128" alt="Canva logo" loading="lazy"></div>
-            <div class="tool-name">Canva</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon adobe-badge tool-icon-ps">Ps</div>
-            <div class="tool-name">Photoshop</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon adobe-badge tool-icon-ai">Ai</div>
-            <div class="tool-name">Illustrator</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=figma.com&sz=128" alt="Figma logo" loading="lazy"></div>
-            <div class="tool-name">Figma</div>
-          </div>
+          <div class="tool-card"><div class="tool-icon adobe-badge tool-icon-ps">Ps</div><div class="tool-name">Photoshop</div></div>
+          <div class="tool-card"><div class="tool-icon adobe-badge tool-icon-ai">Ai</div><div class="tool-name">Illustrator</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=figma.com&sz=128" alt="Figma logo" loading="lazy"></div><div class="tool-name">Figma</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=canva.com&sz=128" alt="Canva logo" loading="lazy"></div><div class="tool-name">Canva</div></div>
         </div>
       </div>
 
-      <!-- VIDEO EDITING -->
       <div>
-        <div class="tools-category-title">// Video Editing</div>
+        <div class="tools-category-title">// Video &amp; Audio Editing</div>
         <div class="tools-grid">
-          <div class="tool-card">
-            <div class="tool-icon adobe-badge tool-icon-pr">Pr</div>
-            <div class="tool-name">Premiere Pro</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=capcut.com&sz=128" alt="CapCut logo" loading="lazy"></div>
-            <div class="tool-name">CapCut</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=blackmagicdesign.com&sz=128" alt="DaVinci Resolve logo" loading="lazy"></div>
-            <div class="tool-name">DaVinci Resolve</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon adobe-badge tool-icon-ae">Ae</div>
-            <div class="tool-name">After Effects</div>
-          </div>
+          <div class="tool-card"><div class="tool-icon adobe-badge tool-icon-pr">Pr</div><div class="tool-name">Premiere Pro</div></div>
+          <div class="tool-card"><div class="tool-icon adobe-badge tool-icon-ae">Ae</div><div class="tool-name">After Effects</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=capcut.com&sz=128" alt="CapCut logo" loading="lazy"></div><div class="tool-name">CapCut</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=blackmagicdesign.com&sz=128" alt="DaVinci Resolve logo" loading="lazy"></div><div class="tool-name">DaVinci Resolve</div></div>
+          <div class="tool-card"><div class="tool-icon adobe-badge tool-icon-au">Au</div><div class="tool-name">Adobe Audition</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=audacityteam.org&sz=128" alt="Audacity logo" loading="lazy"></div><div class="tool-name">Audacity</div></div>
         </div>
       </div>
 
-      <!-- AUTOMATION & MARKETING -->
       <div>
-        <div class="tools-category-title">// Automation & Marketing</div>
+        <div class="tools-category-title">// Automation &amp; Marketing</div>
         <div class="tools-grid">
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=n8n.io&sz=128" alt="n8n logo" loading="lazy"></div>
-            <div class="tool-name">n8n</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=make.com&sz=128" alt="Make logo" loading="lazy"></div>
-            <div class="tool-name">Make</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=zapier.com&sz=128" alt="Zapier logo" loading="lazy"></div>
-            <div class="tool-name">Zapier</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=meta.com&sz=128" alt="Meta Ads logo" loading="lazy"></div>
-            <div class="tool-name">Meta Ads</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=ads.google.com&sz=128" alt="Google Ads logo" loading="lazy"></div>
-            <div class="tool-name">Google Ads</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=mailchimp.com&sz=128" alt="Mailchimp logo" loading="lazy"></div>
-            <div class="tool-name">Mailchimp</div>
-          </div>
-          <div class="tool-card">
-            <div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=whatsapp.com&sz=128" alt="WhatsApp Business logo" loading="lazy"></div>
-            <div class="tool-name">WhatsApp Business</div>
-          </div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=n8n.io&sz=128" alt="n8n logo" loading="lazy"></div><div class="tool-name">n8n</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=make.com&sz=128" alt="Make logo" loading="lazy"></div><div class="tool-name">Make</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=zapier.com&sz=128" alt="Zapier logo" loading="lazy"></div><div class="tool-name">Zapier</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=meta.com&sz=128" alt="Meta Ads logo" loading="lazy"></div><div class="tool-name">Meta Ads</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=ads.google.com&sz=128" alt="Google Ads logo" loading="lazy"></div><div class="tool-name">Google Ads</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=analytics.google.com&sz=128" alt="Google Analytics logo" loading="lazy"></div><div class="tool-name">Google Analytics</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=mailchimp.com&sz=128" alt="Mailchimp logo" loading="lazy"></div><div class="tool-name">Mailchimp</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=buffer.com&sz=128" alt="Buffer logo" loading="lazy"></div><div class="tool-name">Buffer</div></div>
+          <div class="tool-card"><div class="tool-icon"><img src="https://www.google.com/s2/favicons?domain=whatsapp.com&sz=128" alt="WhatsApp Business logo" loading="lazy"></div><div class="tool-name">WhatsApp Business</div></div>
         </div>
       </div>
 
