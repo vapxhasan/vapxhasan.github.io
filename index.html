@@ -4316,7 +4316,7 @@ async function handleSubmit(btn) {
 
     // ২) client-কে confirmation/auto-reply email যাবে — EmailJS-এ এই নামে
     // একটা নতুন template বানিয়ে নিচের ID-টা বসিয়ে দিন (client-confirmation-email-template.html দেখুন)
-    emailjs.send('service_tfcdfkh', 'template_client_reply', templateParams)
+    emailjs.send('service_tfcdfkh', 'template_6r0z0rk', templateParams)
       .catch(err => console.warn('Client confirmation email failed:', err));
 
     // Google Sheets-এ data save করো
@@ -5897,6 +5897,17 @@ function fillPricingLead(el) {
     budgetCustom.value = price;
     budgetCustom.style.display = 'block';
     if (typeof cfSyncBudget === 'function') cfSyncBudget();
+  }
+
+  // Force-scroll to the contact form every time. Relying on the <a href="#contact">
+  // link alone fails when the URL hash is already "#contact" (e.g. user clicked
+  // Nav > Contact earlier) — the hash doesn't change, so the browser skips the
+  // native scroll. Calling scrollIntoView explicitly here fixes that.
+  const contactSection = document.getElementById('contact');
+  if (contactSection) {
+    setTimeout(() => {
+      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 0);
   }
 }
 
