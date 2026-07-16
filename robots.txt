@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://vapxhasan.github.io/sitemap.xml
