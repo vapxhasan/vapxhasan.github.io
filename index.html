@@ -4225,6 +4225,23 @@ async function handleSubmit(btn) {
       '</table>';
   }
 
+  // ===== EMAIL OPEN / CLICK TRACKING =====
+  // Unique ID for this submission — same ID saved to the Sheet row AND
+  // embedded in the tracking links sent inside the client's auto-reply email.
+  // This is how a later pixel-load or button-click gets matched back to the
+  // correct row in Google Sheets.
+  const lead_id = 'L' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  const TRACK_BASE = 'https://script.google.com/macros/s/AKfycby9ihFMaDTmSZRQ5WBlctdeL2edz7ou9UbJVVIzg0SPhC3_GJEqJ5RjAHTH5_xIr34/exec';
+
+  // "Clicked (confirmed)" links — go through Apps Script first (which logs the
+  // click), then redirect the client on to WhatsApp / Calendly.
+  const whatsapp_track_link = `${TRACK_BASE}?id=${lead_id}&action=click&dest=whatsapp`;
+  const calendly_track_link = `${TRACK_BASE}?id=${lead_id}&action=click&dest=calendly`;
+
+  // "Opened (estimate)" — 1x1 invisible pixel, loaded only if the client's
+  // email app renders images.
+  const open_pixel_url = `${TRACK_BASE}?id=${lead_id}&action=open`;
+
   const templateParams = {
     from_name:            name,
     from_email:           email,
@@ -4238,6 +4255,10 @@ async function handleSubmit(btn) {
     package_price_block:  package_price_block,
     client_package_line:  client_package_line,
     status:                'New',
+    lead_id:               lead_id,
+    whatsapp_track_link:  whatsapp_track_link,
+    calendly_track_link:  calendly_track_link,
+    open_pixel_url:       open_pixel_url,
   };
 
   try {
