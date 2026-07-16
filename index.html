@@ -5844,14 +5844,20 @@ function fivRenderCard() {
       ${p.services.map(s => `<div class="fiv-svc${s.on ? '' : ' off'}">${s.on ? checkSvg : crossSvg} ${s.label}</div>`).join('')}
     </div>
     <div class="fiv-cta-wrap">
-      <a href="#contact" class="fiv-cta" data-fiv-service="${escAttr(fivCategories[fivCatActive].name)}" data-fiv-package="${escAttr(p.tab)}" data-fiv-price="${escAttr(p.currency + p.price)}" onclick="fillPricingLead(this)">${p.cta} →</a>
+      <a href="#contact" class="fiv-cta" data-fiv-service="${escAttr(fivCategories[fivCatActive].name)}" data-fiv-package="${escAttr(p.tab)}" data-fiv-price="${escAttr(p.currency + p.price)}" onclick="fillPricingLead(this, event)">${p.cta} →</a>
       <button class="fiv-edit-btn admin-only" style="display:${isAdmin ? 'flex' : 'none'};" onclick="fivOpenModal(${fivActive})">✏ Edit Package</button>
     </div>`;
 }
 function escAttr(s) { return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/"/g,'&quot;'); }
 
 // Auto-fill the existing contact form when a pricing plan CTA is clicked (Fiverr-style lead)
-function fillPricingLead(el) {
+function fillPricingLead(el, evt) {
+  // Stop the native "#contact" anchor jump entirely — on mobile it races with our
+  // own scroll below (native jump is instant, ours is smooth) and the two fight
+  // each other, so the page often ends up not moving at all. We do the scroll
+  // ourselves further down instead.
+  if (evt && evt.preventDefault) evt.preventDefault();
+
   const service = el.dataset.fivService || '';
   const pkg     = el.dataset.fivPackage || '';
   const price   = el.dataset.fivPrice   || '';
@@ -5899,15 +5905,19 @@ function fillPricingLead(el) {
     if (typeof cfSyncBudget === 'function') cfSyncBudget();
   }
 
-  // Force-scroll to the contact form every time. Relying on the <a href="#contact">
-  // link alone fails when the URL hash is already "#contact" (e.g. user clicked
-  // Nav > Contact earlier) — the hash doesn't change, so the browser skips the
-  // native scroll. Calling scrollIntoView explicitly here fixes that.
+  // Force-scroll to the contact form every time — native anchor jump is prevented
+  // above, so this is now the only thing moving the page. A short delay lets the
+  // just-revealed package/budget fields finish laying out first (matters most on
+  // mobile, where the browser also needs a beat to settle after the tap), so the
+  // scroll target position is measured correctly.
   const contactSection = document.getElementById('contact');
   if (contactSection) {
     setTimeout(() => {
-      contactSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 0);
+      const navEl  = document.querySelector('nav');
+      const offset = (navEl ? navEl.offsetHeight : 80) + 16; // fixed navbar height + a little breathing room
+      const targetY = contactSection.getBoundingClientRect().top + window.pageYOffset - offset;
+      window.scrollTo({ top: Math.max(targetY, 0), behavior: 'smooth' });
+    }, 80);
   }
 }
 
