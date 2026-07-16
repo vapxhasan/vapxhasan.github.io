@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" href="/download/a2395b2d2-7837e2a4b/sitemap.xsl"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-       <loc>https://vapxhasan.github.io/</loc>
-       <lastmod>2026-07-16T05:31:51+00:00</lastmod>
-       <changefreq>daily</changefreq>
-       <priority>1.0000</priority>
+    <loc>https://vapxhasan.github.io/</loc>
+    <lastmod>2026-07-16</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
   </url>
 </urlset>
