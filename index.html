@@ -105,7 +105,12 @@
   --font-body: 'Inter', sans-serif;
   --font-mono: 'Inter', sans-serif;
 }
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
 body {
   background: var(--bg);
   color: var(--white);
@@ -570,9 +575,9 @@ nav .container { max-width: 1300px; }
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 14px;
-  background: transparent;
+  background: rgba(255,255,255,0.045);
   color: var(--white);
-  border: 1px solid var(--border);
+  border: 1.5px solid rgba(255,255,255,0.28);
   cursor: pointer;
   transition: all .25s;
   text-decoration: none;
@@ -587,9 +592,9 @@ nav .container { max-width: 1300px; }
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 14px;
-  background: rgba(255,255,255,0.04);
-  color: var(--muted);
-  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(255,255,255,0.06);
+  color: var(--white);
+  border: 1.5px solid rgba(255,255,255,0.2);
   cursor: pointer;
   transition: all .25s;
   text-decoration: none;
@@ -2132,6 +2137,15 @@ footer {
   .form-row { grid-template-columns: 1fr; }
   .footer-inner { flex-direction: column; }
   .footer-bottom { flex-direction: column; text-align: center; }
+  .btn-primary, .btn-outline, .btn-ghost {
+    padding: 12px 22px;
+    font-size: 13px;
+    width: 100%;
+    justify-content: center;
+  }
+  .hero-btns, .about-text > div[style*="display:flex"] {
+    flex-direction: column;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
