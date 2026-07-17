@@ -104,6 +104,10 @@
   --font-display: 'Inter', sans-serif;
   --font-body: 'Inter', sans-serif;
   --font-mono: 'Inter', sans-serif;
+  --btn-outline-border: rgba(255,255,255,0.28);
+  --btn-outline-fill: rgba(255,255,255,0.045);
+  --btn-ghost-border: rgba(255,255,255,0.2);
+  --btn-ghost-fill: rgba(255,255,255,0.06);
 }
 html {
   scroll-behavior: smooth;
@@ -575,9 +579,9 @@ nav .container { max-width: 1300px; }
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 14px;
-  background: rgba(255,255,255,0.045);
+  background: var(--btn-outline-fill);
   color: var(--white);
-  border: 1.5px solid rgba(255,255,255,0.28);
+  border: 1.5px solid var(--btn-outline-border);
   cursor: pointer;
   transition: all .25s;
   text-decoration: none;
@@ -592,9 +596,9 @@ nav .container { max-width: 1300px; }
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 14px;
-  background: rgba(255,255,255,0.06);
+  background: var(--btn-ghost-fill);
   color: var(--white);
-  border: 1.5px solid rgba(255,255,255,0.2);
+  border: 1.5px solid var(--btn-ghost-border);
   cursor: pointer;
   transition: all .25s;
   text-decoration: none;
@@ -2246,6 +2250,10 @@ body.light-mode {
   --muted: #64748B;
   --glow-i: 0 0 20px rgba(37,99,235,0.15);
   --glow-c: 0 0 20px rgba(59,130,246,0.14);
+  --btn-outline-border: rgba(15,23,42,0.24);
+  --btn-outline-fill: rgba(15,23,42,0.035);
+  --btn-ghost-border: rgba(15,23,42,0.16);
+  --btn-ghost-fill: rgba(15,23,42,0.04);
 }
 body.light-mode::before { background-image: radial-gradient(rgba(37,99,235,0.07) 1px, transparent 1px); }
 body.light-mode nav.scrolled { background: rgba(255,255,255,0.92); box-shadow: 0 1px 0 rgba(15,23,42,0.06); }
