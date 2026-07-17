@@ -474,7 +474,7 @@ nav .container { max-width: 1300px; }
 .orb1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(37,99,235,0.12) 0%, transparent 70%); top: -100px; right: -150px; }
 .orb2 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%); bottom: 50px; left: -100px; }
 .orb3 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(59,130,246,0.06) 0%, transparent 70%); top: 50%; left: 40%; }
-.hero-content { position: relative; z-index: 1; max-width: 760px; }
+.hero-content { position: relative; z-index: 1; max-width: 760px; margin: 0 auto; }
 .hero-badge {
   display: inline-flex;
   align-items: center;
@@ -499,15 +499,18 @@ nav .container { max-width: 1300px; }
 @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.3; } }
 .hero-h1 {
   font-family: var(--font-display);
-  font-size: clamp(36px, 6.5vw, 80px);
+  font-size: clamp(30px, 4.6vw, 52px);
   font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -1.5px;
+  line-height: 1.15;
+  letter-spacing: -1px;
   margin-bottom: 20px;
 }
 .hero-h1 .line1 { display: block; color: var(--white); }
 .hero-h1 .line2 {
   display: block;
+  font-size: clamp(24px, 3.6vw, 40px);
+  font-weight: 700;
+  margin-top: 8px;
   background: linear-gradient(95deg, var(--indigo) 0%, var(--cyan) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -2656,7 +2659,7 @@ body, body *, body *::before, body *::after {
       <div class="hamburger" id="hamburger" aria-label="Open menu">
         <span></span><span></span><span></span>
       </div>
-      <a href="#hero" class="nav-logo">Hasanur Rahman<span>Portfolio</span></a>
+      <a href="#hero" class="nav-logo">Hasanur Rahman</a>
       <ul class="nav-links">
         <li><a href="#about">About</a></li>
         <li><a href="#services">Services</a></li>
