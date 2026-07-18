@@ -2317,14 +2317,36 @@ footer {
   .hero-stat-divider { display: none; }
   .process-step { flex: 0 0 100%; }
   .form-row { grid-template-columns: 1fr; }
-  .footer-inner { flex-direction: column; align-items: stretch; }
-  .footer-links-group { width: 100%; padding-bottom: 6px; }
+  .footer-inner { flex-direction: column; align-items: stretch; gap: 0; }
+  .footer-brand {
+    max-width: 100%;
+    text-align: center;
+    padding-bottom: 26px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+  .footer-meta-item { justify-content: center; }
+  .footer-socials { justify-content: center; }
+  .footer-links-group {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 13px 10px;
+    text-align: center;
+    padding: 22px 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .footer-inner > .footer-links-group:last-of-type { border-bottom: none; padding-bottom: 4px; }
+  .footer-links-title { grid-column: 1 / -1; text-align: center; margin-bottom: 2px; }
+  .footer-links-group a { padding: 2px 0; }
   .footer-legal-row { display: none; }
-  .footer-bottom { flex-direction: column; text-align: center; }
+  .footer-bottom { flex-direction: column; text-align: center; gap: 16px; }
+  footer { padding-bottom: 132px; } /* keeps the floating WhatsApp / back-to-top buttons from sitting on top of the copyright line */
   .footer-legal-mobile {
     display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
     gap: 8px; font-size: 12.5px; color: var(--muted); font-family: var(--font-mono);
-    padding-bottom: 4px;
+    padding-bottom: 8px;
+    width: 100%;
   }
   .footer-legal-mobile a { color: var(--muted); padding: 6px 2px; transition: color .2s; display: inline-flex; align-items: center; gap: 6px; }
   .footer-legal-mobile a svg { flex-shrink: 0; color: var(--indigo); transition: color .2s; }
@@ -5060,6 +5082,7 @@ async function sharedGet(key) {
 async function sharedSet(key, val) {
   _record[key] = val;
   await cloudSet(_record);
+  setCachedRecord(_record);
 }
 
 // ===================================================
@@ -5309,7 +5332,7 @@ let _currentReviewMedia = null;
 
 // Skill/category management for reviews — mirrors the Fiverr-pricing category
 // system (icon + name, admin add/edit/delete) instead of a plain free-text tag.
-let reviewCategories = [
+const DEFAULT_REVIEW_CATEGORIES = [
   { name: 'Professional Video Editing' },
   { name: 'AI Video Generation' },
   { name: 'AI Audio Generation' },
@@ -5319,7 +5342,16 @@ let reviewCategories = [
   { name: 'Graphic Design' },
   { name: 'Digital Marketing' }
 ];
+let reviewCategories = DEFAULT_REVIEW_CATEGORIES.map(c => ({ ...c }));
 let reviewCatEditIdx = -1; // -1 = adding a new category, >=0 = editing existing index
+
+async function resetReviewCategories() {
+  if (!isAdmin) return;
+  if (!confirm('Reset skill categories to the default list? This replaces your current category list (existing reviews keep their tags, but chips not in the default list will disappear from the filter bar).')) return;
+  reviewCategories = DEFAULT_REVIEW_CATEGORIES.map(c => ({ ...c }));
+  await sharedSet('review_categories', reviewCategories);
+  renderReviews();
+}
 
 function populateReviewCategorySelect(selected) {
   const sel = document.getElementById('rCategoryInput');
@@ -5415,7 +5447,8 @@ function renderReviewFilters() {
         ${isAdmin ? `<button type="button" class="fiv-cat-edit-btn" onclick="openReviewCatModal(${i})" title="Edit category" aria-label="Edit category">${editPencilSvg}</button>` : ''}
       </div>`
     ).join('') +
-    (isAdmin ? `<button type="button" class="fiv-add-cat-btn" onclick="openReviewCatModal(-1)">＋ Add Category</button>` : '');
+    (isAdmin ? `<button type="button" class="fiv-add-cat-btn" onclick="openReviewCatModal(-1)">＋ Add Category</button>
+     <button type="button" class="fiv-add-cat-btn" onclick="resetReviewCategories()" title="Reset categories to the default list" style="border-color:rgba(148,163,184,0.35);color:var(--muted);">⟲ Reset to Default</button>` : '');
   wrap.querySelectorAll('.fiv-cat-btn').forEach(btn => {
     btn.addEventListener('click', () => { reviewFilterCategory = btn.dataset.cat; renderReviews(); });
   });
@@ -6585,6 +6618,33 @@ function fivCloseModal() { document.getElementById('fivModal').classList.remove(
 document.getElementById('fivModal').addEventListener('click', e => { if (e.target === e.currentTarget) fivCloseModal(); });
 
 // ===================================================
+// ===================================================
+// LOCAL CACHE — instant repeat-visit rendering
+// The Firebase record can carry heavy base64 photos/videos, so on a slow
+// mobile connection the very first paint used to wait on that whole
+// download. We now keep a lightweight local copy: a returning visitor sees
+// last-known content immediately while the fresh copy loads quietly behind
+// it and swaps in only if something actually changed.
+// ===================================================
+const CLOUD_CACHE_KEY = 'site_data_cache_v1';
+
+function getCachedRecord() {
+  try {
+    const raw = localStorage.getItem(CLOUD_CACHE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) { return null; }
+}
+
+function setCachedRecord(record) {
+  try {
+    const str = JSON.stringify(record);
+    // Large video uploads can blow past localStorage's ~5MB quota — skip
+    // caching those rather than throwing on every save. The page still
+    // works fine, it just won't get the instant-paint fast path that time.
+    if (str.length < 4 * 1024 * 1024) localStorage.setItem(CLOUD_CACHE_KEY, str);
+  } catch (e) { /* storage full/unavailable — cache is a bonus, not required */ }
+}
+
 // INIT — load from Firebase cloud, then render
 // ===================================================
 async function initSharedData() {
@@ -6608,8 +6668,8 @@ async function initSharedData() {
   // Admin session check
   checkAdmin();
 
-  const record = await cloudGet();
-  if (record) {
+  function applyRecord(record) {
+    if (!record) return;
     _record = record;
     if (record.yt_videos)      ytVideos       = record.yt_videos;
     if (record.yt_channel)     ytChannel      = record.yt_channel;
@@ -6638,20 +6698,34 @@ async function initSharedData() {
     if (record.faqs)           faqs            = record.faqs;
   }
 
-  renderYtChannel();
-  renderYtVideos();
-  renderBlog();
-  renderProjects();
-  renderReviews();
-  renderClientPricing();
-  fivRenderCats();
-  fivRenderHeadline();
-  fivRenderTabs();
-  fivRenderCard();
-  renderProfileImages();
-  renderCertifications();
-  renderResumeButtons();
-  renderFaq();
+  function renderAll() {
+    renderYtChannel();
+    renderYtVideos();
+    renderBlog();
+    renderProjects();
+    renderReviews();
+    renderClientPricing();
+    fivRenderCats();
+    fivRenderHeadline();
+    fivRenderTabs();
+    fivRenderCard();
+    renderProfileImages();
+    renderCertifications();
+    renderResumeButtons();
+    renderFaq();
+  }
+
+  // Fast path: paint instantly from whatever was cached on the last visit,
+  // instead of sitting on "Loading from cloud..." until the network answers.
+  const cached = getCachedRecord();
+  if (cached) { applyRecord(cached); renderAll(); }
+
+  const record = await cloudGet();
+  if (record) {
+    applyRecord(record);
+    setCachedRecord(record);
+  }
+  renderAll();
 }
 
 // ===== MARQUEE — JS controlled (PC slow, mobile fast) =====
