@@ -1278,7 +1278,7 @@ nav .container { max-width: 1300px; }
 
 /* ===== TEXT REVIEW AUTO-SLIDING CAROUSEL ===== */
 .review-carousel-wrap { overflow: hidden; margin-top: 36px; border-radius: 16px; }
-.review-carousel-track { display: flex; transition: transform .6s ease-in-out; }
+.review-carousel-track { display: flex; transition: transform .4s ease-in-out; }
 .review-slide { flex: 0 0 100%; }
 .review-slide-inner {
   background: var(--card); border: 1px solid var(--border); border-radius: 16px;
@@ -5310,10 +5310,13 @@ let _currentReviewMedia = null;
 // Skill/category management for reviews — mirrors the Fiverr-pricing category
 // system (icon + name, admin add/edit/delete) instead of a plain free-text tag.
 let reviewCategories = [
-  { name: 'Video Editing' },
-  { name: 'Graphic Design' },
+  { name: 'Professional Video Editing' },
+  { name: 'AI Video Generation' },
+  { name: 'AI Audio Generation' },
+  { name: 'AI Image Generation' },
   { name: 'AI Automation' },
   { name: 'Prompt Engineering' },
+  { name: 'Graphic Design' },
   { name: 'Digital Marketing' }
 ];
 let reviewCatEditIdx = -1; // -1 = adding a new category, >=0 = editing existing index
@@ -5457,7 +5460,7 @@ function renderReviewCarousel(indexed) {
     reviewCarouselTimer = setInterval(() => {
       reviewCarouselIndex = (reviewCarouselIndex + 1) % textOnes.length;
       track.style.transform = `translateX(-${reviewCarouselIndex * 100}%)`;
-    }, 5000);
+    }, 3000);
   }
 }
 
