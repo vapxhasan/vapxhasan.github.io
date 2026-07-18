@@ -1261,6 +1261,8 @@ nav .container { max-width: 1300px; }
 .testi-add-btn:hover { transform: translateY(-2px); }
 .testi-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 8px; line-height: 1.4; }
 .testi-thumb { width: 100%; height: 150px; object-fit: cover; border-radius: 10px; margin-bottom: 16px; border: 1px solid var(--border); }
+.testi-video-wrap { position: relative; width: 100%; padding-top: 56.25%; border-radius: 10px; overflow: hidden; margin-bottom: 16px; border: 1px solid var(--border); background: #000; }
+.testi-video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: none; }
 .testi-admin-row { display: flex; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
 .testi-empty {
   text-align: center;
@@ -1750,8 +1752,28 @@ footer {
   border-top: 1px solid var(--border);
   padding: 50px 0 30px;
 }
-.footer-inner { display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: 32px; margin-bottom: 40px; }
-.footer-brand { max-width: 260px; }
+.footer-cta-strip {
+  background: linear-gradient(135deg, rgba(37,99,235,0.10), rgba(123,97,255,0.07));
+  border-bottom: 1px solid var(--border);
+  padding: 64px 0;
+  text-align: center;
+}
+.footer-cta-title {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3.2vw, 36px);
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 12px;
+  letter-spacing: -0.5px;
+}
+.footer-cta-sub {
+  font-size: 16px;
+  color: var(--muted);
+  margin-bottom: 30px;
+}
+.footer-cta-btns { display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+.footer-inner { display: flex; justify-content: space-between; align-items: stretch; flex-wrap: wrap; gap: 32px; margin-bottom: 40px; }
+.footer-brand { max-width: 300px; }
 .footer-logo {
   font-family: var(--font-display);
   font-size: 24px;
@@ -1762,11 +1784,62 @@ footer {
   background-clip: text;
   margin-bottom: 10px;
 }
-.footer-tagline { font-size: 13px; color: var(--muted); line-height: 1.6; }
-.footer-links-group { display: flex; flex-direction: column; gap: 10px; }
+.footer-brand-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--white);
+  line-height: 1.2;
+}
+.footer-brand-handle {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--cyan);
+  margin-top: 3px;
+  margin-bottom: 12px;
+}
+.footer-brand-role {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.4;
+}
+.footer-brand-tagline {
+  font-size: 14px;
+  font-weight: 600;
+  background: linear-gradient(90deg, var(--indigo), var(--violet));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 14px;
+}
+.footer-tagline { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; }
+.footer-meta { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+.footer-meta-item { font-size: 12.5px; color: var(--muted); line-height: 1.6; display: flex; align-items: flex-start; gap: 6px; }
+.footer-meta-item svg { flex-shrink: 0; margin-top: 2px; color: var(--indigo); }
+.footer-meta-item a { color: var(--muted); transition: color .2s; }
+.footer-meta-item a:hover { color: var(--cyan); }
+.footer-links-group { display: flex; flex-direction: column; gap: 10px; flex: 1 1 140px; min-width: 140px; }
 .footer-links-title { font-size: 12px; font-family: var(--font-mono); color: var(--indigo); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
 .footer-links-group a { font-size: 13px; color: var(--muted); transition: color .2s; }
 .footer-links-group a:hover { color: var(--white); }
+.footer-legal-row { margin-top: auto; padding-top: 16px; border-top: 1px solid var(--border); }
+.footer-legal-row a {
+  font-size: 11.5px !important;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  letter-spacing: .3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 0;
+  transition: color .2s, gap .2s;
+}
+.footer-legal-row a svg { flex-shrink: 0; color: var(--indigo); transition: color .2s; }
+.footer-legal-row a:hover { color: var(--cyan) !important; gap: 10px; }
+.footer-legal-row a:hover svg { color: var(--cyan); }
+.footer-legal-mobile { display: none; }
+
 .footer-socials { display: flex; gap: 10px; margin-top: 8px; }
 .social-btn {
   width: 38px; height: 38px;
@@ -2217,8 +2290,20 @@ footer {
   .hero-stat-divider { display: none; }
   .process-step { flex: 0 0 100%; }
   .form-row { grid-template-columns: 1fr; }
-  .footer-inner { flex-direction: column; }
+  .footer-inner { flex-direction: column; align-items: stretch; }
+  .footer-links-group { width: 100%; padding-bottom: 6px; }
+  .footer-legal-row { display: none; }
   .footer-bottom { flex-direction: column; text-align: center; }
+  .footer-legal-mobile {
+    display: flex; align-items: center; justify-content: center; flex-wrap: wrap;
+    gap: 8px; font-size: 12.5px; color: var(--muted); font-family: var(--font-mono);
+    padding-bottom: 4px;
+  }
+  .footer-legal-mobile a { color: var(--muted); padding: 6px 2px; transition: color .2s; display: inline-flex; align-items: center; gap: 6px; }
+  .footer-legal-mobile a svg { flex-shrink: 0; color: var(--indigo); transition: color .2s; }
+  .footer-legal-mobile a:hover { color: var(--cyan); }
+  .footer-legal-mobile a:hover svg { color: var(--cyan); }
+  .footer-legal-dot { color: var(--border2); font-size: 10px; }
   .btn-primary, .btn-outline, .btn-ghost {
     padding: 12px 22px;
     font-size: 13px;
@@ -3537,18 +3622,24 @@ body, body *, body *::before, body *::after {
         </div>
       </div>
 
-      <!-- SCREENSHOT UPLOAD -->
       <div>
-        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">REVIEW SCREENSHOT (optional)</label>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">VIDEO URL (optional — YouTube, Vimeo, or direct .mp4 link)</label>
+        <input id="rVideoUrlInput" type="text" placeholder="https://youtube.com/watch?v=..." style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
+
+      <!-- SCREENSHOT / VIDEO UPLOAD -->
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">UPLOAD IMAGE OR VIDEO (optional — used if no Video URL above)</label>
         <label id="rMediaUploadLabel" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:18px;border:2px dashed rgba(37,99,235,0.35);border-radius:10px;cursor:pointer;transition:all .2s;background:rgba(37,99,235,0.04);" onmouseover="this.style.borderColor='var(--indigo)'" onmouseout="this.style.borderColor='rgba(37,99,235,0.35)'">
           <span style="font-size:26px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="26px" height="26px" style="vertical-align:-0.125em;"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg></span>
-          <span style="font-size:12px;font-family:var(--font-mono);color:var(--muted);">Click to upload a screenshot image</span>
+          <span style="font-size:12px;font-family:var(--font-mono);color:var(--muted);">Click to upload a screenshot image or a short video</span>
           <span id="rMediaFileName" style="font-size:11px;color:var(--cyan);font-family:var(--font-mono);display:none;word-break:break-all;text-align:center;"></span>
-          <input id="rMediaInput" type="file" accept="image/*" style="display:none;" onchange="handleReviewMediaSelect(this)">
+          <input id="rMediaInput" type="file" accept="image/*,video/*" style="display:none;" onchange="handleReviewMediaSelect(this)">
         </label>
         <!-- Preview -->
         <div id="rMediaPreview" style="display:none;margin-top:10px;border-radius:10px;overflow:hidden;max-height:160px;position:relative;">
           <img id="rMediaPreviewImg" style="width:100%;height:160px;object-fit:cover;display:block;" alt="preview">
+          <video id="rMediaPreviewVideo" style="width:100%;height:160px;object-fit:cover;display:none;" controls></video>
           <button onclick="clearReviewMedia()" style="position:absolute;top:6px;right:6px;background:rgba(255,50,50,0.75);color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
       </div>
@@ -4067,11 +4158,38 @@ body, body *, body *::before, body *::after {
 
 <!-- FOOTER -->
 <footer>
+  <div class="footer-cta-strip">
+    <div class="container">
+      <div class="footer-cta-title">Ready to bring your ideas to life?</div>
+      <div class="footer-cta-sub">Let's create engaging videos that grow your brand.</div>
+      <div class="footer-cta-btns">
+        <a href="#contact" class="btn-primary"><span>Hire Me</span></a>
+        <a href="#portfolio" class="btn-outline">View My Portfolio</a>
+      </div>
+    </div>
+  </div>
   <div class="container">
     <div class="footer-inner">
       <div class="footer-brand">
-        <div class="footer-logo">vapxhasan</div>
-        <div class="footer-tagline">AI Automation · Creative Design · Video Production. Built for brands that want to grow smarter and faster.</div>
+        <div class="footer-brand-name">Hasanur Rahman</div>
+        <div class="footer-brand-handle">@vapxhasan</div>
+        <div class="footer-brand-role">Professional Video Editor</div>
+        <div class="footer-brand-tagline">AI Creative Solutions</div>
+        <div class="footer-tagline">Helping brands and creators stand out through cinematic video editing and AI-powered creative solutions.</div>
+        <div class="footer-meta">
+          <div class="footer-meta-item">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>Based in Dhaka, Bangladesh</span>
+          </div>
+          <div class="footer-meta-item">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22 6 12 13 2 6"></polyline></svg>
+            <span>Email: <a href="mailto:vapxhasan@proton.me">vapxhasan@proton.me</a></span>
+          </div>
+          <div class="footer-meta-item">
+            <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span>Available Worldwide</span>
+          </div>
+        </div>
         <div class="footer-socials" style="margin-top:18px">
           <a href="https://facebook.com/vapxhasan" target="_blank" class="social-btn" title="Facebook"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMxODc3RjIiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5GYWNlYm9vazwvdGl0bGU+PHBhdGggZD0iTTkuMTAxIDIzLjY5MXYtNy45OEg2LjYyN3YtMy42NjdoMi40NzR2LTEuNThjMC00LjA4NSAxLjg0OC01Ljk3OCA1Ljg1OC01Ljk3OC40MDEgMCAuOTU1LjA0MiAxLjQ2OC4xMDNhOC42OCA4LjY4IDAgMCAxIDEuMTQxLjE5NXYzLjMyNWE4LjYyMyA4LjYyMyAwIDAgMC0uNjUzLS4wMzYgMjYuODA1IDI2LjgwNSAwIDAgMC0uNzMzLS4wMDljLS43MDcgMC0xLjI1OS4wOTYtMS42NzUuMzA5YTEuNjg2IDEuNjg2IDAgMCAwLS42NzkuNjIyYy0uMjU4LjQyLS4zNzQuOTk1LS4zNzQgMS43NTJ2MS4yOTdoMy45MTlsLS4zODYgMi4xMDMtLjI4NyAxLjU2NGgtMy4yNDZ2OC4yNDVDMTkuMzk2IDIzLjIzOCAyNCAxOC4xNzkgMjQgMTIuMDQ0YzAtNi42MjctNS4zNzMtMTItMTItMTJzLTEyIDUuMzczLTEyIDEyYzAgNS42MjggMy44NzQgMTAuMzUgOS4xMDEgMTEuNjQ3WiIvPjwvc3ZnPg==" alt="Facebook" loading="lazy"></a>
           <a href="https://instagram.com/vapxhasan" target="_blank" class="social-btn" title="Instagram"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiNFNDQwNUYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5JbnN0YWdyYW08L3RpdGxlPjxwYXRoIGQ9Ik03LjAzMDEuMDg0Yy0xLjI3NjguMDYwMi0yLjE0ODcuMjY0LTIuOTExLjU2MzQtLjc4ODguMzA3NS0xLjQ1NzUuNzItMi4xMjI4IDEuMzg3Ny0uNjY1Mi42Njc3LTEuMDc1IDEuMzM2OC0xLjM4MDIgMi4xMjctLjI5NTQuNzYzOC0uNDk1NiAxLjYzNjUtLjU1MiAyLjkxNC0uMDU2NCAxLjI3NzUtLjA2ODkgMS42ODgyLS4wNjI2IDQuOTQ3LjAwNjIgMy4yNTg2LjAyMDYgMy42NjcxLjA4MjUgNC45NDczLjA2MSAxLjI3NjUuMjY0IDIuMTQ4Mi41NjM1IDIuOTEwNy4zMDguNzg4OS43MiAxLjQ1NzMgMS4zODggMi4xMjI4LjY2NzkuNjY1NSAxLjMzNjUgMS4wNzQzIDIuMTI4NSAxLjM4Ljc2MzIuMjk1IDEuNjM2MS40OTYxIDIuOTEzNC41NTIgMS4yNzczLjA1NiAxLjY4ODQuMDY5IDQuOTQ2Mi4wNjI3IDMuMjU3OC0uMDA2MiAzLjY2OC0uMDIwNyA0Ljk0NzgtLjA4MTQgMS4yOC0uMDYwNyAyLjE0Ny0uMjY1MiAyLjkwOTgtLjU2MzMuNzg4OS0uMzA4NiAxLjQ1NzgtLjcyIDIuMTIyOC0xLjM4ODEuNjY1LS42NjgyIDEuMDc0NS0xLjMzNzggMS4zNzk1LTIuMTI4NC4yOTU3LS43NjMyLjQ5NjYtMS42MzYuNTUyLTIuOTEyNC4wNTYtMS4yODA5LjA2OTItMS42ODk4LjA2My00Ljk0OC0uMDA2My0zLjI1ODMtLjAyMS0zLjY2NjgtLjA4MTctNC45NDY1LS4wNjA3LTEuMjc5Ny0uMjY0LTIuMTQ4Ny0uNTYzMy0yLjkxMTctLjMwODQtLjc4ODktLjcyLTEuNDU2OC0xLjM4NzYtMi4xMjI4QzIxLjI5ODIgMS4zMyAyMC42MjguOTIwOCAxOS44Mzc4LjYxNjUgMTkuMDc0LjMyMSAxOC4yMDE3LjExOTcgMTYuOTI0NC4wNjQ1IDE1LjY0NzEuMDA5MyAxNS4yMzYtLjAwNSAxMS45NzcuMDAxNCA4LjcxOC4wMDc2IDguMzEuMDIxNSA3LjAzMDEuMDgzOW0uMTQwMiAyMS42OTMyYy0xLjE3LS4wNTA5LTEuODA1My0uMjQ1My0yLjIyODctLjQwOC0uNTYwNi0uMjE2LS45Ni0uNDc3MS0xLjM4MTktLjg5NS0uNDIyLS40MTc4LS42ODExLS44MTg2LS45LTEuMzc4LS4xNjQ0LS40MjM0LS4zNjI0LTEuMDU4LS40MTcxLTIuMjI4LS4wNTk1LTEuMjY0NS0uMDcyLTEuNjQ0Mi0uMDc5LTQuODQ4LS4wMDctMy4yMDM3LjAwNTMtMy41ODMuMDYwNy00Ljg0OC4wNS0xLjE2OS4yNDU2LTEuODA1LjQwOC0yLjIyODIuMjE2LS41NjEzLjQ3NjItLjk2Ljg5NS0xLjM4MTYuNDE4OC0uNDIxNy44MTg0LS42ODE0IDEuMzc4My0uOTAwMy40MjMtLjE2NTEgMS4wNTc1LS4zNjE0IDIuMjI3LS40MTcxIDEuMjY1NS0uMDYgMS42NDQ3LS4wNzIgNC44NDgtLjA3OSAzLjIwMzMtLjAwNyAzLjU4MzUuMDA1IDQuODQ5NS4wNjA4IDEuMTY5LjA1MDggMS44MDUzLjI0NDUgMi4yMjguNDA4LjU2MDguMjE2Ljk2LjQ3NTQgMS4zODE2Ljg5NS40MjE3LjQxOTQuNjgxNi44MTc2LjkwMDUgMS4zNzg3LjE2NTMuNDIxNy4zNjE3IDEuMDU2LjQxNjkgMi4yMjYzLjA2MDIgMS4yNjU1LjA3MzkgMS42NDUuMDc5NiA0Ljg0OC4wMDU4IDMuMjAzLS4wMDU1IDMuNTgzNC0uMDYxIDQuODQ4LS4wNTEgMS4xNy0uMjQ1IDEuODA1NS0uNDA4IDIuMjI5NC0uMjE2LjU2MDQtLjQ3NjMuOTYtLjg5NTQgMS4zODE0LS40MTkuNDIxNS0uODE4MS42ODExLTEuMzc4My45LS40MjI0LjE2NDktMS4wNTc3LjM2MTctMi4yMjYyLjQxNzQtMS4yNjU2LjA1OTUtMS42NDQ4LjA3Mi00Ljg0OTMuMDc5LTMuMjA0NS4wMDctMy41ODI1LS4wMDYtNC44NDgtLjA2MDhNMTYuOTUzIDUuNTg2NEExLjQ0IDEuNDQgMCAxIDAgMTguMzkgNC4xNDRhMS40NCAxLjQ0IDAgMCAwLTEuNDM3IDEuNDQyNE01LjgzODUgMTIuMDEyYy4wMDY3IDMuNDAzMiAyLjc3MDYgNi4xNTU3IDYuMTczIDYuMTQ5MyAzLjQwMjYtLjAwNjUgNi4xNTctMi43NzAxIDYuMTUwNi02LjE3MzMtLjAwNjUtMy40MDMyLTIuNzcxLTYuMTU2NS02LjE3NC02LjE0OTgtMy40MDMuMDA2Ny02LjE1NiAyLjc3MS02LjE0OTYgNi4xNzM4TTggMTIuMDA3N2E0IDQgMCAxIDEgNC4wMDggMy45OTIxQTMuOTk5NiAzLjk5OTYgMCAwIDEgOCAxMi4wMDc3Ii8+PC9zdmc+" alt="Instagram" loading="lazy"></a>
@@ -4091,6 +4209,7 @@ body, body *, body *::before, body *::after {
         <a href="#services">Prompt Engineering</a>
         <a href="#services">Graphic Design</a>
         <a href="#services">Digital Marketing</a>
+        <div class="footer-legal-row"><a href="privacy-policy.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> Privacy Policy</a></div>
       </div>
       <div class="footer-links-group">
         <div class="footer-links-title">Navigate</div>
@@ -4103,19 +4222,30 @@ body, body *, body *::before, body *::after {
         <a href="#process">Process</a>
         <a href="#faq">FAQ</a>
         <a href="#" id="footerResumeLink" style="display:none;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg> Download Resume</a>
+        <div class="footer-legal-row"><a href="cookie-policy.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M12 2a10 10 0 1 0 10 10 3.2 3.2 0 0 1-3.5-3.5A3.2 3.2 0 0 1 15 5.2 10 10 0 0 0 12 2z"></path><circle cx="8.5" cy="12.5" r="1"></circle><circle cx="12.5" cy="16.5" r="1"></circle><circle cx="15" cy="10.5" r="1"></circle></svg> Cookie Policy</a></div>
       </div>
       <div class="footer-links-group">
         <div class="footer-links-title">Hire Me On</div>
         <a href="https://fiverr.com/vapxhasan" target="_blank">Fiverr</a>
         <a href="https://www.upwork.com/freelancers/~0117eaa6462f5ba09c" target="_blank">Upwork</a>
         <a href="https://linkedin.com/in/vapxhasan" target="_blank">LinkedIn</a>
+        <a href="https://facebook.com/vapxhasan" target="_blank">Facebook</a>
+        <a href="https://twitter.com/vapxhasan" target="_blank">X (Twitter)</a>
         <a href="mailto:vapxhasan@gmail.com">Email</a>
         <a href="https://wa.me/8801327675833" target="_blank">WhatsApp</a>
         <a href="https://calendly.com/vapxhasan/new-meeting" target="_blank">Book a Call</a>
+        <div class="footer-legal-row"><a href="terms-of-service.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg> Terms of Service</a></div>
       </div>
     </div>
     <div class="footer-bottom">
-      <div class="footer-copy">© 2026 <span>Hasanur Rahman</span> · vapxhasan · All rights reserved.</div>
+      <div class="footer-legal-mobile">
+        <a href="privacy-policy.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> Privacy Policy</a>
+        <span class="footer-legal-dot">&bull;</span>
+        <a href="cookie-policy.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M12 2a10 10 0 1 0 10 10 3.2 3.2 0 0 1-3.5-3.5A3.2 3.2 0 0 1 15 5.2 10 10 0 0 0 12 2z"></path><circle cx="8.5" cy="12.5" r="1"></circle><circle cx="12.5" cy="16.5" r="1"></circle><circle cx="15" cy="10.5" r="1"></circle></svg> Cookie Policy</a>
+        <span class="footer-legal-dot">&bull;</span>
+        <a href="terms-of-service.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg> Terms of Service</a>
+      </div>
+      <div class="footer-copy">© 2026 <span>Hasanur Rahman</span> (@vapxhasan). All rights reserved.</div>
     </div>
   </div>
 </footer>
@@ -5105,6 +5235,15 @@ let reviews = [];
 let editingReviewIndex = null;
 let _currentReviewMedia = null;
 
+function getReviewEmbedUrl(url) {
+  if (!url) return null;
+  let m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{6,})/);
+  if (m) return 'https://www.youtube.com/embed/' + m[1];
+  m = url.match(/vimeo\.com\/(\d+)/);
+  if (m) return 'https://player.vimeo.com/video/' + m[1];
+  return null;
+}
+
 function renderReviews() {
   const grid = document.getElementById('reviewsGrid');
   const empty = document.getElementById('reviewsEmpty');
@@ -5118,10 +5257,21 @@ function renderReviews() {
   empty.style.display = 'none';
   grid.innerHTML = reviews.map((r, i) => {
     const stars = '★'.repeat(r.rating || 5) + '☆'.repeat(5 - (r.rating || 5));
+    let mediaHtml = '';
+    if (r.videoUrl) {
+      const embed = getReviewEmbedUrl(r.videoUrl);
+      mediaHtml = embed
+        ? `<div class="testi-video-wrap"><iframe src="${embed}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
+        : `<video class="testi-thumb" controls preload="metadata" src="${r.videoUrl}"></video>`;
+    } else if (r.media && r.media.data) {
+      mediaHtml = (r.media.type || '').startsWith('video/')
+        ? `<video class="testi-thumb" controls preload="metadata" src="${r.media.data}"></video>`
+        : `<img class="testi-thumb" src="${r.media.data}" alt="${r.title || 'Review screenshot'}" loading="lazy">`;
+    }
     return `
     <div class="testi-card reveal visible">
       ${r.platform ? `<div class="testi-platform">${r.platform}</div>` : ''}
-      ${r.media && r.media.data ? `<img class="testi-thumb" src="${r.media.data}" alt="${r.title || 'Review screenshot'}" loading="lazy">` : ''}
+      ${mediaHtml}
       <div class="testi-quote-mark">"</div>
       <div class="testi-stars">${stars}</div>
       ${r.title ? `<div class="testi-title">${r.title}</div>` : ''}
@@ -5148,7 +5298,7 @@ function openReviewModal() {
   document.getElementById('reviewModalLabel').textContent = '// ADD REVIEW';
   document.getElementById('reviewModalTitle').textContent = 'New Review';
   document.getElementById('rSaveBtn').textContent = 'Save Review →';
-  ['rTitleInput','rTextInput','rNameInput','rRoleInput','rPlatformInput'].forEach(id => document.getElementById(id).value = '');
+  ['rTitleInput','rTextInput','rNameInput','rRoleInput','rPlatformInput','rVideoUrlInput'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('rRatingInput').value = '5';
   clearReviewMedia();
   document.getElementById('reviewModal').style.display = 'flex';
@@ -5166,17 +5316,28 @@ function openEditReview(i) {
   document.getElementById('rNameInput').value = r.name || '';
   document.getElementById('rRoleInput').value = r.role || '';
   document.getElementById('rPlatformInput').value = r.platform || '';
+  document.getElementById('rVideoUrlInput').value = r.videoUrl || '';
   document.getElementById('rRatingInput').value = r.rating || 5;
   clearReviewMedia();
   if (r.media && r.media.data) {
     _currentReviewMedia = r.media;
     const fn = document.getElementById('rMediaFileName');
-    fn.textContent = 'Existing screenshot loaded';
+    const isVideo = (r.media.type || '').startsWith('video/');
+    fn.textContent = isVideo ? 'Existing video loaded' : 'Existing screenshot loaded';
     fn.style.display = 'block';
     const prev = document.getElementById('rMediaPreview');
-    const img = document.getElementById('rMediaPreviewImg');
     prev.style.display = 'block';
-    img.src = r.media.data;
+    if (isVideo) {
+      const vid = document.getElementById('rMediaPreviewVideo');
+      vid.src = r.media.data;
+      vid.style.display = 'block';
+      document.getElementById('rMediaPreviewImg').style.display = 'none';
+    } else {
+      const img = document.getElementById('rMediaPreviewImg');
+      img.src = r.media.data;
+      img.style.display = 'block';
+      document.getElementById('rMediaPreviewVideo').style.display = 'none';
+    }
   }
   document.getElementById('reviewModal').style.display = 'flex';
 }
@@ -5202,6 +5363,7 @@ async function saveReview() {
     name:     document.getElementById('rNameInput').value.trim(),
     role:     document.getElementById('rRoleInput').value.trim(),
     platform: document.getElementById('rPlatformInput').value.trim(),
+    videoUrl: document.getElementById('rVideoUrlInput').value.trim(),
     rating:   parseInt(document.getElementById('rRatingInput').value) || 5,
     date:     new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}),
     media:    _currentReviewMedia || null,
@@ -5230,6 +5392,10 @@ async function removeReview(i) {
 function handleReviewMediaSelect(input) {
   const file = input.files[0];
   if (!file) return;
+  const isVideo = file.type.startsWith('video/');
+  if (isVideo && file.size > 15 * 1024 * 1024) {
+    alert('That video is quite large (' + Math.round(file.size/1024/1024) + 'MB). For best performance, use the Video URL field above (YouTube/Vimeo link) instead, or keep uploads under ~15MB.');
+  }
   const fn = document.getElementById('rMediaFileName');
   fn.textContent = '⏳ Loading: ' + file.name;
   fn.style.display = 'block';
@@ -5240,7 +5406,17 @@ function handleReviewMediaSelect(input) {
     fn.textContent = file.name;
     const prev = document.getElementById('rMediaPreview');
     const img  = document.getElementById('rMediaPreviewImg');
-    img.src = e.target.result;
+    const vid  = document.getElementById('rMediaPreviewVideo');
+    if (isVideo) {
+      vid.src = e.target.result;
+      vid.style.display = 'block';
+      img.style.display = 'none';
+    } else {
+      img.src = e.target.result;
+      img.style.display = 'block';
+      vid.style.display = 'none';
+      vid.removeAttribute('src');
+    }
     prev.style.display = 'block';
   };
   reader.readAsDataURL(file);
@@ -5253,7 +5429,9 @@ function clearReviewMedia() {
   const prev = document.getElementById('rMediaPreview');
   if (prev) prev.style.display = 'none';
   const img = document.getElementById('rMediaPreviewImg');
-  if (img) img.src = '';
+  if (img) { img.src = ''; img.style.display = 'block'; }
+  const vid = document.getElementById('rMediaPreviewVideo');
+  if (vid) { vid.removeAttribute('src'); vid.style.display = 'none'; }
   const input = document.getElementById('rMediaInput');
   if (input) input.value = '';
 }
