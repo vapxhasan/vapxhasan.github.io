@@ -1272,14 +1272,9 @@ nav .container { max-width: 1300px; }
 .testi-empty-icon { font-size: 48px; margin-bottom: 12px; }
 .testi-empty-txt { font-size: 14px; margin-bottom: 16px; }
 
-/* ===== REVIEW CATEGORY FILTERS ===== */
-.review-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
-.review-filter-btn {
-  padding: 7px 16px; border-radius: 999px; border: 1px solid var(--border);
-  background: transparent; color: var(--muted); font-family: var(--font-mono);
-  font-size: 12px; cursor: pointer; transition: all .2s;
-}
-.review-filter-btn.active, .review-filter-btn:hover { background: var(--indigo); border-color: var(--indigo); color: #fff; }
+/* Review category filters now reuse the .fiv-cat-bar / .fiv-cat-btn styles
+   defined in the Fiverr-pricing section above, for a consistent admin-managed
+   category system across both. */
 
 /* ===== TEXT REVIEW AUTO-SLIDING CAROUSEL ===== */
 .review-carousel-wrap { overflow: hidden; margin-top: 36px; border-radius: 16px; }
@@ -3601,7 +3596,7 @@ body, body *, body *::before, body *::after {
       <button class="testi-add-btn admin-only" id="openReviewModal" style="display:none;">＋ Add Review</button>
     </div>
 
-    <div id="reviewFilters" class="review-filters" style="display:none;"></div>
+    <div id="reviewFilters" class="fiv-cat-bar" style="display:none;margin-top:28px;"></div>
 
     <div class="review-carousel-wrap">
       <div id="reviewCarouselTrack" class="review-carousel-track"></div>
@@ -3678,14 +3673,8 @@ body, body *, body *::before, body *::after {
 
       <div>
         <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">CATEGORY / SKILL</label>
-        <input id="rCategoryInput" list="rCategoryList" type="text" placeholder="e.g. Video Editing" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
-        <datalist id="rCategoryList">
-          <option value="Video Editing">
-          <option value="Graphic Design">
-          <option value="AI Automation">
-          <option value="Prompt Engineering">
-          <option value="Digital Marketing">
-        </datalist>
+        <select id="rCategoryInput" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;"></select>
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;">Need a new skill? Manage categories from the <button type="button" onclick="closeReviewModal();openReviewCatModal(-1);" style="background:none;border:none;color:var(--indigo);font-weight:700;cursor:pointer;padding:0;font-size:11px;text-decoration:underline;">+ Add Category</button> option next to the filter bar.</div>
       </div>
 
       <div>
@@ -3715,6 +3704,23 @@ body, body *, body *::before, body *::after {
       <button id="rSaveBtn" onclick="saveReview()" style="flex:1;padding:13px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;">Save Review <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
       <button onclick="closeReviewModal()" style="padding:13px 20px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;transition:all .2s;">Cancel</button>
     </div>
+  </div>
+</div>
+
+<!-- REVIEW CATEGORY (SKILL) MANAGEMENT MODAL — mirrors the Fiverr-pricing category modal -->
+<div class="fiv-modal" id="reviewCatModal">
+  <div class="fiv-modal-inner">
+    <button class="fiv-modal-close" onclick="closeReviewCatModal()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    <div class="fiv-modal-title" id="reviewCatModalTitle"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> Edit Skill Category</div>
+
+    <div class="fiv-field">
+        <label>Skill / category name</label>
+        <input type="text" id="rCat_name" placeholder="e.g. Video Editing">
+    </div>
+
+    <button class="fiv-save-btn" onclick="saveReviewCat()">Save Category <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+    <button class="fiv-cancel-btn" id="reviewCatDeleteBtn" style="display:none;color:#ff7777;border-color:rgba(255,80,80,0.3);" onclick="deleteReviewCat()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg> Delete Category</button>
+    <button class="fiv-cancel-btn" onclick="closeReviewCatModal()">Cancel</button>
   </div>
 </div>
 
@@ -5301,6 +5307,76 @@ let reviews = [];
 let editingReviewIndex = null;
 let _currentReviewMedia = null;
 
+// Skill/category management for reviews — mirrors the Fiverr-pricing category
+// system (icon + name, admin add/edit/delete) instead of a plain free-text tag.
+let reviewCategories = [
+  { name: 'Video Editing' },
+  { name: 'Graphic Design' },
+  { name: 'AI Automation' },
+  { name: 'Prompt Engineering' },
+  { name: 'Digital Marketing' }
+];
+let reviewCatEditIdx = -1; // -1 = adding a new category, >=0 = editing existing index
+
+function populateReviewCategorySelect(selected) {
+  const sel = document.getElementById('rCategoryInput');
+  if (!sel) return;
+  if (!reviewCategories.length) {
+    sel.innerHTML = '<option value="">No categories yet — add one first</option>';
+    return;
+  }
+  sel.innerHTML = reviewCategories.map(c => `<option value="${escAttr(c.name)}">${c.name}</option>`).join('');
+  if (selected && reviewCategories.some(c => c.name === selected)) sel.value = selected;
+}
+
+function openReviewCatModal(idx) {
+  if (!isAdmin) { alert('Admin login required.'); return; }
+  reviewCatEditIdx = idx;
+  const isNew = idx === -1;
+  const c = isNew ? { name: '' } : reviewCategories[idx];
+  document.getElementById('reviewCatModalTitle').innerHTML = (isNew ? 'Add Skill Category' : 'Edit — ' + c.name);
+  document.getElementById('rCat_name').value = c.name || '';
+  document.getElementById('reviewCatDeleteBtn').style.display = !isNew ? 'block' : 'none';
+  document.getElementById('reviewCatModal').classList.add('open');
+  setTimeout(() => document.getElementById('rCat_name').focus(), 50);
+}
+
+function closeReviewCatModal() { document.getElementById('reviewCatModal').classList.remove('open'); }
+document.getElementById('reviewCatModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeReviewCatModal(); });
+
+async function saveReviewCat() {
+  if (!isAdmin) return;
+  const name = document.getElementById('rCat_name').value.trim();
+  if (!name) { alert('Category name is required.'); return; }
+  if (reviewCategories.some((c, i) => c.name === name && i !== reviewCatEditIdx)) { alert('A category with this name already exists.'); return; }
+
+  if (reviewCatEditIdx === -1) {
+    reviewCategories.push({ name });
+  } else {
+    const old = reviewCategories[reviewCatEditIdx];
+    if (old.name !== name) {
+      // Keep existing reviews tagged correctly when a category is renamed.
+      reviews.forEach(r => { if (r.category === old.name) r.category = name; });
+      await sharedSet('reviews', reviews);
+    }
+    old.name = name;
+  }
+
+  await sharedSet('review_categories', reviewCategories);
+  closeReviewCatModal();
+  renderReviews();
+}
+
+async function deleteReviewCat() {
+  if (!isAdmin || reviewCatEditIdx === -1) return;
+  const c = reviewCategories[reviewCatEditIdx];
+  if (!confirm(`Delete "${c.name}" category? Existing reviews keep their tag but this filter chip will disappear.`)) return;
+  reviewCategories.splice(reviewCatEditIdx, 1);
+  await sharedSet('review_categories', reviewCategories);
+  closeReviewCatModal();
+  renderReviews();
+}
+
 function getReviewEmbedUrl(url) {
   if (!url) return null;
   let m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/|youtube\.com\/shorts\/)([a-zA-Z0-9_-]{6,})/);
@@ -5319,20 +5395,25 @@ function reviewHasVideo(r) {
 }
 
 function getReviewCategories() {
-  return ['All', ...new Set(reviews.map(r => r.category).filter(Boolean))];
+  return ['All', ...reviewCategories.map(c => c.name)];
 }
 
 function renderReviewFilters() {
   const wrap = document.getElementById('reviewFilters');
   if (!wrap) return;
   const cats = getReviewCategories();
-  if (cats.length <= 2) { wrap.style.display = 'none'; return; } // not worth filtering with 0-1 real categories
   if (!cats.includes(reviewFilterCategory)) reviewFilterCategory = 'All';
   wrap.style.display = 'flex';
-  wrap.innerHTML = cats.map(c =>
-    `<button type="button" class="review-filter-btn${c === reviewFilterCategory ? ' active' : ''}" data-cat="${c}">${c}</button>`
-  ).join('');
-  wrap.querySelectorAll('.review-filter-btn').forEach(btn => {
+  wrap.innerHTML =
+    `<div class="fiv-cat-chip"><button type="button" class="fiv-cat-btn${reviewFilterCategory === 'All' ? ' active' : ''}" data-cat="All">All</button></div>` +
+    reviewCategories.map((c, i) =>
+      `<div class="fiv-cat-chip">
+        <button type="button" class="fiv-cat-btn${c.name === reviewFilterCategory ? ' active' : ''}" data-cat="${escAttr(c.name)}">${c.name}</button>
+        ${isAdmin ? `<button type="button" class="fiv-cat-edit-btn" onclick="openReviewCatModal(${i})" title="Edit category" aria-label="Edit category">${editPencilSvg}</button>` : ''}
+      </div>`
+    ).join('') +
+    (isAdmin ? `<button type="button" class="fiv-add-cat-btn" onclick="openReviewCatModal(-1)">＋ Add Category</button>` : '');
+  wrap.querySelectorAll('.fiv-cat-btn').forEach(btn => {
     btn.addEventListener('click', () => { reviewFilterCategory = btn.dataset.cat; renderReviews(); });
   });
 }
@@ -5458,8 +5539,9 @@ function openReviewModal() {
   document.getElementById('reviewModalLabel').textContent = '// ADD REVIEW';
   document.getElementById('reviewModalTitle').textContent = 'New Review';
   document.getElementById('rSaveBtn').textContent = 'Save Review →';
-  ['rTitleInput','rTextInput','rNameInput','rRoleInput','rPlatformInput','rCategoryInput','rVideoUrlInput'].forEach(id => document.getElementById(id).value = '');
+  ['rTitleInput','rTextInput','rNameInput','rRoleInput','rPlatformInput','rVideoUrlInput'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('rRatingInput').value = '5';
+  populateReviewCategorySelect();
   clearReviewMedia();
   document.getElementById('reviewModal').style.display = 'flex';
 }
@@ -5476,7 +5558,7 @@ function openEditReview(i) {
   document.getElementById('rNameInput').value = r.name || '';
   document.getElementById('rRoleInput').value = r.role || '';
   document.getElementById('rPlatformInput').value = r.platform || '';
-  document.getElementById('rCategoryInput').value = r.category || '';
+  populateReviewCategorySelect(r.category || '');
   document.getElementById('rVideoUrlInput').value = r.videoUrl || '';
   document.getElementById('rRatingInput').value = r.rating || 5;
   clearReviewMedia();
@@ -6534,6 +6616,20 @@ async function initSharedData() {
     if (record.fiv_categories)  fivCategories   = record.fiv_categories;
     else if (record.fiv_plans)  fivCategories[0].plans = record.fiv_plans; // backward compat
     if (record.reviews)        reviews         = record.reviews;
+    if (record.review_categories) {
+      reviewCategories = record.review_categories;
+    } else if (reviews.length) {
+      // One-time migration: older reviews stored category as free text with no
+      // managed list behind it. Fold any of those names into the default list
+      // so nothing existing silently disappears from the filter bar.
+      const known = new Set(reviewCategories.map(c => c.name));
+      reviews.forEach(r => {
+        if (r.category && !known.has(r.category)) {
+          reviewCategories.push({ name: r.category });
+          known.add(r.category);
+        }
+      });
+    }
     if (record.certifications) certifications  = record.certifications;
     if (record.resume !== undefined) resumeData = record.resume;
     if (record.faqs)           faqs            = record.faqs;
