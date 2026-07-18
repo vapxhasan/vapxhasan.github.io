@@ -543,6 +543,14 @@ nav .container { max-width: 1300px; }
   border-radius: 100px;
   margin-bottom: 28px;
   letter-spacing: 1px;
+  cursor: default;
+  transition: transform .3s cubic-bezier(0.16,1,0.3,1), border-color .3s ease, background .3s ease, box-shadow .3s ease;
+}
+.hero-badge:hover {
+  transform: translateY(-2px);
+  border-color: rgba(79,140,255,0.55);
+  background: rgba(37,99,235,0.12);
+  box-shadow: 0 6px 18px rgba(79,140,255,0.18);
 }
 .hero-badge-dot {
   width: 7px; height: 7px;
@@ -551,6 +559,8 @@ nav .container { max-width: 1300px; }
   box-shadow: 0 0 8px #2ECC71;
   animation: pulse 2s ease infinite;
 }
+.hero-badge-dot.status-yellow { background: #F5A623; box-shadow: 0 0 8px #F5A623; }
+.hero-badge-dot.status-red { background: #FF5C5C; box-shadow: 0 0 8px #FF5C5C; }
 @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.3; } }
 .hero-h1 {
   font-family: var(--font-display);
@@ -2885,6 +2895,7 @@ body, body *, body *::before, body *::after {
           <a href="#testimonials" class="nav-more-link" id="navMoreReviewsLink">Reviews</a>
           <a href="#youtube" class="nav-more-link">YouTube</a>
           <a href="#blog" class="nav-more-link" id="navMoreBlogLink">Blog</a>
+          <a href="#notice" class="nav-more-link" id="navMoreNoticeLink">Notice</a>
           <a href="#tools" class="nav-more-link">Tools</a>
         </div>
       </div>
@@ -2924,6 +2935,7 @@ body, body *, body *::before, body *::after {
   <a href="#testimonials" class="mm-link" id="mmReviewsLink"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Reviews</a>
   <a href="#youtube" class="mm-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg> YouTube</a>
   <a href="#blog" class="mm-link" id="mmBlogLink"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Blog</a>
+  <a href="#notice" class="mm-link" id="mmNoticeLink"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg> Notice</a>
   <a href="#tools" class="mm-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg> Tools</a>
   <a href="#contact" class="mm-link drawer-hire-btn"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg> Hire Me</a>
 </div>
@@ -2957,8 +2969,9 @@ body, body *, body *::before, body *::after {
 
     <div class="hero-content">
       <div class="hero-badge hero-reveal hr-1">
-        <span class="hero-badge-dot"></span>
-        Available for new projects
+        <span class="hero-badge-dot" id="heroBadgeDot"></span>
+        <span id="heroBadgeText">Available for new projects</span>
+        <button class="admin-only" id="openAvailabilityModal" title="Edit availability messages" style="display:none;margin-left:6px;background:none;border:none;color:inherit;cursor:pointer;padding:0;opacity:.7;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></button>
       </div>
       <h1 class="hero-h1">
         <span class="line1 hero-reveal hr-2">Hi, I'm Hasanur Rahman.</span>
@@ -4175,7 +4188,19 @@ body, body *, body *::before, body *::after {
   </div>
 </div>
 
-<!-- BLOG SECTION -->
+<!-- AVAILABILITY MESSAGES MODAL -->
+<div class="yt-modal-overlay" id="availabilityModal">
+  <div class="yt-modal" style="max-width:540px;">
+    <div class="yt-modal-title"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> Edit Availability Messages</div>
+    <div class="yt-modal-sub">These rotate automatically on the hero badge — 10 minutes each, cycling continuously.</div>
+    <div id="availabilityRows" style="display:flex;flex-direction:column;gap:10px;max-height:380px;overflow-y:auto;padding-right:4px;margin-bottom:6px;"></div>
+    <button type="button" onclick="addAvailabilityRow()" style="background:rgba(59,130,246,0.08);border:1px dashed rgba(59,130,246,0.35);color:var(--cyan);border-radius:8px;padding:8px;font-size:12px;cursor:pointer;width:100%;font-family:var(--font-mono);margin-bottom:14px;">+ Add Message</button>
+    <div class="yt-modal-btns">
+      <button class="yt-modal-cancel" id="closeAvailabilityModal">Cancel</button>
+      <button class="yt-modal-add" onclick="saveAvailabilityMessages()">Save <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+    </div>
+  </div>
+</div>
 <section id="blog" class="section">
   <div class="container">
     <div class="blog-top reveal">
@@ -4206,6 +4231,77 @@ body, body *, body *::before, body *::after {
     </div>
   </div>
 </section>
+
+<!-- NOTICE SECTION -->
+<section id="notice" class="section" style="background:var(--bg2)">
+  <div class="container">
+    <div class="blog-top reveal">
+      <div>
+        <div class="section-label">Announcements</div>
+        <h2 class="section-title">Notice <span>Board</span></h2>
+        <p class="section-sub">Updates, announcements, and important information.</p>
+      </div>
+      <button class="blog-write-btn admin-only" id="openNoticeModal" style="display:none;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Add Notice</button>
+    </div>
+    <div id="noticeGrid" class="blog-grid">
+      <!-- notice cards injected by JS -->
+    </div>
+    <div id="noticeEmpty" class="blog-empty reveal">
+      <div class="blog-empty-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
+      <div class="blog-empty-txt">No notices yet. Check back soon!</div>
+      <button class="blog-write-btn admin-only" onclick="document.getElementById('openNoticeModal').click()" style="display:none;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Add First Notice</button>
+    </div>
+  </div>
+</section>
+
+<!-- Notice Write Modal -->
+<div class="blog-modal-overlay" id="noticeModal">
+  <div class="blog-modal">
+    <div class="blog-modal-title"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg> Add Notice</div>
+    <div class="blog-modal-sub">Post an announcement, update, or important information</div>
+    <label class="blog-modal-label">TITLE</label>
+    <input class="blog-modal-field" id="noticeTitleInput" placeholder="e.g. Holiday Schedule Update" type="text">
+    <label class="blog-modal-label">IMAGE (optional)</label>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+      <div id="noticeImgPreviewWrap" style="width:64px;height:64px;border-radius:10px;overflow:hidden;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <img id="noticeImgPreview" style="width:100%;height:100%;object-fit:cover;display:none;">
+        <span id="noticeImgPreviewEmpty" style="font-size:11px;color:var(--muted);">No image</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" onclick="document.getElementById('noticeImgInput').click()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg> Upload Image</button>
+        <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" id="noticeImgRemoveBtn" onclick="removeNoticeImgSelection()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button>
+      </div>
+      <input type="file" id="noticeImgInput" accept="image/*" style="display:none;">
+    </div>
+    <label class="blog-modal-label">PDF ATTACHMENT (optional)</label>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
+      <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" onclick="document.getElementById('noticePdfInput').click()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> Upload PDF</button>
+      <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" id="noticePdfRemoveBtn" onclick="removeNoticePdfSelection()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button>
+      <input type="file" id="noticePdfInput" accept="application/pdf" style="display:none;">
+    </div>
+    <div id="noticePdfFileName" style="font-size:12px;color:var(--cyan);font-family:var(--font-mono);margin-bottom:4px;display:none;"></div>
+    <label class="blog-modal-label">DETAILS TEXT</label>
+    <textarea class="blog-modal-field" id="noticeContentInput" rows="8" placeholder="Write the notice details here..."></textarea>
+    <div class="blog-modal-btns">
+      <button class="blog-modal-cancel" id="closeNoticeModal">Cancel</button>
+      <button class="blog-modal-publish" onclick="publishNotice()">Publish <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+    </div>
+  </div>
+</div>
+
+<!-- Notice Read Modal -->
+<div class="blog-read-modal-overlay" id="noticeReadModal">
+  <div class="blog-read-modal">
+    <div id="noticeReadTitle" class="blog-rm-title"></div>
+    <div id="noticeReadMeta" class="blog-rm-meta"></div>
+    <img id="noticeReadImg" style="width:100%;max-height:320px;object-fit:cover;border-radius:12px;margin:16px 0;display:none;" alt="">
+    <div id="noticeReadContent" class="blog-rm-content"></div>
+    <div id="noticeReadPdfWrap" style="margin-top:20px;display:none;"></div>
+    <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap;">
+      <button class="blog-modal-cancel" onclick="closeNoticeRead()" style="padding:11px 24px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> Close</button>
+    </div>
+  </div>
+</div>
 
 <!-- Blog Write Modal -->
 <div class="blog-modal-overlay" id="blogModal">
@@ -5327,9 +5423,160 @@ document.getElementById('closeBlogModal').addEventListener('click', () => docume
 document.getElementById('blogModal').addEventListener('click', e => { if (e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
 
 // ===================================================
+// NOTICE BOARD SYSTEM (title / image / PDF / details text)
+// ===================================================
+let notices = [];
+
+function renderNotices() {
+  const grid = document.getElementById('noticeGrid');
+  const empty = document.getElementById('noticeEmpty');
+  if (!grid || !empty) return;
+  toggleContentSection('notice', notices.length > 0, ['navMoreNoticeLink','mmNoticeLink']);
+  if (!notices.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = notices.map((n, i) => `
+    <div class="blog-card reveal visible">
+      <div class="blog-thumb">
+        <div class="blog-thumb-glow" style="background:rgba(37,99,235,0.35)"></div>
+        ${n.img ? `<img class="blog-thumb-img" src="${n.img}" alt="${escHtml(n.title||'Notice')}" loading="lazy">` : '📢'}
+      </div>
+      <div class="blog-body">
+        <div class="blog-cat">Notice</div>
+        <div class="blog-title">${escHtml(n.title)}</div>
+        <div class="blog-excerpt">${escHtml((n.content||'').substring(0,130))}${n.content&&n.content.length>130?'...':''}</div>
+        <div class="blog-meta">
+          <span>${n.date}</span>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <span class="blog-read-btn" onclick="openNoticeRead(${i})">Read More <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+            ${isAdmin ? `<button onclick="removeNotice(${i})" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;display:inline-flex;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>` : ''}
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+let noticeImgDataUrl = '';
+let noticePdfData = null; // { data: base64, name: filename }
+
+document.getElementById('noticeImgInput').addEventListener('change', async function() {
+  const file = this.files[0];
+  if (!file) return;
+  try {
+    noticeImgDataUrl = await compressImageFile(file, 900, 0.8);
+    document.getElementById('noticeImgPreview').src = noticeImgDataUrl;
+    document.getElementById('noticeImgPreview').style.display = 'block';
+    document.getElementById('noticeImgPreviewEmpty').style.display = 'none';
+  } catch (e) { console.warn('Notice image compress failed:', e); }
+});
+function removeNoticeImgSelection() {
+  noticeImgDataUrl = '';
+  document.getElementById('noticeImgInput').value = '';
+  document.getElementById('noticeImgPreview').style.display = 'none';
+  document.getElementById('noticeImgPreviewEmpty').style.display = 'block';
+}
+
+document.getElementById('noticePdfInput').addEventListener('change', function() {
+  const file = this.files[0];
+  if (!file) return;
+  if (file.type !== 'application/pdf') { alert('Please choose a PDF file.'); this.value=''; return; }
+  if (file.size > 8 * 1024 * 1024) {
+    alert('That PDF is quite large (' + Math.round(file.size/1024/1024) + 'MB). For best performance, keep attachments under ~8MB.');
+  }
+  const fn = document.getElementById('noticePdfFileName');
+  fn.textContent = '⏳ Loading: ' + file.name;
+  fn.style.display = 'block';
+  const reader = new FileReader();
+  reader.onload = e => {
+    noticePdfData = { data: e.target.result, name: file.name };
+    fn.textContent = '📄 ' + file.name;
+  };
+  reader.readAsDataURL(file);
+});
+function removeNoticePdfSelection() {
+  noticePdfData = null;
+  document.getElementById('noticePdfInput').value = '';
+  const fn = document.getElementById('noticePdfFileName');
+  fn.textContent = ''; fn.style.display = 'none';
+}
+
+async function publishNotice() {
+  if (!isAdmin) return;
+  const title   = document.getElementById('noticeTitleInput').value.trim();
+  const content = document.getElementById('noticeContentInput').value.trim();
+  if (!title || !content) { alert('Please fill title and details text!'); return; }
+  const btn = document.querySelector('#noticeModal .blog-modal-publish');
+  btn.textContent = 'Publishing...'; btn.disabled = true;
+  notices.unshift({
+    title, content,
+    img: noticeImgDataUrl || '',
+    pdf: noticePdfData || null,
+    date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
+  });
+  await sharedSet('notices', notices);
+  document.getElementById('noticeTitleInput').value = '';
+  document.getElementById('noticeContentInput').value = '';
+  removeNoticeImgSelection();
+  removeNoticePdfSelection();
+  document.getElementById('noticeModal').classList.remove('open');
+  btn.textContent = 'Publish →'; btn.disabled = false;
+  renderNotices();
+}
+
+async function removeNotice(i) {
+  if (!isAdmin) return;
+  if (!confirm('Delete this notice?')) return;
+  notices.splice(i, 1);
+  await sharedSet('notices', notices);
+  renderNotices();
+}
+
+function openNoticeRead(i) {
+  const n = notices[i];
+  document.getElementById('noticeReadTitle').textContent = n.title;
+  document.getElementById('noticeReadMeta').textContent = n.date;
+  const imgEl = document.getElementById('noticeReadImg');
+  if (n.img) { imgEl.src = n.img; imgEl.alt = n.title||''; imgEl.style.display = 'block'; }
+  else { imgEl.style.display = 'none'; imgEl.src = ''; }
+  document.getElementById('noticeReadContent').textContent = n.content;
+  const pdfWrap = document.getElementById('noticeReadPdfWrap');
+  if (n.pdf && n.pdf.data) {
+    pdfWrap.style.display = 'block';
+    pdfWrap.innerHTML = `<a href="${n.pdf.data}" download="${escHtml(n.pdf.name||'notice.pdf')}" style="display:inline-flex;align-items:center;gap:8px;padding:11px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border-radius:10px;text-decoration:none;font-family:var(--font-display);font-size:14px;font-weight:700;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> Download PDF</a>`;
+  } else {
+    pdfWrap.style.display = 'none';
+    pdfWrap.innerHTML = '';
+  }
+  document.getElementById('noticeReadModal').classList.add('open');
+}
+function closeNoticeRead() { document.getElementById('noticeReadModal').classList.remove('open'); }
+document.getElementById('noticeReadModal').addEventListener('click', e => { if (e.target===e.currentTarget) closeNoticeRead(); });
+
+document.getElementById('openNoticeModal').addEventListener('click', () => {
+  if (!isAdmin) { alert('Admin login required. Click the Admin button.'); return; }
+  removeNoticeImgSelection();
+  removeNoticePdfSelection();
+  document.getElementById('noticeModal').classList.add('open');
+});
+document.getElementById('closeNoticeModal').addEventListener('click', () => document.getElementById('noticeModal').classList.remove('open'));
+document.getElementById('noticeModal').addEventListener('click', e => { if (e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
+
+// ===================================================
 // CLIENT REVIEWS SYSTEM (admin managed — title/edit/delete)
 // ===================================================
 let reviews = [];
+let availabilityMessages = [
+  { text: "Available for new projects — let's talk", status: 'green' },
+  { text: 'Currently accepting 2 more projects this month', status: 'green' },
+  { text: '3 slots left this month — booking fast', status: 'green' },
+  { text: 'Fast response — usually replies within 2 hours', status: 'green' },
+  { text: 'Booking for next month — reserve your spot now', status: 'yellow' },
+  { text: 'High demand this week — limited slots remaining', status: 'yellow' }
+];
 let editingReviewIndex = null;
 let _currentReviewMedia = null;
 
@@ -6653,6 +6900,7 @@ function setCachedRecord(record) {
 async function initSharedData() {
   document.getElementById('ytVideosGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
   document.getElementById('blogGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
+  document.getElementById('noticeGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
   document.getElementById('projectGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
   document.getElementById('reviewCarouselTrack').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
 
@@ -6677,6 +6925,7 @@ async function initSharedData() {
     if (record.yt_videos)      ytVideos       = record.yt_videos;
     if (record.yt_channel)     ytChannel      = record.yt_channel;
     if (record.blog_posts)     blogPosts      = record.blog_posts;
+    if (record.notices)        notices        = record.notices;
     if (record.projects)       projects       = record.projects;
     if (record.client_pricings) clientPricings = record.client_pricings;
     if (record.fiv_categories)  fivCategories   = record.fiv_categories;
@@ -6699,12 +6948,14 @@ async function initSharedData() {
     if (record.certifications) certifications  = record.certifications;
     if (record.resume !== undefined) resumeData = record.resume;
     if (record.faqs)           faqs            = record.faqs;
+    if (record.availability_messages && record.availability_messages.length) availabilityMessages = record.availability_messages;
   }
 
   function renderAll() {
     renderYtChannel();
     renderYtVideos();
     renderBlog();
+    renderNotices();
     renderProjects();
     renderReviews();
     renderClientPricing();
@@ -6716,6 +6967,7 @@ async function initSharedData() {
     renderCertifications();
     renderResumeButtons();
     renderFaq();
+    renderAvailabilityBadge();
   }
 
   // Fast path: paint instantly from whatever was cached on the last visit,
@@ -6730,6 +6982,67 @@ async function initSharedData() {
   }
   renderAll();
 }
+
+// ===================================================
+// LIVE AVAILABILITY BADGE (rotates every 10 min, admin-editable)
+// ===================================================
+function renderAvailabilityBadge() {
+  if (!availabilityMessages || !availabilityMessages.length) return;
+  const idx = Math.floor(Date.now() / (10 * 60 * 1000)) % availabilityMessages.length;
+  const msg = availabilityMessages[idx];
+  const textEl = document.getElementById('heroBadgeText');
+  const dotEl = document.getElementById('heroBadgeDot');
+  if (textEl) textEl.textContent = msg.text;
+  if (dotEl) dotEl.className = 'hero-badge-dot' + (msg.status && msg.status !== 'green' ? ' status-' + msg.status : '');
+}
+setInterval(renderAvailabilityBadge, 30000); // re-check every 30s so the 10-min rotation stays accurate even on a long-open tab
+
+function addAvailabilityRow(text, status) {
+  const wrap = document.getElementById('availabilityRows');
+  const row = document.createElement('div');
+  row.className = 'avail-row';
+  row.style.cssText = 'display:flex;gap:8px;align-items:center;';
+  row.innerHTML = `
+    <input class="yt-modal-input avail-text" style="margin:0;flex:1;" type="text" placeholder="e.g. 3 slots left this month" value="${text ? escHtml(text) : ''}">
+    <select class="avail-status" style="background:var(--card);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:10px 8px;font-size:13px;font-family:inherit;">
+      <option value="green" ${status==='green'||!status?'selected':''}>🟢 Available</option>
+      <option value="yellow" ${status==='yellow'?'selected':''}>🟡 Busy</option>
+      <option value="red" ${status==='red'?'selected':''}>🔴 Full</option>
+    </select>
+    <button type="button" onclick="this.parentElement.remove()" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:6px;width:34px;height:38px;cursor:pointer;flex-shrink:0;">✕</button>
+  `;
+  wrap.appendChild(row);
+}
+
+function openAvailabilityModalFn() {
+  const wrap = document.getElementById('availabilityRows');
+  wrap.innerHTML = '';
+  availabilityMessages.forEach(m => addAvailabilityRow(m.text, m.status));
+  document.getElementById('availabilityModal').classList.add('open');
+}
+
+async function saveAvailabilityMessages() {
+  const rows = document.querySelectorAll('#availabilityRows .avail-row');
+  const msgs = [];
+  rows.forEach(row => {
+    const text = row.querySelector('.avail-text').value.trim();
+    const status = row.querySelector('.avail-status').value;
+    if (text) msgs.push({ text, status });
+  });
+  if (!msgs.length) { alert('Add at least one message.'); return; }
+  availabilityMessages = msgs;
+  await sharedSet('availability_messages', availabilityMessages);
+  renderAvailabilityBadge();
+  document.getElementById('availabilityModal').classList.remove('open');
+}
+
+document.getElementById('openAvailabilityModal').addEventListener('click', () => {
+  if (!isAdmin) { alert('Admin login required.'); return; }
+  openAvailabilityModalFn();
+});
+document.getElementById('closeAvailabilityModal').addEventListener('click', () => document.getElementById('availabilityModal').classList.remove('open'));
+document.getElementById('availabilityModal').addEventListener('click', e => { if (e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
+
 
 // ===== MARQUEE — JS controlled (PC slow, mobile fast) =====
 (function() {
