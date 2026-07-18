@@ -1272,6 +1272,38 @@ nav .container { max-width: 1300px; }
 .testi-empty-icon { font-size: 48px; margin-bottom: 12px; }
 .testi-empty-txt { font-size: 14px; margin-bottom: 16px; }
 
+/* ===== REVIEW CATEGORY FILTERS ===== */
+.review-filters { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+.review-filter-btn {
+  padding: 7px 16px; border-radius: 999px; border: 1px solid var(--border);
+  background: transparent; color: var(--muted); font-family: var(--font-mono);
+  font-size: 12px; cursor: pointer; transition: all .2s;
+}
+.review-filter-btn.active, .review-filter-btn:hover { background: var(--indigo); border-color: var(--indigo); color: #fff; }
+
+/* ===== TEXT REVIEW AUTO-SLIDING CAROUSEL ===== */
+.review-carousel-wrap { overflow: hidden; margin-top: 36px; border-radius: 16px; }
+.review-carousel-track { display: flex; transition: transform .6s ease-in-out; }
+.review-slide { flex: 0 0 100%; }
+.review-slide-inner {
+  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
+  padding: 32px; max-width: 640px; margin: 0 auto; text-align: center; position: relative;
+}
+
+/* ===== VIDEO REVIEW SLIDER ===== */
+.review-video-heading { font-family: var(--font-display); font-size: 18px; font-weight: 700; color: var(--white); margin: 44px 0 16px; }
+.review-video-slider-wrap { display: flex; align-items: center; gap: 10px; }
+.review-video-track { display: flex; gap: 14px; overflow-x: auto; scroll-behavior: smooth; padding: 4px; flex: 1; }
+.review-video-card { flex: 0 0 210px; cursor: pointer; border-radius: 12px; overflow: hidden; border: 1px solid var(--border); background: var(--card); transition: all .2s; position: relative; }
+.review-video-card:hover { border-color: rgba(59,130,246,0.35); transform: translateY(-2px); }
+.review-video-thumb { width: 100%; height: 118px; object-fit: cover; display: block; background: #000; }
+.review-video-play { position: absolute; top: 46%; left: 50%; transform: translate(-50%,-50%); width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; }
+.review-video-card-body { padding: 10px 12px; }
+.review-video-card-title { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 2px; }
+.review-video-card-cat { font-size: 10px; font-family: var(--font-mono); color: var(--cyan); }
+.review-slider-nav { width: 34px; height: 34px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); color: var(--white); cursor: pointer; flex-shrink: 0; font-size: 16px; }
+.review-slider-nav:hover { background: var(--indigo); border-color: var(--indigo); }
+
 /* ===== PROCESS ===== */
 .process-steps { display: flex; align-items: flex-start; gap: 0; margin-top: 60px; position: relative; }
 .process-steps::before {
@@ -3569,7 +3601,20 @@ body, body *, body *::before, body *::after {
       <button class="testi-add-btn admin-only" id="openReviewModal" style="display:none;">＋ Add Review</button>
     </div>
 
-    <div id="reviewsGrid" class="testi-grid"><!-- review cards injected by JS --></div>
+    <div id="reviewFilters" class="review-filters" style="display:none;"></div>
+
+    <div class="review-carousel-wrap">
+      <div id="reviewCarouselTrack" class="review-carousel-track"></div>
+    </div>
+
+    <div id="reviewVideoSection" style="display:none;">
+      <h3 class="review-video-heading">Video Testimonials</h3>
+      <div class="review-video-slider-wrap">
+        <button class="review-slider-nav" id="reviewVideoPrev" aria-label="Previous video">‹</button>
+        <div id="reviewVideoTrack" class="review-video-track"></div>
+        <button class="review-slider-nav" id="reviewVideoNext" aria-label="Next video">›</button>
+      </div>
+    </div>
 
     <div id="reviewsEmpty" class="testi-empty" style="display:none;">
       <div class="testi-empty-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
@@ -3578,6 +3623,15 @@ body, body *, body *::before, body *::after {
     </div>
   </div>
 </section>
+
+<!-- VIDEO REVIEW PLAYBACK MODAL -->
+<div id="reviewVideoModal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:3100;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#111827;border:1px solid rgba(37,99,235,0.3);border-radius:16px;padding:20px;width:100%;max-width:720px;position:relative;">
+    <button onclick="closeReviewVideoModal()" style="position:absolute;top:-14px;right:-14px;width:32px;height:32px;border-radius:50%;background:var(--indigo);border:none;color:#fff;font-size:18px;cursor:pointer;line-height:1;">&times;</button>
+    <div id="reviewVideoModalBody" style="position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;"></div>
+    <div id="reviewVideoModalTitle" style="margin-top:14px;font-size:15px;font-weight:700;color:var(--white);"></div>
+  </div>
+</div>
 
 <!-- REVIEW ADD/EDIT MODAL -->
 <div id="reviewModal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(10px);z-index:3000;align-items:center;justify-content:center;padding:20px;">
@@ -3620,6 +3674,18 @@ body, body *, body *::before, body *::after {
             <option value="1">★☆☆☆☆ (1)</option>
           </select>
         </div>
+      </div>
+
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">CATEGORY / SKILL</label>
+        <input id="rCategoryInput" list="rCategoryList" type="text" placeholder="e.g. Video Editing" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+        <datalist id="rCategoryList">
+          <option value="Video Editing">
+          <option value="Graphic Design">
+          <option value="AI Automation">
+          <option value="Prompt Engineering">
+          <option value="Digital Marketing">
+        </datalist>
       </div>
 
       <div>
@@ -5244,52 +5310,146 @@ function getReviewEmbedUrl(url) {
   return null;
 }
 
+let reviewFilterCategory = 'All';
+let reviewCarouselIndex = 0;
+let reviewCarouselTimer = null;
+
+function reviewHasVideo(r) {
+  return !!(r.videoUrl || (r.media && (r.media.type || '').startsWith('video/')));
+}
+
+function getReviewCategories() {
+  return ['All', ...new Set(reviews.map(r => r.category).filter(Boolean))];
+}
+
+function renderReviewFilters() {
+  const wrap = document.getElementById('reviewFilters');
+  if (!wrap) return;
+  const cats = getReviewCategories();
+  if (cats.length <= 2) { wrap.style.display = 'none'; return; } // not worth filtering with 0-1 real categories
+  if (!cats.includes(reviewFilterCategory)) reviewFilterCategory = 'All';
+  wrap.style.display = 'flex';
+  wrap.innerHTML = cats.map(c =>
+    `<button type="button" class="review-filter-btn${c === reviewFilterCategory ? ' active' : ''}" data-cat="${c}">${c}</button>`
+  ).join('');
+  wrap.querySelectorAll('.review-filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => { reviewFilterCategory = btn.dataset.cat; renderReviews(); });
+  });
+}
+
+function renderReviewCarousel(indexed) {
+  const wrap = document.querySelector('.review-carousel-wrap');
+  const track = document.getElementById('reviewCarouselTrack');
+  clearInterval(reviewCarouselTimer);
+  reviewCarouselIndex = 0;
+  const textOnes = indexed.filter(({ r }) => !reviewHasVideo(r));
+  if (!textOnes.length) { track.innerHTML = ''; wrap.style.display = 'none'; return; }
+  wrap.style.display = 'block';
+  track.style.transform = 'translateX(0%)';
+  track.innerHTML = textOnes.map(({ r, i }) => {
+    const stars = '★'.repeat(r.rating || 5) + '☆'.repeat(5 - (r.rating || 5));
+    const photo = (r.media && r.media.data && !(r.media.type || '').startsWith('video/')) ? r.media.data : '';
+    return `
+    <div class="review-slide">
+      <div class="review-slide-inner">
+        ${r.platform ? `<div class="testi-platform">${r.platform}</div>` : ''}
+        ${photo ? `<img src="${photo}" alt="${r.name || ''}" style="width:64px;height:64px;border-radius:50%;object-fit:cover;margin:0 auto 14px;border:2px solid var(--indigo);">` : ''}
+        <div class="testi-stars" style="justify-content:center;display:flex;">${stars}</div>
+        ${r.title ? `<div class="testi-title">${r.title}</div>` : ''}
+        <div class="testi-text">"${r.text || ''}"</div>
+        <div class="testi-author" style="justify-content:center;">
+          <div>
+            <div class="testi-name">${r.name || 'Anonymous'}</div>
+            <div class="testi-role">${r.role || ''}${r.category ? ' · ' + r.category : ''}</div>
+          </div>
+        </div>
+        ${isAdmin ? `
+        <div class="testi-admin-row" style="justify-content:center;">
+          <button onclick="openEditReview(${i})" class="admin-only" style="padding:7px 14px;background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.25);color:var(--indigo);border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;">Edit</button>
+          <button onclick="removeReview(${i})" class="admin-only" style="padding:7px 14px;background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;">Delete</button>
+        </div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  if (textOnes.length > 1) {
+    reviewCarouselTimer = setInterval(() => {
+      reviewCarouselIndex = (reviewCarouselIndex + 1) % textOnes.length;
+      track.style.transform = `translateX(-${reviewCarouselIndex * 100}%)`;
+    }, 5000);
+  }
+}
+
+function renderReviewVideoSlider(indexed) {
+  const section = document.getElementById('reviewVideoSection');
+  const track = document.getElementById('reviewVideoTrack');
+  const videoOnes = indexed.filter(({ r }) => reviewHasVideo(r));
+  if (!videoOnes.length) { section.style.display = 'none'; track.innerHTML = ''; return; }
+  section.style.display = 'block';
+  track.innerHTML = videoOnes.map(({ r, i }) => {
+    const thumb = (r.media && r.media.data && !(r.media.type || '').startsWith('video/')) ? r.media.data : '';
+    return `
+    <div class="review-video-card" data-i="${i}">
+      ${thumb
+        ? `<img class="review-video-thumb" src="${thumb}" alt="${r.title || ''}" loading="lazy">`
+        : `<div class="review-video-thumb" style="display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:12px;">Video</div>`}
+      <div class="review-video-play">▶</div>
+      <div class="review-video-card-body">
+        <div class="review-video-card-title">${r.title || r.name || 'Video review'}</div>
+        ${r.category ? `<div class="review-video-card-cat">${r.category}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  track.querySelectorAll('.review-video-card').forEach(card => {
+    card.addEventListener('click', () => openReviewVideoModal(reviews[card.dataset.i]));
+  });
+}
+
+function openReviewVideoModal(r) {
+  const modal = document.getElementById('reviewVideoModal');
+  const body = document.getElementById('reviewVideoModalBody');
+  const title = document.getElementById('reviewVideoModalTitle');
+  title.textContent = r.title || r.name || '';
+  let inner = '';
+  const embed = r.videoUrl ? getReviewEmbedUrl(r.videoUrl) : null;
+  if (embed) {
+    inner = `<iframe src="${embed}?autoplay=1" style="position:absolute;inset:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+  } else if (r.videoUrl) {
+    inner = `<video src="${r.videoUrl}" controls autoplay style="position:absolute;inset:0;width:100%;height:100%;"></video>`;
+  } else if (r.media && r.media.data) {
+    inner = `<video src="${r.media.data}" controls autoplay style="position:absolute;inset:0;width:100%;height:100%;"></video>`;
+  }
+  body.innerHTML = inner;
+  modal.style.display = 'flex';
+}
+
+function closeReviewVideoModal() {
+  document.getElementById('reviewVideoModal').style.display = 'none';
+  document.getElementById('reviewVideoModalBody').innerHTML = '';
+}
+
+document.getElementById('reviewVideoModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeReviewVideoModal(); });
+document.getElementById('reviewVideoPrev').addEventListener('click', () => document.getElementById('reviewVideoTrack').scrollBy({ left: -230, behavior: 'smooth' }));
+document.getElementById('reviewVideoNext').addEventListener('click', () => document.getElementById('reviewVideoTrack').scrollBy({ left: 230, behavior: 'smooth' }));
+
 function renderReviews() {
-  const grid = document.getElementById('reviewsGrid');
   const empty = document.getElementById('reviewsEmpty');
-  if (!grid || !empty) return;
+  if (!empty) return;
   toggleContentSection('testimonials', reviews.length > 0, ['navMoreReviewsLink','mmReviewsLink','footerReviewsLink']);
   if (!reviews.length) {
-    grid.innerHTML = '';
     empty.style.display = 'block';
+    document.getElementById('reviewFilters').style.display = 'none';
+    document.querySelector('.review-carousel-wrap').style.display = 'none';
+    document.getElementById('reviewVideoSection').style.display = 'none';
     return;
   }
   empty.style.display = 'none';
-  grid.innerHTML = reviews.map((r, i) => {
-    const stars = '★'.repeat(r.rating || 5) + '☆'.repeat(5 - (r.rating || 5));
-    let mediaHtml = '';
-    if (r.videoUrl) {
-      const embed = getReviewEmbedUrl(r.videoUrl);
-      mediaHtml = embed
-        ? `<div class="testi-video-wrap"><iframe src="${embed}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>`
-        : `<video class="testi-thumb" controls preload="metadata" src="${r.videoUrl}"></video>`;
-    } else if (r.media && r.media.data) {
-      mediaHtml = (r.media.type || '').startsWith('video/')
-        ? `<video class="testi-thumb" controls preload="metadata" src="${r.media.data}"></video>`
-        : `<img class="testi-thumb" src="${r.media.data}" alt="${r.title || 'Review screenshot'}" loading="lazy">`;
-    }
-    return `
-    <div class="testi-card reveal visible">
-      ${r.platform ? `<div class="testi-platform">${r.platform}</div>` : ''}
-      ${mediaHtml}
-      <div class="testi-quote-mark">"</div>
-      <div class="testi-stars">${stars}</div>
-      ${r.title ? `<div class="testi-title">${r.title}</div>` : ''}
-      <div class="testi-text">${r.text || ''}</div>
-      <div class="testi-author">
-        <div class="testi-avatar" style="background:rgba(37,99,235,0.15)"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div>
-        <div>
-          <div class="testi-name">${r.name || 'Anonymous'}</div>
-          <div class="testi-role">${r.role || ''}</div>
-        </div>
-      </div>
-      ${isAdmin ? `
-      <div class="testi-admin-row">
-        <button onclick="openEditReview(${i})" class="admin-only" style="flex:1;padding:7px;background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.25);color:var(--indigo);border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> Edit</button>
-        <button onclick="removeReview(${i})" class="admin-only" style="padding:7px 14px;background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-      </div>` : ''}
-    </div>`;
-  }).join('');
+  renderReviewFilters();
+  const filtered = reviews
+    .map((r, i) => ({ r, i }))
+    .filter(({ r }) => reviewFilterCategory === 'All' || r.category === reviewFilterCategory);
+  renderReviewCarousel(filtered);
+  renderReviewVideoSlider(filtered);
 }
 
 function openReviewModal() {
@@ -5298,7 +5458,7 @@ function openReviewModal() {
   document.getElementById('reviewModalLabel').textContent = '// ADD REVIEW';
   document.getElementById('reviewModalTitle').textContent = 'New Review';
   document.getElementById('rSaveBtn').textContent = 'Save Review →';
-  ['rTitleInput','rTextInput','rNameInput','rRoleInput','rPlatformInput','rVideoUrlInput'].forEach(id => document.getElementById(id).value = '');
+  ['rTitleInput','rTextInput','rNameInput','rRoleInput','rPlatformInput','rCategoryInput','rVideoUrlInput'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('rRatingInput').value = '5';
   clearReviewMedia();
   document.getElementById('reviewModal').style.display = 'flex';
@@ -5316,6 +5476,7 @@ function openEditReview(i) {
   document.getElementById('rNameInput').value = r.name || '';
   document.getElementById('rRoleInput').value = r.role || '';
   document.getElementById('rPlatformInput').value = r.platform || '';
+  document.getElementById('rCategoryInput').value = r.category || '';
   document.getElementById('rVideoUrlInput').value = r.videoUrl || '';
   document.getElementById('rRatingInput').value = r.rating || 5;
   clearReviewMedia();
@@ -5363,6 +5524,7 @@ async function saveReview() {
     name:     document.getElementById('rNameInput').value.trim(),
     role:     document.getElementById('rRoleInput').value.trim(),
     platform: document.getElementById('rPlatformInput').value.trim(),
+    category: document.getElementById('rCategoryInput').value.trim(),
     videoUrl: document.getElementById('rVideoUrlInput').value.trim(),
     rating:   parseInt(document.getElementById('rRatingInput').value) || 5,
     date:     new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}),
@@ -6344,7 +6506,7 @@ async function initSharedData() {
   document.getElementById('ytVideosGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
   document.getElementById('blogGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
   document.getElementById('projectGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
-  document.getElementById('reviewsGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
+  document.getElementById('reviewCarouselTrack').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
 
   // Render the Fiverr-style pricing block right away using the built-in default
   // data (fivCategories already has a value from its declaration above). Waiting
