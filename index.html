@@ -7418,6 +7418,11 @@ const BreakingTicker = (() => {
       document.fonts.ready.then(() => { if (running) measure(); });
     }
 
+    // Safety net: re-measure one frame later regardless of fonts/timing.
+    // Covers any browser/device where the bar's display/layout wasn't
+    // fully committed yet at the moment setContent() ran.
+    requestAnimationFrame(() => { if (running) measure(); });
+
     running = true;
     startLoop();
   }
@@ -7456,6 +7461,13 @@ function renderBreakingBar() {
     return;
   }
 
+  // Make the bar visible FIRST. scrollWidth on a display:none element (or an
+  // element inside one) always reports 0 — measuring before this line was
+  // the root cause of the ticker freezing on first load (loopWidth ended up
+  // 0, so the rAF loop's `if (loopWidth > 0)` guard never let it move).
+  bar.style.display = 'flex';
+  document.body.classList.add('has-breaking-bar');
+
   // Skip rebuilding when nothing has actually changed since the last render
   // (this runs every 30s just to check expiry) — otherwise the ticker would
   // visibly jump back to the start and restart every 30 seconds even when
@@ -7466,9 +7478,6 @@ function renderBreakingBar() {
     const itemsHtml = active.map(u => `<span class="breaking-ticker-item">${escHtml(u.text)}<span class="sep">•</span></span>`).join('');
     BreakingTicker.setContent(itemsHtml); // #11 — also recalculates whenever new breaking text is added
   }
-
-  bar.style.display = 'flex';
-  document.body.classList.add('has-breaking-bar');
 }
 setInterval(renderBreakingBar, 30000); // auto-hide each update once its own time passes, even without a page reload
 
