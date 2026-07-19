@@ -7299,8 +7299,8 @@ function renderBreakingBar() {
     // noticeably faster on wide desktop screens than on mobile.
     track.style.animation = 'none';
     const loopWidth = track.scrollWidth / 2;
-    const pxPerSecond = 24; // a touch faster than the skills marquee (~18px/sec on PC), not the previous 55px/sec
-    const duration = Math.max(10, loopWidth / pxPerSecond);
+    const pxPerSecond = 14; // calm, readable news-ticker pace — slower than the skills marquee
+    const duration = Math.max(14, loopWidth / pxPerSecond);
     void track.offsetWidth; // force reflow so the animation restarts cleanly with the new duration
     track.style.animation = '';
     track.style.animationDuration = duration + 's';
