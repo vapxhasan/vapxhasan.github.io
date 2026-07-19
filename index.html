@@ -185,8 +185,9 @@ nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 1001;
-  background: linear-gradient(90deg, #B91C1C, #7C1D1D 60%, #4c1414);
-  color: #fff;
+  background: linear-gradient(90deg, #111827, #1a2338 55%, #111827);
+  border-bottom: 1px solid rgba(59,130,246,0.2);
+  color: var(--white);
   font-family: var(--font-mono);
   font-size: 13px;
   align-items: center;
@@ -202,14 +203,15 @@ nav {
   font-weight: 800;
   font-size: 11px;
   letter-spacing: 1.5px;
-  background: rgba(0,0,0,0.25);
+  color: #ff4d4d;
+  background: rgba(255,50,50,0.1);
   padding: 0 14px;
   height: 100%;
-  border-right: 1px solid rgba(255,255,255,0.15);
+  border-right: 1px solid var(--border);
 }
 .breaking-bar-dot {
   width: 7px; height: 7px; border-radius: 50%;
-  background: #fff;
+  background: #ff4d4d;
   animation: pulse 1.4s ease infinite;
 }
 .breaking-ticker-viewport {
@@ -234,20 +236,21 @@ nav {
   align-items: center;
   font-size: 13px;
   font-weight: 500;
+  color: var(--white);
 }
-.breaking-ticker-item .sep { margin: 0 40px; opacity: .5; }
+.breaking-ticker-item .sep { margin: 0 40px; opacity: .5; color: var(--cyan); }
 @keyframes breakingTickerScroll {
   from { transform: translateX(0); }
   to   { transform: translateX(-50%); }
 }
 .breaking-bar-close {
   flex-shrink: 0;
-  background: none; border: none; color: #fff; opacity: .75;
+  background: none; border: none; color: var(--muted); opacity: .75;
   cursor: pointer; padding: 0 14px; height: 100%;
   display: flex; align-items: center;
-  border-left: 1px solid rgba(255,255,255,0.15);
+  border-left: 1px solid var(--border);
 }
-.breaking-bar-close:hover { opacity: 1; background: rgba(0,0,0,0.15); }
+.breaking-bar-close:hover { opacity: 1; color: var(--white); background: rgba(59,130,246,0.08); }
 body.has-breaking-bar nav { top: 38px; }
 body.has-breaking-bar #hero { padding-top: 148px; }
 @media (max-width: 768px) {
@@ -2631,6 +2634,11 @@ body.light-mode::before { background-image: radial-gradient(rgba(37,99,235,0.07)
 body.light-mode nav.scrolled { background: rgba(255,255,255,0.92); box-shadow: 0 1px 0 rgba(15,23,42,0.06); }
 body.light-mode .mobile-menu { background: rgba(255,255,255,0.98); }
 body.light-mode .hero-orb { opacity: .5; }
+body.light-mode .breaking-bar { background: linear-gradient(90deg, #ffffff, #f1f5f9 55%, #ffffff); border-bottom: 1px solid rgba(37,99,235,0.15); box-shadow: 0 2px 12px rgba(15,23,42,0.08); }
+body.light-mode .breaking-ticker-item { color: #0F172A; }
+body.light-mode .breaking-bar-label { background: rgba(255,50,50,0.08); }
+body.light-mode .breaking-bar-close { color: #64748B; }
+body.light-mode .breaking-bar-close:hover { color: #0F172A; background: rgba(37,99,235,0.06); }
 
 /* ===== THEME: SMOOTH TRANSITION ===== */
 body, body *, body *::before, body *::after {
@@ -7258,6 +7266,7 @@ setInterval(renderAvailabilityBadge, 30000); // re-check every 30s so the 10-min
 let breakingUpdates = []; // [{ text, expiresAt }, ...]
 let _breakingDismissed = false;
 
+let _breakingBarFingerprint = '';
 function renderBreakingBar() {
   const bar = document.getElementById('breakingBar');
   const track = document.getElementById('breakingTickerTrack');
@@ -7267,19 +7276,34 @@ function renderBreakingBar() {
   if (!active.length || _breakingDismissed) {
     bar.style.display = 'none';
     document.body.classList.remove('has-breaking-bar');
+    _breakingBarFingerprint = '';
     return;
   }
 
-  // Build one loop of items, then duplicate the whole loop once so the
-  // -50% transform animation scrolls seamlessly with no visible seam/jump.
-  const itemsHtml = active.map(u => `<span class="breaking-ticker-item">${escHtml(u.text)}<span class="sep">•</span></span>`).join('');
-  track.innerHTML = itemsHtml + itemsHtml;
+  // Skip rebuilding when nothing has actually changed since the last render
+  // (this runs every 30s just to check expiry) — otherwise the ticker would
+  // visibly jump back to the start and restart every 30 seconds even when
+  // no update text changed.
+  const fingerprint = active.map(u => u.text).join('|');
+  if (fingerprint !== _breakingBarFingerprint) {
+    _breakingBarFingerprint = fingerprint;
+    // Build one loop of items, then duplicate the whole loop once so the
+    // -50% transform animation scrolls seamlessly with no visible seam/jump.
+    const itemsHtml = active.map(u => `<span class="breaking-ticker-item">${escHtml(u.text)}<span class="sep">•</span></span>`).join('');
+    track.innerHTML = itemsHtml + itemsHtml;
 
-  // Scroll speed scales with total content length so it always reads at a
-  // comfortable, consistent pace whether there's 1 update or 6.
-  const totalChars = active.reduce((sum, u) => sum + u.text.length, 0);
-  const duration = Math.max(14, totalChars * 0.22);
-  track.style.animationDuration = duration + 's';
+    // Measure the actual rendered width of one loop and derive the duration
+    // from a fixed px/sec speed, so it always scrolls at the same real-world
+    // pace regardless of screen size — a character-count estimate was moving
+    // noticeably faster on wide desktop screens than on mobile.
+    track.style.animation = 'none';
+    const loopWidth = track.scrollWidth / 2;
+    const pxPerSecond = 55;
+    const duration = Math.max(10, loopWidth / pxPerSecond);
+    void track.offsetWidth; // force reflow so the animation restarts cleanly with the new duration
+    track.style.animation = '';
+    track.style.animationDuration = duration + 's';
+  }
 
   bar.style.display = 'flex';
   document.body.classList.add('has-breaking-bar');
