@@ -7293,7 +7293,6 @@ const BreakingTicker = (() => {
   let rafId = null;          // current requestAnimationFrame handle
   let running = false;       // true once there is content to animate
   let hoverPaused = false;   // paused because the pointer is over the ticker
-  let reducedMotion = false; // paused because the OS asked for reduced motion
 
   // Constant px/sec per breakpoint (per the design spec: desktop
   // slow/premium, tablet a little faster, mobile the fastest of the
@@ -7324,7 +7323,7 @@ const BreakingTicker = (() => {
   function tick(ts) {
     if (!running) { rafId = null; return; }
 
-    if (hoverPaused || reducedMotion || document.hidden) {
+    if (hoverPaused || document.hidden) {
       // Reset lastTs (don't accumulate a stale delta) so that unpausing
       // doesn't cause a big jump/teleport from a huge elapsed-time value.
       lastTs = null;
@@ -7365,7 +7364,6 @@ const BreakingTicker = (() => {
   function init(trackEl, viewportEl) {
     track = trackEl;
     viewport = viewportEl;
-    reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // #15 — pause on hover, like every professional news ticker does so
     // readers can finish a headline without it scrolling away.
@@ -7388,15 +7386,9 @@ const BreakingTicker = (() => {
       resizeTimer = setTimeout(() => { if (running) measure(); }, 150);
     });
 
-    // Live-track OS-level reduced-motion toggles (#13), not just the value
-    // at page load.
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const onMqChange = (e) => {
-      reducedMotion = e.matches;
-      if (reducedMotion) { offset = 0; applyTransform(); } // freeze on a clean frame, no partial-scroll flash
-    };
-    if (mq.addEventListener) mq.addEventListener('change', onMqChange);
-    else if (mq.addListener) mq.addListener(onMqChange); // Safari <14 fallback
+    // NOTE: OS-level "prefers-reduced-motion" is intentionally NOT honored
+    // here (site-owner decision) — the ticker always scrolls regardless of
+    // that setting. Hover-pause and tab-visibility pause above still work.
   }
 
   // #6/#7 — replaces the whole content with one fresh loop, duplicated once
