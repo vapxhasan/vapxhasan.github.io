@@ -57,7 +57,9 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://www.gstatic.com">
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
@@ -183,41 +185,79 @@ nav {
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 1001;
-  background: linear-gradient(90deg, var(--indigo), var(--violet));
+  background: linear-gradient(90deg, #B91C1C, #7C1D1D 60%, #4c1414);
   color: #fff;
   font-family: var(--font-mono);
   font-size: 13px;
-  padding: 10px 48px;
-  text-align: center;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  height: 40px;
+  height: 38px;
   box-sizing: border-box;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.35);
 }
 .breaking-bar-label {
-  font-weight: 800;
-  font-size: 10.5px;
-  letter-spacing: 1px;
-  background: rgba(255,255,255,0.18);
-  padding: 3px 8px;
-  border-radius: 4px;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  background: rgba(0,0,0,0.25);
+  padding: 0 14px;
+  height: 100%;
+  border-right: 1px solid rgba(255,255,255,0.15);
+}
+.breaking-bar-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #fff;
+  animation: pulse 1.4s ease infinite;
+}
+.breaking-ticker-viewport {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+  min-width: 0;
+}
+.breaking-ticker-track {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  will-change: transform;
+  animation: breakingTickerScroll linear infinite;
+}
+.breaking-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 500;
+}
+.breaking-ticker-item .sep { margin: 0 40px; opacity: .5; }
+@keyframes breakingTickerScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
 }
 .breaking-bar-close {
-  position: absolute;
-  right: 14px; top: 50%;
-  transform: translateY(-50%);
+  flex-shrink: 0;
   background: none; border: none; color: #fff; opacity: .75;
-  cursor: pointer; padding: 4px;
+  cursor: pointer; padding: 0 14px; height: 100%;
+  display: flex; align-items: center;
+  border-left: 1px solid rgba(255,255,255,0.15);
 }
-.breaking-bar-close:hover { opacity: 1; }
-body.has-breaking-bar nav { top: 40px; }
-body.has-breaking-bar #hero { padding-top: 150px; }
+.breaking-bar-close:hover { opacity: 1; background: rgba(0,0,0,0.15); }
+body.has-breaking-bar nav { top: 38px; }
+body.has-breaking-bar #hero { padding-top: 148px; }
 @media (max-width: 768px) {
-  .breaking-bar { font-size: 11.5px; padding: 8px 40px; height: auto; min-height: 36px; }
-  body.has-breaking-bar nav { top: 36px; }
-  body.has-breaking-bar #hero { padding-top: 136px; }
+  .breaking-bar { height: 34px; font-size: 11.5px; }
+  .breaking-bar-label { font-size: 9.5px; padding: 0 10px; letter-spacing: 1px; }
+  .breaking-ticker-item { font-size: 11.5px; }
+  .breaking-ticker-item .sep { margin: 0 26px; }
+  .breaking-bar-close { padding: 0 10px; }
+  body.has-breaking-bar nav { top: 34px; }
+  body.has-breaking-bar #hero { padding-top: 132px; }
 }
 nav.scrolled {
   background: rgba(8,11,20,0.92);
@@ -2850,8 +2890,8 @@ body, body *, body *::before, body *::after {
 .exit-popup-cta:hover { background: #1ebd5a; box-shadow: 0 6px 20px rgba(37,211,102,0.4); }
 .exit-popup-cta svg { width: 20px; height: 20px; }
 </style>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
+  <script defer>
     // limitRate blocks the SDK from actually dispatching a second request for
     // 8 seconds after the first one — a hard, built-in guarantee against
     // duplicate sends (accidental double-click, double-tap, etc.), regardless
@@ -2923,38 +2963,15 @@ body, body *, body *::before, body *::after {
 
 <!-- ===== BREAKING UPDATE MODAL ===== -->
 <div id="breakingBarModal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
-  <div class="dark-surface" style="background:#111827;border:1px solid rgba(37,99,235,0.3);border-radius:16px;padding:32px;width:100%;max-width:440px;margin:16px;box-shadow:0 0 40px rgba(37,99,235,0.2);position:relative;">
+  <div class="dark-surface" style="background:#111827;border:1px solid rgba(37,99,235,0.3);border-radius:16px;padding:32px;width:100%;max-width:520px;margin:16px;box-shadow:0 0 40px rgba(37,99,235,0.2);position:relative;max-height:88vh;overflow-y:auto;">
     <button onclick="closeBreakingBarModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#94A3B8;font-size:20px;cursor:pointer;line-height:1;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
-    <div style="font-size:18px;font-weight:700;color:#F8FAFC;margin-bottom:4px;">🔴 Breaking Update Bar</div>
-    <div style="font-size:13px;color:#94A3B8;margin-bottom:22px;">Shows a bar at the top of every page for a fixed time, then disappears automatically.</div>
-    <div style="margin-bottom:14px;">
-      <label style="font-size:11px;color:#94A3B8;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:monospace;">Update Text</label>
-      <input id="breakingBarTextInput" type="text" placeholder="e.g. Booking for August now open — limited slots!" style="width:100%;padding:10px 14px;background:#0d1220;border:1px solid rgba(37,99,235,0.25);border-radius:8px;color:#F8FAFC;font-size:14px;outline:none;font-family:inherit;">
-    </div>
-    <div style="margin-bottom:20px;">
-      <label style="font-size:11px;color:#94A3B8;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:monospace;">Show For</label>
-      <select id="breakingBarDurationInput" onchange="toggleBreakingBarCustomDuration()" style="width:100%;padding:10px 14px;background:#0d1220;border:1px solid rgba(37,99,235,0.25);border-radius:8px;color:#F8FAFC;font-size:14px;outline:none;font-family:inherit;">
-        <option value="1">1 Hour</option>
-        <option value="6">6 Hours</option>
-        <option value="12">12 Hours</option>
-        <option value="24" selected>1 Day</option>
-        <option value="72">3 Days</option>
-        <option value="168">7 Days</option>
-        <option value="720">30 Days</option>
-        <option value="custom">Custom...</option>
-      </select>
-      <div id="breakingBarCustomWrap" style="display:none;margin-top:10px;gap:8px;">
-        <input id="breakingBarCustomValue" type="number" min="1" placeholder="e.g. 5" style="width:100%;padding:10px 14px;background:#0d1220;border:1px solid rgba(37,99,235,0.25);border-radius:8px;color:#F8FAFC;font-size:14px;outline:none;font-family:inherit;">
-        <select id="breakingBarCustomUnit" style="width:100%;padding:10px 14px;background:#0d1220;border:1px solid rgba(37,99,235,0.25);border-radius:8px;color:#F8FAFC;font-size:14px;outline:none;font-family:inherit;">
-          <option value="1">Hours</option>
-          <option value="24">Days</option>
-        </select>
-      </div>
-    </div>
-    <div id="breakingBarStatus" style="font-size:12px;color:#6EE7B7;margin-bottom:16px;display:none;font-family:monospace;"></div>
+    <div style="font-size:18px;font-weight:700;color:#F8FAFC;margin-bottom:4px;">🔴 Breaking Update Ticker</div>
+    <div style="font-size:13px;color:#94A3B8;margin-bottom:20px;">Add 1 or more updates — they'll scroll continuously like a TV news ticker. Each one disappears on its own schedule.</div>
+    <div id="breakingRows" style="display:flex;flex-direction:column;gap:12px;max-height:380px;overflow-y:auto;padding-right:4px;margin-bottom:8px;"></div>
+    <button type="button" onclick="addBreakingRow()" style="background:rgba(59,130,246,0.08);border:1px dashed rgba(59,130,246,0.35);color:#60A5FA;border-radius:8px;padding:9px;font-size:12px;cursor:pointer;width:100%;font-family:monospace;margin-bottom:18px;">+ Add Another Update</button>
     <div style="display:flex;gap:10px;">
-      <button onclick="clearBreakingBar()" style="flex:1;padding:12px;background:rgba(255,50,50,0.1);border:1px solid rgba(255,50,50,0.3);border-radius:8px;color:#ff7777;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Clear / Remove</button>
-      <button onclick="saveBreakingBar()" style="flex:1;padding:12px;background:linear-gradient(135deg,#2563EB,#3B82F6);border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Publish Update</button>
+      <button onclick="clearBreakingBar()" style="flex:1;padding:12px;background:rgba(255,50,50,0.1);border:1px solid rgba(255,50,50,0.3);border-radius:8px;color:#ff7777;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Clear All</button>
+      <button onclick="saveBreakingBar()" style="flex:1;padding:12px;background:linear-gradient(135deg,#2563EB,#3B82F6);border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Publish All</button>
     </div>
   </div>
 </div>
@@ -2990,8 +3007,10 @@ body, body *, body *::before, body *::after {
 
 <!-- ===== BREAKING UPDATE BAR ===== -->
 <div id="breakingBar" class="breaking-bar" style="display:none;">
-  <span class="breaking-bar-label">🔴 UPDATE</span>
-  <span id="breakingBarText"></span>
+  <span class="breaking-bar-label"><span class="breaking-bar-dot"></span>LIVE</span>
+  <div class="breaking-ticker-viewport">
+    <div class="breaking-ticker-track" id="breakingTickerTrack"></div>
+  </div>
   <button class="breaking-bar-close" onclick="dismissBreakingBar()" aria-label="Dismiss"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
 </div>
 
@@ -7137,7 +7156,12 @@ async function initSharedData() {
     if (record.resume !== undefined) resumeData = record.resume;
     if (record.faqs)           faqs            = record.faqs;
     if (record.availability_messages && record.availability_messages.length) availabilityMessages = record.availability_messages;
-    if (record.breaking_update !== undefined) breakingUpdate = record.breaking_update;
+    if (record.breaking_update !== undefined) {
+      // Support the old single-object format from before multi-update support existed
+      breakingUpdates = Array.isArray(record.breaking_update)
+        ? record.breaking_update
+        : (record.breaking_update ? [record.breaking_update] : []);
+    }
   }
 
   function renderAll() {
@@ -7188,51 +7212,88 @@ function renderAvailabilityBadge() {
 setInterval(renderAvailabilityBadge, 30000); // re-check every 30s so the 10-min rotation stays accurate even on a long-open tab
 
 // ===================================================
-// BREAKING UPDATE BAR (admin-set text + auto-expiring duration)
+// BREAKING UPDATE TICKER (multiple admin-set updates, auto-expiring, TV-news style scroll)
 // ===================================================
-let breakingUpdate = null; // { text, expiresAt }
+let breakingUpdates = []; // [{ text, expiresAt }, ...]
 let _breakingDismissed = false;
 
 function renderBreakingBar() {
   const bar = document.getElementById('breakingBar');
-  if (!bar) return;
-  const active = breakingUpdate && breakingUpdate.text && breakingUpdate.expiresAt && Date.now() < breakingUpdate.expiresAt && !_breakingDismissed;
-  if (active) {
-    document.getElementById('breakingBarText').textContent = breakingUpdate.text;
-    bar.style.display = 'flex';
-    document.body.classList.add('has-breaking-bar');
-  } else {
+  const track = document.getElementById('breakingTickerTrack');
+  if (!bar || !track) return;
+  const active = (breakingUpdates || []).filter(u => u && u.text && u.expiresAt && Date.now() < u.expiresAt);
+
+  if (!active.length || _breakingDismissed) {
     bar.style.display = 'none';
     document.body.classList.remove('has-breaking-bar');
+    return;
   }
+
+  // Build one loop of items, then duplicate the whole loop once so the
+  // -50% transform animation scrolls seamlessly with no visible seam/jump.
+  const itemsHtml = active.map(u => `<span class="breaking-ticker-item">${escHtml(u.text)}<span class="sep">•</span></span>`).join('');
+  track.innerHTML = itemsHtml + itemsHtml;
+
+  // Scroll speed scales with total content length so it always reads at a
+  // comfortable, consistent pace whether there's 1 update or 6.
+  const totalChars = active.reduce((sum, u) => sum + u.text.length, 0);
+  const duration = Math.max(14, totalChars * 0.22);
+  track.style.animationDuration = duration + 's';
+
+  bar.style.display = 'flex';
+  document.body.classList.add('has-breaking-bar');
 }
-setInterval(renderBreakingBar, 30000); // auto-hide once the fixed time passes, even without a page reload
+setInterval(renderBreakingBar, 30000); // auto-hide each update once its own time passes, even without a page reload
 
 function dismissBreakingBar() {
   _breakingDismissed = true;
   renderBreakingBar();
 }
 
-function toggleBreakingBarCustomDuration() {
-  const sel = document.getElementById('breakingBarDurationInput').value;
-  document.getElementById('breakingBarCustomWrap').style.display = sel === 'custom' ? 'flex' : 'none';
+function addBreakingRow(text, hoursValue) {
+  const wrap = document.getElementById('breakingRows');
+  const row = document.createElement('div');
+  row.className = 'breaking-row';
+  row.style.cssText = 'background:#0d1220;border:1px solid rgba(37,99,235,0.2);border-radius:10px;padding:12px;';
+  const isPreset = ['1','6','12','24','72','168','720'].includes(String(hoursValue));
+  row.innerHTML = `
+    <input class="breaking-row-text" type="text" placeholder="e.g. Booking for August now open — limited slots!" value="${text ? escHtml(text) : ''}" style="width:100%;padding:10px 12px;background:#151b2c;border:1px solid rgba(37,99,235,0.25);border-radius:8px;color:#F8FAFC;font-size:13.5px;outline:none;font-family:inherit;margin-bottom:8px;box-sizing:border-box;">
+    <div style="display:flex;gap:8px;align-items:center;">
+      <select class="breaking-row-duration" onchange="this.parentElement.nextElementSibling.style.display = this.value==='custom' ? 'flex' : 'none';" style="flex:1;padding:9px 10px;background:#151b2c;border:1px solid rgba(37,99,235,0.25);border-radius:8px;color:#F8FAFC;font-size:13px;outline:none;font-family:inherit;">
+        <option value="1" ${hoursValue==1?'selected':''}>1 Hour</option>
+        <option value="6" ${hoursValue==6?'selected':''}>6 Hours</option>
+        <option value="12" ${hoursValue==12?'selected':''}>12 Hours</option>
+        <option value="24" ${!hoursValue||hoursValue==24?'selected':''}>1 Day</option>
+        <option value="72" ${hoursValue==72?'selected':''}>3 Days</option>
+        <option value="168" ${hoursValue==168?'selected':''}>7 Days</option>
+        <option value="720" ${hoursValue==720?'selected':''}>30 Days</option>
+        <option value="custom" ${!isPreset&&hoursValue?'selected':''}>Custom...</option>
+      </select>
+      <button type="button" onclick="this.closest('.breaking-row').remove()" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:6px;width:36px;height:36px;cursor:pointer;flex-shrink:0;">✕</button>
+    </div>
+    <div class="breaking-row-custom" style="display:${!isPreset&&hoursValue?'flex':'none'};gap:8px;margin-top:8px;">
+      <input class="breaking-row-custom-val" type="number" min="1" placeholder="e.g. 5" value="${!isPreset&&hoursValue?hoursValue:''}" style="width:100%;padding:9px 10px;background:#151b2c;border:1px solid rgba(37,99,235,0.25);border-radius:8px;color:#F8FAFC;font-size:13px;outline:none;font-family:inherit;">
+      <select class="breaking-row-custom-unit" style="width:100%;padding:9px 10px;background:#151b2c;border:1px solid rgba(37,99,235,0.25);border-radius:8px;color:#F8FAFC;font-size:13px;outline:none;font-family:inherit;">
+        <option value="1">Hours</option>
+        <option value="24">Days</option>
+      </select>
+    </div>
+  `;
+  wrap.appendChild(row);
 }
 
 function openBreakingBarModal() {
   if (!isAdmin) return;
-  document.getElementById('breakingBarDurationInput').value = '24';
-  document.getElementById('breakingBarCustomWrap').style.display = 'none';
-  document.getElementById('breakingBarCustomValue').value = '';
-  const status = document.getElementById('breakingBarStatus');
-  if (breakingUpdate && breakingUpdate.text && Date.now() < breakingUpdate.expiresAt) {
-    document.getElementById('breakingBarTextInput').value = breakingUpdate.text;
-    const remainingMs = breakingUpdate.expiresAt - Date.now();
-    const remainingHrs = Math.max(1, Math.round(remainingMs / 3600000));
-    status.style.display = 'block';
-    status.textContent = `🟢 Currently live — about ${remainingHrs} hour${remainingHrs!==1?'s':''} remaining.`;
+  const wrap = document.getElementById('breakingRows');
+  wrap.innerHTML = '';
+  const active = (breakingUpdates || []).filter(u => u && u.text && Date.now() < u.expiresAt);
+  if (active.length) {
+    active.forEach(u => {
+      const remainingHrs = Math.max(1, Math.round((u.expiresAt - Date.now()) / 3600000));
+      addBreakingRow(u.text, remainingHrs);
+    });
   } else {
-    document.getElementById('breakingBarTextInput').value = '';
-    status.style.display = 'none';
+    addBreakingRow('', 24);
   }
   document.getElementById('breakingBarModal').style.display = 'flex';
 }
@@ -7240,29 +7301,36 @@ function closeBreakingBarModal() { document.getElementById('breakingBarModal').s
 
 async function saveBreakingBar() {
   if (!isAdmin) return;
-  const text = document.getElementById('breakingBarTextInput').value.trim();
-  const durationSel = document.getElementById('breakingBarDurationInput').value;
-  let hours;
-  if (durationSel === 'custom') {
-    const val = parseFloat(document.getElementById('breakingBarCustomValue').value);
-    const unit = parseInt(document.getElementById('breakingBarCustomUnit').value) || 1;
-    if (!val || val <= 0) { alert('Please enter a valid custom duration.'); return; }
-    hours = val * unit;
-  } else {
-    hours = parseInt(durationSel) || 24;
+  const rows = document.querySelectorAll('#breakingRows .breaking-row');
+  const updates = [];
+  for (const row of rows) {
+    const text = row.querySelector('.breaking-row-text').value.trim();
+    if (!text) continue;
+    const durationSel = row.querySelector('.breaking-row-duration').value;
+    let hours;
+    if (durationSel === 'custom') {
+      const val = parseFloat(row.querySelector('.breaking-row-custom-val').value);
+      const unit = parseInt(row.querySelector('.breaking-row-custom-unit').value) || 1;
+      if (!val || val <= 0) { alert('Please enter a valid custom duration for one of your updates.'); return; }
+      hours = val * unit;
+    } else {
+      hours = parseInt(durationSel) || 24;
+    }
+    updates.push({ text, expiresAt: Date.now() + hours * 3600000 });
   }
-  if (!text) { alert('Please enter the update text.'); return; }
-  breakingUpdate = { text, expiresAt: Date.now() + hours * 3600000 };
+  if (!updates.length) { alert('Add at least one update with text.'); return; }
+  breakingUpdates = updates;
   _breakingDismissed = false;
-  await sharedSet('breaking_update', breakingUpdate);
+  await sharedSet('breaking_update', breakingUpdates);
   renderBreakingBar();
   closeBreakingBarModal();
 }
 
 async function clearBreakingBar() {
   if (!isAdmin) return;
-  breakingUpdate = null;
-  await sharedSet('breaking_update', null);
+  if (!confirm('Remove all breaking updates?')) return;
+  breakingUpdates = [];
+  await sharedSet('breaking_update', []);
   renderBreakingBar();
   closeBreakingBarModal();
 }
