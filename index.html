@@ -7268,6 +7268,27 @@ let breakingUpdates = []; // [{ text, expiresAt }, ...]
 let _breakingDismissed = false;
 
 let _breakingBarFingerprint = '';
+
+// Measures the actual rendered width of one ticker loop and derives the
+// animation duration from a fixed px/sec speed, so it always scrolls at the
+// same real-world pace regardless of screen size or font-load timing.
+// Pulled out into its own function because it needs to run more than once:
+// once right after the HTML is built, and again once the Inter webfont has
+// actually finished loading (measuring too early uses the fallback font's
+// metrics, which are narrower than Inter — that mismatch is what made the
+// ticker look like it was racing on desktop once Inter swapped in), and
+// again on resize since reflowed text width changes with viewport width.
+function _setBreakingTickerSpeed(track) {
+  if (!track || !track.childNodes.length) return;
+  track.style.animation = 'none';
+  const loopWidth = track.scrollWidth / 2;
+  const pxPerSecond = 14; // calm, readable news-ticker pace — slower than the skills marquee
+  const duration = Math.max(14, loopWidth / pxPerSecond);
+  void track.offsetWidth; // force reflow so the animation restarts cleanly with the new duration
+  track.style.animation = '';
+  track.style.animationDuration = duration + 's';
+}
+
 function renderBreakingBar() {
   const bar = document.getElementById('breakingBar');
   const track = document.getElementById('breakingTickerTrack');
@@ -7293,23 +7314,36 @@ function renderBreakingBar() {
     const itemsHtml = active.map(u => `<span class="breaking-ticker-item">${escHtml(u.text)}<span class="sep">•</span></span>`).join('');
     track.innerHTML = itemsHtml + itemsHtml;
 
-    // Measure the actual rendered width of one loop and derive the duration
-    // from a fixed px/sec speed, so it always scrolls at the same real-world
-    // pace regardless of screen size — a character-count estimate was moving
-    // noticeably faster on wide desktop screens than on mobile.
-    track.style.animation = 'none';
-    const loopWidth = track.scrollWidth / 2;
-    const pxPerSecond = 8; // slow, deliberate professional ticker pace
-    const duration = Math.max(20, loopWidth / pxPerSecond);
-    void track.offsetWidth; // force reflow so the animation restarts cleanly with the new duration
-    track.style.animation = '';
-    track.style.animationDuration = duration + 's';
+    _setBreakingTickerSpeed(track);
+
+    // Re-measure once the real Inter font is actually active (it may still
+    // be loading right now and rendering in a fallback font), so the speed
+    // matches the final, true text width instead of a wrong early guess.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        if (document.getElementById('breakingTickerTrack') === track) {
+          _setBreakingTickerSpeed(track);
+        }
+      });
+    }
   }
 
   bar.style.display = 'flex';
   document.body.classList.add('has-breaking-bar');
 }
 setInterval(renderBreakingBar, 30000); // auto-hide each update once its own time passes, even without a page reload
+
+// Recompute the scroll speed on resize (debounced) — the rendered text width
+// changes with viewport/zoom, so the duration needs to track it too.
+let _breakingResizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(_breakingResizeTimer);
+  _breakingResizeTimer = setTimeout(() => {
+    const bar = document.getElementById('breakingBar');
+    const track = document.getElementById('breakingTickerTrack');
+    if (track && bar && bar.style.display !== 'none') _setBreakingTickerSpeed(track);
+  }, 200);
+});
 
 function dismissBreakingBar() {
   _breakingDismissed = true;
