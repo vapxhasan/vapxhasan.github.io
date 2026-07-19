@@ -441,6 +441,8 @@ nav .container { max-width: 1300px; }
 .settings-item:hover { background: rgba(37,99,235,0.12); }
 .settings-item-label { font-size: 13px; font-weight: 500; color: var(--white); }
 .settings-item-icon { font-size: 16px; }
+.settings-item-static { cursor: default; }
+.settings-item-static:hover { background: none; }
 
 /* MOBILE DRAWER BACKDROP */
 .drawer-backdrop {
@@ -3067,13 +3069,20 @@ body, body *, body *::before, body *::after {
         </div>
       </div>
       <a href="#contact" class="nav-cta">Hire Me <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
-      <button class="nav-settings-btn" id="navSearchBtn" aria-label="Search" onclick="openSearchModal()" style="margin-right:6px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
       <div class="nav-settings-wrap" id="navSettingsWrap">
         <button class="nav-settings-btn" id="navSettingsBtn" aria-label="Settings"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>
         <div class="nav-settings-dropdown" id="navSettingsDropdown">
           <div class="settings-item" onclick="toggleThemeMode()">
             <span class="settings-item-label" id="themeLabel">Dark Mode</span>
             <span class="settings-item-icon" id="themeIcon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+          </div>
+          <div class="settings-item" onclick="document.getElementById('navSettingsDropdown').classList.remove('open');openSearchModal();">
+            <span class="settings-item-label">Search</span>
+            <span class="settings-item-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
+          </div>
+          <div class="settings-item settings-item-static">
+            <span class="settings-item-label">Language</span>
+            <span class="settings-item-icon" style="font-size:12px;color:var(--muted);font-weight:600;">English</span>
           </div>
         </div>
       </div>
@@ -3089,7 +3098,26 @@ body, body *, body *::before, body *::after {
   <div class="drawer-header">
     <button class="close-btn" id="closeMenu" aria-label="Close menu"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
   </div>
-  <button class="mm-link" type="button" style="background:none;border:none;text-align:left;width:100%;cursor:pointer;font:inherit;" onclick="closeDrawer();openSearchModal();"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> Search</button>
+  <div id="mmSettingsWrap">
+    <button class="mm-link" type="button" id="mmSettingsBtn" style="background:none;border:none;text-align:left;width:100%;cursor:pointer;font:inherit;display:flex;align-items:center;justify-content:space-between;">
+      <span style="display:flex;align-items:center;gap:12px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Settings</span>
+      <span id="mmSettingsArrow" style="font-size:12px;color:var(--muted);transition:transform .2s;">▾</span>
+    </button>
+    <div id="mmSettingsPanel" style="display:none;padding:2px 0 6px 34px;">
+      <div class="settings-item" onclick="toggleThemeMode()">
+        <span class="settings-item-label" id="mmThemeLabel">Dark Mode</span>
+        <span class="settings-item-icon" id="mmThemeIcon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+      </div>
+      <div class="settings-item" onclick="closeDrawer();openSearchModal();">
+        <span class="settings-item-label">Search</span>
+        <span class="settings-item-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
+      </div>
+      <div class="settings-item settings-item-static">
+        <span class="settings-item-label">Language</span>
+        <span class="settings-item-icon" style="font-size:12px;color:var(--muted);font-weight:600;">English</span>
+      </div>
+    </div>
+  </div>
   <a href="#about" class="mm-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> About</a>
   <a href="#services" class="mm-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg> Services</a>
   <a href="#portfolio" class="mm-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> Work</a>
@@ -7905,6 +7933,19 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   drop.addEventListener('click', (e) => e.stopPropagation());
 })();
 
+// ===== MOBILE DRAWER "SETTINGS" SECTION =====
+(function() {
+  const btn = document.getElementById('mmSettingsBtn');
+  const panel = document.getElementById('mmSettingsPanel');
+  const arrow = document.getElementById('mmSettingsArrow');
+  if (!btn || !panel) return;
+  btn.addEventListener('click', () => {
+    const willOpen = panel.style.display === 'none';
+    panel.style.display = willOpen ? 'block' : 'none';
+    if (arrow) arrow.style.transform = willOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+  });
+})();
+
 // ===== NAV "MORE" DROPDOWN =====
 (function() {
   const wrap = document.getElementById('navMoreWrap');
@@ -7938,18 +7979,29 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
   }
   if (useLight) {
     document.body.classList.add('light-mode');
+    const lightIconSvg = '<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
     const lbl = document.getElementById('themeLabel');
     const ico = document.getElementById('themeIcon');
+    const mmLbl = document.getElementById('mmThemeLabel');
+    const mmIco = document.getElementById('mmThemeIcon');
     if (lbl) lbl.textContent = 'Light Mode';
-    if (ico) ico.innerHTML = '<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+    if (ico) ico.innerHTML = lightIconSvg;
+    if (mmLbl) mmLbl.textContent = 'Light Mode';
+    if (mmIco) mmIco.innerHTML = lightIconSvg;
   }
 })();
 function toggleThemeMode() {
   const isLight = document.body.classList.toggle('light-mode');
   const lbl = document.getElementById('themeLabel');
   const ico = document.getElementById('themeIcon');
+  const mmLbl = document.getElementById('mmThemeLabel');
+  const mmIco = document.getElementById('mmThemeIcon');
+  const lightIconSvg = '<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>';
+  const darkIconSvg = '<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
   if (lbl) lbl.textContent = isLight ? 'Light Mode' : 'Dark Mode';
-  if (ico) ico.innerHTML = isLight ? '<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>' : '<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>';
+  if (ico) ico.innerHTML = isLight ? lightIconSvg : darkIconSvg;
+  if (mmLbl) mmLbl.textContent = isLight ? 'Light Mode' : 'Dark Mode';
+  if (mmIco) mmIco.innerHTML = isLight ? lightIconSvg : darkIconSvg;
   localStorage.setItem('themeMode', isLight ? 'light' : 'dark');
 }
 
