@@ -592,6 +592,13 @@ nav .container { max-width: 1300px; }
   z-index: 0;
   pointer-events: none;
 }
+@media (max-width: 768px) {
+  /* A blurred layer animating transform forever is one of the most expensive
+     things you can ask a phone's GPU to composite continuously. Keep the
+     static soft-glow look (still renders once), just drop the endless
+     animation and shrink the blur radius so it's cheap to paint. */
+  .hero-orb { animation: none !important; filter: blur(55px); }
+}
 .hero-content { position: relative; z-index: 2; max-width: 830px; margin: 0 auto; }
 @media (prefers-reduced-motion: no-preference) {
   .hero-reveal {
@@ -609,6 +616,13 @@ nav .container { max-width: 1300px; }
   .hero-reveal.hr-5 { transition-delay: 480ms; }
   .hero-reveal.hr-6 { transition-delay: 600ms; }
   .hero-reveal.hr-7 { transition-delay: 720ms; }
+}
+@media (max-width: 768px) {
+  /* filter:blur() animation is expensive to composite on mobile GPUs and runs
+     right during the critical first-load window — drop it there and keep
+     only the cheap opacity/transform part of the entrance animation. */
+  .hero-reveal { filter: none !important; transition: opacity .7s cubic-bezier(0.16,1,0.3,1), transform .7s cubic-bezier(0.16,1,0.3,1) !important; will-change: opacity, transform; }
+  .hero-content.hero-in .hero-reveal { filter: none !important; }
 }
 .hero-badge {
   display: inline-flex;
@@ -3115,7 +3129,7 @@ body, body *, body *::before, body *::after {
   <div class="container" style="position:relative;">
 
     <div class="hero-content">
-      <a href="#contact" class="hero-badge hero-reveal hr-1">
+      <a href="#contact" class="hero-badge hero-reveal hr-1" onclick="return smoothScrollToContact(event)">
         <span class="hero-badge-dot" id="heroBadgeDot"></span>
         <span id="heroBadgeText">Available for new projects</span>
         <button class="admin-only" id="openAvailabilityModal" title="Edit availability messages" style="display:none;margin-left:6px;background:none;border:none;color:inherit;cursor:pointer;padding:0;opacity:.7;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></button>
@@ -7195,6 +7209,33 @@ async function initSharedData() {
     setCachedRecord(record);
   }
   renderAll();
+}
+
+// ===================================================
+// SMOOTH EASED SCROLL (badge -> contact: quick start, gentle stop)
+// ===================================================
+function smoothScrollToContact(e) {
+  if (e) e.preventDefault();
+  const target = document.getElementById('contact');
+  if (!target) return false;
+  const nav = document.getElementById('navbar');
+  const bar = document.getElementById('breakingBar');
+  let offset = nav ? nav.offsetHeight : 90;
+  if (bar && bar.style.display !== 'none') offset += bar.offsetHeight;
+  const targetY = target.getBoundingClientRect().top + window.scrollY - offset - 16;
+  const startY = window.scrollY;
+  const diff = targetY - startY;
+  const duration = 650;
+  let startTime = null;
+  function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); } // quick at first, eases to a gentle stop
+  function step(ts) {
+    if (!startTime) startTime = ts;
+    const progress = Math.min((ts - startTime) / duration, 1);
+    window.scrollTo(0, startY + diff * easeOutCubic(progress));
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+  return false;
 }
 
 // ===================================================
