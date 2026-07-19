@@ -177,7 +177,47 @@ nav {
   top: 0; left: 0; right: 0;
   z-index: 1000;
   padding: 24px 0;
-  transition: all .4s ease;
+  transition: all .4s ease, top .3s ease;
+}
+.breaking-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1001;
+  background: linear-gradient(90deg, var(--indigo), var(--violet));
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 10px 48px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 40px;
+  box-sizing: border-box;
+}
+.breaking-bar-label {
+  font-weight: 800;
+  font-size: 10.5px;
+  letter-spacing: 1px;
+  background: rgba(255,255,255,0.18);
+  padding: 3px 8px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.breaking-bar-close {
+  position: absolute;
+  right: 14px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none; color: #fff; opacity: .75;
+  cursor: pointer; padding: 4px;
+}
+.breaking-bar-close:hover { opacity: 1; }
+body.has-breaking-bar nav { top: 40px; }
+body.has-breaking-bar #hero { padding-top: 150px; }
+@media (max-width: 768px) {
+  .breaking-bar { font-size: 11.5px; padding: 8px 40px; height: auto; min-height: 36px; }
+  body.has-breaking-bar nav { top: 36px; }
+  body.has-breaking-bar #hero { padding-top: 136px; }
 }
 nav.scrolled {
   background: rgba(8,11,20,0.92);
@@ -543,7 +583,8 @@ nav .container { max-width: 1300px; }
   border-radius: 100px;
   margin-bottom: 28px;
   letter-spacing: 1px;
-  cursor: default;
+  cursor: pointer;
+  text-decoration: none;
   transition: transform .3s cubic-bezier(0.16,1,0.3,1), border-color .3s ease, background .3s ease, box-shadow .3s ease;
 }
 .hero-badge:hover {
@@ -1311,6 +1352,47 @@ nav .container { max-width: 1300px; }
 .review-video-card-cat { font-size: 10px; font-family: var(--font-mono); color: var(--cyan); }
 .review-slider-nav { width: 34px; height: 34px; border-radius: 50%; background: var(--card); border: 1px solid var(--border); color: var(--white); cursor: pointer; flex-shrink: 0; font-size: 16px; }
 .review-slider-nav:hover { background: var(--indigo); border-color: var(--indigo); }
+
+/* ===== NOTICE BOARD ===== */
+.notice-featured-card {
+  display: flex; gap: 24px; background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px; cursor: pointer; transition: all .25s;
+}
+.notice-featured-card:hover { border-color: rgba(59,130,246,0.35); transform: translateY(-2px); }
+.notice-featured-thumb {
+  width: 160px; height: 120px; flex-shrink: 0; border-radius: 12px; overflow: hidden;
+  background: linear-gradient(135deg, rgba(37,99,235,0.18), rgba(123,97,255,0.12));
+  display: flex; align-items: center; justify-content: center; font-size: 36px;
+}
+.notice-featured-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.notice-featured-body { flex: 1; min-width: 0; }
+.notice-badge-new {
+  display: inline-block; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 1px;
+  color: #2ECC71; background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.3);
+  padding: 3px 10px; border-radius: 100px; margin-bottom: 10px;
+}
+.notice-featured-title { font-family: var(--font-display); font-size: 19px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.notice-featured-excerpt { font-size: 13.5px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+.notice-featured-date { font-size: 11.5px; font-family: var(--font-mono); color: var(--cyan); }
+.notice-slider-wrap { display: flex; align-items: center; gap: 10px; }
+.notice-slider-track { display: flex; gap: 14px; overflow-x: auto; scroll-behavior: smooth; padding: 4px; flex: 1; }
+.notice-slide-card {
+  flex: 0 0 220px; cursor: pointer; border-radius: 12px; overflow: hidden;
+  border: 1px solid var(--border); background: var(--card); transition: all .2s;
+}
+.notice-slide-card:hover { border-color: rgba(59,130,246,0.35); transform: translateY(-2px); }
+.notice-slide-thumb {
+  width: 100%; height: 100px; object-fit: cover; display: block;
+  background: linear-gradient(135deg, rgba(37,99,235,0.18), rgba(123,97,255,0.12));
+}
+.notice-slide-thumb-emoji { width: 100%; height: 100px; display: flex; align-items: center; justify-content: center; font-size: 26px; background: linear-gradient(135deg, rgba(37,99,235,0.18), rgba(123,97,255,0.12)); }
+.notice-slide-body { padding: 10px 12px; }
+.notice-slide-title { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.notice-slide-date { font-size: 10.5px; font-family: var(--font-mono); color: var(--muted); }
+@media (max-width: 640px) {
+  .notice-featured-card { flex-direction: column; }
+  .notice-featured-thumb { width: 100%; height: 160px; }
+}
 
 /* ===== PROCESS ===== */
 .process-steps { display: flex; align-items: flex-start; gap: 0; margin-top: 60px; position: relative; }
@@ -2833,8 +2915,47 @@ body, body *, body *::before, body *::after {
     <span style="font-size:11px;color:rgba(255,255,255,0.65);font-family:monospace;">You can add, edit & delete content</span>
   </div>
   <div style="display:flex;align-items:center;gap:10px;">
+    <button onclick="openBreakingBarModal()" style="padding:7px 18px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">🔴 Breaking Update</button>
     <span style="font-size:11px;color:rgba(255,255,255,0.6);font-family:monospace;">Session only — closes when tab closes</span>
     <button onclick="adminLogout()" style="padding:7px 18px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);color:#fff;border-radius:7px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 9.9-1"></path></svg> Logout</button>
+  </div>
+</div>
+
+<!-- ===== BREAKING UPDATE MODAL ===== -->
+<div id="breakingBarModal" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
+  <div class="dark-surface" style="background:#111827;border:1px solid rgba(37,99,235,0.3);border-radius:16px;padding:32px;width:100%;max-width:440px;margin:16px;box-shadow:0 0 40px rgba(37,99,235,0.2);position:relative;">
+    <button onclick="closeBreakingBarModal()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#94A3B8;font-size:20px;cursor:pointer;line-height:1;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    <div style="font-size:18px;font-weight:700;color:#F8FAFC;margin-bottom:4px;">🔴 Breaking Update Bar</div>
+    <div style="font-size:13px;color:#94A3B8;margin-bottom:22px;">Shows a bar at the top of every page for a fixed time, then disappears automatically.</div>
+    <div style="margin-bottom:14px;">
+      <label style="font-size:11px;color:#94A3B8;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:monospace;">Update Text</label>
+      <input id="breakingBarTextInput" type="text" placeholder="e.g. Booking for August now open — limited slots!" style="width:100%;padding:10px 14px;background:#0d1220;border:1px solid rgba(37,99,235,0.25);border-radius:8px;color:#F8FAFC;font-size:14px;outline:none;font-family:inherit;">
+    </div>
+    <div style="margin-bottom:20px;">
+      <label style="font-size:11px;color:#94A3B8;letter-spacing:1px;text-transform:uppercase;display:block;margin-bottom:6px;font-family:monospace;">Show For</label>
+      <select id="breakingBarDurationInput" onchange="toggleBreakingBarCustomDuration()" style="width:100%;padding:10px 14px;background:#0d1220;border:1px solid rgba(37,99,235,0.25);border-radius:8px;color:#F8FAFC;font-size:14px;outline:none;font-family:inherit;">
+        <option value="1">1 Hour</option>
+        <option value="6">6 Hours</option>
+        <option value="12">12 Hours</option>
+        <option value="24" selected>1 Day</option>
+        <option value="72">3 Days</option>
+        <option value="168">7 Days</option>
+        <option value="720">30 Days</option>
+        <option value="custom">Custom...</option>
+      </select>
+      <div id="breakingBarCustomWrap" style="display:none;margin-top:10px;gap:8px;">
+        <input id="breakingBarCustomValue" type="number" min="1" placeholder="e.g. 5" style="width:100%;padding:10px 14px;background:#0d1220;border:1px solid rgba(37,99,235,0.25);border-radius:8px;color:#F8FAFC;font-size:14px;outline:none;font-family:inherit;">
+        <select id="breakingBarCustomUnit" style="width:100%;padding:10px 14px;background:#0d1220;border:1px solid rgba(37,99,235,0.25);border-radius:8px;color:#F8FAFC;font-size:14px;outline:none;font-family:inherit;">
+          <option value="1">Hours</option>
+          <option value="24">Days</option>
+        </select>
+      </div>
+    </div>
+    <div id="breakingBarStatus" style="font-size:12px;color:#6EE7B7;margin-bottom:16px;display:none;font-family:monospace;"></div>
+    <div style="display:flex;gap:10px;">
+      <button onclick="clearBreakingBar()" style="flex:1;padding:12px;background:rgba(255,50,50,0.1);border:1px solid rgba(255,50,50,0.3);border-radius:8px;color:#ff7777;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Clear / Remove</button>
+      <button onclick="saveBreakingBar()" style="flex:1;padding:12px;background:linear-gradient(135deg,#2563EB,#3B82F6);border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;">Publish Update</button>
+    </div>
   </div>
 </div>
 
@@ -2866,6 +2987,13 @@ body, body *, body *::before, body *::after {
 
 <!-- Back to top -->
 <button id="btt" aria-label="Back to top"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg></button>
+
+<!-- ===== BREAKING UPDATE BAR ===== -->
+<div id="breakingBar" class="breaking-bar" style="display:none;">
+  <span class="breaking-bar-label">🔴 UPDATE</span>
+  <span id="breakingBarText"></span>
+  <button class="breaking-bar-close" onclick="dismissBreakingBar()" aria-label="Dismiss"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+</div>
 
 <!-- NAV -->
 <nav id="navbar">
@@ -2968,11 +3096,11 @@ body, body *, body *::before, body *::after {
   <div class="container" style="position:relative;">
 
     <div class="hero-content">
-      <div class="hero-badge hero-reveal hr-1">
+      <a href="#contact" class="hero-badge hero-reveal hr-1">
         <span class="hero-badge-dot" id="heroBadgeDot"></span>
         <span id="heroBadgeText">Available for new projects</span>
         <button class="admin-only" id="openAvailabilityModal" title="Edit availability messages" style="display:none;margin-left:6px;background:none;border:none;color:inherit;cursor:pointer;padding:0;opacity:.7;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></button>
-      </div>
+      </a>
       <h1 class="hero-h1">
         <span class="line1 hero-reveal hr-2">Hi, I'm Hasanur Rahman.</span>
         <span class="line2 hero-reveal hr-3">Professional Video Editor</span>
@@ -4243,9 +4371,21 @@ body, body *, body *::before, body *::after {
       </div>
       <button class="blog-write-btn admin-only" id="openNoticeModal" style="display:none;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Add Notice</button>
     </div>
-    <div id="noticeGrid" class="blog-grid">
-      <!-- notice cards injected by JS -->
+
+    <div id="noticeFeaturedWrap"></div>
+
+    <button id="noticeMoreToggle" onclick="toggleNoticeMore()" data-open="0" style="display:none;align-items:center;gap:8px;margin:22px auto 0;padding:10px 22px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:100px;font-family:var(--font-mono);font-size:12.5px;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='var(--white)';this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">
+      <span id="noticeMoreLabel">More Notices ▾</span>
+    </button>
+
+    <div id="noticeSliderSection" style="display:none;margin-top:22px;">
+      <div class="notice-slider-wrap">
+        <button class="review-slider-nav" id="noticeSliderPrev" aria-label="Previous notice">‹</button>
+        <div id="noticeSliderTrack" class="notice-slider-track"></div>
+        <button class="review-slider-nav" id="noticeSliderNext" aria-label="Next notice">›</button>
+      </div>
     </div>
+
     <div id="noticeEmpty" class="blog-empty reveal">
       <div class="blog-empty-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg></div>
       <div class="blog-empty-txt">No notices yet. Check back soon!</div>
@@ -5428,37 +5568,85 @@ document.getElementById('blogModal').addEventListener('click', e => { if (e.targ
 let notices = [];
 
 function renderNotices() {
-  const grid = document.getElementById('noticeGrid');
+  const featuredWrap = document.getElementById('noticeFeaturedWrap');
   const empty = document.getElementById('noticeEmpty');
-  if (!grid || !empty) return;
+  const moreBtn = document.getElementById('noticeMoreToggle');
+  const sliderSection = document.getElementById('noticeSliderSection');
+  const sliderTrack = document.getElementById('noticeSliderTrack');
+  if (!featuredWrap || !empty) return;
   toggleContentSection('notice', notices.length > 0, ['navMoreNoticeLink','mmNoticeLink']);
   if (!notices.length) {
-    grid.innerHTML = '';
+    featuredWrap.innerHTML = '';
+    moreBtn.style.display = 'none';
+    sliderSection.style.display = 'none';
     empty.style.display = 'block';
     return;
   }
   empty.style.display = 'none';
-  grid.innerHTML = notices.map((n, i) => `
-    <div class="blog-card reveal visible">
-      <div class="blog-thumb">
-        <div class="blog-thumb-glow" style="background:rgba(37,99,235,0.35)"></div>
-        ${n.img ? `<img class="blog-thumb-img" src="${n.img}" alt="${escHtml(n.title||'Notice')}" loading="lazy">` : '📢'}
-      </div>
-      <div class="blog-body">
-        <div class="blog-cat">Notice</div>
-        <div class="blog-title">${escHtml(n.title)}</div>
-        <div class="blog-excerpt">${escHtml((n.content||'').substring(0,130))}${n.content&&n.content.length>130?'...':''}</div>
-        <div class="blog-meta">
-          <span>${n.date}</span>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <span class="blog-read-btn" onclick="openNoticeRead(${i})">Read More <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-            ${isAdmin ? `<button onclick="removeNotice(${i})" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;display:inline-flex;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>` : ''}
-          </div>
-        </div>
+
+  // Newest notice (index 0, since publishNotice unshifts) shown as the featured card
+  const n0 = notices[0];
+  featuredWrap.innerHTML = `
+    <div class="notice-featured-card" onclick="openNoticeRead(0)">
+      <div class="notice-featured-thumb">${n0.img ? `<img src="${n0.img}" alt="${escHtml(n0.title||'Notice')}" loading="lazy">` : '📢'}</div>
+      <div class="notice-featured-body">
+        <span class="notice-badge-new">● NEW</span>
+        <div class="notice-featured-title">${escHtml(n0.title)}</div>
+        <div class="notice-featured-excerpt">${escHtml((n0.content||'').substring(0,160))}${n0.content&&n0.content.length>160?'...':''}</div>
+        <div class="notice-featured-date">${n0.date}</div>
+        ${isAdmin ? `<div style="margin-top:10px;" onclick="event.stopPropagation()"><button onclick="removeNotice(0)" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button></div>` : ''}
       </div>
     </div>
-  `).join('');
+  `;
+
+  const rest = notices.slice(1);
+  if (!rest.length) {
+    moreBtn.style.display = 'none';
+    sliderSection.style.display = 'none';
+    return;
+  }
+  moreBtn.style.display = 'inline-flex';
+  document.getElementById('noticeMoreLabel').textContent = `More Notices (${rest.length}) ▾`;
+
+  sliderTrack.innerHTML = rest.map((n, idx) => {
+    const realIndex = idx + 1; // actual index in the `notices` array
+    return `
+    <div class="notice-slide-card" onclick="openNoticeRead(${realIndex})">
+      ${n.img ? `<img class="notice-slide-thumb" src="${n.img}" alt="${escHtml(n.title||'Notice')}" loading="lazy">` : `<div class="notice-slide-thumb-emoji">📢</div>`}
+      <div class="notice-slide-body">
+        <div class="notice-slide-title">${escHtml(n.title)}</div>
+        <div class="notice-slide-date">${n.date}</div>
+        ${isAdmin ? `<div style="margin-top:6px;" onclick="event.stopPropagation()"><button onclick="removeNotice(${realIndex})" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:3px 8px;cursor:pointer;font-size:10.5px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>` : ''}
+      </div>
+    </div>
+  `;
+  }).join('');
+
+  // Keep the slider section's open/closed state as it was before re-rendering
+  if (moreBtn.getAttribute('data-open') !== '1') {
+    sliderSection.style.display = 'none';
+  } else {
+    sliderSection.style.display = 'block';
+  }
 }
+
+function toggleNoticeMore() {
+  const btn = document.getElementById('noticeMoreToggle');
+  const sliderSection = document.getElementById('noticeSliderSection');
+  const isOpen = btn.getAttribute('data-open') === '1';
+  const rest = notices.length - 1;
+  if (isOpen) {
+    btn.setAttribute('data-open', '0');
+    sliderSection.style.display = 'none';
+    document.getElementById('noticeMoreLabel').textContent = `More Notices (${rest}) ▾`;
+  } else {
+    btn.setAttribute('data-open', '1');
+    sliderSection.style.display = 'block';
+    document.getElementById('noticeMoreLabel').textContent = `Hide Notices ▴`;
+  }
+}
+document.getElementById('noticeSliderPrev').addEventListener('click', () => document.getElementById('noticeSliderTrack').scrollBy({ left: -240, behavior: 'smooth' }));
+document.getElementById('noticeSliderNext').addEventListener('click', () => document.getElementById('noticeSliderTrack').scrollBy({ left: 240, behavior: 'smooth' }));
 
 let noticeImgDataUrl = '';
 let noticePdfData = null; // { data: base64, name: filename }
@@ -6900,7 +7088,7 @@ function setCachedRecord(record) {
 async function initSharedData() {
   document.getElementById('ytVideosGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
   document.getElementById('blogGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
-  document.getElementById('noticeGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
+  document.getElementById('noticeFeaturedWrap').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
   document.getElementById('projectGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
   document.getElementById('reviewCarouselTrack').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
 
@@ -6949,6 +7137,7 @@ async function initSharedData() {
     if (record.resume !== undefined) resumeData = record.resume;
     if (record.faqs)           faqs            = record.faqs;
     if (record.availability_messages && record.availability_messages.length) availabilityMessages = record.availability_messages;
+    if (record.breaking_update !== undefined) breakingUpdate = record.breaking_update;
   }
 
   function renderAll() {
@@ -6968,6 +7157,7 @@ async function initSharedData() {
     renderResumeButtons();
     renderFaq();
     renderAvailabilityBadge();
+    renderBreakingBar();
   }
 
   // Fast path: paint instantly from whatever was cached on the last visit,
@@ -6996,6 +7186,86 @@ function renderAvailabilityBadge() {
   if (dotEl) dotEl.className = 'hero-badge-dot' + (msg.status && msg.status !== 'green' ? ' status-' + msg.status : '');
 }
 setInterval(renderAvailabilityBadge, 30000); // re-check every 30s so the 10-min rotation stays accurate even on a long-open tab
+
+// ===================================================
+// BREAKING UPDATE BAR (admin-set text + auto-expiring duration)
+// ===================================================
+let breakingUpdate = null; // { text, expiresAt }
+let _breakingDismissed = false;
+
+function renderBreakingBar() {
+  const bar = document.getElementById('breakingBar');
+  if (!bar) return;
+  const active = breakingUpdate && breakingUpdate.text && breakingUpdate.expiresAt && Date.now() < breakingUpdate.expiresAt && !_breakingDismissed;
+  if (active) {
+    document.getElementById('breakingBarText').textContent = breakingUpdate.text;
+    bar.style.display = 'flex';
+    document.body.classList.add('has-breaking-bar');
+  } else {
+    bar.style.display = 'none';
+    document.body.classList.remove('has-breaking-bar');
+  }
+}
+setInterval(renderBreakingBar, 30000); // auto-hide once the fixed time passes, even without a page reload
+
+function dismissBreakingBar() {
+  _breakingDismissed = true;
+  renderBreakingBar();
+}
+
+function toggleBreakingBarCustomDuration() {
+  const sel = document.getElementById('breakingBarDurationInput').value;
+  document.getElementById('breakingBarCustomWrap').style.display = sel === 'custom' ? 'flex' : 'none';
+}
+
+function openBreakingBarModal() {
+  if (!isAdmin) return;
+  document.getElementById('breakingBarDurationInput').value = '24';
+  document.getElementById('breakingBarCustomWrap').style.display = 'none';
+  document.getElementById('breakingBarCustomValue').value = '';
+  const status = document.getElementById('breakingBarStatus');
+  if (breakingUpdate && breakingUpdate.text && Date.now() < breakingUpdate.expiresAt) {
+    document.getElementById('breakingBarTextInput').value = breakingUpdate.text;
+    const remainingMs = breakingUpdate.expiresAt - Date.now();
+    const remainingHrs = Math.max(1, Math.round(remainingMs / 3600000));
+    status.style.display = 'block';
+    status.textContent = `🟢 Currently live — about ${remainingHrs} hour${remainingHrs!==1?'s':''} remaining.`;
+  } else {
+    document.getElementById('breakingBarTextInput').value = '';
+    status.style.display = 'none';
+  }
+  document.getElementById('breakingBarModal').style.display = 'flex';
+}
+function closeBreakingBarModal() { document.getElementById('breakingBarModal').style.display = 'none'; }
+
+async function saveBreakingBar() {
+  if (!isAdmin) return;
+  const text = document.getElementById('breakingBarTextInput').value.trim();
+  const durationSel = document.getElementById('breakingBarDurationInput').value;
+  let hours;
+  if (durationSel === 'custom') {
+    const val = parseFloat(document.getElementById('breakingBarCustomValue').value);
+    const unit = parseInt(document.getElementById('breakingBarCustomUnit').value) || 1;
+    if (!val || val <= 0) { alert('Please enter a valid custom duration.'); return; }
+    hours = val * unit;
+  } else {
+    hours = parseInt(durationSel) || 24;
+  }
+  if (!text) { alert('Please enter the update text.'); return; }
+  breakingUpdate = { text, expiresAt: Date.now() + hours * 3600000 };
+  _breakingDismissed = false;
+  await sharedSet('breaking_update', breakingUpdate);
+  renderBreakingBar();
+  closeBreakingBarModal();
+}
+
+async function clearBreakingBar() {
+  if (!isAdmin) return;
+  breakingUpdate = null;
+  await sharedSet('breaking_update', null);
+  renderBreakingBar();
+  closeBreakingBarModal();
+}
 
 function addAvailabilityRow(text, status) {
   const wrap = document.getElementById('availabilityRows');
@@ -7036,7 +7306,9 @@ async function saveAvailabilityMessages() {
   document.getElementById('availabilityModal').classList.remove('open');
 }
 
-document.getElementById('openAvailabilityModal').addEventListener('click', () => {
+document.getElementById('openAvailabilityModal').addEventListener('click', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
   if (!isAdmin) { alert('Admin login required.'); return; }
   openAvailabilityModalFn();
 });
