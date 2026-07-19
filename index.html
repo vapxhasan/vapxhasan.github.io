@@ -7301,9 +7301,9 @@ const BreakingTicker = (() => {
   // on every resize/orientation change without needing a separate cache.
   function pxPerSecond() {
     const w = window.innerWidth;
-    if (w <= 600) return 11;   // mobile: 10–12 px/sec
-    if (w <= 1024) return 9;   // tablet: 8–10 px/sec
-    return 7;                  // desktop: 6–8 px/sec, smooth/premium
+    if (w <= 600) return 70;   // mobile: fastest
+    if (w <= 1024) return 55;  // tablet: a bit slower
+    return 40;                 // desktop: slowest, but still clearly visible/legible
   }
 
   // Reading scrollWidth forces a layout, so this is only called on
