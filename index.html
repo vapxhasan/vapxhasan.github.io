@@ -229,8 +229,9 @@ nav {
   display: flex;
   align-items: center;
   white-space: nowrap;
-  will-change: transform;
-  animation: breakingTickerScroll linear infinite;
+  will-change: transform;      /* hints the compositor to keep this on its own GPU layer */
+  transform: translate3d(0,0,0); /* base state — the JS ticker engine (BreakingTicker) drives this every frame at a constant px/sec, replacing the old fixed-duration @keyframes so speed never depends on text length */
+  backface-visibility: hidden;   /* extra Safari/Chrome anti-flicker hint for GPU-composited layers */
 }
 .breaking-ticker-item {
   display: inline-flex;
@@ -240,10 +241,6 @@ nav {
   color: var(--white);
 }
 .breaking-ticker-item .sep { margin: 0 40px; opacity: .5; color: var(--cyan); }
-@keyframes breakingTickerScroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
-}
 .breaking-bar-close {
   flex-shrink: 0;
   background: none; border: none; color: var(--muted); opacity: .75;
@@ -7266,41 +7263,196 @@ setInterval(renderAvailabilityBadge, 30000); // re-check every 30s so the 10-min
 // ===================================================
 let breakingUpdates = []; // [{ text, expiresAt }, ...]
 let _breakingDismissed = false;
-
 let _breakingBarFingerprint = '';
 
-// Measures the actual rendered width of one ticker loop and derives the
-// animation duration from a fixed px/sec speed, so it always scrolls at the
-// same real-world pace regardless of screen size or font-load timing.
-// Pulled out into its own function because it needs to run more than once:
-// once right after the HTML is built, and again once the Inter webfont has
-// actually finished loading (measuring too early uses the fallback font's
-// metrics, which are narrower than Inter — that mismatch is what made the
-// ticker look like it was racing on desktop once Inter swapped in), and
-// again on resize since reflowed text width changes with viewport width.
-function _setBreakingTickerSpeed(track) {
-  if (!track || !track.childNodes.length) return;
-  track.style.animation = 'none';
-  const loopWidth = track.scrollWidth / 2;
-  const isMobile = window.matchMedia('(max-width: 768px)').matches;
-  const pxPerSecond = isMobile ? 14 : 4; // mobile stays at the original normal pace; desktop moves much slower
-  const minDuration = isMobile ? 14 : 30;
-  const duration = Math.max(minDuration, loopWidth / pxPerSecond);
-  void track.offsetWidth; // force reflow so the animation restarts cleanly with the new duration
-  track.style.animation = '';
-  track.style.animationDuration = duration + 's';
-}
+// ===================================================
+// TICKER ENGINE — professional, constant-speed, GPU-accelerated
+// infinite scroller (BBC / Bloomberg / CNN style breaking-news bar).
+//
+// WHY NOT A CSS @keyframes ANIMATION:
+// A CSS keyframe animation moves between 0% and -50% over a fixed
+// *duration*. To keep constant real px/sec speed, the duration had to be
+// recalculated from the text width (duration = width / speed) every time
+// the content changed — any measurement error (fonts not yet loaded,
+// stale cache, wrong breakpoint) directly warped the visible speed, and
+// short text always risked hitting a "minimum duration" clamp that made
+// it silently speed up. That's the root cause of the bugs reported
+// earlier in this thread.
+//
+// This engine instead drives the scroll with requestAnimationFrame and
+// moves the track by exactly `pxPerSecond * deltaTime` every frame. The
+// speed is therefore a true, constant real-world rate — completely
+// independent of message length, viewport size, or font-load timing.
+// ===================================================
+const BreakingTicker = (() => {
+  let track = null;          // the element being translated
+  let viewport = null;       // the overflow:hidden window around it (for hover-pause)
+  let loopWidth = 0;         // px width of ONE copy of the (duplicated) content
+  let offset = 0;            // current translateX, always <= 0
+  let lastTs = null;         // rAF timestamp of the previous frame
+  let rafId = null;          // current requestAnimationFrame handle
+  let running = false;       // true once there is content to animate
+  let hoverPaused = false;   // paused because the pointer is over the ticker
+  let reducedMotion = false; // paused because the OS asked for reduced motion
+
+  // Constant px/sec per breakpoint (per the design spec: desktop
+  // slow/premium, tablet a little faster, mobile the fastest of the
+  // three) — read live off innerWidth so it re-evaluates automatically
+  // on every resize/orientation change without needing a separate cache.
+  function pxPerSecond() {
+    const w = window.innerWidth;
+    if (w <= 600) return 11;   // mobile: 10–12 px/sec
+    if (w <= 1024) return 9;   // tablet: 8–10 px/sec
+    return 7;                  // desktop: 6–8 px/sec, smooth/premium
+  }
+
+  // Reading scrollWidth forces a layout, so this is only called on
+  // meaningful events (new content, resize, font swap) — never per-frame —
+  // to avoid any unnecessary reflow/repaint cost during animation.
+  function measure() {
+    if (!track) return;
+    loopWidth = track.scrollWidth / 2; // track always holds the content x2
+  }
+
+  function applyTransform() {
+    // translate3d (not translateX) promotes the layer to the GPU compositor
+    // on Chrome/Edge/Safari, avoiding main-thread paint work every frame —
+    // this is what keeps the motion stutter-free even on lower-end hardware.
+    if (track) track.style.transform = `translate3d(${offset}px,0,0)`;
+  }
+
+  function tick(ts) {
+    if (!running) { rafId = null; return; }
+
+    if (hoverPaused || reducedMotion || document.hidden) {
+      // Reset lastTs (don't accumulate a stale delta) so that unpausing
+      // doesn't cause a big jump/teleport from a huge elapsed-time value.
+      lastTs = null;
+      rafId = requestAnimationFrame(tick);
+      return;
+    }
+
+    if (lastTs == null) lastTs = ts;
+    // Clamp dt to guard only against extreme stalls (e.g. a long GC pause or
+    // a missed visibilitychange event) turning into a big visual jump —
+    // kept generous (250ms) so normal, lower-than-60fps frame delivery on
+    // slower devices still advances the ticker at the true real-time rate
+    // instead of being silently throttled by an overly tight clamp.
+    const dt = Math.min((ts - lastTs) / 1000, 0.25);
+    lastTs = ts;
+
+    if (loopWidth > 0) {
+      offset -= pxPerSecond() * dt;
+      // Seamless wrap: once we've scrolled exactly one loop's width, add
+      // that width back instead of resetting to 0 — this is what makes the
+      // restart invisible, since the duplicated content lines up perfectly.
+      if (offset <= -loopWidth) offset += loopWidth;
+      applyTransform();
+    }
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function startLoop() {
+    if (rafId != null) return; // already looping
+    lastTs = null;
+    rafId = requestAnimationFrame(tick);
+  }
+
+  function stopLoop() {
+    if (rafId != null) { cancelAnimationFrame(rafId); rafId = null; }
+  }
+
+  function init(trackEl, viewportEl) {
+    track = trackEl;
+    viewport = viewportEl;
+    reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // #15 — pause on hover, like every professional news ticker does so
+    // readers can finish a headline without it scrolling away.
+    viewport.addEventListener('mouseenter', () => { hoverPaused = true; });
+    viewport.addEventListener('mouseleave', () => { hoverPaused = false; });
+
+    // #14 — pause while the tab is in the background. The rAF loop itself
+    // already stops firing in most browsers when hidden, but we also gate
+    // on document.hidden explicitly so we never resume with a huge dt.
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) lastTs = null; // avoid a jump on return
+    });
+
+    // #11 — recalculate on resize (covers window resize, orientation
+    // change, and — in all current browsers — pinch/ctrl+scroll zoom,
+    // since browser zoom changes reported innerWidth/scrollWidth too).
+    let resizeTimer = null;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => { if (running) measure(); }, 150);
+    });
+
+    // Live-track OS-level reduced-motion toggles (#13), not just the value
+    // at page load.
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const onMqChange = (e) => {
+      reducedMotion = e.matches;
+      if (reducedMotion) { offset = 0; applyTransform(); } // freeze on a clean frame, no partial-scroll flash
+    };
+    if (mq.addEventListener) mq.addEventListener('change', onMqChange);
+    else if (mq.addListener) mq.addListener(onMqChange); // Safari <14 fallback
+  }
+
+  // #6/#7 — replaces the whole content with one fresh loop, duplicated once
+  // for the seamless -loopWidth wraparound, and (re)starts the engine.
+  function setContent(itemsHtml) {
+    if (!track) return;
+    track.innerHTML = itemsHtml + itemsHtml;
+    offset = 0;
+    applyTransform();
+    measure();
+
+    // Re-measure once the real Inter webfont is active — measuring while a
+    // fallback font is still showing under-reports the width, which used to
+    // be the root cause of the ticker briefly looking like it was racing.
+    // Constant px/sec makes this self-correcting either way, but an
+    // accurate loopWidth keeps the seamless-wrap point exactly on the
+    // duplicate boundary with zero visible seam.
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => { if (running) measure(); });
+    }
+
+    running = true;
+    startLoop();
+  }
+
+  function clear() {
+    running = false;
+    stopLoop();
+    offset = 0;
+    if (track) { track.innerHTML = ''; applyTransform(); }
+    loopWidth = 0;
+  }
+
+  return { init, setContent, clear };
+})();
+
+let _breakingTickerInitDone = false;
 
 function renderBreakingBar() {
   const bar = document.getElementById('breakingBar');
   const track = document.getElementById('breakingTickerTrack');
-  if (!bar || !track) return;
+  const viewport = track ? track.closest('.breaking-ticker-viewport') : null;
+  if (!bar || !track || !viewport) return;
+
+  if (!_breakingTickerInitDone) {
+    BreakingTicker.init(track, viewport);
+    _breakingTickerInitDone = true;
+  }
+
   const active = (breakingUpdates || []).filter(u => u && u.text && u.expiresAt && Date.now() < u.expiresAt);
 
   if (!active.length || _breakingDismissed) {
     bar.style.display = 'none';
     document.body.classList.remove('has-breaking-bar');
     _breakingBarFingerprint = '';
+    BreakingTicker.clear();
     return;
   }
 
@@ -7311,41 +7463,14 @@ function renderBreakingBar() {
   const fingerprint = active.map(u => u.text).join('|');
   if (fingerprint !== _breakingBarFingerprint) {
     _breakingBarFingerprint = fingerprint;
-    // Build one loop of items, then duplicate the whole loop once so the
-    // -50% transform animation scrolls seamlessly with no visible seam/jump.
     const itemsHtml = active.map(u => `<span class="breaking-ticker-item">${escHtml(u.text)}<span class="sep">•</span></span>`).join('');
-    track.innerHTML = itemsHtml + itemsHtml;
-
-    _setBreakingTickerSpeed(track);
-
-    // Re-measure once the real Inter font is actually active (it may still
-    // be loading right now and rendering in a fallback font), so the speed
-    // matches the final, true text width instead of a wrong early guess.
-    if (document.fonts && document.fonts.ready) {
-      document.fonts.ready.then(() => {
-        if (document.getElementById('breakingTickerTrack') === track) {
-          _setBreakingTickerSpeed(track);
-        }
-      });
-    }
+    BreakingTicker.setContent(itemsHtml); // #11 — also recalculates whenever new breaking text is added
   }
 
   bar.style.display = 'flex';
   document.body.classList.add('has-breaking-bar');
 }
 setInterval(renderBreakingBar, 30000); // auto-hide each update once its own time passes, even without a page reload
-
-// Recompute the scroll speed on resize (debounced) — the rendered text width
-// changes with viewport/zoom, so the duration needs to track it too.
-let _breakingResizeTimer = null;
-window.addEventListener('resize', () => {
-  clearTimeout(_breakingResizeTimer);
-  _breakingResizeTimer = setTimeout(() => {
-    const bar = document.getElementById('breakingBar');
-    const track = document.getElementById('breakingTickerTrack');
-    if (track && bar && bar.style.display !== 'none') _setBreakingTickerSpeed(track);
-  }, 200);
-});
 
 function dismissBreakingBar() {
   _breakingDismissed = true;
