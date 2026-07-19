@@ -7282,8 +7282,8 @@ function _setBreakingTickerSpeed(track) {
   if (!track || !track.childNodes.length) return;
   track.style.animation = 'none';
   const loopWidth = track.scrollWidth / 2;
-  const pxPerSecond = 14; // calm, readable news-ticker pace — slower than the skills marquee
-  const duration = Math.max(14, loopWidth / pxPerSecond);
+  const pxPerSecond = 6; // slow, easy-to-read news-ticker pace
+  const duration = Math.max(24, loopWidth / pxPerSecond);
   void track.offsetWidth; // force reflow so the animation restarts cleanly with the new duration
   track.style.animation = '';
   track.style.animationDuration = duration + 's';
