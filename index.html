@@ -444,6 +444,63 @@ nav .container { max-width: 1300px; }
 .settings-item-static { cursor: default; }
 .settings-item-static:hover { background: none; }
 
+/* LANGUAGE SWITCHER (nav icon) */
+.nav-lang-wrap { position: relative; display: block; flex-shrink: 0; }
+.nav-lang-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 190px;
+  max-height: 320px;
+  overflow-y: auto;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+  z-index: 1200;
+  animation: dropIn .2s ease;
+}
+.nav-lang-dropdown.open { display: block; }
+.lang-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--white);
+  transition: background .15s;
+}
+.lang-item:hover { background: rgba(37,99,235,0.12); }
+.lang-item.active { color: var(--cyan); }
+.lang-item .lang-check { color: var(--cyan); font-size: 13px; opacity: 0; }
+.lang-item.active .lang-check { opacity: 1; }
+.lang-submenu {
+  display: none;
+  margin-top: 4px;
+  padding: 4px;
+  border-radius: 8px;
+  background: var(--card2);
+}
+.lang-submenu.open { display: block; }
+
+/* Hide Google Translate's default widget/banner completely — we drive it via our own UI */
+#google_translate_element { display: none !important; }
+.goog-te-banner-frame.skiptranslate { display: none !important; visibility: hidden !important; }
+body { top: 0 !important; position: static !important; }
+.goog-te-gadget { display: none !important; }
+.goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
+.goog-tooltip, .goog-tooltip:hover { display: none !important; }
+iframe.skiptranslate { display: none !important; }
+@media (max-width: 768px) {
+  .nav-lang-wrap { display: none; }
+}
+
 /* MOBILE DRAWER BACKDROP */
 .drawer-backdrop {
   display: none;
@@ -2925,6 +2982,7 @@ body, body *, body *::before, body *::after {
   </script>
 </head>
 <body>
+<div id="google_translate_element"></div>
 
 <!-- ===== NEW FEATURE: WHATSAPP FLOATING BUTTON (bottom-right) ===== -->
 <div class="wa-float-wrap" id="waFloatWrap">
@@ -3068,6 +3126,10 @@ body, body *, body *::before, body *::after {
         </div>
       </div>
       <a href="#contact" class="nav-cta">Hire Me <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
+      <div class="nav-lang-wrap" id="navLangWrap">
+        <button class="nav-settings-btn" id="navLangBtn" aria-label="Change language" title="Language"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
+        <div class="nav-lang-dropdown" id="navLangDropdown"></div>
+      </div>
       <div class="nav-settings-wrap" id="navSettingsWrap">
         <button class="nav-settings-btn" id="navSettingsBtn" aria-label="Settings"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>
         <div class="nav-settings-dropdown" id="navSettingsDropdown">
@@ -3079,10 +3141,11 @@ body, body *, body *::before, body *::after {
             <span class="settings-item-label">Search</span>
             <span class="settings-item-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
           </div>
-          <div class="settings-item settings-item-static">
+          <div class="settings-item" id="settingsLangToggle" onclick="toggleLangSubmenu('settingsLangSubmenu', event)">
             <span class="settings-item-label">Language</span>
-            <span class="settings-item-icon" style="font-size:12px;color:var(--muted);font-weight:600;">English</span>
+            <span class="settings-item-icon" id="settingsLangCurrent" style="font-size:12px;color:var(--muted);font-weight:600;">English</span>
           </div>
+          <div class="lang-submenu" id="settingsLangSubmenu"></div>
         </div>
       </div>
     </div>
@@ -3126,10 +3189,11 @@ body, body *, body *::before, body *::after {
         <span class="settings-item-label">Search</span>
         <span class="settings-item-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
       </div>
-      <div class="settings-item settings-item-static">
+      <div class="settings-item" id="mmSettingsLangToggle" onclick="toggleLangSubmenu('mmLangSubmenu', event)">
         <span class="settings-item-label">Language</span>
-        <span class="settings-item-icon" style="font-size:12px;color:var(--muted);font-weight:600;">English</span>
+        <span class="settings-item-icon" id="mmSettingsLangCurrent" style="font-size:12px;color:var(--muted);font-weight:600;">English</span>
       </div>
+      <div class="lang-submenu" id="mmLangSubmenu"></div>
     </div>
   </div>
   <a href="#contact" class="mm-link drawer-hire-btn"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg> Hire Me</a>
@@ -7930,9 +7994,104 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     e.stopPropagation();
     drop.classList.toggle('open');
   });
+  document.addEventListener('click', () => {
+    drop.classList.remove('open');
+    const sub = document.getElementById('settingsLangSubmenu');
+    if (sub) sub.classList.remove('open');
+  });
+  drop.addEventListener('click', (e) => e.stopPropagation());
+})();
+
+// ===== LANGUAGE SWITCHER (Google Translate powered) =====
+const SITE_LANGS = [
+  { code: 'en', name: 'English' },
+  { code: 'bn', name: 'বাংলা (Bengali)' },
+  { code: 'hi', name: 'हिन्दी (Hindi)' },
+  { code: 'ar', name: 'العربية (Arabic)' },
+  { code: 'es', name: 'Español (Spanish)' },
+  { code: 'fr', name: 'Français (French)' },
+  { code: 'pt', name: 'Português (Portuguese)' },
+  { code: 'zh-CN', name: '中文 (Chinese)' },
+  { code: 'ru', name: 'Русский (Russian)' },
+  { code: 'de', name: 'Deutsch (German)' },
+  { code: 'ur', name: 'اردو (Urdu)' },
+  { code: 'ko', name: '한국어 (Korean)' },
+  { code: 'ja', name: '日本語 (Japanese)' },
+  { code: 'id', name: 'Bahasa Indonesia (Indonesian)' },
+  { code: 'ms', name: 'Bahasa Melayu (Malay)' },
+  { code: 'tr', name: 'Türkçe (Turkish)' }
+];
+
+function getCurrentLangCode() {
+  const m = document.cookie.match(/googtrans=\/en\/([a-zA-Z-]+)/);
+  return m ? m[1] : 'en';
+}
+
+function buildLangListHTML(currentCode) {
+  return SITE_LANGS.map(l => {
+    const active = l.code === currentCode ? ' active' : '';
+    return `<div class="lang-item${active}" onclick="setSiteLanguage('${l.code}')">
+      <span>${l.name}</span><span class="lang-check">✓</span>
+    </div>`;
+  }).join('');
+}
+
+function renderLanguageMenus() {
+  const current = getCurrentLangCode();
+  const currentName = (SITE_LANGS.find(l => l.code === current) || SITE_LANGS[0]).name.split(' (')[0];
+  const html = buildLangListHTML(current);
+
+  const navList = document.getElementById('navLangDropdown');
+  if (navList) navList.innerHTML = html;
+
+  const settingsSub = document.getElementById('settingsLangSubmenu');
+  if (settingsSub) settingsSub.innerHTML = html;
+
+  const mmSub = document.getElementById('mmLangSubmenu');
+  if (mmSub) mmSub.innerHTML = html;
+
+  const settingsLabel = document.getElementById('settingsLangCurrent');
+  if (settingsLabel) settingsLabel.textContent = currentName;
+
+  const mmLabel = document.getElementById('mmSettingsLangCurrent');
+  if (mmLabel) mmLabel.textContent = currentName;
+}
+
+function setSiteLanguage(code) {
+  const domain = window.location.hostname;
+  // clear any existing googtrans cookie first
+  document.cookie = 'googtrans=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;';
+  document.cookie = 'googtrans=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;domain=' + domain + ';';
+  if (code !== 'en') {
+    document.cookie = 'googtrans=/en/' + code + ';path=/;';
+    document.cookie = 'googtrans=/en/' + code + ';path=/;domain=' + domain + ';';
+  }
+  localStorage.setItem('preferredLang', code);
+  window.location.reload();
+}
+
+function toggleLangSubmenu(id, e) {
+  if (e) e.stopPropagation();
+  const sub = document.getElementById(id);
+  if (!sub) return;
+  const wasOpen = sub.classList.contains('open');
+  document.querySelectorAll('.lang-submenu').forEach(s => s.classList.remove('open'));
+  if (!wasOpen) sub.classList.add('open');
+}
+
+(function() {
+  const btn = document.getElementById('navLangBtn');
+  const drop = document.getElementById('navLangDropdown');
+  if (!btn || !drop) return;
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    drop.classList.toggle('open');
+  });
   document.addEventListener('click', () => drop.classList.remove('open'));
   drop.addEventListener('click', (e) => e.stopPropagation());
 })();
+
+renderLanguageMenus();
 
 // ===== MOBILE DRAWER "SETTINGS" SECTION =====
 (function() {
@@ -8062,5 +8221,17 @@ window.addEventListener('load', function() {
   setTimeout(() => { tip.classList.remove('wa-tooltip-show'); }, 5500);
 });
 </script>
+
+<!-- Google Translate (loaded async, drives the custom language switcher UI above) -->
+<script type="text/javascript">
+function googleTranslateElementInit() {
+  new google.translate.TranslateElement({
+    pageLanguage: 'en',
+    includedLanguages: 'bn,hi,ar,es,fr,pt,zh-CN,ru,de,ur,ko,ja,id,ms,tr',
+    autoDisplay: false
+  }, 'google_translate_element');
+}
+</script>
+<script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" async></script>
 </body>
 </html>
