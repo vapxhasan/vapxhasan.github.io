@@ -270,7 +270,7 @@ nav .container { max-width: 1300px; }
 .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 22px; }
 .nav-logo {
   font-family: var(--font-display);
-  font-size: 26px;
+  font-size: 29px;
   font-weight: 800;
   background: linear-gradient(90deg, var(--indigo), var(--cyan));
   -webkit-background-clip: text;
@@ -294,7 +294,7 @@ nav .container { max-width: 1300px; }
 .nav-links::-webkit-scrollbar { display: none; }
 .nav-links li { flex-shrink: 0; }
 .nav-links a {
-  font-size: 15px;
+  font-size: 16.5px;
   font-weight: 500;
   color: var(--muted);
   letter-spacing: .3px;
@@ -337,7 +337,7 @@ nav .container { max-width: 1300px; }
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 16.5px;
   font-weight: 500;
   color: var(--muted);
   letter-spacing: .3px;
@@ -509,7 +509,7 @@ nav .container { max-width: 1300px; }
   flex-shrink: 0;
 }
 .mobile-menu .close-btn:hover { background: rgba(37,99,235,0.25); }
-.mobile-menu a {
+.mobile-menu .mm-link {
   font-family: var(--font-display);
   font-size: 16px;
   font-weight: 600;
@@ -521,8 +521,8 @@ nav .container { max-width: 1300px; }
   align-items: center;
   gap: 10px;
 }
-.mobile-menu a:last-of-type { border-bottom: none; }
-.mobile-menu a:hover { color: var(--white); padding-left: 6px; }
+.mobile-menu > .mm-link:last-child { border-bottom: none; }
+.mobile-menu .mm-link:hover { color: var(--white); padding-left: 6px; }
 .drawer-hire-btn {
   margin-top: 28px;
   padding: 13px 20px;
@@ -3098,26 +3098,6 @@ body, body *, body *::before, body *::after {
   <div class="drawer-header">
     <button class="close-btn" id="closeMenu" aria-label="Close menu"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
   </div>
-  <div id="mmSettingsWrap">
-    <button class="mm-link" type="button" id="mmSettingsBtn" style="background:none;border:none;text-align:left;width:100%;cursor:pointer;font:inherit;display:flex;align-items:center;justify-content:space-between;">
-      <span style="display:flex;align-items:center;gap:12px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Settings</span>
-      <span id="mmSettingsArrow" style="font-size:12px;color:var(--muted);transition:transform .2s;">▾</span>
-    </button>
-    <div id="mmSettingsPanel" style="display:none;padding:2px 0 6px 34px;">
-      <div class="settings-item" onclick="toggleThemeMode()">
-        <span class="settings-item-label" id="mmThemeLabel">Dark Mode</span>
-        <span class="settings-item-icon" id="mmThemeIcon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
-      </div>
-      <div class="settings-item" onclick="closeDrawer();openSearchModal();">
-        <span class="settings-item-label">Search</span>
-        <span class="settings-item-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
-      </div>
-      <div class="settings-item settings-item-static">
-        <span class="settings-item-label">Language</span>
-        <span class="settings-item-icon" style="font-size:12px;color:var(--muted);font-weight:600;">English</span>
-      </div>
-    </div>
-  </div>
   <a href="#about" class="mm-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> About</a>
   <a href="#services" class="mm-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg> Services</a>
   <a href="#portfolio" class="mm-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg> Work</a>
@@ -3132,6 +3112,26 @@ body, body *, body *::before, body *::after {
   <a href="#blog" class="mm-link" id="mmBlogLink"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Blog</a>
   <a href="#notice" class="mm-link" id="mmNoticeLink"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg> Notice</a>
   <a href="#tools" class="mm-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg> Tools</a>
+  <div id="mmSettingsWrap">
+    <button class="mm-link" type="button" id="mmSettingsBtn" style="background:none;border:none;text-align:left;width:100%;cursor:pointer;font:inherit;justify-content:space-between;">
+      <span style="display:flex;align-items:center;gap:10px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Settings</span>
+      <span id="mmSettingsArrow" style="font-size:12px;transition:transform .2s;">▾</span>
+    </button>
+    <div id="mmSettingsPanel" style="display:none;padding:2px 0 10px 34px;">
+      <div class="settings-item" onclick="toggleThemeMode()">
+        <span class="settings-item-label" id="mmThemeLabel">Dark Mode</span>
+        <span class="settings-item-icon" id="mmThemeIcon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
+      </div>
+      <div class="settings-item" onclick="closeDrawer();openSearchModal();">
+        <span class="settings-item-label">Search</span>
+        <span class="settings-item-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
+      </div>
+      <div class="settings-item settings-item-static">
+        <span class="settings-item-label">Language</span>
+        <span class="settings-item-icon" style="font-size:12px;color:var(--muted);font-weight:600;">English</span>
+      </div>
+    </div>
+  </div>
   <a href="#contact" class="mm-link drawer-hire-btn"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg> Hire Me</a>
 </div>
 
@@ -4685,7 +4685,7 @@ function closeDrawer() {
 document.getElementById('hamburger').addEventListener('click', openDrawer);
 document.getElementById('closeMenu').addEventListener('click', closeDrawer);
 drawerBackdrop.addEventListener('click', closeDrawer);
-document.querySelectorAll('.mm-link').forEach(link => {
+document.querySelectorAll('.mm-link:not(#mmSettingsBtn)').forEach(link => {
   link.addEventListener('click', closeDrawer);
 });
 
@@ -6618,17 +6618,18 @@ function renderResumeButtons() {
   const mmBtn     = document.getElementById('mmResumeBtn');
   const editBtn   = document.getElementById('navResumeEditBtn');
   if (!navBtn) return;
+  const resumeIconSvg = '<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg> ';
 
   if (resumeData && resumeData.data) {
     const label = (resumeData.title || 'Resume');
-    if (navBtn) { navBtn.style.display = 'block'; navBtn.textContent = label; navBtn.href = resumeData.data; navBtn.setAttribute('download', resumeData.name || 'Resume.pdf'); navBtn.onclick = closeNavMoreDropdown; }
-    if (mmBtn)  { mmBtn.style.display = 'flex'; mmBtn.textContent = label; mmBtn.href = resumeData.data; mmBtn.setAttribute('download', resumeData.name || 'Resume.pdf'); mmBtn.onclick = null; }
+    if (navBtn) { navBtn.style.display = 'block'; navBtn.innerHTML = resumeIconSvg + label; navBtn.href = resumeData.data; navBtn.setAttribute('download', resumeData.name || 'Resume.pdf'); navBtn.onclick = closeNavMoreDropdown; }
+    if (mmBtn)  { mmBtn.style.display = 'flex'; mmBtn.innerHTML = resumeIconSvg + label; mmBtn.href = resumeData.data; mmBtn.setAttribute('download', resumeData.name || 'Resume.pdf'); mmBtn.onclick = null; }
     if (footerLink) { footerLink.style.display = 'inline-block'; footerLink.textContent = 'Download ' + (resumeData.title || 'Resume'); footerLink.href = resumeData.data; footerLink.setAttribute('download', resumeData.name || 'Resume.pdf'); footerLink.onclick = null; }
     if (editBtn) editBtn.style.display = isAdmin ? 'flex' : 'none';
   } else if (isAdmin) {
     const openEdit = (e) => { e.preventDefault(); closeNavMoreDropdown(); openResumeModal(); };
-    if (navBtn) { navBtn.style.display = 'block'; navBtn.textContent = '＋ Add Resume'; navBtn.removeAttribute('download'); navBtn.href = 'javascript:void(0)'; navBtn.onclick = openEdit; }
-    if (mmBtn)  { mmBtn.style.display = 'flex'; mmBtn.textContent = '＋ Add Resume'; mmBtn.removeAttribute('download'); mmBtn.href = 'javascript:void(0)'; mmBtn.onclick = openEdit; }
+    if (navBtn) { navBtn.style.display = 'block'; navBtn.innerHTML = resumeIconSvg + '＋ Add Resume'; navBtn.removeAttribute('download'); navBtn.href = 'javascript:void(0)'; navBtn.onclick = openEdit; }
+    if (mmBtn)  { mmBtn.style.display = 'flex'; mmBtn.innerHTML = resumeIconSvg + '＋ Add Resume'; mmBtn.removeAttribute('download'); mmBtn.href = 'javascript:void(0)'; mmBtn.onclick = openEdit; }
     if (footerLink) footerLink.style.display = 'none';
     if (editBtn) editBtn.style.display = 'none';
   } else {
