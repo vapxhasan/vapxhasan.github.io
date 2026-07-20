@@ -448,8 +448,8 @@ nav .container { max-width: 1300px; }
 .drawer-backdrop {
   display: none;
   position: fixed;
-  top: 60px; left: 0; right: 0; bottom: 0;
-  z-index: 998;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1001;
   background: rgba(0,0,0,0.6);
   backdrop-filter: blur(4px);
 }
@@ -458,14 +458,13 @@ nav .container { max-width: 1300px; }
 /* MOBILE DRAWER */
 .mobile-menu {
   position: fixed;
-  top: 60px; left: 0; bottom: 0;
+  top: 0; left: 0; bottom: 0;
   width: 78vw;
   max-width: 300px;
-  z-index: 999;
+  z-index: 1002;
   background: rgba(8,11,20,0.98);
   backdrop-filter: blur(20px);
   border-right: 1px solid var(--border);
-  border-top: 1px solid var(--border);
   padding: 20px 20px 32px;
   display: flex;
   flex-direction: column;
@@ -479,7 +478,7 @@ nav .container { max-width: 1300px; }
 .drawer-header {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   margin-bottom: 16px;
   padding-bottom: 16px;
   border-bottom: 1px solid var(--border);
@@ -3096,6 +3095,7 @@ body, body *, body *::before, body *::after {
 <!-- Mobile Side Drawer -->
 <div class="mobile-menu" id="mobileMenu">
   <div class="drawer-header">
+    <span class="drawer-logo">Hasanur Rahman</span>
     <button class="close-btn" id="closeMenu" aria-label="Close menu"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
   </div>
   <a href="#about" class="mm-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> About</a>
