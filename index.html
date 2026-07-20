@@ -486,6 +486,9 @@ nav .container { max-width: 1300px; }
   padding: 4px;
   border-radius: 8px;
   background: var(--card2);
+  max-height: 240px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .lang-submenu.open { display: block; }
 
@@ -2182,6 +2185,9 @@ footer {
 }
 .yt-subscribe-btn:hover { background: #cc0000; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,0,0,0.3); }
 .yt-videos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
+.yt-videos-track { display: flex; gap: 24px; overflow-x: auto; scroll-behavior: smooth; padding: 4px; flex: 1; scroll-snap-type: x proximity; }
+.yt-videos-track .yt-video-card { flex: 0 0 300px; scroll-snap-align: start; }
+@media (max-width: 640px) { .yt-videos-track .yt-video-card { flex-basis: 260px; } }
 .yt-video-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -3128,7 +3134,7 @@ body, body *, body *::before, body *::after {
       <a href="#contact" class="nav-cta">Hire Me <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
       <div class="nav-lang-wrap" id="navLangWrap">
         <button class="nav-settings-btn" id="navLangBtn" aria-label="Change language" title="Language"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
-        <div class="nav-lang-dropdown" id="navLangDropdown"></div>
+        <div class="nav-lang-dropdown notranslate" id="navLangDropdown" translate="no"></div>
       </div>
       <div class="nav-settings-wrap" id="navSettingsWrap">
         <button class="nav-settings-btn" id="navSettingsBtn" aria-label="Settings"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>
@@ -3143,9 +3149,9 @@ body, body *, body *::before, body *::after {
           </div>
           <div class="settings-item" id="settingsLangToggle" onclick="toggleLangSubmenu('settingsLangSubmenu', event)">
             <span class="settings-item-label">Language</span>
-            <span class="settings-item-icon" id="settingsLangCurrent" style="font-size:12px;color:var(--muted);font-weight:600;">English</span>
+            <span class="settings-item-icon notranslate" id="settingsLangCurrent" translate="no" style="font-size:12px;color:var(--muted);font-weight:600;">English</span>
           </div>
-          <div class="lang-submenu" id="settingsLangSubmenu"></div>
+          <div class="lang-submenu notranslate" id="settingsLangSubmenu" translate="no"></div>
         </div>
       </div>
     </div>
@@ -3191,9 +3197,9 @@ body, body *, body *::before, body *::after {
       </div>
       <div class="settings-item" id="mmSettingsLangToggle" onclick="toggleLangSubmenu('mmLangSubmenu', event)">
         <span class="settings-item-label">Language</span>
-        <span class="settings-item-icon" id="mmSettingsLangCurrent" style="font-size:12px;color:var(--muted);font-weight:600;">English</span>
+        <span class="settings-item-icon notranslate" id="mmSettingsLangCurrent" translate="no" style="font-size:12px;color:var(--muted);font-weight:600;">English</span>
       </div>
-      <div class="lang-submenu" id="mmLangSubmenu"></div>
+      <div class="lang-submenu notranslate" id="mmLangSubmenu" translate="no"></div>
     </div>
   </div>
   <a href="#contact" class="mm-link drawer-hire-btn"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg> Hire Me</a>
@@ -4396,19 +4402,17 @@ body, body *, body *::before, body *::after {
       </a>
     </div>
 
-    <!-- Videos Grid -->
-    <div id="ytVideosGrid" class="yt-videos-grid">
-      <!-- videos injected by JS -->
-    </div>
+    <div id="ytFilters" class="fiv-cat-bar" style="display:none;margin:22px 0 4px;"></div>
 
-    <!-- Load More -->
-    <div id="ytLoadMoreWrap" style="display:none;flex-direction:column;align-items:center;gap:16px;margin-top:40px;">
-      <div id="ytVideoCount" style="font-size:13px;color:var(--muted);font-family:var(--font-mono);"></div>
-      <div style="display:flex;gap:12px;">
-        <button id="ytLoadMoreBtn" onclick="ytLoadMore()" style="display:none;align-items:center;gap:8px;padding:12px 28px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(37,99,235,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">▶ Load More Videos</button>
-        <button id="ytShowLessBtn" onclick="ytShowLess()" style="display:none;align-items:center;gap:8px;padding:12px 22px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='var(--white)';this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg> Show Less</button>
+    <!-- Videos Slider -->
+    <div class="yt-slider-wrap" style="display:flex;align-items:center;gap:10px;">
+      <button class="review-slider-nav" id="ytSliderPrev" aria-label="Previous video" style="display:none;">‹</button>
+      <div id="ytVideosGrid" class="yt-videos-track">
+        <!-- videos injected by JS -->
       </div>
+      <button class="review-slider-nav" id="ytSliderNext" aria-label="Next video" style="display:none;">›</button>
     </div>
+    <div id="ytVideoCount" style="font-size:13px;color:var(--muted);font-family:var(--font-mono);text-align:center;margin-top:14px;"></div>
 
     <div id="ytEmpty" class="yt-empty reveal">
       <div class="yt-empty-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line></svg></div>
@@ -4425,10 +4429,29 @@ body, body *, body *::before, body *::after {
     <div class="yt-modal-sub">Paste your YouTube video URL or embed ID below</div>
     <input class="yt-modal-input" id="ytUrlInput" placeholder="e.g. https://youtube.com/watch?v=dQw4w9WgXcQ" type="text">
     <input class="yt-modal-input" id="ytTitleInput" placeholder="Video title (optional)" type="text">
+    <select class="yt-modal-input" id="ytCategoryInput" style="cursor:pointer;"></select>
+    <div style="font-size:11px;color:var(--muted);margin:-8px 0 12px;">Need a new category? <button type="button" onclick="document.getElementById('ytModal').classList.remove('open');openYtCatModal(-1);" style="background:none;border:none;color:var(--indigo);font-weight:700;cursor:pointer;padding:0;font-size:11px;text-decoration:underline;">+ Add Category</button></div>
     <div class="yt-modal-btns">
       <button class="yt-modal-cancel" id="closeYtModal">Cancel</button>
       <button class="yt-modal-add" onclick="addYtVideo()">Add Video <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
     </div>
+  </div>
+</div>
+
+<!-- YouTube Video CATEGORY MANAGEMENT MODAL — mirrors the review skill-category modal -->
+<div class="fiv-modal" id="ytCatModal">
+  <div class="fiv-modal-inner">
+    <button class="fiv-modal-close" onclick="closeYtCatModal()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    <div class="fiv-modal-title" id="ytCatModalTitle"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> Edit Video Category</div>
+
+    <div class="fiv-field">
+        <label>Category name</label>
+        <input type="text" id="ytCat_name" placeholder="e.g. Tutorials">
+    </div>
+
+    <button class="fiv-save-btn" onclick="saveYtCat()">Save Category <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+    <button class="fiv-cancel-btn" id="ytCatDeleteBtn" style="display:none;color:#ff7777;border-color:rgba(255,80,80,0.3);" onclick="deleteYtCat()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg> Delete Category</button>
+    <button class="fiv-cancel-btn" onclick="closeYtCatModal()">Cancel</button>
   </div>
 </div>
 
@@ -4470,16 +4493,17 @@ body, body *, body *::before, body *::after {
       </div>
       <button class="blog-write-btn admin-only" id="openBlogModal" style="display:none;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Write Post</button>
     </div>
-    <div id="blogGrid" class="blog-grid">
-      <!-- blog cards injected by JS -->
-    </div>
+    <div id="blogFeaturedWrap"></div>
 
-    <!-- Load More -->
-    <div id="blogLoadMoreWrap" style="display:none;flex-direction:column;align-items:center;gap:16px;margin-top:40px;">
-      <div id="blogPostCount" style="font-size:13px;color:var(--muted);font-family:var(--font-mono);"></div>
-      <div style="display:flex;gap:12px;">
-        <button id="blogLoadMoreBtn" onclick="blogLoadMore()" style="display:none;align-items:center;gap:8px;padding:12px 28px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(37,99,235,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Load More Posts</button>
-        <button id="blogShowLessBtn" onclick="blogShowLess()" style="display:none;align-items:center;gap:8px;padding:12px 22px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='var(--white)';this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg> Show Less</button>
+    <button id="blogMoreToggle" onclick="toggleBlogMore()" data-open="0" style="display:none;align-items:center;gap:8px;margin:22px auto 0;padding:10px 22px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:100px;font-family:var(--font-mono);font-size:12.5px;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='var(--white)';this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">
+      <span id="blogMoreLabel">More Posts ▾</span>
+    </button>
+
+    <div id="blogSliderSection" style="display:none;margin-top:22px;">
+      <div class="notice-slider-wrap">
+        <button class="review-slider-nav" id="blogSliderPrev" aria-label="Previous post">‹</button>
+        <div id="blogSliderTrack" class="notice-slider-track"></div>
+        <button class="review-slider-nav" id="blogSliderNext" aria-label="Next post">›</button>
       </div>
     </div>
 
@@ -5461,6 +5485,113 @@ async function sharedSet(key, val) {
 let ytVideos = [];
 let ytChannel = { name: '@vapxhasan', sub: 'YouTube Channel · AI, Design & Automation', url: 'https://youtube.com/@vapxhasan' };
 
+// Category management for YT videos — mirrors the review skill-category system
+// (admin add/edit/delete, filter chips) instead of a plain free-text tag.
+const DEFAULT_YT_CATEGORIES = [
+  { name: 'Tutorials' },
+  { name: 'AI Tools' },
+  { name: 'Tips & Tricks' },
+  { name: 'Client Work' },
+  { name: 'Behind The Scenes' },
+  { name: 'Vlog' }
+];
+let ytCategories = DEFAULT_YT_CATEGORIES.map(c => ({ ...c }));
+let ytCatEditIdx = -1; // -1 = adding a new category, >=0 = editing existing index
+let ytFilterCategory = 'All';
+
+async function resetYtCategories() {
+  if (!isAdmin) return;
+  if (!confirm('Reset video categories to the default list? This replaces your current category list (existing videos keep their tags, but chips not in the default list will disappear from the filter bar).')) return;
+  ytCategories = DEFAULT_YT_CATEGORIES.map(c => ({ ...c }));
+  await sharedSet('yt_categories', ytCategories);
+  renderYtVideos();
+}
+
+function populateYtCategorySelect(selected) {
+  const sel = document.getElementById('ytCategoryInput');
+  if (!sel) return;
+  if (!ytCategories.length) {
+    sel.innerHTML = '<option value="">No categories yet — add one first</option>';
+    return;
+  }
+  sel.innerHTML = ytCategories.map(c => `<option value="${escAttr(c.name)}">${c.name}</option>`).join('');
+  if (selected && ytCategories.some(c => c.name === selected)) sel.value = selected;
+}
+
+function openYtCatModal(idx) {
+  if (!isAdmin) { alert('Admin login required.'); return; }
+  ytCatEditIdx = idx;
+  const isNew = idx === -1;
+  const c = isNew ? { name: '' } : ytCategories[idx];
+  document.getElementById('ytCatModalTitle').innerHTML = (isNew ? 'Add Video Category' : 'Edit — ' + c.name);
+  document.getElementById('ytCat_name').value = c.name || '';
+  document.getElementById('ytCatDeleteBtn').style.display = !isNew ? 'block' : 'none';
+  document.getElementById('ytCatModal').classList.add('open');
+  setTimeout(() => document.getElementById('ytCat_name').focus(), 50);
+}
+
+function closeYtCatModal() { document.getElementById('ytCatModal').classList.remove('open'); }
+document.getElementById('ytCatModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeYtCatModal(); });
+
+async function saveYtCat() {
+  if (!isAdmin) return;
+  const name = document.getElementById('ytCat_name').value.trim();
+  if (!name) { alert('Category name is required.'); return; }
+  if (ytCategories.some((c, i) => c.name === name && i !== ytCatEditIdx)) { alert('A category with this name already exists.'); return; }
+
+  if (ytCatEditIdx === -1) {
+    ytCategories.push({ name });
+  } else {
+    const old = ytCategories[ytCatEditIdx];
+    if (old.name !== name) {
+      // Keep existing videos tagged correctly when a category is renamed.
+      ytVideos.forEach(v => { if (v.category === old.name) v.category = name; });
+      await sharedSet('yt_videos', ytVideos);
+    }
+    old.name = name;
+  }
+
+  await sharedSet('yt_categories', ytCategories);
+  closeYtCatModal();
+  renderYtVideos();
+}
+
+async function deleteYtCat() {
+  if (!isAdmin || ytCatEditIdx === -1) return;
+  const c = ytCategories[ytCatEditIdx];
+  if (!confirm(`Delete "${c.name}" category? Existing videos keep their tag but this filter chip will disappear.`)) return;
+  ytCategories.splice(ytCatEditIdx, 1);
+  await sharedSet('yt_categories', ytCategories);
+  closeYtCatModal();
+  renderYtVideos();
+}
+
+function getYtCategories() {
+  return ['All', ...ytCategories.map(c => c.name)];
+}
+
+function renderYtFilters() {
+  const wrap = document.getElementById('ytFilters');
+  if (!wrap) return;
+  if (!ytVideos.length) { wrap.style.display = 'none'; return; }
+  const cats = getYtCategories();
+  if (!cats.includes(ytFilterCategory)) ytFilterCategory = 'All';
+  wrap.style.display = 'flex';
+  wrap.innerHTML =
+    `<div class="fiv-cat-chip"><button type="button" class="fiv-cat-btn${ytFilterCategory === 'All' ? ' active' : ''}" data-cat="All">All</button></div>` +
+    ytCategories.map((c, i) =>
+      `<div class="fiv-cat-chip">
+        <button type="button" class="fiv-cat-btn${c.name === ytFilterCategory ? ' active' : ''}" data-cat="${escAttr(c.name)}">${c.name}</button>
+        ${isAdmin ? `<button type="button" class="fiv-cat-edit-btn" onclick="openYtCatModal(${i})" title="Edit category" aria-label="Edit category">${editPencilSvg}</button>` : ''}
+      </div>`
+    ).join('') +
+    (isAdmin ? `<button type="button" class="fiv-add-cat-btn" onclick="openYtCatModal(-1)">＋ Add Category</button>
+     <button type="button" class="fiv-add-cat-btn" onclick="resetYtCategories()" title="Reset categories to the default list" style="border-color:rgba(148,163,184,0.35);color:var(--muted);">⟲ Reset to Default</button>` : '');
+  wrap.querySelectorAll('.fiv-cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => { ytFilterCategory = btn.dataset.cat; renderYtVideos(); });
+  });
+}
+
 function getYtId(url) {
   const patterns = [
     /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([A-Za-z0-9_-]{11})/,
@@ -5479,25 +5610,39 @@ function renderYtChannel() {
   document.getElementById('ytChUrlInput').value = ytChannel.url;
 }
 
-let ytShowCount = 6;
 function renderYtVideos() {
-  const grid = document.getElementById('ytVideosGrid');
+  const track = document.getElementById('ytVideosGrid');
   const empty = document.getElementById('ytEmpty');
-  const lmw = document.getElementById('ytLoadMoreWrap');
+  const prevBtn = document.getElementById('ytSliderPrev');
+  const nextBtn = document.getElementById('ytSliderNext');
+  const countEl = document.getElementById('ytVideoCount');
+  renderYtFilters();
   if (!ytVideos.length) {
-    grid.innerHTML = '';
+    track.innerHTML = '';
     empty.style.display = 'block';
-    if (lmw) lmw.style.display = 'none';
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
+    if (countEl) countEl.textContent = '';
     return;
   }
   empty.style.display = 'none';
-  const visible = ytVideos.slice(0, ytShowCount);
-  grid.innerHTML = visible.map((v, i) => `
+  const filtered = ytVideos
+    .map((v, i) => ({ v, i }))
+    .filter(({ v }) => ytFilterCategory === 'All' || v.category === ytFilterCategory);
+  if (!filtered.length) {
+    track.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:13px;padding:30px;font-family:var(--font-mono);width:100%;">No videos in this category yet.</div>';
+    prevBtn.style.display = 'none';
+    nextBtn.style.display = 'none';
+    if (countEl) countEl.textContent = '';
+    return;
+  }
+  track.innerHTML = filtered.map(({ v, i }) => `
     <div class="yt-video-card reveal visible">
       <div class="yt-thumb-wrap">
         <iframe src="https://www.youtube.com/embed/${v.id}" title="${v.title||'YouTube Video'}" allowfullscreen loading="lazy"></iframe>
       </div>
       <div class="yt-video-body">
+        ${v.category ? `<div style="font-size:10.5px;font-family:var(--font-mono);color:var(--cyan);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">${escHtml(v.category)}</div>` : ''}
         <div class="yt-video-title">${v.title||'YouTube Video'}</div>
         <div class="yt-video-meta" style="display:flex;justify-content:space-between;align-items:center;">
           <span>${v.date}</span>
@@ -5506,25 +5651,28 @@ function renderYtVideos() {
       </div>
     </div>
   `).join('');
-  if (!lmw) return;
-  lmw.style.display = 'flex';
-  document.getElementById('ytVideoCount').textContent = `Showing ${Math.min(ytShowCount, ytVideos.length)} of ${ytVideos.length} video${ytVideos.length !== 1 ? 's' : ''}`;
-  document.getElementById('ytLoadMoreBtn').style.display = ytVideos.length > ytShowCount ? 'inline-flex' : 'none';
-  document.getElementById('ytShowLessBtn').style.display = ytShowCount > 6 ? 'inline-flex' : 'none';
+  // Only show slide controls when there's more than one video to slide through
+  const showNav = filtered.length > 1;
+  prevBtn.style.display = showNav ? 'flex' : 'none';
+  nextBtn.style.display = showNav ? 'flex' : 'none';
+  if (countEl) countEl.textContent = `${filtered.length} video${filtered.length !== 1 ? 's' : ''}${ytFilterCategory !== 'All' ? ' in ' + ytFilterCategory : ''}`;
 }
-function ytLoadMore() { ytShowCount += 6; renderYtVideos(); }
-function ytShowLess() { ytShowCount = 6; renderYtVideos(); document.getElementById('youtube').scrollIntoView({behavior:'smooth'}); }
+document.getElementById('ytSliderPrev').addEventListener('click', () => document.getElementById('ytVideosGrid').scrollBy({ left: -320, behavior: 'smooth' }));
+document.getElementById('ytSliderNext').addEventListener('click', () => document.getElementById('ytVideosGrid').scrollBy({ left: 320, behavior: 'smooth' }));
 
 async function addYtVideo() {
   if (!isAdmin) return;
   const url = document.getElementById('ytUrlInput').value.trim();
   const title = document.getElementById('ytTitleInput').value.trim();
+  const category = document.getElementById('ytCategoryInput').value.trim();
   if (!url) return;
   const id = getYtId(url);
   if (!id) { alert('Invalid YouTube URL!'); return; }
   const btn = document.querySelector('#ytModal .yt-modal-add');
   btn.textContent = 'Saving...'; btn.disabled = true;
-  ytVideos.unshift({ id, title: title || 'YouTube Video', date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) });
+  const ytNow = new Date();
+  const ytDateStr = ytNow.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) + ' • ' + ytNow.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  ytVideos.unshift({ id, title: title || 'YouTube Video', category: category || '', date: ytDateStr });
   await sharedSet('yt_videos', ytVideos);
   document.getElementById('ytUrlInput').value = '';
   document.getElementById('ytTitleInput').value = '';
@@ -5554,6 +5702,7 @@ async function saveChannelInfo() {
 // modal listeners
 document.getElementById('openYtModal').addEventListener('click', () => {
   if (!isAdmin) { alert('Admin login required. Click the Admin button.'); return; }
+  populateYtCategorySelect();
   document.getElementById('ytModal').classList.add('open');
 });
 document.getElementById('closeYtModal').addEventListener('click', () => document.getElementById('ytModal').classList.remove('open'));
@@ -5570,7 +5719,6 @@ document.getElementById('ytChannelModal').addEventListener('click', e => { if (e
 // ===================================================
 let blogPosts = [];
 
-let blogShowCount = 6;
 // ===== Hide sections (and their nav links) from public until admin adds content =====
 function toggleContentSection(sectionId, hasContent, navLinkIds) {
   const show = hasContent || isAdmin;
@@ -5583,46 +5731,86 @@ function toggleContentSection(sectionId, hasContent, navLinkIds) {
 }
 
 function renderBlog() {
-  const grid = document.getElementById('blogGrid');
+  const featuredWrap = document.getElementById('blogFeaturedWrap');
   const empty = document.getElementById('blogEmpty');
-  const lmw = document.getElementById('blogLoadMoreWrap');
+  const moreBtn = document.getElementById('blogMoreToggle');
+  const sliderSection = document.getElementById('blogSliderSection');
+  const sliderTrack = document.getElementById('blogSliderTrack');
+  if (!featuredWrap || !empty) return;
   toggleContentSection('blog', blogPosts.length > 0, ['navMoreBlogLink','mmBlogLink','footerBlogLink']);
   if (!blogPosts.length) {
-    grid.innerHTML = '';
+    featuredWrap.innerHTML = '';
+    moreBtn.style.display = 'none';
+    sliderSection.style.display = 'none';
     empty.style.display = 'block';
-    if (lmw) lmw.style.display = 'none';
     return;
   }
   empty.style.display = 'none';
-  const visible = blogPosts.slice(0, blogShowCount);
-  grid.innerHTML = visible.map((p, i) => `
-    <div class="blog-card reveal visible">
-      <div class="blog-thumb">
-        <div class="blog-thumb-glow" style="background:rgba(37,99,235,0.35)"></div>
-        ${p.img ? `<img class="blog-thumb-img" src="${p.img}" alt="${(p.title||'Blog post').replace(/"/g,'&quot;')}" loading="lazy">` : (p.emoji||'📝')}
-      </div>
-      <div class="blog-body">
-        <div class="blog-cat">${p.cat||'Article'}</div>
-        <div class="blog-title">${p.title}</div>
-        <div class="blog-excerpt">${(p.content||'').substring(0,130)}${p.content&&p.content.length>130?'...':''}</div>
-        <div class="blog-meta">
-          <span>${p.date}</span>
-          <div style="display:flex;gap:8px;align-items:center;">
-            <span class="blog-read-btn" onclick="openBlogRead(${i})">Read More <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-            ${isAdmin ? `<button onclick="removeBlogPost(${i})" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;display:inline-flex;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>` : ''}
-          </div>
-        </div>
+
+  // Newest post (index 0, since publishBlog unshifts) shown as the featured card
+  const p0 = blogPosts[0];
+  featuredWrap.innerHTML = `
+    <div class="notice-featured-card" onclick="openBlogRead(0)">
+      <div class="notice-featured-thumb">${p0.img ? `<img src="${p0.img}" alt="${escHtml(p0.title||'Post')}" loading="lazy">` : (p0.emoji||'📝')}</div>
+      <div class="notice-featured-body">
+        <span class="notice-badge-new">● NEW</span>
+        <div style="font-size:11px;font-family:var(--font-mono);color:var(--cyan);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">${escHtml(p0.cat||'Article')}</div>
+        <div class="notice-featured-title">${escHtml(p0.title)}</div>
+        <div class="notice-featured-excerpt">${escHtml((p0.content||'').substring(0,160))}${p0.content&&p0.content.length>160?'...':''}</div>
+        <div class="notice-featured-date">${p0.date}</div>
+        ${isAdmin ? `<div style="margin-top:10px;" onclick="event.stopPropagation()"><button onclick="removeBlogPost(0)" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button></div>` : ''}
       </div>
     </div>
-  `).join('');
-  if (!lmw) return;
-  lmw.style.display = 'flex';
-  document.getElementById('blogPostCount').textContent = `Showing ${Math.min(blogShowCount, blogPosts.length)} of ${blogPosts.length} post${blogPosts.length!==1?'s':''}`;
-  document.getElementById('blogLoadMoreBtn').style.display = blogPosts.length > blogShowCount ? 'inline-flex' : 'none';
-  document.getElementById('blogShowLessBtn').style.display = blogShowCount > 6 ? 'inline-flex' : 'none';
+  `;
+
+  const rest = blogPosts.slice(1);
+  if (!rest.length) {
+    moreBtn.style.display = 'none';
+    sliderSection.style.display = 'none';
+    return;
+  }
+  moreBtn.style.display = 'inline-flex';
+  document.getElementById('blogMoreLabel').textContent = `More Posts (${rest.length}) ▾`;
+
+  sliderTrack.innerHTML = rest.map((p, idx) => {
+    const realIndex = idx + 1; // actual index in the `blogPosts` array
+    return `
+    <div class="notice-slide-card" onclick="openBlogRead(${realIndex})">
+      ${p.img ? `<img class="notice-slide-thumb" src="${p.img}" alt="${escHtml(p.title||'Post')}" loading="lazy">` : `<div class="notice-slide-thumb-emoji">${p.emoji||'📝'}</div>`}
+      <div class="notice-slide-body">
+        <div class="notice-slide-title">${escHtml(p.title)}</div>
+        <div class="notice-slide-date">${p.date}</div>
+        ${isAdmin ? `<div style="margin-top:6px;" onclick="event.stopPropagation()"><button onclick="removeBlogPost(${realIndex})" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:3px 8px;cursor:pointer;font-size:10.5px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>` : ''}
+      </div>
+    </div>
+  `;
+  }).join('');
+
+  // Keep the slider section's open/closed state as it was before re-rendering
+  if (moreBtn.getAttribute('data-open') !== '1') {
+    sliderSection.style.display = 'none';
+  } else {
+    sliderSection.style.display = 'block';
+  }
 }
-function blogLoadMore() { blogShowCount += 6; renderBlog(); }
-function blogShowLess() { blogShowCount = 6; renderBlog(); document.getElementById('blog').scrollIntoView({behavior:'smooth'}); }
+
+function toggleBlogMore() {
+  const btn = document.getElementById('blogMoreToggle');
+  const sliderSection = document.getElementById('blogSliderSection');
+  const isOpen = btn.getAttribute('data-open') === '1';
+  const rest = blogPosts.length - 1;
+  if (isOpen) {
+    btn.setAttribute('data-open', '0');
+    sliderSection.style.display = 'none';
+    document.getElementById('blogMoreLabel').textContent = `More Posts (${rest}) ▾`;
+  } else {
+    btn.setAttribute('data-open', '1');
+    sliderSection.style.display = 'block';
+    document.getElementById('blogMoreLabel').textContent = `Hide Posts ▴`;
+  }
+}
+document.getElementById('blogSliderPrev').addEventListener('click', () => document.getElementById('blogSliderTrack').scrollBy({ left: -240, behavior: 'smooth' }));
+document.getElementById('blogSliderNext').addEventListener('click', () => document.getElementById('blogSliderTrack').scrollBy({ left: 240, behavior: 'smooth' }));
 
 let blogImgDataUrl = '';
 document.getElementById('blogImgInput').addEventListener('change', async function() {
@@ -5651,7 +5839,9 @@ async function publishBlog() {
   if (!title || !content) { alert('Please fill title and content!'); return; }
   const btn = document.querySelector('#blogModal .blog-modal-publish');
   btn.textContent = 'Publishing...'; btn.disabled = true;
-  blogPosts.unshift({ title, cat: cat||'Article', emoji: emoji||'📝', img: blogImgDataUrl||'', content, date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) });
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) + ' • ' + now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  blogPosts.unshift({ title, cat: cat||'Article', emoji: emoji||'📝', img: blogImgDataUrl||'', content, date: dateStr });
   await sharedSet('blog_posts', blogPosts);
   document.getElementById('blogTitleInput').value = '';
   document.getElementById('blogCatInput').value = '';
@@ -5830,11 +6020,12 @@ async function publishNotice() {
   if (!title || !content) { alert('Please fill title and details text!'); return; }
   const btn = document.querySelector('#noticeModal .blog-modal-publish');
   btn.textContent = 'Publishing...'; btn.disabled = true;
+  const noticeNow = new Date();
   notices.unshift({
     title, content,
     img: noticeImgDataUrl || '',
     pdf: noticePdfData || null,
-    date: new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'})
+    date: noticeNow.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) + ' • ' + noticeNow.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})
   });
   await sharedSet('notices', notices);
   document.getElementById('noticeTitleInput').value = '';
@@ -6205,6 +6396,7 @@ async function saveReview() {
   const orig = btn.textContent;
   btn.textContent = 'Saving...'; btn.disabled = true;
 
+  const rNow = new Date();
   const rev = {
     title,
     text,
@@ -6214,7 +6406,7 @@ async function saveReview() {
     category: document.getElementById('rCategoryInput').value.trim(),
     videoUrl: document.getElementById('rVideoUrlInput').value.trim(),
     rating:   parseInt(document.getElementById('rRatingInput').value) || 5,
-    date:     new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}),
+    date:     rNow.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) + ' • ' + rNow.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),
     media:    _currentReviewMedia || null,
   };
 
@@ -6427,6 +6619,8 @@ async function saveProject() {
   const orig = btn.textContent;
   btn.textContent = 'Saving...'; btn.disabled = true;
 
+  const pNow = new Date();
+  const pDateStr = pNow.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) + ' • ' + pNow.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   const proj = {
     emoji:  document.getElementById('pEmojiInput').value.trim() || '📁',
     type:   document.getElementById('pTypeInput').value.trim() || 'Project',
@@ -6435,7 +6629,7 @@ async function saveProject() {
     tools:  document.getElementById('pToolsInput').value.trim(),
     result: document.getElementById('pResultInput').value.trim(),
     link:   document.getElementById('pLinkInput').value.trim(),
-    date:   new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}),
+    date:   pDateStr,
     media:  _currentProjectMedia || null,
   };
 
@@ -7219,7 +7413,7 @@ function setCachedRecord(record) {
 // ===================================================
 async function initSharedData() {
   document.getElementById('ytVideosGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
-  document.getElementById('blogGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
+  document.getElementById('blogFeaturedWrap').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
   document.getElementById('noticeFeaturedWrap').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
   document.getElementById('projectGrid').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
   document.getElementById('reviewCarouselTrack').innerHTML = '<div style="color:var(--muted);font-size:13px;padding:20px;font-family:var(--font-mono);"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg> Loading from cloud...</div>';
@@ -7244,6 +7438,17 @@ async function initSharedData() {
     _record = record;
     if (record.yt_videos)      ytVideos       = record.yt_videos;
     if (record.yt_channel)     ytChannel      = record.yt_channel;
+    if (record.yt_categories) {
+      ytCategories = record.yt_categories;
+    } else if (ytVideos.length) {
+      const knownYt = new Set(ytCategories.map(c => c.name));
+      ytVideos.forEach(v => {
+        if (v.category && !knownYt.has(v.category)) {
+          ytCategories.push({ name: v.category });
+          knownYt.add(v.category);
+        }
+      });
+    }
     if (record.blog_posts)     blogPosts      = record.blog_posts;
     if (record.notices)        notices        = record.notices;
     if (record.projects)       projects       = record.projects;
@@ -8005,21 +8210,21 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 // ===== LANGUAGE SWITCHER (Google Translate powered) =====
 const SITE_LANGS = [
   { code: 'en', name: 'English' },
-  { code: 'bn', name: 'বাংলা (Bengali)' },
-  { code: 'hi', name: 'हिन्दी (Hindi)' },
-  { code: 'ar', name: 'العربية (Arabic)' },
-  { code: 'es', name: 'Español (Spanish)' },
-  { code: 'fr', name: 'Français (French)' },
-  { code: 'pt', name: 'Português (Portuguese)' },
-  { code: 'zh-CN', name: '中文 (Chinese)' },
-  { code: 'ru', name: 'Русский (Russian)' },
-  { code: 'de', name: 'Deutsch (German)' },
-  { code: 'ur', name: 'اردو (Urdu)' },
-  { code: 'ko', name: '한국어 (Korean)' },
-  { code: 'ja', name: '日本語 (Japanese)' },
-  { code: 'id', name: 'Bahasa Indonesia (Indonesian)' },
-  { code: 'ms', name: 'Bahasa Melayu (Malay)' },
-  { code: 'tr', name: 'Türkçe (Turkish)' }
+  { code: 'bn', name: 'Bengali (বাংলা)' },
+  { code: 'hi', name: 'Hindi (हिन्दी)' },
+  { code: 'ar', name: 'Arabic (العربية)' },
+  { code: 'es', name: 'Spanish (Español)' },
+  { code: 'fr', name: 'French (Français)' },
+  { code: 'pt', name: 'Portuguese (Português)' },
+  { code: 'zh-CN', name: 'Chinese (中文)' },
+  { code: 'ru', name: 'Russian (Русский)' },
+  { code: 'de', name: 'German (Deutsch)' },
+  { code: 'ur', name: 'Urdu (اردو)' },
+  { code: 'ko', name: 'Korean (한국어)' },
+  { code: 'ja', name: 'Japanese (日本語)' },
+  { code: 'id', name: 'Indonesian (Bahasa Indonesia)' },
+  { code: 'ms', name: 'Malay (Bahasa Melayu)' },
+  { code: 'tr', name: 'Turkish (Türkçe)' }
 ];
 
 function getCurrentLangCode() {
@@ -8030,8 +8235,8 @@ function getCurrentLangCode() {
 function buildLangListHTML(currentCode) {
   return SITE_LANGS.map(l => {
     const active = l.code === currentCode ? ' active' : '';
-    return `<div class="lang-item${active}" onclick="setSiteLanguage('${l.code}')">
-      <span>${l.name}</span><span class="lang-check">✓</span>
+    return `<div class="lang-item notranslate${active}" translate="no" onclick="setSiteLanguage('${l.code}')">
+      <span class="notranslate" translate="no">${l.name}</span><span class="lang-check">✓</span>
     </div>`;
   }).join('');
 }
