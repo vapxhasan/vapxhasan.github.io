@@ -2656,6 +2656,7 @@ footer {
   .about-photo-slot { width: 130px; height: 165px; }
   .about-badge-card { min-width: 100px; padding: 10px 12px; }
   .contact-grid { grid-template-columns: 1fr; }
+  .contact-form { height: auto; }
   .process-steps { flex-wrap: wrap; }
   .process-steps::before { display: none; }
   .process-step { flex: 0 0 calc(50% - 10px); }
@@ -4362,6 +4363,147 @@ body, body *, body *::before, body *::after {
   </div>
 </section>
 
+<!-- CONTACT -->
+<section id="contact" class="section" style="background:var(--bg2)">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Get In Touch</div>
+      <h2 class="section-title">Let's Build Something <span>Great</span></h2>
+      <p class="section-sub">Have a project in mind? Send a message or reach out on any platform below. I typically respond within 2 hours.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-form reveal" id="contactFormBox">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">YOUR NAME</label>
+            <input type="text" id="cf_name" class="form-input" placeholder="Alex Johnson">
+          </div>
+          <div class="form-group">
+            <label class="form-label">YOUR EMAIL</label>
+            <input type="email" id="cf_email" class="form-input" placeholder="alex@company.com">
+          </div>
+        </div>
+        <div class="form-group" id="cf_package_group" style="display:none;">
+          <label class="form-label">SELECTED PACKAGE</label>
+          <input type="text" id="cf_package_custom" class="form-input" placeholder="Package name..." oninput="document.getElementById('cf_package').value=this.value.trim();">
+        </div>
+        <div class="form-group">
+          <label class="form-label">SERVICE NEEDED</label>
+          <select id="cf_service_select" class="form-input" onchange="cfSyncService()">
+            <option value="" disabled selected>Select a service...</option>
+            <option value="Video Editing">Video Editing</option>
+            <option value="YouTube Video Editing">YouTube Video Editing</option>
+            <option value="Short-form Video Editing">Short-form Video Editing</option>
+            <option value="Commercial Ads">Commercial Ads</option>
+            <option value="Motion Graphics">Motion Graphics</option>
+            <option value="Graphic Design">Graphic Design</option>
+            <option value="AI Automation">AI Automation</option>
+            <option value="Prompt Engineering">Prompt Engineering</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+            <option value="Custom">Custom</option>
+          </select>
+          <input type="text" id="cf_service_custom" class="form-input" placeholder="Enter your service..." style="display:none;margin-top:10px;" oninput="cfSyncService()">
+          <input type="hidden" id="cf_service">
+        </div>
+        <div class="form-group">
+          <label class="form-label">YOUR BUDGET (USD)</label>
+          <select id="cf_budget_select" class="form-input" onchange="cfSyncBudget()">
+            <option value="" disabled selected>Select a budget...</option>
+            <option value="Under $100">Under $100</option>
+            <option value="$100–300">$100–300</option>
+            <option value="$300–500">$300–500</option>
+            <option value="$500–1000">$500–1000</option>
+            <option value="$1000+">$1000+</option>
+            <option value="Custom">Custom</option>
+          </select>
+          <input type="text" id="cf_budget_custom" class="form-input" placeholder="Enter your budget..." style="display:none;margin-top:10px;" oninput="cfSyncBudget()">
+          <input type="hidden" id="cf_budget">
+        </div>
+        <div class="form-group" style="flex:1;">
+          <label class="form-label">PROJECT DETAILS</label>
+          <textarea id="cf_message" class="form-textarea" style="flex:1;min-height:130px;" placeholder="Please describe your project, goals, preferred editing style, deadline, budget, and reference links if available."></textarea>
+        </div>
+        <input type="hidden" id="cf_package" value="None">
+        <input type="hidden" id="cf_price" value="None">
+        <input type="hidden" id="cf_lead_source" value="Contact Form">
+        <div id="cf_success" style="display:none;padding:14px 18px;background:rgba(22,163,74,0.12);border:1px solid rgba(22,163,74,0.35);border-radius:10px;color:#4ade80;font-size:14px;text-align:center;line-height:1.6;">
+          Thank you for contacting me!<br>Your inquiry has been received successfully.<br>I will carefully review your project requirements and get back to you as soon as possible.<br>Please check your inbox for a confirmation email.
+        </div>
+        <div id="cf_error" style="display:none;padding:14px 18px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;color:#f87171;font-size:14px;text-align:center;line-height:1.6;">
+          Oops! Something went wrong while sending your inquiry.<br>Please try again later or contact me directly via email or WhatsApp.
+        </div>
+        <button class="form-submit" onclick="handleSubmit(this)">Send Message <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+      </div>
+      <div class="contact-info reveal">
+        <a href="mailto:vapxhasan@gmail.com" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(234,67,53,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiNFQTQzMzUiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5HbWFpbDwvdGl0bGU+PHBhdGggZD0iTTI0IDUuNDU3djEzLjkwOWMwIC45MDQtLjczMiAxLjYzNi0xLjYzNiAxLjYzNmgtMy44MTlWMTEuNzNMMTIgMTYuNjRsLTYuNTQ1LTQuOTF2OS4yNzNIMS42MzZBMS42MzYgMS42MzYgMCAwIDEgMCAxOS4zNjZWNS40NTdjMC0yLjAyMyAyLjMwOS0zLjE3OCAzLjkyNy0xLjk2NEw1LjQ1NSA0LjY0IDEyIDkuNTQ4bDYuNTQ1LTQuOTEgMS41MjgtMS4xNDVDMjEuNjkgMi4yOCAyNCAzLjQzNCAyNCA1LjQ1N3oiLz48L3N2Zz4=" alt="Email" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">EMAIL</div>
+            <div class="cl-val">vapxhasan@gmail.com</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+        <a href="https://wa.me/8801327675833" target="_blank" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(37,211,102,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMyNUQzNjYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5XaGF0c0FwcDwvdGl0bGU+PHBhdGggZD0iTTE3LjQ3MiAxNC4zODJjLS4yOTctLjE0OS0xLjc1OC0uODY3LTIuMDMtLjk2Ny0uMjczLS4wOTktLjQ3MS0uMTQ4LS42Ny4xNS0uMTk3LjI5Ny0uNzY3Ljk2Ni0uOTQgMS4xNjQtLjE3My4xOTktLjM0Ny4yMjMtLjY0NC4wNzUtLjI5Ny0uMTUtMS4yNTUtLjQ2My0yLjM5LTEuNDc1LS44ODMtLjc4OC0xLjQ4LTEuNzYxLTEuNjUzLTIuMDU5LS4xNzMtLjI5Ny0uMDE4LS40NTguMTMtLjYwNi4xMzQtLjEzMy4yOTgtLjM0Ny40NDYtLjUyLjE0OS0uMTc0LjE5OC0uMjk4LjI5OC0uNDk3LjA5OS0uMTk4LjA1LS4zNzEtLjAyNS0uNTItLjA3NS0uMTQ5LS42NjktMS42MTItLjkxNi0yLjIwNy0uMjQyLS41NzktLjQ4Ny0uNS0uNjY5LS41MS0uMTczLS4wMDgtLjM3MS0uMDEtLjU3LS4wMS0uMTk4IDAtLjUyLjA3NC0uNzkyLjM3Mi0uMjcyLjI5Ny0xLjA0IDEuMDE2LTEuMDQgMi40NzkgMCAxLjQ2MiAxLjA2NSAyLjg3NSAxLjIxMyAzLjA3NC4xNDkuMTk4IDIuMDk2IDMuMiA1LjA3NyA0LjQ4Ny43MDkuMzA2IDEuMjYyLjQ4OSAxLjY5NC42MjUuNzEyLjIyNyAxLjM2LjE5NSAxLjg3MS4xMTguNTcxLS4wODUgMS43NTgtLjcxOSAyLjAwNi0xLjQxMy4yNDgtLjY5NC4yNDgtMS4yODkuMTczLTEuNDEzLS4wNzQtLjEyNC0uMjcyLS4xOTgtLjU3LS4zNDdtLTUuNDIxIDcuNDAzaC0uMDA0YTkuODcgOS44NyAwIDAxLTUuMDMxLTEuMzc4bC0uMzYxLS4yMTQtMy43NDEuOTgyLjk5OC0zLjY0OC0uMjM1LS4zNzRhOS44NiA5Ljg2IDAgMDEtMS41MS01LjI2Yy4wMDEtNS40NSA0LjQzNi05Ljg4NCA5Ljg4OC05Ljg4NCAyLjY0IDAgNS4xMjIgMS4wMyA2Ljk4OCAyLjg5OGE5LjgyNSA5LjgyNSAwIDAxMi44OTMgNi45OTRjLS4wMDMgNS40NS00LjQzNyA5Ljg4NC05Ljg4NSA5Ljg4NG04LjQxMy0xOC4yOTdBMTEuODE1IDExLjgxNSAwIDAwMTIuMDUgMEM1LjQ5NSAwIC4xNiA1LjMzNS4xNTcgMTEuODkyYzAgMi4wOTYuNTQ3IDQuMTQyIDEuNTg4IDUuOTQ1TC4wNTcgMjRsNi4zMDUtMS42NTRhMTEuODgyIDExLjg4MiAwIDAwNS42ODMgMS40NDhoLjAwNWM2LjU1NCAwIDExLjg5LTUuMzM1IDExLjg5My0xMS44OTNhMTEuODIxIDExLjgyMSAwIDAwLTMuNDgtOC40MTNaIi8+PC9zdmc+" alt="WhatsApp" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">WHATSAPP</div>
+            <div class="cl-val">Chat on WhatsApp</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+        <a href="https://fiverr.com/vapxhasan" target="_blank" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(26,182,93,0.12)"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAETElEQVR42u2av29bVRTHz/fc98N2YrVGbUgrArS04kerVjAgihRVQkJIVAyIgYEywAITM0KMTCz8BQyMiIUNGKjEgkSlSvyYQFVR1aQtNIHWtRPnvXfPl+HZVhonbh3HdiLelQdLvno6n3t+fe95xtmvP5C9vFT2+CoACoA9DEBhoE4xlA3BBAEgyMwXIVQAFAD/b4Cdr0IQEQAiEGwomkbuagAFIEjNZz6lSGoZhd2KGWkQu5DbOhGOAcBBm1krM1+Lq3PTByMXHqkeilwopIik5i/XF67UbwRwlMEoQg0Sy0YIAIEI60nz9IFjr8w9/+LsyYfLNae6IYQWm0tvf/+JJzHg8/tYvwMAEKFwzafvPn3uvWdeW68LjMZO9KugGlamgvLtpLENJ4wQgCKe9ukL788fPpV/VwEAEenCUAiBCXfQ7p0pow7aSFfPH395/vCpjF6EDppbT6HRPM1oRhpJ2u4qoxCs+uTJ/XPvPPWqkQ73BD06fuiu6bCyISsmDKBA4tM3j70UucDTdJ0zE8sSn169e3OpdacWVytBCZA/bi80s1WF7mwgbR/Ai5VcdHzfI+3m1UkJEaaWfXzx8x9v/iaCUJ2DE5HE0ljDDW6ZGABEzFgO4lpclXVN12gOemHh0oXFSzOlWt598yOvBPGu6MRoawVRaSdr757F5nKsESBGAujgUTc7fopwCLBgUOsTy0RIMjNfDuOt/NNIV/PceJBnxi4cB4ACjXT13GNn3jh6tuWTzPxUWDpY3t8Rb+09IvL60fnTB57IQ7/PMlKBa42/P/v1qwDKUQNAkFr2ePXQyYeO9A+wmXJtplx7wMceLO8nue0CO3gI+TTvUA66vt32Kuf7mpR7YCVbG2sSK1Sh3ML0Lqei9z7Qe8pUQIcrrDp4EqfdatinJaFdo9qf+8r68Wkhkgrk8dNHGrR8khuNzsEnPsUIAAYIIaNNhaXvrl388+6NZtpKmQVwHz13fm56hmReiIym0C9+//bLyxcenZ5l2wGAyI2V5Q+ffevM7Il8zwQAKOKg/6zVf7j+swooAiCj37BHRJZb9WuNW3eSZrcPOGg9aV6pXz8ze4KT8kBuX4AgDEMIjYxcWAk26WX7oqlIw0oQrwdY82k5iCcvJSgkCREjPW1TeeNpeSXt/gohOZKpxEjmQqPQ/WMF2JAYewkgP/m/Vv5VYA97gCNpWWMEGOcqAAqAAqAAmOwadribXy9J5vIhn0hv1Qdy+dRVeEZSYMPNTIcFqEYVB+1qn/yiE2rQy0BhOYgc1HUuAw4iItNhZUIAEJLfXP2pFleNJp05l4MuNm5F9zJQGGn4y/LlkgtTmq7bfL25NIzuwJB/eGpmrd65WslFvU6AoOWTtOd1i0IrQ9wThg6hsILNYn2rEKpI3HtJ6p8GAPrMHncgiQfZzG2MJpyoF9uqMASy61dKjz3dB1B04gKgACgACoACoADYtes/3DwHMQFVT44AAAAASUVORK5CYII=" alt="Fiverr" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">FIVERR</div>
+            <div class="cl-val">fiverr.com/vapxhasan</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+        <a href="https://www.upwork.com/freelancers/~0117eaa6462f5ba09c" target="_blank" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(20,171,98,0.1)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMxNEE4MDAiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5VcHdvcms8L3RpdGxlPjxwYXRoIGQ9Ik0xOC41NjEgMTMuMTU4Yy0xLjEwMiAwLTIuMTM1LS40NjctMy4wNzQtMS4yMjdsLjIyOC0xLjA3Ni4wMDgtLjA0MmMuMjA3LTEuMTQzLjg0OS0zLjA2IDIuODM5LTMuMDYgMS40OTIgMCAyLjcwMyAxLjIxMiAyLjcwMyAyLjcwMy0uMDAxIDEuNDg5LTEuMjEyIDIuNzAyLTIuNzA0IDIuNzAyem0wLTguMTRjLTIuNTM5IDAtNC41MSAxLjY0OS01LjMxIDQuMzY2LTEuMjItMS44MzQtMi4xNDgtNC4wMzYtMi42ODctNS44OTJINy44Mjh2Ny4xMTJjLS4wMDIgMS40MDYtMS4xNDEgMi41NDYtMi41NDcgMi41NDgtMS40MDUtLjAwMi0yLjU0My0xLjE0My0yLjU0NS0yLjU0OFYzLjQ5MkgwdjcuMTEyYzAgMi45MTQgMi4zNyA1LjMwMyA1LjI4MSA1LjMwMyAyLjkxMyAwIDUuMjgzLTIuMzg5IDUuMjgzLTUuMzAzdi0xLjE5Yy41MjkgMS4xMDcgMS4xODIgMi4yMjkgMS45NzQgMy4yMjFsLTEuNjczIDcuODczaDIuNzk3bDEuMjEzLTUuNzFjMS4wNjMuNjc5IDIuMjg1IDEuMTA5IDMuNjg2IDEuMTA5IDMgMCA1LjQzOS0yLjQ1MiA1LjQzOS01LjQ1IDAtMy0yLjQzOS01LjQzOS01LjQzOS01LjQzOXoiLz48L3N2Zz4=" alt="Upwork" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">UPWORK</div>
+            <div class="cl-val">Hire on Upwork</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+        <a href="https://instagram.com/vapxhasan" target="_blank" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(225,48,108,0.1)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiNFNDQwNUYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5JbnN0YWdyYW08L3RpdGxlPjxwYXRoIGQ9Ik03LjAzMDEuMDg0Yy0xLjI3NjguMDYwMi0yLjE0ODcuMjY0LTIuOTExLjU2MzQtLjc4ODguMzA3NS0xLjQ1NzUuNzItMi4xMjI4IDEuMzg3Ny0uNjY1Mi42Njc3LTEuMDc1IDEuMzM2OC0xLjM4MDIgMi4xMjctLjI5NTQuNzYzOC0uNDk1NiAxLjYzNjUtLjU1MiAyLjkxNC0uMDU2NCAxLjI3NzUtLjA2ODkgMS42ODgyLS4wNjI2IDQuOTQ3LjAwNjIgMy4yNTg2LjAyMDYgMy42NjcxLjA4MjUgNC45NDczLjA2MSAxLjI3NjUuMjY0IDIuMTQ4Mi41NjM1IDIuOTEwNy4zMDguNzg4OS43MiAxLjQ1NzMgMS4zODggMi4xMjI4LjY2NzkuNjY1NSAxLjMzNjUgMS4wNzQzIDIuMTI4NSAxLjM4Ljc2MzIuMjk1IDEuNjM2MS40OTYxIDIuOTEzNC41NTIgMS4yNzczLjA1NiAxLjY4ODQuMDY5IDQuOTQ2Mi4wNjI3IDMuMjU3OC0uMDA2MiAzLjY2OC0uMDIwNyA0Ljk0NzgtLjA4MTQgMS4yOC0uMDYwNyAyLjE0Ny0uMjY1MiAyLjkwOTgtLjU2MzMuNzg4OS0uMzA4NiAxLjQ1NzgtLjcyIDIuMTIyOC0xLjM4ODEuNjY1LS42NjgyIDEuMDc0NS0xLjMzNzggMS4zNzk1LTIuMTI4NC4yOTU3LS43NjMyLjQ5NjYtMS42MzYuNTUyLTIuOTEyNC4wNTYtMS4yODA5LjA2OTItMS42ODk4LjA2My00Ljk0OC0uMDA2My0zLjI1ODMtLjAyMS0zLjY2NjgtLjA4MTctNC45NDY1LS4wNjA3LTEuMjc5Ny0uMjY0LTIuMTQ4Ny0uNTYzMy0yLjkxMTctLjMwODQtLjc4ODktLjcyLTEuNDU2OC0xLjM4NzYtMi4xMjI4QzIxLjI5ODIgMS4zMyAyMC42MjguOTIwOCAxOS44Mzc4LjYxNjUgMTkuMDc0LjMyMSAxOC4yMDE3LjExOTcgMTYuOTI0NC4wNjQ1IDE1LjY0NzEuMDA5MyAxNS4yMzYtLjAwNSAxMS45NzcuMDAxNCA4LjcxOC4wMDc2IDguMzEuMDIxNSA3LjAzMDEuMDgzOW0uMTQwMiAyMS42OTMyYy0xLjE3LS4wNTA5LTEuODA1My0uMjQ1My0yLjIyODctLjQwOC0uNTYwNi0uMjE2LS45Ni0uNDc3MS0xLjM4MTktLjg5NS0uNDIyLS40MTc4LS42ODExLS44MTg2LS45LTEuMzc4LS4xNjQ0LS40MjM0LS4zNjI0LTEuMDU4LS40MTcxLTIuMjI4LS4wNTk1LTEuMjY0NS0uMDcyLTEuNjQ0Mi0uMDc5LTQuODQ4LS4wMDctMy4yMDM3LjAwNTMtMy41ODMuMDYwNy00Ljg0OC4wNS0xLjE2OS4yNDU2LTEuODA1LjQwOC0yLjIyODIuMjE2LS41NjEzLjQ3NjItLjk2Ljg5NS0xLjM4MTYuNDE4OC0uNDIxNy44MTg0LS42ODE0IDEuMzc4My0uOTAwMy40MjMtLjE2NTEgMS4wNTc1LS4zNjE0IDIuMjI3LS40MTcxIDEuMjY1NS0uMDYgMS42NDQ3LS4wNzIgNC44NDgtLjA3OSAzLjIwMzMtLjAwNyAzLjU4MzUuMDA1IDQuODQ5NS4wNjA4IDEuMTY5LjA1MDggMS44MDUzLjI0NDUgMi4yMjguNDA4LjU2MDguMjE2Ljk2LjQ3NTQgMS4zODE2Ljg5NS40MjE3LjQxOTQuNjgxNi44MTc2LjkwMDUgMS4zNzg3LjE2NTMuNDIxNy4zNjE3IDEuMDU2LjQxNjkgMi4yMjYzLjA2MDIgMS4yNjU1LjA3MzkgMS42NDUuMDc5NiA0Ljg0OC4wMDU4IDMuMjAzLS4wMDU1IDMuNTgzNC0uMDYxIDQuODQ4LS4wNTEgMS4xNy0uMjQ1IDEuODA1NS0uNDA4IDIuMjI5NC0uMjE2LjU2MDQtLjQ3NjMuOTYtLjg5NTQgMS4zODE0LS40MTkuNDIxNS0uODE4MS42ODExLTEuMzc4My45LS40MjI0LjE2NDktMS4wNTc3LjM2MTctMi4yMjYyLjQxNzQtMS4yNjU2LjA1OTUtMS42NDQ4LjA3Mi00Ljg0OTMuMDc5LTMuMjA0NS4wMDctMy41ODI1LS4wMDYtNC44NDgtLjA2MDhNMTYuOTUzIDUuNTg2NEExLjQ0IDEuNDQgMCAxIDAgMTguMzkgNC4xNDRhMS40NCAxLjQ0IDAgMCAwLTEuNDM3IDEuNDQyNE01LjgzODUgMTIuMDEyYy4wMDY3IDMuNDAzMiAyLjc3MDYgNi4xNTU3IDYuMTczIDYuMTQ5MyAzLjQwMjYtLjAwNjUgNi4xNTctMi43NzAxIDYuMTUwNi02LjE3MzMtLjAwNjUtMy40MDMyLTIuNzcxLTYuMTU2NS02LjE3NC02LjE0OTgtMy40MDMuMDA2Ny02LjE1NiAyLjc3MS02LjE0OTYgNi4xNzM4TTggMTIuMDA3N2E0IDQgMCAxIDEgNC4wMDggMy45OTIxQTMuOTk5NiAzLjk5OTYgMCAwIDEgOCAxMi4wMDc3Ii8+PC9zdmc+" alt="Instagram" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">INSTAGRAM</div>
+            <div class="cl-val">@vapxhasan</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+        <a href="https://linkedin.com/in/vapxhasan" target="_blank" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(10,102,194,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNDQ4Ij48cmVjdCB3aWR0aD0iNDQ4IiBoZWlnaHQ9IjQ0OCIgcng9IjYwIiBmaWxsPSIjMEE2NkMyIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTEzNS40IDE3Nmg2My40djE5OC40aC02My40VjE3NnptMzEuNy0xMDEuNGMyMC4zIDAgMzYuNyAxNi41IDM2LjcgMzYuNyAwIDIwLjMtMTYuNSAzNi43LTM2LjcgMzYuNy0yMC4zIDAtMzYuNy0xNi41LTM2LjctMzYuNyAwLTIwLjIgMTYuNC0zNi43IDM2LjctMzYuN3pNMjMyLjkgMTc2aDYwLjh2MjcuMWguOWM4LjUtMTYgMjkuMS0zMi45IDU5LjktMzIuOSA2NCAwIDc1LjggNDIuMSA3NS44IDk2Ljl2MTA3LjNoLTYzLjRWMjc5LjljMC0yMy42LS40LTUzLjktMzIuOS01My45LTMyLjkgMC0zOCAyNS43LTM4IDUyLjJ2OTUuOGgtNjMuNFYxNzZ6Ii8+PC9zdmc+Cg==" alt="LinkedIn" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">LINKEDIN</div>
+            <div class="cl-val">@vapxhasan</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+        <a href="https://facebook.com/vapxhasan" target="_blank" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(24,119,242,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMxODc3RjIiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5GYWNlYm9vazwvdGl0bGU+PHBhdGggZD0iTTkuMTAxIDIzLjY5MXYtNy45OEg2LjYyN3YtMy42NjdoMi40NzR2LTEuNThjMC00LjA4NSAxLjg0OC01Ljk3OCA1Ljg1OC01Ljk3OC40MDEgMCAuOTU1LjA0MiAxLjQ2OC4xMDNhOC42OCA4LjY4IDAgMCAxIDEuMTQxLjE5NXYzLjMyNWE4LjYyMyA4LjYyMyAwIDAgMC0uNjUzLS4wMzYgMjYuODA1IDI2LjgwNSAwIDAgMC0uNzMzLS4wMDljLS43MDcgMC0xLjI1OS4wOTYtMS42NzUuMzA5YTEuNjg2IDEuNjg2IDAgMCAwLS42NzkuNjIyYy0uMjU4LjQyLS4zNzQuOTk1LS4zNzQgMS43NTJ2MS4yOTdoMy45MTlsLS4zODYgMi4xMDMtLjI4NyAxLjU2NGgtMy4yNDZ2OC4yNDVDMTkuMzk2IDIzLjIzOCAyNCAxOC4xNzkgMjQgMTIuMDQ0YzAtNi42MjctNS4zNzMtMTItMTItMTJzLTEyIDUuMzczLTEyIDEyYzAgNS42MjggMy44NzQgMTAuMzUgOS4xMDEgMTEuNjQ3WiIvPjwvc3ZnPg==" alt="Facebook" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">FACEBOOK</div>
+            <div class="cl-val">@vapxhasan</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+        <a href="https://calendly.com/vapxhasan/new-meeting" target="_blank" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(0,105,255,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMwMDY5RkYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5DYWxlbmRseTwvdGl0bGU+PHBhdGggZD0iTTE5LjY1NSAxNC4yNjJjLjI4MSAwIC41NTcuMDIzLjgyOC4wNjQgMCAuMDA1LS4wMDUuMDEtLjAwNS4wMTQtLjEwNS4yNjctLjIzNC41MzQtLjM4MS43ODZsLTEuMjE5IDIuMTA2Yy0xLjExMiAxLjkzNi0zLjE3NyAzLjEyNy01LjQxMSAzLjEyN2gtMi40MzJjLTIuMjMgMC00LjI5NC0xLjE5MS01LjQxMi0zLjEyN2wtMS4yMTgtMi4xMDZhNi4yNTEgNi4yNTEgMCAwIDEgMC02LjI1MmwxLjIxOC0yLjEwNkM2LjczNiA0LjgzMiA4LjggMy42NDEgMTEuMDM1IDMuNjQxaDIuNDMyYzIuMjMgMCA0LjI5NCAxLjE5MSA1LjQxMSAzLjEyN2wxLjIxOSAyLjEwNmMuMTQ3LjI1Mi4yNzEuNTE5LjM4MS43ODYgMCAuMDA0LjAwNS4wMDkuMDA1LjAxNC0uMjY3LjA0MS0uNTQzLjA2NC0uODI4LjA2NC0xLjgxNiAwLTIuNTAxLS42MDctMy4yOTEtMS4zMDYtLjc2NC0uNjc2LTEuNzExLTEuNTE3LTMuNDQtMS41MTdoLTEuMDI5Yy0xLjI1MSAwLTIuMzg3LjQ1NS0zLjIgMS4yNzgtLjc5Ni44MDUtMS4yMzMgMS45MDQtMS4yMzMgMy4wOTl2MS40MTFjMCAxLjE5Ni40MzcgMi4yOTUgMS4yMzMgMy4wOTkuODEzLjgyMyAxLjk0OSAxLjI3OCAzLjIgMS4yNzhoMS4wMzRjMS43MjkgMCAyLjY3Ni0uODQxIDMuNDM5LTEuNTE3Ljc5MS0uNzAzIDEuNDcxLTEuMzA2IDMuMjg3LTEuMzAxWm0uMDA1LTMuMjM3Yy4zOTkgMCAuNzk0LS4wMzYgMS4xNzktLjExLS4wMDItLjAwNC0uMDAyLS4wMS0uMDAyLS4wMTQtLjA3My0uNDE0LS4xOTMtLjgyMy0uMzQ5LTEuMjE4LjczMS0uMTIgMS40MDctLjM5NiAxLjk4Ni0uODE5IDAtLjAwNC0uMDA1LS4wMTMtLjAwNS0uMDE4LS4zMzEtMS4wODUtLjgzMi0yLjEwMS0xLjQ4OS0zLjAzLS42NDktLjkxNS0xLjQzNS0xLjcxOS0yLjMzMS0yLjM5NS0xLjg2Ny0xLjM5OC00LjA4OC0yLjEzOC02LjQyOC0yLjEzOC0xLjQ0OCAwLTIuODU1LjI4LTQuMTc1Ljg0MS0xLjI3My41NDMtMi40MjMgMS4zMTUtMy40MDcgMi4yOTlTMi44NzggNi41NTIgMi4zNDEgNy44M2MtLjU1NyAxLjMyNC0uODQyIDIuNzI2LS44NDIgNC4xNzUgMCAxLjQ0OC4yODEgMi44NTUuODQyIDQuMTc0LjU0MiAxLjI3NCAxLjMxNCAyLjQyMyAyLjI5OCAzLjQwN3MyLjEyOSAxLjc2MSAzLjQwNyAyLjI5OWMxLjMyNC41NTYgMi43MjcuODQxIDQuMTc1Ljg0MSAyLjM0IDAgNC41NjEtLjc0IDYuNDI4LTIuMTM3YTEwLjgxNSAxMC44MTUgMCAwIDAgMi4zMzEtMi4zOTZjLjY1Mi0uOTI5IDEuMTU4LTEuOTQ5IDEuNDg5LTMuMDMgMC0uMDA0LjAwNS0uMDE0LjAwNS0uMDE4LS41NzktLjQyMy0xLjI1NS0uNjk5LTEuOTg2LS44MTkuMTYxLS4zOTUuMjc2LS44MDQuMzQ5LTEuMjE4LjAwNS0uMDA5LjAwNS0uMDE0LjAwNS0uMDIzLjg2OS4xNjYgMS42OTIuNTA2IDIuNDA0IDEuMDM1LjY4NS41MDUuNTUyIDEuMDc1LjQ0NiAxLjQxNkMyMi4xODQgMjAuNDM3IDE3LjYxOSAyNCAxMi4yMjEgMjRjLTYuNjI1IDAtMTItNS4zNzUtMTItMTJzNS4zNy0xMiAxMi0xMmM1LjM5OCAwIDkuOTYzIDMuNTYzIDExLjQ3MSA4LjQ2NC4xMDYuMzQxLjIzOS45MTUtLjQ0NiAxLjQyMS0uNzE3LjUyOS0xLjUzNS44NzMtMi40MDQgMS4wMzQuMTI4LjcxNi4xMjggMS40NSAwIDIuMTY2LS4zODctLjA3NC0uNzgyLS4xMS0xLjE4Mi0uMTEtNC4xODQgMC0zLjk2OCAyLjgyMy02LjczNiAyLjgyM2gtMS4wMjljLTEuODk5IDAtMy4xNS0xLjM1Ny0zLjE1LTMuMDk1di0xLjQxMWMwLTEuNzM4IDEuMjUxLTMuMDk0IDMuMTUtMy4wOTRoMS4wMzRjMi43NjggMCAyLjU1MiAyLjgyMyA2LjczMSAyLjgyN1oiLz48L3N2Zz4=" alt="Calendly" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">BOOK A CALL</div>
+            <div class="cl-val">Schedule on Calendly</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- FIVERR PRICING EDIT MODAL -->
 <div class="fiv-modal" id="fivModal">
   <div class="fiv-modal-inner">
@@ -4479,146 +4621,6 @@ body, body *, body *::before, body *::after {
   </div>
 </div>
 
-<!-- CONTACT -->
-<section id="contact" class="section" style="background:var(--bg2)">
-  <div class="container">
-    <div class="reveal">
-      <div class="section-label">Get In Touch</div>
-      <h2 class="section-title">Let's Build Something <span>Great</span></h2>
-      <p class="section-sub">Have a project in mind? Send a message or reach out on any platform below. I typically respond within 2 hours.</p>
-    </div>
-    <div class="contact-grid">
-      <div class="contact-info reveal">
-        <a href="mailto:vapxhasan@gmail.com" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(234,67,53,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiNFQTQzMzUiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5HbWFpbDwvdGl0bGU+PHBhdGggZD0iTTI0IDUuNDU3djEzLjkwOWMwIC45MDQtLjczMiAxLjYzNi0xLjYzNiAxLjYzNmgtMy44MTlWMTEuNzNMMTIgMTYuNjRsLTYuNTQ1LTQuOTF2OS4yNzNIMS42MzZBMS42MzYgMS42MzYgMCAwIDEgMCAxOS4zNjZWNS40NTdjMC0yLjAyMyAyLjMwOS0zLjE3OCAzLjkyNy0xLjk2NEw1LjQ1NSA0LjY0IDEyIDkuNTQ4bDYuNTQ1LTQuOTEgMS41MjgtMS4xNDVDMjEuNjkgMi4yOCAyNCAzLjQzNCAyNCA1LjQ1N3oiLz48L3N2Zz4=" alt="Email" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">EMAIL</div>
-            <div class="cl-val">vapxhasan@gmail.com</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="https://wa.me/8801327675833" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(37,211,102,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMyNUQzNjYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5XaGF0c0FwcDwvdGl0bGU+PHBhdGggZD0iTTE3LjQ3MiAxNC4zODJjLS4yOTctLjE0OS0xLjc1OC0uODY3LTIuMDMtLjk2Ny0uMjczLS4wOTktLjQ3MS0uMTQ4LS42Ny4xNS0uMTk3LjI5Ny0uNzY3Ljk2Ni0uOTQgMS4xNjQtLjE3My4xOTktLjM0Ny4yMjMtLjY0NC4wNzUtLjI5Ny0uMTUtMS4yNTUtLjQ2My0yLjM5LTEuNDc1LS44ODMtLjc4OC0xLjQ4LTEuNzYxLTEuNjUzLTIuMDU5LS4xNzMtLjI5Ny0uMDE4LS40NTguMTMtLjYwNi4xMzQtLjEzMy4yOTgtLjM0Ny40NDYtLjUyLjE0OS0uMTc0LjE5OC0uMjk4LjI5OC0uNDk3LjA5OS0uMTk4LjA1LS4zNzEtLjAyNS0uNTItLjA3NS0uMTQ5LS42NjktMS42MTItLjkxNi0yLjIwNy0uMjQyLS41NzktLjQ4Ny0uNS0uNjY5LS41MS0uMTczLS4wMDgtLjM3MS0uMDEtLjU3LS4wMS0uMTk4IDAtLjUyLjA3NC0uNzkyLjM3Mi0uMjcyLjI5Ny0xLjA0IDEuMDE2LTEuMDQgMi40NzkgMCAxLjQ2MiAxLjA2NSAyLjg3NSAxLjIxMyAzLjA3NC4xNDkuMTk4IDIuMDk2IDMuMiA1LjA3NyA0LjQ4Ny43MDkuMzA2IDEuMjYyLjQ4OSAxLjY5NC42MjUuNzEyLjIyNyAxLjM2LjE5NSAxLjg3MS4xMTguNTcxLS4wODUgMS43NTgtLjcxOSAyLjAwNi0xLjQxMy4yNDgtLjY5NC4yNDgtMS4yODkuMTczLTEuNDEzLS4wNzQtLjEyNC0uMjcyLS4xOTgtLjU3LS4zNDdtLTUuNDIxIDcuNDAzaC0uMDA0YTkuODcgOS44NyAwIDAxLTUuMDMxLTEuMzc4bC0uMzYxLS4yMTQtMy43NDEuOTgyLjk5OC0zLjY0OC0uMjM1LS4zNzRhOS44NiA5Ljg2IDAgMDEtMS41MS01LjI2Yy4wMDEtNS40NSA0LjQzNi05Ljg4NCA5Ljg4OC05Ljg4NCAyLjY0IDAgNS4xMjIgMS4wMyA2Ljk4OCAyLjg5OGE5LjgyNSA5LjgyNSAwIDAxMi44OTMgNi45OTRjLS4wMDMgNS40NS00LjQzNyA5Ljg4NC05Ljg4NSA5Ljg4NG04LjQxMy0xOC4yOTdBMTEuODE1IDExLjgxNSAwIDAwMTIuMDUgMEM1LjQ5NSAwIC4xNiA1LjMzNS4xNTcgMTEuODkyYzAgMi4wOTYuNTQ3IDQuMTQyIDEuNTg4IDUuOTQ1TC4wNTcgMjRsNi4zMDUtMS42NTRhMTEuODgyIDExLjg4MiAwIDAwNS42ODMgMS40NDhoLjAwNWM2LjU1NCAwIDExLjg5LTUuMzM1IDExLjg5My0xMS44OTNhMTEuODIxIDExLjgyMSAwIDAwLTMuNDgtOC40MTNaIi8+PC9zdmc+" alt="WhatsApp" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">WHATSAPP</div>
-            <div class="cl-val">Chat on WhatsApp</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="https://fiverr.com/vapxhasan" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(26,182,93,0.12)"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAETElEQVR42u2av29bVRTHz/fc98N2YrVGbUgrArS04kerVjAgihRVQkJIVAyIgYEywAITM0KMTCz8BQyMiIUNGKjEgkSlSvyYQFVR1aQtNIHWtRPnvXfPl+HZVhonbh3HdiLelQdLvno6n3t+fe95xtmvP5C9vFT2+CoACoA9DEBhoE4xlA3BBAEgyMwXIVQAFAD/b4Cdr0IQEQAiEGwomkbuagAFIEjNZz6lSGoZhd2KGWkQu5DbOhGOAcBBm1krM1+Lq3PTByMXHqkeilwopIik5i/XF67UbwRwlMEoQg0Sy0YIAIEI60nz9IFjr8w9/+LsyYfLNae6IYQWm0tvf/+JJzHg8/tYvwMAEKFwzafvPn3uvWdeW68LjMZO9KugGlamgvLtpLENJ4wQgCKe9ukL788fPpV/VwEAEenCUAiBCXfQ7p0pow7aSFfPH395/vCpjF6EDppbT6HRPM1oRhpJ2u4qoxCs+uTJ/XPvPPWqkQ73BD06fuiu6bCyISsmDKBA4tM3j70UucDTdJ0zE8sSn169e3OpdacWVytBCZA/bi80s1WF7mwgbR/Ai5VcdHzfI+3m1UkJEaaWfXzx8x9v/iaCUJ2DE5HE0ljDDW6ZGABEzFgO4lpclXVN12gOemHh0oXFSzOlWt598yOvBPGu6MRoawVRaSdr757F5nKsESBGAujgUTc7fopwCLBgUOsTy0RIMjNfDuOt/NNIV/PceJBnxi4cB4ACjXT13GNn3jh6tuWTzPxUWDpY3t8Rb+09IvL60fnTB57IQ7/PMlKBa42/P/v1qwDKUQNAkFr2ePXQyYeO9A+wmXJtplx7wMceLO8nue0CO3gI+TTvUA66vt32Kuf7mpR7YCVbG2sSK1Sh3ML0Lqei9z7Qe8pUQIcrrDp4EqfdatinJaFdo9qf+8r68Wkhkgrk8dNHGrR8khuNzsEnPsUIAAYIIaNNhaXvrl388+6NZtpKmQVwHz13fm56hmReiIym0C9+//bLyxcenZ5l2wGAyI2V5Q+ffevM7Il8zwQAKOKg/6zVf7j+swooAiCj37BHRJZb9WuNW3eSZrcPOGg9aV6pXz8ze4KT8kBuX4AgDEMIjYxcWAk26WX7oqlIw0oQrwdY82k5iCcvJSgkCREjPW1TeeNpeSXt/gohOZKpxEjmQqPQ/WMF2JAYewkgP/m/Vv5VYA97gCNpWWMEGOcqAAqAAqAAmOwadribXy9J5vIhn0hv1Qdy+dRVeEZSYMPNTIcFqEYVB+1qn/yiE2rQy0BhOYgc1HUuAw4iItNhZUIAEJLfXP2pFleNJp05l4MuNm5F9zJQGGn4y/LlkgtTmq7bfL25NIzuwJB/eGpmrd65WslFvU6AoOWTtOd1i0IrQ9wThg6hsILNYn2rEKpI3HtJ6p8GAPrMHncgiQfZzG2MJpyoF9uqMASy61dKjz3dB1B04gKgACgACoACoADYtes/3DwHMQFVT44AAAAASUVORK5CYII=" alt="Fiverr" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">FIVERR</div>
-            <div class="cl-val">fiverr.com/vapxhasan</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="https://www.upwork.com/freelancers/~0117eaa6462f5ba09c" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(20,171,98,0.1)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMxNEE4MDAiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5VcHdvcms8L3RpdGxlPjxwYXRoIGQ9Ik0xOC41NjEgMTMuMTU4Yy0xLjEwMiAwLTIuMTM1LS40NjctMy4wNzQtMS4yMjdsLjIyOC0xLjA3Ni4wMDgtLjA0MmMuMjA3LTEuMTQzLjg0OS0zLjA2IDIuODM5LTMuMDYgMS40OTIgMCAyLjcwMyAxLjIxMiAyLjcwMyAyLjcwMy0uMDAxIDEuNDg5LTEuMjEyIDIuNzAyLTIuNzA0IDIuNzAyem0wLTguMTRjLTIuNTM5IDAtNC41MSAxLjY0OS01LjMxIDQuMzY2LTEuMjItMS44MzQtMi4xNDgtNC4wMzYtMi42ODctNS44OTJINy44Mjh2Ny4xMTJjLS4wMDIgMS40MDYtMS4xNDEgMi41NDYtMi41NDcgMi41NDgtMS40MDUtLjAwMi0yLjU0My0xLjE0My0yLjU0NS0yLjU0OFYzLjQ5MkgwdjcuMTEyYzAgMi45MTQgMi4zNyA1LjMwMyA1LjI4MSA1LjMwMyAyLjkxMyAwIDUuMjgzLTIuMzg5IDUuMjgzLTUuMzAzdi0xLjE5Yy41MjkgMS4xMDcgMS4xODIgMi4yMjkgMS45NzQgMy4yMjFsLTEuNjczIDcuODczaDIuNzk3bDEuMjEzLTUuNzFjMS4wNjMuNjc5IDIuMjg1IDEuMTA5IDMuNjg2IDEuMTA5IDMgMCA1LjQzOS0yLjQ1MiA1LjQzOS01LjQ1IDAtMy0yLjQzOS01LjQzOS01LjQzOS01LjQzOXoiLz48L3N2Zz4=" alt="Upwork" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">UPWORK</div>
-            <div class="cl-val">Hire on Upwork</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="https://instagram.com/vapxhasan" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(225,48,108,0.1)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiNFNDQwNUYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5JbnN0YWdyYW08L3RpdGxlPjxwYXRoIGQ9Ik03LjAzMDEuMDg0Yy0xLjI3NjguMDYwMi0yLjE0ODcuMjY0LTIuOTExLjU2MzQtLjc4ODguMzA3NS0xLjQ1NzUuNzItMi4xMjI4IDEuMzg3Ny0uNjY1Mi42Njc3LTEuMDc1IDEuMzM2OC0xLjM4MDIgMi4xMjctLjI5NTQuNzYzOC0uNDk1NiAxLjYzNjUtLjU1MiAyLjkxNC0uMDU2NCAxLjI3NzUtLjA2ODkgMS42ODgyLS4wNjI2IDQuOTQ3LjAwNjIgMy4yNTg2LjAyMDYgMy42NjcxLjA4MjUgNC45NDczLjA2MSAxLjI3NjUuMjY0IDIuMTQ4Mi41NjM1IDIuOTEwNy4zMDguNzg4OS43MiAxLjQ1NzMgMS4zODggMi4xMjI4LjY2NzkuNjY1NSAxLjMzNjUgMS4wNzQzIDIuMTI4NSAxLjM4Ljc2MzIuMjk1IDEuNjM2MS40OTYxIDIuOTEzNC41NTIgMS4yNzczLjA1NiAxLjY4ODQuMDY5IDQuOTQ2Mi4wNjI3IDMuMjU3OC0uMDA2MiAzLjY2OC0uMDIwNyA0Ljk0NzgtLjA4MTQgMS4yOC0uMDYwNyAyLjE0Ny0uMjY1MiAyLjkwOTgtLjU2MzMuNzg4OS0uMzA4NiAxLjQ1NzgtLjcyIDIuMTIyOC0xLjM4ODEuNjY1LS42NjgyIDEuMDc0NS0xLjMzNzggMS4zNzk1LTIuMTI4NC4yOTU3LS43NjMyLjQ5NjYtMS42MzYuNTUyLTIuOTEyNC4wNTYtMS4yODA5LjA2OTItMS42ODk4LjA2My00Ljk0OC0uMDA2My0zLjI1ODMtLjAyMS0zLjY2NjgtLjA4MTctNC45NDY1LS4wNjA3LTEuMjc5Ny0uMjY0LTIuMTQ4Ny0uNTYzMy0yLjkxMTctLjMwODQtLjc4ODktLjcyLTEuNDU2OC0xLjM4NzYtMi4xMjI4QzIxLjI5ODIgMS4zMyAyMC42MjguOTIwOCAxOS44Mzc4LjYxNjUgMTkuMDc0LjMyMSAxOC4yMDE3LjExOTcgMTYuOTI0NC4wNjQ1IDE1LjY0NzEuMDA5MyAxNS4yMzYtLjAwNSAxMS45NzcuMDAxNCA4LjcxOC4wMDc2IDguMzEuMDIxNSA3LjAzMDEuMDgzOW0uMTQwMiAyMS42OTMyYy0xLjE3LS4wNTA5LTEuODA1My0uMjQ1My0yLjIyODctLjQwOC0uNTYwNi0uMjE2LS45Ni0uNDc3MS0xLjM4MTktLjg5NS0uNDIyLS40MTc4LS42ODExLS44MTg2LS45LTEuMzc4LS4xNjQ0LS40MjM0LS4zNjI0LTEuMDU4LS40MTcxLTIuMjI4LS4wNTk1LTEuMjY0NS0uMDcyLTEuNjQ0Mi0uMDc5LTQuODQ4LS4wMDctMy4yMDM3LjAwNTMtMy41ODMuMDYwNy00Ljg0OC4wNS0xLjE2OS4yNDU2LTEuODA1LjQwOC0yLjIyODIuMjE2LS41NjEzLjQ3NjItLjk2Ljg5NS0xLjM4MTYuNDE4OC0uNDIxNy44MTg0LS42ODE0IDEuMzc4My0uOTAwMy40MjMtLjE2NTEgMS4wNTc1LS4zNjE0IDIuMjI3LS40MTcxIDEuMjY1NS0uMDYgMS42NDQ3LS4wNzIgNC44NDgtLjA3OSAzLjIwMzMtLjAwNyAzLjU4MzUuMDA1IDQuODQ5NS4wNjA4IDEuMTY5LjA1MDggMS44MDUzLjI0NDUgMi4yMjguNDA4LjU2MDguMjE2Ljk2LjQ3NTQgMS4zODE2Ljg5NS40MjE3LjQxOTQuNjgxNi44MTc2LjkwMDUgMS4zNzg3LjE2NTMuNDIxNy4zNjE3IDEuMDU2LjQxNjkgMi4yMjYzLjA2MDIgMS4yNjU1LjA3MzkgMS42NDUuMDc5NiA0Ljg0OC4wMDU4IDMuMjAzLS4wMDU1IDMuNTgzNC0uMDYxIDQuODQ4LS4wNTEgMS4xNy0uMjQ1IDEuODA1NS0uNDA4IDIuMjI5NC0uMjE2LjU2MDQtLjQ3NjMuOTYtLjg5NTQgMS4zODE0LS40MTkuNDIxNS0uODE4MS42ODExLTEuMzc4My45LS40MjI0LjE2NDktMS4wNTc3LjM2MTctMi4yMjYyLjQxNzQtMS4yNjU2LjA1OTUtMS42NDQ4LjA3Mi00Ljg0OTMuMDc5LTMuMjA0NS4wMDctMy41ODI1LS4wMDYtNC44NDgtLjA2MDhNMTYuOTUzIDUuNTg2NEExLjQ0IDEuNDQgMCAxIDAgMTguMzkgNC4xNDRhMS40NCAxLjQ0IDAgMCAwLTEuNDM3IDEuNDQyNE01LjgzODUgMTIuMDEyYy4wMDY3IDMuNDAzMiAyLjc3MDYgNi4xNTU3IDYuMTczIDYuMTQ5MyAzLjQwMjYtLjAwNjUgNi4xNTctMi43NzAxIDYuMTUwNi02LjE3MzMtLjAwNjUtMy40MDMyLTIuNzcxLTYuMTU2NS02LjE3NC02LjE0OTgtMy40MDMuMDA2Ny02LjE1NiAyLjc3MS02LjE0OTYgNi4xNzM4TTggMTIuMDA3N2E0IDQgMCAxIDEgNC4wMDggMy45OTIxQTMuOTk5NiAzLjk5OTYgMCAwIDEgOCAxMi4wMDc3Ii8+PC9zdmc+" alt="Instagram" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">INSTAGRAM</div>
-            <div class="cl-val">@vapxhasan</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="https://linkedin.com/in/vapxhasan" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(10,102,194,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNDQ4Ij48cmVjdCB3aWR0aD0iNDQ4IiBoZWlnaHQ9IjQ0OCIgcng9IjYwIiBmaWxsPSIjMEE2NkMyIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTEzNS40IDE3Nmg2My40djE5OC40aC02My40VjE3NnptMzEuNy0xMDEuNGMyMC4zIDAgMzYuNyAxNi41IDM2LjcgMzYuNyAwIDIwLjMtMTYuNSAzNi43LTM2LjcgMzYuNy0yMC4zIDAtMzYuNy0xNi41LTM2LjctMzYuNyAwLTIwLjIgMTYuNC0zNi43IDM2LjctMzYuN3pNMjMyLjkgMTc2aDYwLjh2MjcuMWguOWM4LjUtMTYgMjkuMS0zMi45IDU5LjktMzIuOSA2NCAwIDc1LjggNDIuMSA3NS44IDk2Ljl2MTA3LjNoLTYzLjRWMjc5LjljMC0yMy42LS40LTUzLjktMzIuOS01My45LTMyLjkgMC0zOCAyNS43LTM4IDUyLjJ2OTUuOGgtNjMuNFYxNzZ6Ii8+PC9zdmc+Cg==" alt="LinkedIn" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">LINKEDIN</div>
-            <div class="cl-val">@vapxhasan</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="https://facebook.com/vapxhasan" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(24,119,242,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMxODc3RjIiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5GYWNlYm9vazwvdGl0bGU+PHBhdGggZD0iTTkuMTAxIDIzLjY5MXYtNy45OEg2LjYyN3YtMy42NjdoMi40NzR2LTEuNThjMC00LjA4NSAxLjg0OC01Ljk3OCA1Ljg1OC01Ljk3OC40MDEgMCAuOTU1LjA0MiAxLjQ2OC4xMDNhOC42OCA4LjY4IDAgMCAxIDEuMTQxLjE5NXYzLjMyNWE4LjYyMyA4LjYyMyAwIDAgMC0uNjUzLS4wMzYgMjYuODA1IDI2LjgwNSAwIDAgMC0uNzMzLS4wMDljLS43MDcgMC0xLjI1OS4wOTYtMS42NzUuMzA5YTEuNjg2IDEuNjg2IDAgMCAwLS42NzkuNjIyYy0uMjU4LjQyLS4zNzQuOTk1LS4zNzQgMS43NTJ2MS4yOTdoMy45MTlsLS4zODYgMi4xMDMtLjI4NyAxLjU2NGgtMy4yNDZ2OC4yNDVDMTkuMzk2IDIzLjIzOCAyNCAxOC4xNzkgMjQgMTIuMDQ0YzAtNi42MjctNS4zNzMtMTItMTItMTJzLTEyIDUuMzczLTEyIDEyYzAgNS42MjggMy44NzQgMTAuMzUgOS4xMDEgMTEuNjQ3WiIvPjwvc3ZnPg==" alt="Facebook" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">FACEBOOK</div>
-            <div class="cl-val">@vapxhasan</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="https://calendly.com/vapxhasan/new-meeting" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(0,105,255,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMwMDY5RkYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5DYWxlbmRseTwvdGl0bGU+PHBhdGggZD0iTTE5LjY1NSAxNC4yNjJjLjI4MSAwIC41NTcuMDIzLjgyOC4wNjQgMCAuMDA1LS4wMDUuMDEtLjAwNS4wMTQtLjEwNS4yNjctLjIzNC41MzQtLjM4MS43ODZsLTEuMjE5IDIuMTA2Yy0xLjExMiAxLjkzNi0zLjE3NyAzLjEyNy01LjQxMSAzLjEyN2gtMi40MzJjLTIuMjMgMC00LjI5NC0xLjE5MS01LjQxMi0zLjEyN2wtMS4yMTgtMi4xMDZhNi4yNTEgNi4yNTEgMCAwIDEgMC02LjI1MmwxLjIxOC0yLjEwNkM2LjczNiA0LjgzMiA4LjggMy42NDEgMTEuMDM1IDMuNjQxaDIuNDMyYzIuMjMgMCA0LjI5NCAxLjE5MSA1LjQxMSAzLjEyN2wxLjIxOSAyLjEwNmMuMTQ3LjI1Mi4yNzEuNTE5LjM4MS43ODYgMCAuMDA0LjAwNS4wMDkuMDA1LjAxNC0uMjY3LjA0MS0uNTQzLjA2NC0uODI4LjA2NC0xLjgxNiAwLTIuNTAxLS42MDctMy4yOTEtMS4zMDYtLjc2NC0uNjc2LTEuNzExLTEuNTE3LTMuNDQtMS41MTdoLTEuMDI5Yy0xLjI1MSAwLTIuMzg3LjQ1NS0zLjIgMS4yNzgtLjc5Ni44MDUtMS4yMzMgMS45MDQtMS4yMzMgMy4wOTl2MS40MTFjMCAxLjE5Ni40MzcgMi4yOTUgMS4yMzMgMy4wOTkuODEzLjgyMyAxLjk0OSAxLjI3OCAzLjIgMS4yNzhoMS4wMzRjMS43MjkgMCAyLjY3Ni0uODQxIDMuNDM5LTEuNTE3Ljc5MS0uNzAzIDEuNDcxLTEuMzA2IDMuMjg3LTEuMzAxWm0uMDA1LTMuMjM3Yy4zOTkgMCAuNzk0LS4wMzYgMS4xNzktLjExLS4wMDItLjAwNC0uMDAyLS4wMS0uMDAyLS4wMTQtLjA3My0uNDE0LS4xOTMtLjgyMy0uMzQ5LTEuMjE4LjczMS0uMTIgMS40MDctLjM5NiAxLjk4Ni0uODE5IDAtLjAwNC0uMDA1LS4wMTMtLjAwNS0uMDE4LS4zMzEtMS4wODUtLjgzMi0yLjEwMS0xLjQ4OS0zLjAzLS42NDktLjkxNS0xLjQzNS0xLjcxOS0yLjMzMS0yLjM5NS0xLjg2Ny0xLjM5OC00LjA4OC0yLjEzOC02LjQyOC0yLjEzOC0xLjQ0OCAwLTIuODU1LjI4LTQuMTc1Ljg0MS0xLjI3My41NDMtMi40MjMgMS4zMTUtMy40MDcgMi4yOTlTMi44NzggNi41NTIgMi4zNDEgNy44M2MtLjU1NyAxLjMyNC0uODQyIDIuNzI2LS44NDIgNC4xNzUgMCAxLjQ0OC4yODEgMi44NTUuODQyIDQuMTc0LjU0MiAxLjI3NCAxLjMxNCAyLjQyMyAyLjI5OCAzLjQwN3MyLjEyOSAxLjc2MSAzLjQwNyAyLjI5OWMxLjMyNC41NTYgMi43MjcuODQxIDQuMTc1Ljg0MSAyLjM0IDAgNC41NjEtLjc0IDYuNDI4LTIuMTM3YTEwLjgxNSAxMC44MTUgMCAwIDAgMi4zMzEtMi4zOTZjLjY1Mi0uOTI5IDEuMTU4LTEuOTQ5IDEuNDg5LTMuMDMgMC0uMDA0LjAwNS0uMDE0LjAwNS0uMDE4LS41NzktLjQyMy0xLjI1NS0uNjk5LTEuOTg2LS44MTkuMTYxLS4zOTUuMjc2LS44MDQuMzQ5LTEuMjE4LjAwNS0uMDA5LjAwNS0uMDE0LjAwNS0uMDIzLjg2OS4xNjYgMS42OTIuNTA2IDIuNDA0IDEuMDM1LjY4NS41MDUuNTUyIDEuMDc1LjQ0NiAxLjQxNkMyMi4xODQgMjAuNDM3IDE3LjYxOSAyNCAxMi4yMjEgMjRjLTYuNjI1IDAtMTItNS4zNzUtMTItMTJzNS4zNy0xMiAxMi0xMmM1LjM5OCAwIDkuOTYzIDMuNTYzIDExLjQ3MSA4LjQ2NC4xMDYuMzQxLjIzOS45MTUtLjQ0NiAxLjQyMS0uNzE3LjUyOS0xLjUzNS44NzMtMi40MDQgMS4wMzQuMTI4LjcxNi4xMjggMS40NSAwIDIuMTY2LS4zODctLjA3NC0uNzgyLS4xMS0xLjE4Mi0uMTEtNC4xODQgMC0zLjk2OCAyLjgyMy02LjczNiAyLjgyM2gtMS4wMjljLTEuODk5IDAtMy4xNS0xLjM1Ny0zLjE1LTMuMDk1di0xLjQxMWMwLTEuNzM4IDEuMjUxLTMuMDk0IDMuMTUtMy4wOTRoMS4wMzRjMi43NjggMCAyLjU1MiAyLjgyMyA2LjczMSAyLjgyN1oiLz48L3N2Zz4=" alt="Calendly" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">BOOK A CALL</div>
-            <div class="cl-val">Schedule on Calendly</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-      </div>
-      <div class="contact-form reveal" id="contactFormBox">
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">YOUR NAME</label>
-            <input type="text" id="cf_name" class="form-input" placeholder="Alex Johnson">
-          </div>
-          <div class="form-group">
-            <label class="form-label">YOUR EMAIL</label>
-            <input type="email" id="cf_email" class="form-input" placeholder="alex@company.com">
-          </div>
-        </div>
-        <div class="form-group" id="cf_package_group" style="display:none;">
-          <label class="form-label">SELECTED PACKAGE</label>
-          <input type="text" id="cf_package_custom" class="form-input" placeholder="Package name..." oninput="document.getElementById('cf_package').value=this.value.trim();">
-        </div>
-        <div class="form-group">
-          <label class="form-label">SERVICE NEEDED</label>
-          <select id="cf_service_select" class="form-input" onchange="cfSyncService()">
-            <option value="" disabled selected>Select a service...</option>
-            <option value="Video Editing">Video Editing</option>
-            <option value="YouTube Video Editing">YouTube Video Editing</option>
-            <option value="Short-form Video Editing">Short-form Video Editing</option>
-            <option value="Commercial Ads">Commercial Ads</option>
-            <option value="Motion Graphics">Motion Graphics</option>
-            <option value="Graphic Design">Graphic Design</option>
-            <option value="AI Automation">AI Automation</option>
-            <option value="Prompt Engineering">Prompt Engineering</option>
-            <option value="Digital Marketing">Digital Marketing</option>
-            <option value="Custom">Custom</option>
-          </select>
-          <input type="text" id="cf_service_custom" class="form-input" placeholder="Enter your service..." style="display:none;margin-top:10px;" oninput="cfSyncService()">
-          <input type="hidden" id="cf_service">
-        </div>
-        <div class="form-group">
-          <label class="form-label">YOUR BUDGET (USD)</label>
-          <select id="cf_budget_select" class="form-input" onchange="cfSyncBudget()">
-            <option value="" disabled selected>Select a budget...</option>
-            <option value="Under $100">Under $100</option>
-            <option value="$100–300">$100–300</option>
-            <option value="$300–500">$300–500</option>
-            <option value="$500–1000">$500–1000</option>
-            <option value="$1000+">$1000+</option>
-            <option value="Custom">Custom</option>
-          </select>
-          <input type="text" id="cf_budget_custom" class="form-input" placeholder="Enter your budget..." style="display:none;margin-top:10px;" oninput="cfSyncBudget()">
-          <input type="hidden" id="cf_budget">
-        </div>
-        <div class="form-group" style="flex:1;">
-          <label class="form-label">PROJECT DETAILS</label>
-          <textarea id="cf_message" class="form-textarea" style="flex:1;min-height:130px;" placeholder="Please describe your project, goals, preferred editing style, deadline, budget, and reference links if available."></textarea>
-        </div>
-        <input type="hidden" id="cf_package" value="None">
-        <input type="hidden" id="cf_price" value="None">
-        <input type="hidden" id="cf_lead_source" value="Contact Form">
-        <div id="cf_success" style="display:none;padding:14px 18px;background:rgba(22,163,74,0.12);border:1px solid rgba(22,163,74,0.35);border-radius:10px;color:#4ade80;font-size:14px;text-align:center;line-height:1.6;">
-          Thank you for contacting me!<br>Your inquiry has been received successfully.<br>I will carefully review your project requirements and get back to you as soon as possible.<br>Please check your inbox for a confirmation email.
-        </div>
-        <div id="cf_error" style="display:none;padding:14px 18px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;color:#f87171;font-size:14px;text-align:center;line-height:1.6;">
-          Oops! Something went wrong while sending your inquiry.<br>Please try again later or contact me directly via email or WhatsApp.
-        </div>
-        <button class="form-submit" onclick="handleSubmit(this)">Send Message <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- YOUTUBE SECTION -->
 <section id="youtube" class="section">
