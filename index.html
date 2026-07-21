@@ -1343,6 +1343,52 @@ iframe.skiptranslate { display: none !important; }
 .cert-date { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
 .cert-link { display: inline-flex; margin-top: 6px; font-size: 12px; color: var(--indigo); font-family: var(--font-mono); }
 
+/* ===== SECTION ADMIN CONTROLS (category bar row + items-per-view) ===== */
+.section-admin-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; justify-content: center; margin: 22px 0 4px; }
+.items-per-view-ctrl { display: flex; align-items: center; gap: 8px; font-size: 12px; font-family: var(--font-mono); color: var(--muted); background: var(--card); border: 1px solid var(--border); border-radius: 50px; padding: 6px 14px; }
+.items-per-view-ctrl input { width: 42px; background: var(--card2); border: 1px solid var(--border); border-radius: 6px; color: var(--white); font-size: 12px; text-align: center; padding: 3px 4px; font-family: var(--font-mono); }
+.admin-move-btn { width: 26px; height: 26px; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all .2s; font-size: 11px; padding: 0; }
+.admin-move-btn:hover:not(:disabled) { border-color: var(--indigo); color: var(--white); background: rgba(37,99,235,0.15); }
+.admin-move-btn:disabled { opacity: .3; cursor: default; }
+.admin-move-row { display: flex; gap: 6px; }
+
+/* ===== PROJECT "MORE" SLIDER (overflow beyond main display count) ===== */
+.proj-more-toggle-wrap { text-align: center; margin-top: 32px; }
+.proj-more-toggle-btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px;
+  background: transparent; border: 1px solid var(--border2); color: var(--cyan);
+  border-radius: 50px; font-family: var(--font-display); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+}
+.proj-more-toggle-btn:hover { background: rgba(37,99,235,0.1); border-color: var(--indigo); }
+.proj-more-toggle-btn .chevron { transition: transform .25s; }
+.proj-more-toggle-btn.open .chevron { transform: rotate(180deg); }
+.proj-more-wrap { display: none; margin-top: 24px; }
+.proj-more-wrap.open { display: block; }
+.proj-more-slider-wrap { display: flex; align-items: center; gap: 10px; }
+.proj-more-track { display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding: 4px; flex: 1; scroll-snap-type: x proximity; }
+.proj-more-track .project-card { flex: 0 0 300px; scroll-snap-align: start; }
+@media (max-width: 640px) { .proj-more-track .project-card { flex-basis: 260px; } }
+
+/* ===== CERTIFICATE SPOTLIGHT + "MORE" SLIDER ===== */
+.cert-spotlight-wrap { max-width: 420px; margin: 48px auto 0; }
+.cert-more-toggle-wrap { text-align: center; margin-top: 28px; }
+.cert-more-toggle-btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 11px 24px;
+  background: transparent; border: 1px solid var(--border2); color: var(--cyan);
+  border-radius: 50px; font-family: var(--font-display); font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all .2s;
+}
+.cert-more-toggle-btn:hover { background: rgba(37,99,235,0.1); border-color: var(--indigo); }
+.cert-more-toggle-btn .chevron { transition: transform .25s; }
+.cert-more-toggle-btn.open .chevron { transform: rotate(180deg); }
+.cert-more-wrap { display: none; margin-top: 24px; }
+.cert-more-wrap.open { display: block; }
+.cert-more-slider-wrap { display: flex; align-items: center; gap: 10px; }
+.cert-more-track { display: flex; gap: 20px; overflow-x: auto; scroll-behavior: smooth; padding: 4px; flex: 1; scroll-snap-type: x proximity; }
+.cert-more-track .cert-card { flex: 0 0 240px; scroll-snap-align: start; }
+@media (max-width: 640px) { .cert-more-track .cert-card { flex-basis: 220px; } }
+
 /* ===== RESUME BUTTON (nav / footer / drawer) ===== */
 .nav-resume-btn {
   font-size: 12.5px;
@@ -3676,17 +3722,37 @@ body, body *, body *::before, body *::after {
       </div>
       <button class="admin-only" id="openProjectModal" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(37,99,235,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">＋ Add Project</button>
     </div>
+
+    <div id="projectFilters" class="fiv-cat-bar" style="display:none;"></div>
+
+    <div class="section-admin-row admin-only" id="projectItemsPerViewRow" style="display:none;">
+      <div class="items-per-view-ctrl">
+        Show at once:
+        <input type="number" id="projectItemsPerViewInput" min="2" max="8" value="4" onchange="setProjectItemsPerView(this.value)">
+        <span>(2–8)</span>
+      </div>
+    </div>
+
     <div class="portfolio-grid" id="projectGrid"><!-- injected by JS --></div>
     <div id="projectEmpty" style="display:none;text-align:center;padding:60px 24px;border:2px dashed var(--border);border-radius:16px;color:var(--muted);">
       <div style="font-size:48px;margin-bottom:12px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48px" height="48px" style="vertical-align:-0.125em;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></div>
       <div style="font-size:14px;margin-bottom:16px;">No projects yet. Login as admin to add your first project!</div>
     </div>
-    <!-- Load more -->
-    <div id="projectLoadMoreWrap" style="display:none;flex-direction:column;align-items:center;gap:16px;margin-top:40px;">
-      <div id="projectCount" style="font-size:13px;color:var(--muted);font-family:var(--font-mono);"></div>
-      <div style="display:flex;gap:12px;">
-        <button id="projectLoadMoreBtn" onclick="projectLoadMore()" style="display:none;align-items:center;gap:8px;padding:12px 28px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(37,99,235,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">Load More <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
-        <button id="projectShowLessBtn" onclick="projectShowLess()" style="display:none;align-items:center;gap:8px;padding:12px 22px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='var(--white)';this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg> Show Less</button>
+
+    <div id="projectCount" style="font-size:13px;color:var(--muted);font-family:var(--font-mono);text-align:center;margin-top:24px;"></div>
+
+    <!-- MORE PROJECTS (overflow beyond the "show at once" count) — slide left/right -->
+    <div id="projectMoreToggleWrap" class="proj-more-toggle-wrap" style="display:none;">
+      <button type="button" class="proj-more-toggle-btn" id="projectMoreToggleBtn" onclick="toggleProjectMore()">
+        <span id="projectMoreToggleLabel">Show More Projects</span>
+        <svg class="icon-inline chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+    </div>
+    <div id="projectMoreWrap" class="proj-more-wrap">
+      <div class="proj-more-slider-wrap">
+        <button class="review-slider-nav" id="projectMorePrev" aria-label="Previous project">‹</button>
+        <div id="projectMoreTrack" class="proj-more-track"><!-- injected by JS --></div>
+        <button class="review-slider-nav" id="projectMoreNext" aria-label="Next project">›</button>
       </div>
     </div>
   </div>
@@ -3703,10 +3769,27 @@ body, body *, body *::before, body *::after {
       </div>
       <button class="admin-only" id="openCertModal" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(37,99,235,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">＋ Add Certificate</button>
     </div>
-    <div class="cert-grid" id="certGrid"><!-- injected by JS --></div>
+    <div class="cert-spotlight-wrap" id="certSpotlightWrap"><!-- injected by JS: single featured certificate --></div>
     <div id="certEmpty" style="display:none;text-align:center;padding:60px 24px;border:2px dashed var(--border);border-radius:16px;color:var(--muted);">
       <div style="font-size:48px;margin-bottom:12px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48px" height="48px" style="vertical-align:-0.125em;"><path d="M22 10L12 5 2 10l10 5 10-5z"></path><path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"></path><path d="M2 10v6"></path></svg></div>
       <div style="font-size:14px;">No certifications yet. Login as admin to add the first certificate!</div>
+    </div>
+
+    <div id="certCount" style="font-size:13px;color:var(--muted);font-family:var(--font-mono);text-align:center;margin-top:16px;"></div>
+
+    <!-- MORE CERTIFICATES — slide left/right -->
+    <div id="certMoreToggleWrap" class="cert-more-toggle-wrap" style="display:none;">
+      <button type="button" class="cert-more-toggle-btn" id="certMoreToggleBtn" onclick="toggleCertMore()">
+        <span id="certMoreToggleLabel">Show More Certificates</span>
+        <svg class="icon-inline chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+    </div>
+    <div id="certMoreWrap" class="cert-more-wrap">
+      <div class="cert-more-slider-wrap">
+        <button class="review-slider-nav" id="certMorePrev" aria-label="Previous certificate">‹</button>
+        <div id="certMoreTrack" class="cert-more-track"><!-- injected by JS --></div>
+        <button class="review-slider-nav" id="certMoreNext" aria-label="Next certificate">›</button>
+      </div>
     </div>
   </div>
 </section>
@@ -3807,7 +3890,10 @@ body, body *, body *::before, body *::after {
       </div>
       <div>
         <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">PROJECT TYPE / CATEGORY</label>
-        <input id="pTypeInput" type="text" placeholder="e.g. AI Automation, Video Editing..." style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+        <div style="display:flex;gap:8px;">
+          <select id="pTypeInput" style="flex:1;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;"></select>
+          <button type="button" onclick="openProjectCatModal(-1)" style="padding:10px 14px;background:transparent;border:1px dashed rgba(37,99,235,0.4);color:var(--indigo);border-radius:8px;font-size:12px;cursor:pointer;white-space:nowrap;">＋ New</button>
+        </div>
       </div>
       <div>
         <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">PROJECT TITLE *</label>
@@ -4452,6 +4538,23 @@ body, body *, body *::before, body *::after {
     <button class="fiv-save-btn" onclick="saveYtCat()">Save Category <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
     <button class="fiv-cancel-btn" id="ytCatDeleteBtn" style="display:none;color:#ff7777;border-color:rgba(255,80,80,0.3);" onclick="deleteYtCat()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg> Delete Category</button>
     <button class="fiv-cancel-btn" onclick="closeYtCatModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- PROJECT CATEGORY ADD/EDIT MODAL -->
+<div class="fiv-modal" id="projectCatModal">
+  <div class="fiv-modal-inner">
+    <button class="fiv-modal-close" onclick="closeProjectCatModal()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    <div class="fiv-modal-title" id="projectCatModalTitle"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> Edit Project Category</div>
+
+    <div class="fiv-field">
+        <label>Category name</label>
+        <input type="text" id="projectCat_name" placeholder="e.g. Video Editing">
+    </div>
+
+    <button class="fiv-save-btn" onclick="saveProjectCat()">Save Category <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+    <button class="fiv-cancel-btn" id="projectCatDeleteBtn" style="display:none;color:#ff7777;border-color:rgba(255,80,80,0.3);" onclick="deleteProjectCat()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg> Delete Category</button>
+    <button class="fiv-cancel-btn" onclick="closeProjectCatModal()">Cancel</button>
   </div>
 </div>
 
@@ -5648,6 +5751,11 @@ function renderYtVideos() {
           <span>${v.date}</span>
           ${isAdmin ? `<button onclick="removeYtVideo(${i})" class="admin-only" style="background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);color:#ff6666;border-radius:5px;padding:3px 9px;cursor:pointer;font-size:11px;display:inline-flex;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button>` : ''}
         </div>
+        ${isAdmin ? `
+        <div class="admin-move-row" style="margin-top:8px;">
+          <button class="admin-move-btn" title="Move earlier (up in serial)" onclick="moveYtVideo(${i}, -1)" ${i <= 0 ? 'disabled' : ''}>▲</button>
+          <button class="admin-move-btn" title="Move later (down in serial)" onclick="moveYtVideo(${i}, 1)" ${i >= ytVideos.length - 1 ? 'disabled' : ''}>▼</button>
+        </div>` : ''}
       </div>
     </div>
   `).join('');
@@ -5685,6 +5793,18 @@ async function removeYtVideo(i) {
   if (!isAdmin) return;
   if (!confirm('Remove this video?')) return;
   ytVideos.splice(i, 1);
+  await sharedSet('yt_videos', ytVideos);
+  renderYtVideos();
+}
+
+// ---- Admin serial (reorder) ----
+async function moveYtVideo(origIndex, dir) {
+  if (!isAdmin) return;
+  const target = origIndex + dir;
+  if (target < 0 || target >= ytVideos.length) return;
+  const tmp = ytVideos[origIndex];
+  ytVideos[origIndex] = ytVideos[target];
+  ytVideos[target] = tmp;
   await sharedSet('yt_videos', ytVideos);
   renderYtVideos();
 }
@@ -5758,7 +5878,8 @@ function renderBlog() {
         <div class="notice-featured-title">${escHtml(p0.title)}</div>
         <div class="notice-featured-excerpt">${escHtml((p0.content||'').substring(0,160))}${p0.content&&p0.content.length>160?'...':''}</div>
         <div class="notice-featured-date">${p0.date}</div>
-        ${isAdmin ? `<div style="margin-top:10px;" onclick="event.stopPropagation()"><button onclick="removeBlogPost(0)" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button></div>` : ''}
+        ${isAdmin ? `<div style="margin-top:10px;display:flex;gap:10px;align-items:center;" onclick="event.stopPropagation()"><button onclick="removeBlogPost(0)" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button>
+        <div class="admin-move-row"><button class="admin-move-btn" title="Move earlier (up in serial)" onclick="moveBlogPost(0, -1)" disabled>▲</button><button class="admin-move-btn" title="Move later (down in serial)" onclick="moveBlogPost(0, 1)" ${blogPosts.length <= 1 ? 'disabled' : ''}>▼</button></div></div>` : ''}
       </div>
     </div>
   `;
@@ -5780,7 +5901,8 @@ function renderBlog() {
       <div class="notice-slide-body">
         <div class="notice-slide-title">${escHtml(p.title)}</div>
         <div class="notice-slide-date">${p.date}</div>
-        ${isAdmin ? `<div style="margin-top:6px;" onclick="event.stopPropagation()"><button onclick="removeBlogPost(${realIndex})" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:3px 8px;cursor:pointer;font-size:10.5px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>` : ''}
+        ${isAdmin ? `<div style="margin-top:6px;display:flex;gap:8px;align-items:center;" onclick="event.stopPropagation()"><button onclick="removeBlogPost(${realIndex})" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:3px 8px;cursor:pointer;font-size:10.5px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        <div class="admin-move-row"><button class="admin-move-btn" title="Move earlier (up in serial)" onclick="moveBlogPost(${realIndex}, -1)" ${realIndex <= 0 ? 'disabled' : ''}>▲</button><button class="admin-move-btn" title="Move later (down in serial)" onclick="moveBlogPost(${realIndex}, 1)" ${realIndex >= blogPosts.length - 1 ? 'disabled' : ''}>▼</button></div></div>` : ''}
       </div>
     </div>
   `;
@@ -5861,6 +5983,18 @@ async function removeBlogPost(i) {
   renderBlog();
 }
 
+// ---- Admin serial (reorder) ----
+async function moveBlogPost(origIndex, dir) {
+  if (!isAdmin) return;
+  const target = origIndex + dir;
+  if (target < 0 || target >= blogPosts.length) return;
+  const tmp = blogPosts[origIndex];
+  blogPosts[origIndex] = blogPosts[target];
+  blogPosts[target] = tmp;
+  await sharedSet('blog_posts', blogPosts);
+  renderBlog();
+}
+
 function openBlogRead(i) {
   const p = blogPosts[i];
   document.getElementById('blogReadCat').textContent = p.cat||'Article';
@@ -5915,7 +6049,8 @@ function renderNotices() {
         <div class="notice-featured-title">${escHtml(n0.title)}</div>
         <div class="notice-featured-excerpt">${escHtml((n0.content||'').substring(0,160))}${n0.content&&n0.content.length>160?'...':''}</div>
         <div class="notice-featured-date">${n0.date}</div>
-        ${isAdmin ? `<div style="margin-top:10px;" onclick="event.stopPropagation()"><button onclick="removeNotice(0)" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button></div>` : ''}
+        ${isAdmin ? `<div style="margin-top:10px;display:flex;gap:10px;align-items:center;" onclick="event.stopPropagation()"><button onclick="removeNotice(0)" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button>
+        <div class="admin-move-row"><button class="admin-move-btn" title="Move earlier (up in serial)" onclick="moveNotice(0, -1)" disabled>▲</button><button class="admin-move-btn" title="Move later (down in serial)" onclick="moveNotice(0, 1)" ${notices.length <= 1 ? 'disabled' : ''}>▼</button></div></div>` : ''}
       </div>
     </div>
   `;
@@ -5937,7 +6072,8 @@ function renderNotices() {
       <div class="notice-slide-body">
         <div class="notice-slide-title">${escHtml(n.title)}</div>
         <div class="notice-slide-date">${n.date}</div>
-        ${isAdmin ? `<div style="margin-top:6px;" onclick="event.stopPropagation()"><button onclick="removeNotice(${realIndex})" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:3px 8px;cursor:pointer;font-size:10.5px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>` : ''}
+        ${isAdmin ? `<div style="margin-top:6px;display:flex;gap:8px;align-items:center;" onclick="event.stopPropagation()"><button onclick="removeNotice(${realIndex})" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:3px 8px;cursor:pointer;font-size:10.5px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        <div class="admin-move-row"><button class="admin-move-btn" title="Move earlier (up in serial)" onclick="moveNotice(${realIndex}, -1)" ${realIndex <= 0 ? 'disabled' : ''}>▲</button><button class="admin-move-btn" title="Move later (down in serial)" onclick="moveNotice(${realIndex}, 1)" ${realIndex >= notices.length - 1 ? 'disabled' : ''}>▼</button></div></div>` : ''}
       </div>
     </div>
   `;
@@ -6041,6 +6177,18 @@ async function removeNotice(i) {
   if (!isAdmin) return;
   if (!confirm('Delete this notice?')) return;
   notices.splice(i, 1);
+  await sharedSet('notices', notices);
+  renderNotices();
+}
+
+// ---- Admin serial (reorder) ----
+async function moveNotice(origIndex, dir) {
+  if (!isAdmin) return;
+  const target = origIndex + dir;
+  if (target < 0 || target >= notices.length) return;
+  const tmp = notices[origIndex];
+  notices[origIndex] = notices[target];
+  notices[target] = tmp;
   await sharedSet('notices', notices);
   renderNotices();
 }
@@ -6238,12 +6386,17 @@ function renderReviewCarousel(indexed) {
           <div>
             <div class="testi-name">${r.name || 'Anonymous'}</div>
             <div class="testi-role">${r.role || ''}${r.category ? ' · ' + r.category : ''}</div>
+            ${r.date ? `<div class="cert-date" style="margin-top:4px;">${r.date}</div>` : ''}
           </div>
         </div>
         ${isAdmin ? `
         <div class="testi-admin-row" style="justify-content:center;">
           <button onclick="openEditReview(${i})" class="admin-only" style="padding:7px 14px;background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.25);color:var(--indigo);border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;">Edit</button>
           <button onclick="removeReview(${i})" class="admin-only" style="padding:7px 14px;background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;">Delete</button>
+        </div>
+        <div class="admin-move-row" style="justify-content:center;margin-top:8px;">
+          <button class="admin-move-btn" title="Move earlier (up in serial)" onclick="moveReview(${i}, -1)" ${i <= 0 ? 'disabled' : ''}>▲</button>
+          <button class="admin-move-btn" title="Move later (down in serial)" onclick="moveReview(${i}, 1)" ${i >= reviews.length - 1 ? 'disabled' : ''}>▼</button>
         </div>` : ''}
       </div>
     </div>`;
@@ -6274,7 +6427,13 @@ function renderReviewVideoSlider(indexed) {
       <div class="review-video-card-body">
         <div class="review-video-card-title">${r.title || r.name || 'Video review'}</div>
         ${r.category ? `<div class="review-video-card-cat">${r.category}</div>` : ''}
+        ${r.date ? `<div class="cert-date" style="margin-top:4px;">${r.date}</div>` : ''}
       </div>
+      ${isAdmin ? `
+      <div class="admin-move-row" onclick="event.stopPropagation()" style="justify-content:center;padding:6px 0 8px;">
+        <button class="admin-move-btn" title="Move earlier (up in serial)" onclick="moveReview(${i}, -1)" ${i <= 0 ? 'disabled' : ''}>▲</button>
+        <button class="admin-move-btn" title="Move later (down in serial)" onclick="moveReview(${i}, 1)" ${i >= reviews.length - 1 ? 'disabled' : ''}>▼</button>
+      </div>` : ''}
     </div>`;
   }).join('');
   track.querySelectorAll('.review-video-card').forEach(card => {
@@ -6430,6 +6589,18 @@ async function removeReview(i) {
   renderReviews();
 }
 
+// ---- Admin serial (reorder) ----
+async function moveReview(origIndex, dir) {
+  if (!isAdmin) return;
+  const target = origIndex + dir;
+  if (target < 0 || target >= reviews.length) return;
+  const tmp = reviews[origIndex];
+  reviews[origIndex] = reviews[target];
+  reviews[target] = tmp;
+  await sharedSet('reviews', reviews);
+  renderReviews();
+}
+
 function handleReviewMediaSelect(input) {
   const file = input.files[0];
   if (!file) return;
@@ -6484,7 +6655,6 @@ document.getElementById('openReviewModal').addEventListener('click', openReviewM
 // PORTFOLIO / PROJECTS SYSTEM
 // ===================================================
 let projects = [];
-let projectShowCount = 6;
 let editingProjectIndex = null;
 
 const glowColors = [
@@ -6496,65 +6666,238 @@ const glowColors = [
   'rgba(59,130,246,0.35)',
 ];
 
-function renderProjects() {
-  const grid = document.getElementById('projectGrid');
-  const empty = document.getElementById('projectEmpty');
-  const lmw = document.getElementById('projectLoadMoreWrap');
-  if (!projects.length) {
-    grid.innerHTML = '';
-    empty.style.display = 'block';
-    if (lmw) lmw.style.display = 'none';
+// ---- Category system (mirrors the Review / YouTube category chips) ----
+const DEFAULT_PROJECT_CATEGORIES = [
+  { name: 'Video Editing' },
+  { name: 'AI Automation' },
+  { name: 'Graphic Design' },
+  { name: 'Digital Marketing' },
+];
+let projectCategories = DEFAULT_PROJECT_CATEGORIES.map(c => ({ ...c }));
+let projectCatEditIdx = -1;
+let projectFilterCategory = 'All';
+
+// ---- "Show at once" (2-8) + More slider state ----
+let projectItemsPerView = 4;
+let projectMoreOpen = false;
+
+function getProjectCategories() { return ['All', ...projectCategories.map(c => c.name)]; }
+
+function populateProjectCategorySelect(selected) {
+  const sel = document.getElementById('pTypeInput');
+  if (!sel) return;
+  if (!projectCategories.length) {
+    sel.innerHTML = '<option value="">No categories yet — add one first</option>';
     return;
   }
-  empty.style.display = 'none';
-  const visible = projects.slice(0, projectShowCount);
-  grid.innerHTML = visible.map((p, i) => {
-    const glow = glowColors[i % glowColors.length];
-    const tools = (p.tools || '').split(',').map(t => t.trim()).filter(Boolean);
+  sel.innerHTML = projectCategories.map(c => `<option value="${escAttr(c.name)}">${c.name}</option>`).join('');
+  if (selected && projectCategories.some(c => c.name === selected)) sel.value = selected;
+}
 
-    // Build media section
-    let mediaHtml = '';
-    if (p.media && p.media.data) {
-      const mt = p.media.type || '';
-      if (mt.startsWith('image/')) {
-        mediaHtml = `<div class="project-media-wrap"><img class="project-media-img" src="${p.media.data}" alt="${p.title}" loading="lazy"><span class="project-media-type-badge">IMAGE</span></div>`;
-      } else if (mt.startsWith('video/')) {
-        mediaHtml = `<div class="project-media-wrap"><video class="project-media-video" src="${p.media.data}" muted playsinline loop autoplay></video><span class="project-media-type-badge">VIDEO</span></div>`;
-      } else if (mt === 'application/pdf') {
-        mediaHtml = `<div class="project-media-wrap"><div class="project-media-emoji" style="flex-direction:column;gap:8px;"><span style="font-size:48px"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48px" height="48px" style="vertical-align:-0.125em;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span><span style="font-size:12px;font-family:var(--font-mono);color:var(--muted);">PDF Document</span></div><span class="project-media-type-badge">PDF</span></div>`;
-      }
-    } else {
-      mediaHtml = `<div class="project-thumb"><div class="project-thumb-glow" style="background:${glow}"></div>${p.emoji || '📁'}</div>`;
+function openProjectCatModal(idx) {
+  if (!isAdmin) { alert('Admin login required.'); return; }
+  projectCatEditIdx = idx;
+  const isNew = idx === -1;
+  const c = isNew ? { name: '' } : projectCategories[idx];
+  document.getElementById('projectCatModalTitle').innerHTML = (isNew ? 'Add Project Category' : 'Edit — ' + c.name);
+  document.getElementById('projectCat_name').value = c.name || '';
+  document.getElementById('projectCatDeleteBtn').style.display = !isNew ? 'block' : 'none';
+  document.getElementById('projectCatModal').classList.add('open');
+  setTimeout(() => document.getElementById('projectCat_name').focus(), 50);
+}
+function closeProjectCatModal() { document.getElementById('projectCatModal').classList.remove('open'); }
+document.getElementById('projectCatModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeProjectCatModal(); });
+
+async function saveProjectCat() {
+  if (!isAdmin) return;
+  const name = document.getElementById('projectCat_name').value.trim();
+  if (!name) { alert('Category name is required.'); return; }
+  if (projectCategories.some((c, i) => c.name === name && i !== projectCatEditIdx)) { alert('A category with this name already exists.'); return; }
+
+  if (projectCatEditIdx === -1) {
+    projectCategories.push({ name });
+  } else {
+    const old = projectCategories[projectCatEditIdx];
+    if (old.name !== name) {
+      projects.forEach(p => { if (p.type === old.name) p.type = name; });
+      await sharedSet('projects', projects);
     }
+    old.name = name;
+  }
 
-    return `
+  await sharedSet('project_categories', projectCategories);
+  closeProjectCatModal();
+  populateProjectCategorySelect(name);
+  renderProjects();
+}
+
+async function deleteProjectCat() {
+  if (!isAdmin || projectCatEditIdx === -1) return;
+  const c = projectCategories[projectCatEditIdx];
+  if (!confirm(`Delete "${c.name}" category? Existing projects keep their tag but this filter chip will disappear.`)) return;
+  projectCategories.splice(projectCatEditIdx, 1);
+  await sharedSet('project_categories', projectCategories);
+  closeProjectCatModal();
+  populateProjectCategorySelect();
+  renderProjects();
+}
+
+function renderProjectFilters() {
+  const wrap = document.getElementById('projectFilters');
+  if (!wrap) return;
+  if (!projects.length) { wrap.style.display = 'none'; return; }
+  const cats = getProjectCategories();
+  if (!cats.includes(projectFilterCategory)) projectFilterCategory = 'All';
+  wrap.style.display = 'flex';
+  wrap.innerHTML =
+    `<div class="fiv-cat-chip"><button type="button" class="fiv-cat-btn${projectFilterCategory === 'All' ? ' active' : ''}" data-cat="All">All</button></div>` +
+    projectCategories.map((c, i) =>
+      `<div class="fiv-cat-chip">
+        <button type="button" class="fiv-cat-btn${c.name === projectFilterCategory ? ' active' : ''}" data-cat="${escAttr(c.name)}">${c.name}</button>
+        ${isAdmin ? `<button type="button" class="fiv-cat-edit-btn" onclick="openProjectCatModal(${i})" title="Edit category" aria-label="Edit category">${editPencilSvg}</button>` : ''}
+      </div>`
+    ).join('') +
+    (isAdmin ? `<button type="button" class="fiv-add-cat-btn" onclick="openProjectCatModal(-1)">＋ Add Category</button>` : '');
+  wrap.querySelectorAll('.fiv-cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => { projectFilterCategory = btn.dataset.cat; projectMoreOpen = false; renderProjects(); });
+  });
+}
+
+function buildProjectMediaHtml(p, i) {
+  const glow = glowColors[i % glowColors.length];
+  if (p.media && p.media.data) {
+    const mt = p.media.type || '';
+    if (mt.startsWith('image/')) {
+      return `<div class="project-media-wrap"><img class="project-media-img" src="${p.media.data}" alt="${p.title}" loading="lazy"><span class="project-media-type-badge">IMAGE</span></div>`;
+    } else if (mt.startsWith('video/')) {
+      return `<div class="project-media-wrap"><video class="project-media-video" src="${p.media.data}" muted playsinline loop autoplay></video><span class="project-media-type-badge">VIDEO</span></div>`;
+    } else if (mt === 'application/pdf') {
+      return `<div class="project-media-wrap"><div class="project-media-emoji" style="flex-direction:column;gap:8px;"><span style="font-size:48px"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48px" height="48px" style="vertical-align:-0.125em;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span><span style="font-size:12px;font-family:var(--font-mono);color:var(--muted);">PDF Document</span></div><span class="project-media-type-badge">PDF</span></div>`;
+    }
+  }
+  return `<div class="project-thumb"><div class="project-thumb-glow" style="background:${glow}"></div>${p.emoji || '📁'}</div>`;
+}
+
+function buildProjectCardHtml(p, origIndex, posInCatOrder, catOrderLen) {
+  const tools = (p.tools || '').split(',').map(t => t.trim()).filter(Boolean);
+  const mediaHtml = buildProjectMediaHtml(p, origIndex);
+  return `
     <div class="project-card reveal visible">
       ${mediaHtml}
       <div class="project-body">
         <div class="project-type">${p.type || 'Project'}</div>
         <div class="project-title">${p.title}</div>
+        ${p.date ? `<div class="cert-date">${p.date}</div>` : ''}
         <div class="project-desc">${p.desc || ''}</div>
         ${tools.length ? `<div class="project-tools">${tools.map(t=>`<span class="project-tool">${t}</span>`).join('')}</div>` : ''}
         ${p.result ? `<div class="project-result"><span class="result-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg></span> ${p.result}</div>` : ''}
         ${p.link ? `<a href="${p.link}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:12px;color:var(--cyan);font-family:var(--font-mono);">View Project <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>` : ''}
         ${isAdmin ? `
         <div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
-          <button onclick="openEditProject(${i})" style="flex:1;padding:7px;background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.25);color:var(--indigo);border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(37,99,235,0.2)'" onmouseout="this.style.background='rgba(37,99,235,0.1)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> Edit</button>
-          <button onclick="removeProject(${i})" style="padding:7px 14px;background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(255,50,50,0.16)'" onmouseout="this.style.background='rgba(255,50,50,0.08)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+          <button onclick="openEditProject(${origIndex})" style="flex:1;padding:7px;background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.25);color:var(--indigo);border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(37,99,235,0.2)'" onmouseout="this.style.background='rgba(37,99,235,0.1)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> Edit</button>
+          <button onclick="removeProject(${origIndex})" style="padding:7px 14px;background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(255,50,50,0.16)'" onmouseout="this.style.background='rgba(255,50,50,0.08)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <div class="admin-move-row" style="margin-top:8px;">
+          <button class="admin-move-btn" title="Move earlier (up in serial)" onclick="moveProject(${origIndex}, -1)" ${origIndex <= 0 ? 'disabled' : ''}>▲</button>
+          <button class="admin-move-btn" title="Move later (down in serial)" onclick="moveProject(${origIndex}, 1)" ${origIndex >= projects.length - 1 ? 'disabled' : ''}>▼</button>
         </div>` : ''}
       </div>
     </div>`;
-  }).join('');
-
-  if (!lmw) return;
-  lmw.style.display = 'flex';
-  document.getElementById('projectCount').textContent = `Showing ${Math.min(projectShowCount, projects.length)} of ${projects.length} project${projects.length !== 1 ? 's' : ''}`;
-  document.getElementById('projectLoadMoreBtn').style.display = projects.length > projectShowCount ? 'inline-flex' : 'none';
-  document.getElementById('projectShowLessBtn').style.display = projectShowCount > 6 ? 'inline-flex' : 'none';
 }
 
-function projectLoadMore() { projectShowCount += 6; renderProjects(); }
-function projectShowLess() { projectShowCount = 6; renderProjects(); document.getElementById('portfolio').scrollIntoView({behavior:'smooth'}); }
+function renderProjects() {
+  const grid = document.getElementById('projectGrid');
+  const empty = document.getElementById('projectEmpty');
+  const countEl = document.getElementById('projectCount');
+  const moreToggleWrap = document.getElementById('projectMoreToggleWrap');
+  const moreWrap = document.getElementById('projectMoreWrap');
+  const moreTrack = document.getElementById('projectMoreTrack');
+  const ipvRow = document.getElementById('projectItemsPerViewRow');
+  const ipvInput = document.getElementById('projectItemsPerViewInput');
+
+  renderProjectFilters();
+  if (ipvRow) ipvRow.style.display = isAdmin ? 'flex' : 'none';
+  if (ipvInput) ipvInput.value = projectItemsPerView;
+
+  if (!projects.length) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    if (countEl) countEl.textContent = '';
+    if (moreToggleWrap) moreToggleWrap.style.display = 'none';
+    if (moreWrap) { moreWrap.classList.remove('open'); moreTrack.innerHTML = ''; }
+    return;
+  }
+  empty.style.display = 'none';
+
+  // Filter by selected category, keeping the original array index for edit/remove/reorder
+  const filtered = projects
+    .map((p, i) => ({ p, i }))
+    .filter(({ p }) => projectFilterCategory === 'All' || p.type === projectFilterCategory);
+
+  if (!filtered.length) {
+    grid.innerHTML = '<div style="text-align:center;color:var(--muted);font-size:13px;padding:30px;font-family:var(--font-mono);grid-column:1/-1;">No projects in this category yet.</div>';
+    if (countEl) countEl.textContent = '';
+    if (moreToggleWrap) moreToggleWrap.style.display = 'none';
+    if (moreWrap) { moreWrap.classList.remove('open'); moreTrack.innerHTML = ''; }
+    return;
+  }
+
+  const mainItems = filtered.slice(0, projectItemsPerView);
+  const moreItems = filtered.slice(projectItemsPerView);
+  const total = filtered.length;
+
+  grid.innerHTML = mainItems.map(({ p, i }, pos) => buildProjectCardHtml(p, i, pos, total)).join('');
+
+  if (countEl) countEl.textContent = `Showing ${mainItems.length} of ${total} project${total !== 1 ? 's' : ''}${projectFilterCategory !== 'All' ? ' in ' + projectFilterCategory : ''}`;
+
+  if (moreItems.length) {
+    moreToggleWrap.style.display = 'block';
+    moreTrack.innerHTML = moreItems.map(({ p, i }, idx) => buildProjectCardHtml(p, i, projectItemsPerView + idx, total)).join('');
+    document.getElementById('projectMoreToggleLabel').textContent = `Show ${moreItems.length} More Project${moreItems.length !== 1 ? 's' : ''}`;
+  } else {
+    moreToggleWrap.style.display = 'none';
+    moreWrap.classList.remove('open');
+    moreTrack.innerHTML = '';
+    projectMoreOpen = false;
+  }
+  document.getElementById('projectMoreToggleBtn').classList.toggle('open', projectMoreOpen);
+  moreWrap.classList.toggle('open', projectMoreOpen && moreItems.length > 0);
+}
+
+function toggleProjectMore() {
+  projectMoreOpen = !projectMoreOpen;
+  renderProjects();
+  if (projectMoreOpen) {
+    setTimeout(() => document.getElementById('projectMoreWrap').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+  }
+}
+
+async function setProjectItemsPerView(val) {
+  if (!isAdmin) return;
+  let n = parseInt(val, 10);
+  if (isNaN(n)) n = 4;
+  n = Math.max(2, Math.min(8, n));
+  projectItemsPerView = n;
+  const input = document.getElementById('projectItemsPerViewInput');
+  if (input) input.value = n;
+  await sharedSet('project_items_per_view', n);
+  renderProjects();
+}
+
+document.getElementById('projectMorePrev').addEventListener('click', () => document.getElementById('projectMoreTrack').scrollBy({ left: -320, behavior: 'smooth' }));
+document.getElementById('projectMoreNext').addEventListener('click', () => document.getElementById('projectMoreTrack').scrollBy({ left: 320, behavior: 'smooth' }));
+
+// ---- Admin serial (reorder) ----
+async function moveProject(origIndex, dir) {
+  if (!isAdmin) return;
+  const target = origIndex + dir;
+  if (target < 0 || target >= projects.length) return;
+  const tmp = projects[origIndex];
+  projects[origIndex] = projects[target];
+  projects[target] = tmp;
+  await sharedSet('projects', projects);
+  renderProjects();
+}
 
 function openProjectModal() {
   if (!isAdmin) { alert('Admin login required.'); return; }
@@ -6562,7 +6905,8 @@ function openProjectModal() {
   document.getElementById('projectModalLabel').textContent = '// ADD PROJECT';
   document.getElementById('projectModalTitle').textContent = 'New Project';
   document.getElementById('pSaveBtn').textContent = 'Save Project →';
-  ['pEmojiInput','pTypeInput','pTitleInput','pDescInput','pToolsInput','pResultInput','pLinkInput'].forEach(id => document.getElementById(id).value = '');
+  ['pEmojiInput','pTitleInput','pDescInput','pToolsInput','pResultInput','pLinkInput'].forEach(id => document.getElementById(id).value = '');
+  populateProjectCategorySelect();
   document.getElementById('pEmojiInput').value = '📁';
   clearProjectMedia();
   document.getElementById('projectModal').style.display = 'flex';
@@ -6576,7 +6920,7 @@ function openEditProject(i) {
   document.getElementById('projectModalTitle').textContent = 'Edit Project';
   document.getElementById('pSaveBtn').textContent = 'Update Project →';
   document.getElementById('pEmojiInput').value = p.emoji || '📁';
-  document.getElementById('pTypeInput').value = p.type || '';
+  populateProjectCategorySelect(p.type || '');
   document.getElementById('pTitleInput').value = p.title || '';
   document.getElementById('pDescInput').value = p.desc || '';
   document.getElementById('pToolsInput').value = p.tools || '';
@@ -6717,21 +7061,12 @@ function clearProjectMedia() {
 let certifications = [];
 let editingCertIndex = null;
 let _currentCertImage = null;
+let certMoreOpen = false;
 
-function renderCertifications() {
-  const grid = document.getElementById('certGrid');
-  const empty = document.getElementById('certEmpty');
-  if (!grid || !empty) return;
-  toggleContentSection('certifications', certifications.length > 0, ['navMoreCertLink','mmCertLink','footerCertLink']);
-  if (!certifications.length) {
-    grid.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
-  grid.innerHTML = certifications.map((c, i) => `
+function buildCertCardHtml(c, origIndex) {
+  return `
     <div class="cert-card reveal visible">
-      <div class="cert-thumb-wrap" onclick="openCertLightbox(${i})">
+      <div class="cert-thumb-wrap" onclick="openCertLightbox(${origIndex})">
         ${c.image && c.image.data ? `<img class="cert-thumb-img" src="${c.image.data}" alt="${c.title}" loading="lazy">` : `<div class="cert-thumb-fallback"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M22 10L12 5 2 10l10 5 10-5z"></path><path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"></path><path d="M2 10v6"></path></svg></div>`}
       </div>
       <div class="cert-body">
@@ -6741,11 +7076,77 @@ function renderCertifications() {
         ${c.link ? `<a href="${c.link}" target="_blank" rel="noopener" class="cert-link">View Credential <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>` : ''}
         ${isAdmin ? `
         <div style="display:flex;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">
-          <button onclick="openEditCert(${i})" style="flex:1;padding:7px;background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.25);color:var(--indigo);border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(37,99,235,0.2)'" onmouseout="this.style.background='rgba(37,99,235,0.1)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> Edit</button>
-          <button onclick="removeCert(${i})" style="padding:7px 14px;background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(255,50,50,0.16)'" onmouseout="this.style.background='rgba(255,50,50,0.08)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+          <button onclick="openEditCert(${origIndex})" style="flex:1;padding:7px;background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.25);color:var(--indigo);border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(37,99,235,0.2)'" onmouseout="this.style.background='rgba(37,99,235,0.1)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> Edit</button>
+          <button onclick="removeCert(${origIndex})" style="padding:7px 14px;background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:7px;font-size:12px;cursor:pointer;font-family:var(--font-display);font-weight:600;transition:all .2s;" onmouseover="this.style.background='rgba(255,50,50,0.16)'" onmouseout="this.style.background='rgba(255,50,50,0.08)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+        <div class="admin-move-row" style="margin-top:8px;">
+          <button class="admin-move-btn" title="Move earlier (up in serial)" onclick="moveCert(${origIndex}, -1)" ${origIndex <= 0 ? 'disabled' : ''}>▲</button>
+          <button class="admin-move-btn" title="Move later (down in serial)" onclick="moveCert(${origIndex}, 1)" ${origIndex >= certifications.length - 1 ? 'disabled' : ''}>▼</button>
         </div>` : ''}
       </div>
-    </div>`).join('');
+    </div>`;
+}
+
+function renderCertifications() {
+  const spotlightWrap = document.getElementById('certSpotlightWrap');
+  const empty = document.getElementById('certEmpty');
+  const countEl = document.getElementById('certCount');
+  const moreToggleWrap = document.getElementById('certMoreToggleWrap');
+  const moreWrap = document.getElementById('certMoreWrap');
+  const moreTrack = document.getElementById('certMoreTrack');
+  if (!spotlightWrap || !empty) return;
+  toggleContentSection('certifications', certifications.length > 0, ['navMoreCertLink','mmCertLink','footerCertLink']);
+  if (!certifications.length) {
+    spotlightWrap.innerHTML = '';
+    empty.style.display = 'block';
+    if (countEl) countEl.textContent = '';
+    if (moreToggleWrap) moreToggleWrap.style.display = 'none';
+    if (moreWrap) { moreWrap.classList.remove('open'); moreTrack.innerHTML = ''; }
+    return;
+  }
+  empty.style.display = 'none';
+
+  // 1 in the main display, the rest tucked away in "More" (slide left/right)
+  spotlightWrap.innerHTML = buildCertCardHtml(certifications[0], 0);
+  const rest = certifications.slice(1);
+
+  if (countEl) countEl.textContent = `Showing 1 of ${certifications.length} certificate${certifications.length !== 1 ? 's' : ''}`;
+
+  if (rest.length) {
+    moreToggleWrap.style.display = 'block';
+    moreTrack.innerHTML = rest.map((c, idx) => buildCertCardHtml(c, idx + 1)).join('');
+    document.getElementById('certMoreToggleLabel').textContent = `Show ${rest.length} More Certificate${rest.length !== 1 ? 's' : ''}`;
+  } else {
+    moreToggleWrap.style.display = 'none';
+    moreWrap.classList.remove('open');
+    moreTrack.innerHTML = '';
+    certMoreOpen = false;
+  }
+  document.getElementById('certMoreToggleBtn').classList.toggle('open', certMoreOpen);
+  moreWrap.classList.toggle('open', certMoreOpen && rest.length > 0);
+}
+
+function toggleCertMore() {
+  certMoreOpen = !certMoreOpen;
+  renderCertifications();
+  if (certMoreOpen) {
+    setTimeout(() => document.getElementById('certMoreWrap').scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 60);
+  }
+}
+
+document.getElementById('certMorePrev').addEventListener('click', () => document.getElementById('certMoreTrack').scrollBy({ left: -260, behavior: 'smooth' }));
+document.getElementById('certMoreNext').addEventListener('click', () => document.getElementById('certMoreTrack').scrollBy({ left: 260, behavior: 'smooth' }));
+
+// ---- Admin serial (reorder) ----
+async function moveCert(origIndex, dir) {
+  if (!isAdmin) return;
+  const target = origIndex + dir;
+  if (target < 0 || target >= certifications.length) return;
+  const tmp = certifications[origIndex];
+  certifications[origIndex] = certifications[target];
+  certifications[target] = tmp;
+  await sharedSet('certifications', certifications);
+  renderCertifications();
 }
 
 function openCertModal() {
@@ -7452,6 +7853,23 @@ async function initSharedData() {
     if (record.blog_posts)     blogPosts      = record.blog_posts;
     if (record.notices)        notices        = record.notices;
     if (record.projects)       projects       = record.projects;
+    if (record.project_categories) {
+      projectCategories = record.project_categories;
+    } else if (projects.length) {
+      // One-time migration: older projects stored type as free text with no
+      // managed list behind it. Fold any of those names into the default list.
+      const knownProj = new Set(projectCategories.map(c => c.name));
+      projects.forEach(p => {
+        if (p.type && !knownProj.has(p.type)) {
+          projectCategories.push({ name: p.type });
+          knownProj.add(p.type);
+        }
+      });
+    }
+    if (record.project_items_per_view) {
+      const n = parseInt(record.project_items_per_view, 10);
+      if (!isNaN(n)) projectItemsPerView = Math.max(2, Math.min(8, n));
+    }
     if (record.client_pricings) clientPricings = record.client_pricings;
     if (record.fiv_categories)  fivCategories   = record.fiv_categories;
     else if (record.fiv_plans)  fivCategories[0].plans = record.fiv_plans; // backward compat
