@@ -2116,6 +2116,8 @@ iframe.skiptranslate { display: none !important; }
 /* ===== CONTACT ===== */
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: stretch; margin-top: 48px; }
 .contact-info { display: flex; flex-direction: column; gap: 16px; }
+.contact-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 48px; }
+.contact-form-standalone { max-width: 760px; margin: 48px auto 0; }
 .contact-link-card {
   display: flex; align-items: center; gap: 16px;
   background: var(--card);
@@ -2706,6 +2708,7 @@ footer {
   .about-badge-card { min-width: 100px; padding: 10px 12px; }
   .contact-grid { grid-template-columns: 1fr; }
   .contact-form { height: auto; }
+  .contact-info-grid { grid-template-columns: 1fr; }
   .process-steps { flex-wrap: wrap; }
   .process-steps::before { display: none; }
   .process-step { flex: 0 0 calc(50% - 10px); }
@@ -2879,6 +2882,48 @@ footer {
   .tool-card { padding: 14px 8px 10px; }
   .tool-icon { width: 32px; height: 32px; font-size: 17px; padding: 6px; }
   .tool-name { font-size: 11px; }
+}
+
+/* ===== WHY CHOOSE ME ===== */
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 22px;
+  margin-top: 48px;
+}
+.why-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 24px;
+  transition: all .25s;
+  position: relative;
+}
+.why-card:hover {
+  border-color: var(--indigo);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 32px rgba(37,99,235,0.35), var(--glow-i);
+  background: var(--card2);
+}
+.why-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  background: linear-gradient(135deg,var(--indigo),var(--violet));
+  margin-bottom: 18px;
+  box-shadow: 0 4px 16px rgba(37,99,235,0.35);
+}
+.why-title { font-family: var(--font-display); font-size: 16px; font-weight: 700; color: var(--white); margin-bottom: 8px; }
+.why-desc { font-size: 13px; color: var(--muted); line-height: 1.7; }
+.why-admin-row { display: flex; gap: 8px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); }
+.why-admin-row button { flex: 1; padding: 7px; border-radius: 7px; font-size: 12px; cursor: pointer; font-family: var(--font-display); font-weight: 600; transition: all .2s; }
+.why-move-row { display: flex; gap: 6px; margin-top: 8px; justify-content: center; }
+@media (max-width: 600px) {
+  .why-grid { grid-template-columns: 1fr; gap: 16px; }
 }
 
 /* ===== ALWAYS-DARK SURFACES (modals that stay dark in both themes) ===== */
@@ -3341,6 +3386,7 @@ body, body *, body *::before, body *::after {
             <button id="navResumeEditBtn" class="nav-more-resume-edit admin-only" title="Manage Resume" onclick="closeNavMoreDropdown();openResumeModal()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></button>
           </div>
           <a href="#certifications" class="nav-more-link" id="navMoreCertLink"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><path d="M22 10L12 5 2 10l10 5 10-5z"></path><path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"></path><path d="M2 10v6"></path></svg> Certificates</a>
+          <a href="#why-choose" class="nav-more-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Why Choose Me</a>
 
           <div class="nav-more-category">Expertise</div>
           <a href="#skills" class="nav-more-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> Skills</a>
@@ -3406,6 +3452,7 @@ body, body *, body *::before, body *::after {
   <div class="mm-category-label">Profile</div>
   <a href="#" id="mmResumeBtn" class="mm-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg> Resume</a>
   <a href="#certifications" class="mm-link" id="mmCertLink"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M22 10L12 5 2 10l10 5 10-5z"></path><path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"></path><path d="M2 10v6"></path></svg> Certificates</a>
+  <a href="#why-choose" class="mm-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg> Why Choose Me</a>
 
   <div class="mm-category-label">Expertise</div>
   <a href="#skills" class="mm-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg> Skills</a>
@@ -3526,6 +3573,7 @@ body, body *, body *::before, body *::after {
     </div>
   </div>
 </section>
+
 
 
 <!-- MARQUEE -->
@@ -3654,6 +3702,24 @@ body, body *, body *::before, body *::after {
   </div>
 </section>
 
+<!-- WHY CHOOSE ME -->
+<section id="why-choose" class="section" style="background:var(--bg2)">
+  <div class="container">
+    <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+      <div>
+        <div class="section-label">Why Me</div>
+        <h2 class="section-title">Why Choose <span>Me</span></h2>
+        <p class="section-sub">A few honest reasons clients keep coming back for their next project.</p>
+      </div>
+      <button class="admin-only" id="openWhyModal" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(37,99,235,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">＋ Add Reason</button>
+    </div>
+    <div class="why-grid reveal" id="whyGrid"></div>
+    <div id="whyEmpty" style="display:none;text-align:center;padding:60px 24px;border:2px dashed var(--border);border-radius:16px;color:var(--muted);margin-top:32px;">
+      <div style="font-size:14px;">No reasons added yet. Login as admin to add the first one!</div>
+    </div>
+  </div>
+</section>
+
 <!-- SERVICES -->
 <section id="services" class="section">
   <div class="container">
@@ -3760,289 +3826,6 @@ body, body *, body *::before, body *::after {
         </div>
       </div>
 
-    </div>
-  </div>
-</section>
-
-<!-- PORTFOLIO -->
-<section id="portfolio" class="section">
-  <div class="container">
-    <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:48px;">
-      <div>
-        <div class="section-label">My Work</div>
-        <h2 class="section-title">Selected <span>Projects</span></h2>
-        <p class="section-sub">Real work, real results. A curated look at projects that made a difference.</p>
-      </div>
-      <button class="admin-only" id="openProjectModal" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(37,99,235,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">＋ Add Project</button>
-    </div>
-
-    <div id="projectFilters" class="fiv-cat-bar" style="display:none;"></div>
-
-    <div class="section-admin-row admin-only" id="projectItemsPerViewRow" style="display:none;">
-      <div class="items-per-view-ctrl">
-        Show at once:
-        <input type="number" id="projectItemsPerViewInput" min="2" max="8" value="4" onchange="setProjectItemsPerView(this.value)">
-        <span>(2–8)</span>
-      </div>
-    </div>
-
-    <div class="portfolio-grid" id="projectGrid"><!-- injected by JS --></div>
-    <div id="projectEmpty" style="display:none;text-align:center;padding:60px 24px;border:2px dashed var(--border);border-radius:16px;color:var(--muted);">
-      <div style="font-size:48px;margin-bottom:12px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48px" height="48px" style="vertical-align:-0.125em;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></div>
-      <div style="font-size:14px;margin-bottom:16px;">No projects yet. Login as admin to add your first project!</div>
-    </div>
-
-    <div id="projectCount" style="font-size:13px;color:var(--muted);font-family:var(--font-mono);text-align:center;margin-top:24px;"></div>
-
-    <!-- MORE PROJECTS (overflow beyond the "show at once" count) — slide left/right -->
-    <div id="projectMoreToggleWrap" class="proj-more-toggle-wrap" style="display:none;">
-      <button type="button" class="proj-more-toggle-btn" id="projectMoreToggleBtn" onclick="toggleProjectMore()">
-        <span id="projectMoreToggleLabel">Show More Projects</span>
-        <svg class="icon-inline chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </button>
-    </div>
-    <div id="projectMoreWrap" class="proj-more-wrap">
-      <div class="proj-more-slider-wrap">
-        <button class="review-slider-nav" id="projectMorePrev" aria-label="Previous project">‹</button>
-        <div id="projectMoreTrack" class="proj-more-track"><!-- injected by JS --></div>
-        <button class="review-slider-nav" id="projectMoreNext" aria-label="Next project">›</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FIVERR-STYLE TAB PRICING -->
-<section id="pricing" class="section">
-  <div class="container">
-    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto 48px;">
-      <div class="section-label" style="justify-content:center">Service Tiers</div>
-      <h2 class="section-title" style="text-align:center">Choose Your <span>Package</span></h2>
-      <p class="section-sub" style="margin:0 auto">Transparent pricing — pick a tier, or message me for a custom deal.</p>
-    </div>
-    <div class="fiv-wrap reveal">
-      <!-- Category bar -->
-      <div class="fiv-cat-bar" id="fivCatBar"></div>
-      <!-- Gig headline / custom gig name -->
-      <div class="fiv-cat-headline" id="fivCatHeadline"></div>
-      <!-- Tab bar -->
-      <div class="fiv-tab-bar" id="fivTabBar"></div>
-      <!-- Card -->
-      <div class="fiv-card" id="fivCard"></div>
-
-      <!-- Custom quote option -->
-      <a href="#contact" class="fiv-custom-card" onclick="fillCustomQuoteLead(event)">
-        <div class="fiv-custom-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></div>
-        <div>
-          <div class="fiv-custom-title">Need something different?</div>
-          <div class="fiv-custom-sub">Get a custom quote tailored to your project</div>
-        </div>
-        <span class="fiv-custom-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-      </a>
-    </div>
-
-    <!-- CLIENT CUSTOM PRICING -->
-    <div id="clientPricingSection" class="client-pricing-wrap">
-      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin:56px 0 24px;">
-        <div>
-          <div class="section-label" style="margin-bottom:6px;">// SPECIAL DEALS</div>
-          <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--white);">Custom Pricing For You</div>
-        </div>
-        <button class="admin-only" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,var(--cyan),var(--indigo));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;" onclick="openClientPricingModal()">＋ Add Custom Deal</button>
-      </div>
-      <div class="client-pricing-grid" id="clientPricingGrid"></div>
-      <div id="clientPricingEmpty" style="display:none;text-align:center;padding:40px 24px;border:2px dashed var(--border);border-radius:16px;color:var(--muted);font-size:13px;">
-        No custom deals yet. Admin can add a special client-specific offer here.
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact" class="section" style="background:var(--bg2)">
-  <div class="container">
-    <div class="reveal">
-      <div class="section-label">Get In Touch</div>
-      <h2 class="section-title">Let's Build Something <span>Great</span></h2>
-      <p class="section-sub">Have a project in mind? Send a message or reach out on any platform below. I typically respond within 2 hours.</p>
-    </div>
-    <div class="contact-grid">
-      <div class="contact-form reveal" id="contactFormBox">
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">YOUR NAME</label>
-            <input type="text" id="cf_name" class="form-input" placeholder="Alex Johnson">
-          </div>
-          <div class="form-group">
-            <label class="form-label">YOUR EMAIL</label>
-            <input type="email" id="cf_email" class="form-input" placeholder="alex@company.com">
-          </div>
-        </div>
-        <div class="form-group" id="cf_package_group" style="display:none;">
-          <label class="form-label">SELECTED PACKAGE</label>
-          <input type="text" id="cf_package_custom" class="form-input" placeholder="Package name..." oninput="document.getElementById('cf_package').value=this.value.trim();">
-        </div>
-        <div class="form-group">
-          <label class="form-label">SERVICE NEEDED</label>
-          <select id="cf_service_select" class="form-input" onchange="cfSyncService()">
-            <option value="" disabled selected>Select a service...</option>
-            <option value="Video Editing">Video Editing</option>
-            <option value="YouTube Video Editing">YouTube Video Editing</option>
-            <option value="Short-form Video Editing">Short-form Video Editing</option>
-            <option value="Commercial Ads">Commercial Ads</option>
-            <option value="Motion Graphics">Motion Graphics</option>
-            <option value="Graphic Design">Graphic Design</option>
-            <option value="AI Automation">AI Automation</option>
-            <option value="Prompt Engineering">Prompt Engineering</option>
-            <option value="Digital Marketing">Digital Marketing</option>
-            <option value="Custom">Custom</option>
-          </select>
-          <input type="text" id="cf_service_custom" class="form-input" placeholder="Enter your service..." style="display:none;margin-top:10px;" oninput="cfSyncService()">
-          <input type="hidden" id="cf_service">
-        </div>
-        <div class="form-group">
-          <label class="form-label">YOUR BUDGET (USD)</label>
-          <select id="cf_budget_select" class="form-input" onchange="cfSyncBudget()">
-            <option value="" disabled selected>Select a budget...</option>
-            <option value="Under $100">Under $100</option>
-            <option value="$100–300">$100–300</option>
-            <option value="$300–500">$300–500</option>
-            <option value="$500–1000">$500–1000</option>
-            <option value="$1000+">$1000+</option>
-            <option value="Custom">Custom</option>
-          </select>
-          <input type="text" id="cf_budget_custom" class="form-input" placeholder="Enter your budget..." style="display:none;margin-top:10px;" oninput="cfSyncBudget()">
-          <input type="hidden" id="cf_budget">
-        </div>
-        <div class="form-group" style="flex:1;">
-          <label class="form-label">PROJECT DETAILS</label>
-          <textarea id="cf_message" class="form-textarea" style="flex:1;min-height:130px;" placeholder="Please describe your project, goals, preferred editing style, deadline, budget, and reference links if available."></textarea>
-        </div>
-        <input type="hidden" id="cf_package" value="None">
-        <input type="hidden" id="cf_price" value="None">
-        <input type="hidden" id="cf_lead_source" value="Contact Form">
-        <div id="cf_success" style="display:none;padding:14px 18px;background:rgba(22,163,74,0.12);border:1px solid rgba(22,163,74,0.35);border-radius:10px;color:#4ade80;font-size:14px;text-align:center;line-height:1.6;">
-          Thank you for contacting me!<br>Your inquiry has been received successfully.<br>I will carefully review your project requirements and get back to you as soon as possible.<br>Please check your inbox for a confirmation email.
-        </div>
-        <div id="cf_error" style="display:none;padding:14px 18px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;color:#f87171;font-size:14px;text-align:center;line-height:1.6;">
-          Oops! Something went wrong while sending your inquiry.<br>Please try again later or contact me directly via email or WhatsApp.
-        </div>
-        <button class="form-submit" onclick="handleSubmit(this)">Send Message <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
-      </div>
-      <div class="contact-info reveal">
-        <a href="mailto:vapxhasan@gmail.com" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(234,67,53,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiNFQTQzMzUiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5HbWFpbDwvdGl0bGU+PHBhdGggZD0iTTI0IDUuNDU3djEzLjkwOWMwIC45MDQtLjczMiAxLjYzNi0xLjYzNiAxLjYzNmgtMy44MTlWMTEuNzNMMTIgMTYuNjRsLTYuNTQ1LTQuOTF2OS4yNzNIMS42MzZBMS42MzYgMS42MzYgMCAwIDEgMCAxOS4zNjZWNS40NTdjMC0yLjAyMyAyLjMwOS0zLjE3OCAzLjkyNy0xLjk2NEw1LjQ1NSA0LjY0IDEyIDkuNTQ4bDYuNTQ1LTQuOTEgMS41MjgtMS4xNDVDMjEuNjkgMi4yOCAyNCAzLjQzNCAyNCA1LjQ1N3oiLz48L3N2Zz4=" alt="Email" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">EMAIL</div>
-            <div class="cl-val">vapxhasan@gmail.com</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="https://wa.me/8801327675833" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(37,211,102,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMyNUQzNjYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5XaGF0c0FwcDwvdGl0bGU+PHBhdGggZD0iTTE3LjQ3MiAxNC4zODJjLS4yOTctLjE0OS0xLjc1OC0uODY3LTIuMDMtLjk2Ny0uMjczLS4wOTktLjQ3MS0uMTQ4LS42Ny4xNS0uMTk3LjI5Ny0uNzY3Ljk2Ni0uOTQgMS4xNjQtLjE3My4xOTktLjM0Ny4yMjMtLjY0NC4wNzUtLjI5Ny0uMTUtMS4yNTUtLjQ2My0yLjM5LTEuNDc1LS44ODMtLjc4OC0xLjQ4LTEuNzYxLTEuNjUzLTIuMDU5LS4xNzMtLjI5Ny0uMDE4LS40NTguMTMtLjYwNi4xMzQtLjEzMy4yOTgtLjM0Ny40NDYtLjUyLjE0OS0uMTc0LjE5OC0uMjk4LjI5OC0uNDk3LjA5OS0uMTk4LjA1LS4zNzEtLjAyNS0uNTItLjA3NS0uMTQ5LS42NjktMS42MTItLjkxNi0yLjIwNy0uMjQyLS41NzktLjQ4Ny0uNS0uNjY5LS41MS0uMTczLS4wMDgtLjM3MS0uMDEtLjU3LS4wMS0uMTk4IDAtLjUyLjA3NC0uNzkyLjM3Mi0uMjcyLjI5Ny0xLjA0IDEuMDE2LTEuMDQgMi40NzkgMCAxLjQ2MiAxLjA2NSAyLjg3NSAxLjIxMyAzLjA3NC4xNDkuMTk4IDIuMDk2IDMuMiA1LjA3NyA0LjQ4Ny43MDkuMzA2IDEuMjYyLjQ4OSAxLjY5NC42MjUuNzEyLjIyNyAxLjM2LjE5NSAxLjg3MS4xMTguNTcxLS4wODUgMS43NTgtLjcxOSAyLjAwNi0xLjQxMy4yNDgtLjY5NC4yNDgtMS4yODkuMTczLTEuNDEzLS4wNzQtLjEyNC0uMjcyLS4xOTgtLjU3LS4zNDdtLTUuNDIxIDcuNDAzaC0uMDA0YTkuODcgOS44NyAwIDAxLTUuMDMxLTEuMzc4bC0uMzYxLS4yMTQtMy43NDEuOTgyLjk5OC0zLjY0OC0uMjM1LS4zNzRhOS44NiA5Ljg2IDAgMDEtMS41MS01LjI2Yy4wMDEtNS40NSA0LjQzNi05Ljg4NCA5Ljg4OC05Ljg4NCAyLjY0IDAgNS4xMjIgMS4wMyA2Ljk4OCAyLjg5OGE5LjgyNSA5LjgyNSAwIDAxMi44OTMgNi45OTRjLS4wMDMgNS40NS00LjQzNyA5Ljg4NC05Ljg4NSA5Ljg4NG04LjQxMy0xOC4yOTdBMTEuODE1IDExLjgxNSAwIDAwMTIuMDUgMEM1LjQ5NSAwIC4xNiA1LjMzNS4xNTcgMTEuODkyYzAgMi4wOTYuNTQ3IDQuMTQyIDEuNTg4IDUuOTQ1TC4wNTcgMjRsNi4zMDUtMS42NTRhMTEuODgyIDExLjg4MiAwIDAwNS42ODMgMS40NDhoLjAwNWM2LjU1NCAwIDExLjg5LTUuMzM1IDExLjg5My0xMS44OTNhMTEuODIxIDExLjgyMSAwIDAwLTMuNDgtOC40MTNaIi8+PC9zdmc+" alt="WhatsApp" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">WHATSAPP</div>
-            <div class="cl-val">Chat on WhatsApp</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="https://fiverr.com/vapxhasan" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(26,182,93,0.12)"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAETElEQVR42u2av29bVRTHz/fc98N2YrVGbUgrArS04kerVjAgihRVQkJIVAyIgYEywAITM0KMTCz8BQyMiIUNGKjEgkSlSvyYQFVR1aQtNIHWtRPnvXfPl+HZVhonbh3HdiLelQdLvno6n3t+fe95xtmvP5C9vFT2+CoACoA9DEBhoE4xlA3BBAEgyMwXIVQAFAD/b4Cdr0IQEQAiEGwomkbuagAFIEjNZz6lSGoZhd2KGWkQu5DbOhGOAcBBm1krM1+Lq3PTByMXHqkeilwopIik5i/XF67UbwRwlMEoQg0Sy0YIAIEI60nz9IFjr8w9/+LsyYfLNae6IYQWm0tvf/+JJzHg8/tYvwMAEKFwzafvPn3uvWdeW68LjMZO9KugGlamgvLtpLENJ4wQgCKe9ukL788fPpV/VwEAEenCUAiBCXfQ7p0pow7aSFfPH395/vCpjF6EDppbT6HRPM1oRhpJ2u4qoxCs+uTJ/XPvPPWqkQ73BD06fuiu6bCyISsmDKBA4tM3j70UucDTdJ0zE8sSn169e3OpdacWVytBCZA/bi80s1WF7mwgbR/Ai5VcdHzfI+3m1UkJEaaWfXzx8x9v/iaCUJ2DE5HE0ljDDW6ZGABEzFgO4lpclXVN12gOemHh0oXFSzOlWt598yOvBPGu6MRoawVRaSdr757F5nKsESBGAujgUTc7fopwCLBgUOsTy0RIMjNfDuOt/NNIV/PceJBnxi4cB4ACjXT13GNn3jh6tuWTzPxUWDpY3t8Rb+09IvL60fnTB57IQ7/PMlKBa42/P/v1qwDKUQNAkFr2ePXQyYeO9A+wmXJtplx7wMceLO8nue0CO3gI+TTvUA66vt32Kuf7mpR7YCVbG2sSK1Sh3ML0Lqei9z7Qe8pUQIcrrDp4EqfdatinJaFdo9qf+8r68Wkhkgrk8dNHGrR8khuNzsEnPsUIAAYIIaNNhaXvrl388+6NZtpKmQVwHz13fm56hmReiIym0C9+//bLyxcenZ5l2wGAyI2V5Q+ffevM7Il8zwQAKOKg/6zVf7j+swooAiCj37BHRJZb9WuNW3eSZrcPOGg9aV6pXz8ze4KT8kBuX4AgDEMIjYxcWAk26WX7oqlIw0oQrwdY82k5iCcvJSgkCREjPW1TeeNpeSXt/gohOZKpxEjmQqPQ/WMF2JAYewkgP/m/Vv5VYA97gCNpWWMEGOcqAAqAAqAAmOwadribXy9J5vIhn0hv1Qdy+dRVeEZSYMPNTIcFqEYVB+1qn/yiE2rQy0BhOYgc1HUuAw4iItNhZUIAEJLfXP2pFleNJp05l4MuNm5F9zJQGGn4y/LlkgtTmq7bfL25NIzuwJB/eGpmrd65WslFvU6AoOWTtOd1i0IrQ9wThg6hsILNYn2rEKpI3HtJ6p8GAPrMHncgiQfZzG2MJpyoF9uqMASy61dKjz3dB1B04gKgACgACoACoADYtes/3DwHMQFVT44AAAAASUVORK5CYII=" alt="Fiverr" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">FIVERR</div>
-            <div class="cl-val">fiverr.com/vapxhasan</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="https://www.upwork.com/freelancers/~0117eaa6462f5ba09c" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(20,171,98,0.1)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMxNEE4MDAiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5VcHdvcms8L3RpdGxlPjxwYXRoIGQ9Ik0xOC41NjEgMTMuMTU4Yy0xLjEwMiAwLTIuMTM1LS40NjctMy4wNzQtMS4yMjdsLjIyOC0xLjA3Ni4wMDgtLjA0MmMuMjA3LTEuMTQzLjg0OS0zLjA2IDIuODM5LTMuMDYgMS40OTIgMCAyLjcwMyAxLjIxMiAyLjcwMyAyLjcwMy0uMDAxIDEuNDg5LTEuMjEyIDIuNzAyLTIuNzA0IDIuNzAyem0wLTguMTRjLTIuNTM5IDAtNC41MSAxLjY0OS01LjMxIDQuMzY2LTEuMjItMS44MzQtMi4xNDgtNC4wMzYtMi42ODctNS44OTJINy44Mjh2Ny4xMTJjLS4wMDIgMS40MDYtMS4xNDEgMi41NDYtMi41NDcgMi41NDgtMS40MDUtLjAwMi0yLjU0My0xLjE0My0yLjU0NS0yLjU0OFYzLjQ5MkgwdjcuMTEyYzAgMi45MTQgMi4zNyA1LjMwMyA1LjI4MSA1LjMwMyAyLjkxMyAwIDUuMjgzLTIuMzg5IDUuMjgzLTUuMzAzdi0xLjE5Yy41MjkgMS4xMDcgMS4xODIgMi4yMjkgMS45NzQgMy4yMjFsLTEuNjczIDcuODczaDIuNzk3bDEuMjEzLTUuNzFjMS4wNjMuNjc5IDIuMjg1IDEuMTA5IDMuNjg2IDEuMTA5IDMgMCA1LjQzOS0yLjQ1MiA1LjQzOS01LjQ1IDAtMy0yLjQzOS01LjQzOS01LjQzOS01LjQzOXoiLz48L3N2Zz4=" alt="Upwork" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">UPWORK</div>
-            <div class="cl-val">Hire on Upwork</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="https://instagram.com/vapxhasan" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(225,48,108,0.1)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiNFNDQwNUYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5JbnN0YWdyYW08L3RpdGxlPjxwYXRoIGQ9Ik03LjAzMDEuMDg0Yy0xLjI3NjguMDYwMi0yLjE0ODcuMjY0LTIuOTExLjU2MzQtLjc4ODguMzA3NS0xLjQ1NzUuNzItMi4xMjI4IDEuMzg3Ny0uNjY1Mi42Njc3LTEuMDc1IDEuMzM2OC0xLjM4MDIgMi4xMjctLjI5NTQuNzYzOC0uNDk1NiAxLjYzNjUtLjU1MiAyLjkxNC0uMDU2NCAxLjI3NzUtLjA2ODkgMS42ODgyLS4wNjI2IDQuOTQ3LjAwNjIgMy4yNTg2LjAyMDYgMy42NjcxLjA4MjUgNC45NDczLjA2MSAxLjI3NjUuMjY0IDIuMTQ4Mi41NjM1IDIuOTEwNy4zMDguNzg4OS43MiAxLjQ1NzMgMS4zODggMi4xMjI4LjY2NzkuNjY1NSAxLjMzNjUgMS4wNzQzIDIuMTI4NSAxLjM4Ljc2MzIuMjk1IDEuNjM2MS40OTYxIDIuOTEzNC41NTIgMS4yNzczLjA1NiAxLjY4ODQuMDY5IDQuOTQ2Mi4wNjI3IDMuMjU3OC0uMDA2MiAzLjY2OC0uMDIwNyA0Ljk0NzgtLjA4MTQgMS4yOC0uMDYwNyAyLjE0Ny0uMjY1MiAyLjkwOTgtLjU2MzMuNzg4OS0uMzA4NiAxLjQ1NzgtLjcyIDIuMTIyOC0xLjM4ODEuNjY1LS42NjgyIDEuMDc0NS0xLjMzNzggMS4zNzk1LTIuMTI4NC4yOTU3LS43NjMyLjQ5NjYtMS42MzYuNTUyLTIuOTEyNC4wNTYtMS4yODA5LjA2OTItMS42ODk4LjA2My00Ljk0OC0uMDA2My0zLjI1ODMtLjAyMS0zLjY2NjgtLjA4MTctNC45NDY1LS4wNjA3LTEuMjc5Ny0uMjY0LTIuMTQ4Ny0uNTYzMy0yLjkxMTctLjMwODQtLjc4ODktLjcyLTEuNDU2OC0xLjM4NzYtMi4xMjI4QzIxLjI5ODIgMS4zMyAyMC42MjguOTIwOCAxOS44Mzc4LjYxNjUgMTkuMDc0LjMyMSAxOC4yMDE3LjExOTcgMTYuOTI0NC4wNjQ1IDE1LjY0NzEuMDA5MyAxNS4yMzYtLjAwNSAxMS45NzcuMDAxNCA4LjcxOC4wMDc2IDguMzEuMDIxNSA3LjAzMDEuMDgzOW0uMTQwMiAyMS42OTMyYy0xLjE3LS4wNTA5LTEuODA1My0uMjQ1My0yLjIyODctLjQwOC0uNTYwNi0uMjE2LS45Ni0uNDc3MS0xLjM4MTktLjg5NS0uNDIyLS40MTc4LS42ODExLS44MTg2LS45LTEuMzc4LS4xNjQ0LS40MjM0LS4zNjI0LTEuMDU4LS40MTcxLTIuMjI4LS4wNTk1LTEuMjY0NS0uMDcyLTEuNjQ0Mi0uMDc5LTQuODQ4LS4wMDctMy4yMDM3LjAwNTMtMy41ODMuMDYwNy00Ljg0OC4wNS0xLjE2OS4yNDU2LTEuODA1LjQwOC0yLjIyODIuMjE2LS41NjEzLjQ3NjItLjk2Ljg5NS0xLjM4MTYuNDE4OC0uNDIxNy44MTg0LS42ODE0IDEuMzc4My0uOTAwMy40MjMtLjE2NTEgMS4wNTc1LS4zNjE0IDIuMjI3LS40MTcxIDEuMjY1NS0uMDYgMS42NDQ3LS4wNzIgNC44NDgtLjA3OSAzLjIwMzMtLjAwNyAzLjU4MzUuMDA1IDQuODQ5NS4wNjA4IDEuMTY5LjA1MDggMS44MDUzLjI0NDUgMi4yMjguNDA4LjU2MDguMjE2Ljk2LjQ3NTQgMS4zODE2Ljg5NS40MjE3LjQxOTQuNjgxNi44MTc2LjkwMDUgMS4zNzg3LjE2NTMuNDIxNy4zNjE3IDEuMDU2LjQxNjkgMi4yMjYzLjA2MDIgMS4yNjU1LjA3MzkgMS42NDUuMDc5NiA0Ljg0OC4wMDU4IDMuMjAzLS4wMDU1IDMuNTgzNC0uMDYxIDQuODQ4LS4wNTEgMS4xNy0uMjQ1IDEuODA1NS0uNDA4IDIuMjI5NC0uMjE2LjU2MDQtLjQ3NjMuOTYtLjg5NTQgMS4zODE0LS40MTkuNDIxNS0uODE4MS42ODExLTEuMzc4My45LS40MjI0LjE2NDktMS4wNTc3LjM2MTctMi4yMjYyLjQxNzQtMS4yNjU2LjA1OTUtMS42NDQ4LjA3Mi00Ljg0OTMuMDc5LTMuMjA0NS4wMDctMy41ODI1LS4wMDYtNC44NDgtLjA2MDhNMTYuOTUzIDUuNTg2NEExLjQ0IDEuNDQgMCAxIDAgMTguMzkgNC4xNDRhMS40NCAxLjQ0IDAgMCAwLTEuNDM3IDEuNDQyNE01LjgzODUgMTIuMDEyYy4wMDY3IDMuNDAzMiAyLjc3MDYgNi4xNTU3IDYuMTczIDYuMTQ5MyAzLjQwMjYtLjAwNjUgNi4xNTctMi43NzAxIDYuMTUwNi02LjE3MzMtLjAwNjUtMy40MDMyLTIuNzcxLTYuMTU2NS02LjE3NC02LjE0OTgtMy40MDMuMDA2Ny02LjE1NiAyLjc3MS02LjE0OTYgNi4xNzM4TTggMTIuMDA3N2E0IDQgMCAxIDEgNC4wMDggMy45OTIxQTMuOTk5NiAzLjk5OTYgMCAwIDEgOCAxMi4wMDc3Ii8+PC9zdmc+" alt="Instagram" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">INSTAGRAM</div>
-            <div class="cl-val">@vapxhasan</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="https://linkedin.com/in/vapxhasan" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(10,102,194,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNDQ4Ij48cmVjdCB3aWR0aD0iNDQ4IiBoZWlnaHQ9IjQ0OCIgcng9IjYwIiBmaWxsPSIjMEE2NkMyIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTEzNS40IDE3Nmg2My40djE5OC40aC02My40VjE3NnptMzEuNy0xMDEuNGMyMC4zIDAgMzYuNyAxNi41IDM2LjcgMzYuNyAwIDIwLjMtMTYuNSAzNi43LTM2LjcgMzYuNy0yMC4zIDAtMzYuNy0xNi41LTM2LjctMzYuNyAwLTIwLjIgMTYuNC0zNi43IDM2LjctMzYuN3pNMjMyLjkgMTc2aDYwLjh2MjcuMWguOWM4LjUtMTYgMjkuMS0zMi45IDU5LjktMzIuOSA2NCAwIDc1LjggNDIuMSA3NS44IDk2Ljl2MTA3LjNoLTYzLjRWMjc5LjljMC0yMy42LS40LTUzLjktMzIuOS01My45LTMyLjkgMC0zOCAyNS43LTM4IDUyLjJ2OTUuOGgtNjMuNFYxNzZ6Ii8+PC9zdmc+Cg==" alt="LinkedIn" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">LINKEDIN</div>
-            <div class="cl-val">@vapxhasan</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="https://facebook.com/vapxhasan" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(24,119,242,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMxODc3RjIiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5GYWNlYm9vazwvdGl0bGU+PHBhdGggZD0iTTkuMTAxIDIzLjY5MXYtNy45OEg2LjYyN3YtMy42NjdoMi40NzR2LTEuNThjMC00LjA4NSAxLjg0OC01Ljk3OCA1Ljg1OC01Ljk3OC40MDEgMCAuOTU1LjA0MiAxLjQ2OC4xMDNhOC42OCA4LjY4IDAgMCAxIDEuMTQxLjE5NXYzLjMyNWE4LjYyMyA4LjYyMyAwIDAgMC0uNjUzLS4wMzYgMjYuODA1IDI2LjgwNSAwIDAgMC0uNzMzLS4wMDljLS43MDcgMC0xLjI1OS4wOTYtMS42NzUuMzA5YTEuNjg2IDEuNjg2IDAgMCAwLS42NzkuNjIyYy0uMjU4LjQyLS4zNzQuOTk1LS4zNzQgMS43NTJ2MS4yOTdoMy45MTlsLS4zODYgMi4xMDMtLjI4NyAxLjU2NGgtMy4yNDZ2OC4yNDVDMTkuMzk2IDIzLjIzOCAyNCAxOC4xNzkgMjQgMTIuMDQ0YzAtNi42MjctNS4zNzMtMTItMTItMTJzLTEyIDUuMzczLTEyIDEyYzAgNS42MjggMy44NzQgMTAuMzUgOS4xMDEgMTEuNjQ3WiIvPjwvc3ZnPg==" alt="Facebook" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">FACEBOOK</div>
-            <div class="cl-val">@vapxhasan</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-        <a href="https://calendly.com/vapxhasan/new-meeting" target="_blank" class="contact-link-card">
-          <div class="cl-icon" style="background:rgba(0,105,255,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMwMDY5RkYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5DYWxlbmRseTwvdGl0bGU+PHBhdGggZD0iTTE5LjY1NSAxNC4yNjJjLjI4MSAwIC41NTcuMDIzLjgyOC4wNjQgMCAuMDA1LS4wMDUuMDEtLjAwNS4wMTQtLjEwNS4yNjctLjIzNC41MzQtLjM4MS43ODZsLTEuMjE5IDIuMTA2Yy0xLjExMiAxLjkzNi0zLjE3NyAzLjEyNy01LjQxMSAzLjEyN2gtMi40MzJjLTIuMjMgMC00LjI5NC0xLjE5MS01LjQxMi0zLjEyN2wtMS4yMTgtMi4xMDZhNi4yNTEgNi4yNTEgMCAwIDEgMC02LjI1MmwxLjIxOC0yLjEwNkM2LjczNiA0LjgzMiA4LjggMy42NDEgMTEuMDM1IDMuNjQxaDIuNDMyYzIuMjMgMCA0LjI5NCAxLjE5MSA1LjQxMSAzLjEyN2wxLjIxOSAyLjEwNmMuMTQ3LjI1Mi4yNzEuNTE5LjM4MS43ODYgMCAuMDA0LjAwNS4wMDkuMDA1LjAxNC0uMjY3LjA0MS0uNTQzLjA2NC0uODI4LjA2NC0xLjgxNiAwLTIuNTAxLS42MDctMy4yOTEtMS4zMDYtLjc2NC0uNjc2LTEuNzExLTEuNTE3LTMuNDQtMS41MTdoLTEuMDI5Yy0xLjI1MSAwLTIuMzg3LjQ1NS0zLjIgMS4yNzgtLjc5Ni44MDUtMS4yMzMgMS45MDQtMS4yMzMgMy4wOTl2MS40MTFjMCAxLjE5Ni40MzcgMi4yOTUgMS4yMzMgMy4wOTkuODEzLjgyMyAxLjk0OSAxLjI3OCAzLjIgMS4yNzhoMS4wMzRjMS43MjkgMCAyLjY3Ni0uODQxIDMuNDM5LTEuNTE3Ljc5MS0uNzAzIDEuNDcxLTEuMzA2IDMuMjg3LTEuMzAxWm0uMDA1LTMuMjM3Yy4zOTkgMCAuNzk0LS4wMzYgMS4xNzktLjExLS4wMDItLjAwNC0uMDAyLS4wMS0uMDAyLS4wMTQtLjA3My0uNDE0LS4xOTMtLjgyMy0uMzQ5LTEuMjE4LjczMS0uMTIgMS40MDctLjM5NiAxLjk4Ni0uODE5IDAtLjAwNC0uMDA1LS4wMTMtLjAwNS0uMDE4LS4zMzEtMS4wODUtLjgzMi0yLjEwMS0xLjQ4OS0zLjAzLS42NDktLjkxNS0xLjQzNS0xLjcxOS0yLjMzMS0yLjM5NS0xLjg2Ny0xLjM5OC00LjA4OC0yLjEzOC02LjQyOC0yLjEzOC0xLjQ0OCAwLTIuODU1LjI4LTQuMTc1Ljg0MS0xLjI3My41NDMtMi40MjMgMS4zMTUtMy40MDcgMi4yOTlTMi44NzggNi41NTIgMi4zNDEgNy44M2MtLjU1NyAxLjMyNC0uODQyIDIuNzI2LS44NDIgNC4xNzUgMCAxLjQ0OC4yODEgMi44NTUuODQyIDQuMTc0LjU0MiAxLjI3NCAxLjMxNCAyLjQyMyAyLjI5OCAzLjQwN3MyLjEyOSAxLjc2MSAzLjQwNyAyLjI5OWMxLjMyNC41NTYgMi43MjcuODQxIDQuMTc1Ljg0MSAyLjM0IDAgNC41NjEtLjc0IDYuNDI4LTIuMTM3YTEwLjgxNSAxMC44MTUgMCAwIDAgMi4zMzEtMi4zOTZjLjY1Mi0uOTI5IDEuMTU4LTEuOTQ5IDEuNDg5LTMuMDMgMC0uMDA0LjAwNS0uMDE0LjAwNS0uMDE4LS41NzktLjQyMy0xLjI1NS0uNjk5LTEuOTg2LS44MTkuMTYxLS4zOTUuMjc2LS44MDQuMzQ5LTEuMjE4LjAwNS0uMDA5LjAwNS0uMDE0LjAwNS0uMDIzLjg2OS4xNjYgMS42OTIuNTA2IDIuNDA0IDEuMDM1LjY4NS41MDUuNTUyIDEuMDc1LjQ0NiAxLjQxNkMyMi4xODQgMjAuNDM3IDE3LjYxOSAyNCAxMi4yMjEgMjRjLTYuNjI1IDAtMTItNS4zNzUtMTItMTJzNS4zNy0xMiAxMi0xMmM1LjM5OCAwIDkuOTYzIDMuNTYzIDExLjQ3MSA4LjQ2NC4xMDYuMzQxLjIzOS45MTUtLjQ0NiAxLjQyMS0uNzE3LjUyOS0xLjUzNS44NzMtMi40MDQgMS4wMzQuMTI4LjcxNi4xMjggMS40NSAwIDIuMTY2LS4zODctLjA3NC0uNzgyLS4xMS0xLjE4Mi0uMTEtNC4xODQgMC0zLjk2OCAyLjgyMy02LjczNiAyLjgyM2gtMS4wMjljLTEuODk5IDAtMy4xNS0xLjM1Ny0zLjE1LTMuMDk1di0xLjQxMWMwLTEuNzM4IDEuMjUxLTMuMDk0IDMuMTUtMy4wOTRoMS4wMzRjMi43NjggMCAyLjU1MiAyLjgyMyA2LjczMSAyLjgyN1oiLz48L3N2Zz4=" alt="Calendly" width="22" height="22" loading="lazy"></div>
-          <div>
-            <div class="cl-label">BOOK A CALL</div>
-            <div class="cl-val">Schedule on Calendly</div>
-          </div>
-          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section id="faq" class="section">
-  <div class="container">
-    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto 48px;">
-      <div class="section-label" style="justify-content:center">FAQ</div>
-      <h2 class="section-title" style="text-align:center">Common <span>Questions</span></h2>
-      <p class="section-sub" style="margin:0 auto">Everything you need to know before we start working together.</p>
-      <button class="blog-write-btn admin-only" id="openFaqModal" style="display:none;margin-top:16px;">+ Add FAQ</button>
-    </div>
-    <div class="faq-list reveal" id="faqList"></div>
-  </div>
-</section>
-
-<!-- CERTIFICATIONS -->
-<section id="certifications" class="section">
-  <div class="container">
-    <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:48px;">
-      <div>
-        <div class="section-label">Credentials</div>
-        <h2 class="section-title">Certifications & <span>Courses</span></h2>
-        <p class="section-sub">Courses and certifications that back up the skills — including Bivinno and other platforms.</p>
-      </div>
-      <button class="admin-only" id="openCertModal" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(37,99,235,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">＋ Add Certificate</button>
-    </div>
-    <div class="cert-spotlight-wrap" id="certSpotlightWrap"><!-- injected by JS: single featured certificate --></div>
-    <div id="certEmpty" style="display:none;text-align:center;padding:60px 24px;border:2px dashed var(--border);border-radius:16px;color:var(--muted);">
-      <div style="font-size:48px;margin-bottom:12px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48px" height="48px" style="vertical-align:-0.125em;"><path d="M22 10L12 5 2 10l10 5 10-5z"></path><path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"></path><path d="M2 10v6"></path></svg></div>
-      <div style="font-size:14px;">No certifications yet. Login as admin to add the first certificate!</div>
-    </div>
-
-    <div id="certCount" style="font-size:13px;color:var(--muted);font-family:var(--font-mono);text-align:center;margin-top:16px;"></div>
-
-    <!-- MORE CERTIFICATES — slide left/right -->
-    <div id="certMoreToggleWrap" class="cert-more-toggle-wrap" style="display:none;">
-      <button type="button" class="cert-more-toggle-btn" id="certMoreToggleBtn" onclick="toggleCertMore()">
-        <span id="certMoreToggleLabel">Show More Certificates</span>
-        <svg class="icon-inline chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><polyline points="6 9 12 15 18 9"></polyline></svg>
-      </button>
-    </div>
-    <div id="certMoreWrap" class="cert-more-wrap">
-      <div class="cert-more-slider-wrap">
-        <button class="review-slider-nav" id="certMorePrev" aria-label="Previous certificate">‹</button>
-        <div id="certMoreTrack" class="cert-more-track"><!-- injected by JS --></div>
-        <button class="review-slider-nav" id="certMoreNext" aria-label="Next certificate">›</button>
-      </div>
     </div>
   </div>
 </section>
@@ -4234,6 +4017,53 @@ body, body *, body *::before, body *::after {
   </div>
 </section>
 
+<!-- PORTFOLIO -->
+<section id="portfolio" class="section">
+  <div class="container">
+    <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:48px;">
+      <div>
+        <div class="section-label">My Work</div>
+        <h2 class="section-title">Selected <span>Projects</span></h2>
+        <p class="section-sub">Real work, real results. A curated look at projects that made a difference.</p>
+      </div>
+      <button class="admin-only" id="openProjectModal" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(37,99,235,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">＋ Add Project</button>
+    </div>
+
+    <div id="projectFilters" class="fiv-cat-bar" style="display:none;"></div>
+
+    <div class="section-admin-row admin-only" id="projectItemsPerViewRow" style="display:none;">
+      <div class="items-per-view-ctrl">
+        Show at once:
+        <input type="number" id="projectItemsPerViewInput" min="2" max="8" value="4" onchange="setProjectItemsPerView(this.value)">
+        <span>(2–8)</span>
+      </div>
+    </div>
+
+    <div class="portfolio-grid" id="projectGrid"><!-- injected by JS --></div>
+    <div id="projectEmpty" style="display:none;text-align:center;padding:60px 24px;border:2px dashed var(--border);border-radius:16px;color:var(--muted);">
+      <div style="font-size:48px;margin-bottom:12px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48px" height="48px" style="vertical-align:-0.125em;"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg></div>
+      <div style="font-size:14px;margin-bottom:16px;">No projects yet. Login as admin to add your first project!</div>
+    </div>
+
+    <div id="projectCount" style="font-size:13px;color:var(--muted);font-family:var(--font-mono);text-align:center;margin-top:24px;"></div>
+
+    <!-- MORE PROJECTS (overflow beyond the "show at once" count) — slide left/right -->
+    <div id="projectMoreToggleWrap" class="proj-more-toggle-wrap" style="display:none;">
+      <button type="button" class="proj-more-toggle-btn" id="projectMoreToggleBtn" onclick="toggleProjectMore()">
+        <span id="projectMoreToggleLabel">Show More Projects</span>
+        <svg class="icon-inline chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+    </div>
+    <div id="projectMoreWrap" class="proj-more-wrap">
+      <div class="proj-more-slider-wrap">
+        <button class="review-slider-nav" id="projectMorePrev" aria-label="Previous project">‹</button>
+        <div id="projectMoreTrack" class="proj-more-track"><!-- injected by JS --></div>
+        <button class="review-slider-nav" id="projectMoreNext" aria-label="Next project">›</button>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- TESTIMONIALS -->
 <section id="testimonials" class="section">
   <div class="container">
@@ -4299,6 +4129,173 @@ body, body *, body *::before, body *::after {
       <div class="cmt-carousel-counter" id="cmtCarouselCounter"></div>
     </div>
     <div id="cmtEmpty" class="cmt-empty" style="display:none;">No comments yet. Be the first to share your thoughts!</div>
+  </div>
+</section>
+
+<!-- FIVERR-STYLE TAB PRICING -->
+<section id="pricing" class="section">
+  <div class="container">
+    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto 48px;">
+      <div class="section-label" style="justify-content:center">Service Tiers</div>
+      <h2 class="section-title" style="text-align:center">Choose Your <span>Package</span></h2>
+      <p class="section-sub" style="margin:0 auto">Transparent pricing — pick a tier, or message me for a custom deal.</p>
+    </div>
+    <div class="fiv-wrap reveal">
+      <!-- Category bar -->
+      <div class="fiv-cat-bar" id="fivCatBar"></div>
+      <!-- Gig headline / custom gig name -->
+      <div class="fiv-cat-headline" id="fivCatHeadline"></div>
+      <!-- Tab bar -->
+      <div class="fiv-tab-bar" id="fivTabBar"></div>
+      <!-- Card -->
+      <div class="fiv-card" id="fivCard"></div>
+
+      <!-- Custom quote option -->
+      <a href="#contact" class="fiv-custom-card" onclick="fillCustomQuoteLead(event)">
+        <div class="fiv-custom-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg></div>
+        <div>
+          <div class="fiv-custom-title">Need something different?</div>
+          <div class="fiv-custom-sub">Get a custom quote tailored to your project</div>
+        </div>
+        <span class="fiv-custom-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+      </a>
+    </div>
+
+    <!-- CLIENT CUSTOM PRICING -->
+    <div id="clientPricingSection" class="client-pricing-wrap">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin:56px 0 24px;">
+        <div>
+          <div class="section-label" style="margin-bottom:6px;">// SPECIAL DEALS</div>
+          <div style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--white);">Custom Pricing For You</div>
+        </div>
+        <button class="admin-only" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,var(--cyan),var(--indigo));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;" onclick="openClientPricingModal()">＋ Add Custom Deal</button>
+      </div>
+      <div class="client-pricing-grid" id="clientPricingGrid"></div>
+      <div id="clientPricingEmpty" style="display:none;text-align:center;padding:40px 24px;border:2px dashed var(--border);border-radius:16px;color:var(--muted);font-size:13px;">
+        No custom deals yet. Admin can add a special client-specific offer here.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" class="section" style="background:var(--bg2)">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Send A Message</div>
+      <h2 class="section-title">Let's Build Something <span>Great</span></h2>
+      <p class="section-sub">Have a project in mind? Send a message below and I'll get back to you within 2 hours.</p>
+    </div>
+    <div class="contact-form reveal contact-form-standalone" id="contactFormBox">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">YOUR NAME</label>
+            <input type="text" id="cf_name" class="form-input" placeholder="Alex Johnson">
+          </div>
+          <div class="form-group">
+            <label class="form-label">YOUR EMAIL</label>
+            <input type="email" id="cf_email" class="form-input" placeholder="alex@company.com">
+          </div>
+        </div>
+        <div class="form-group" id="cf_package_group" style="display:none;">
+          <label class="form-label">SELECTED PACKAGE</label>
+          <input type="text" id="cf_package_custom" class="form-input" placeholder="Package name..." oninput="document.getElementById('cf_package').value=this.value.trim();">
+        </div>
+        <div class="form-group">
+          <label class="form-label">SERVICE NEEDED</label>
+          <select id="cf_service_select" class="form-input" onchange="cfSyncService()">
+            <option value="" disabled selected>Select a service...</option>
+            <option value="Video Editing">Video Editing</option>
+            <option value="YouTube Video Editing">YouTube Video Editing</option>
+            <option value="Short-form Video Editing">Short-form Video Editing</option>
+            <option value="Commercial Ads">Commercial Ads</option>
+            <option value="Motion Graphics">Motion Graphics</option>
+            <option value="Graphic Design">Graphic Design</option>
+            <option value="AI Automation">AI Automation</option>
+            <option value="Prompt Engineering">Prompt Engineering</option>
+            <option value="Digital Marketing">Digital Marketing</option>
+            <option value="Custom">Custom</option>
+          </select>
+          <input type="text" id="cf_service_custom" class="form-input" placeholder="Enter your service..." style="display:none;margin-top:10px;" oninput="cfSyncService()">
+          <input type="hidden" id="cf_service">
+        </div>
+        <div class="form-group">
+          <label class="form-label">YOUR BUDGET (USD)</label>
+          <select id="cf_budget_select" class="form-input" onchange="cfSyncBudget()">
+            <option value="" disabled selected>Select a budget...</option>
+            <option value="Under $100">Under $100</option>
+            <option value="$100–300">$100–300</option>
+            <option value="$300–500">$300–500</option>
+            <option value="$500–1000">$500–1000</option>
+            <option value="$1000+">$1000+</option>
+            <option value="Custom">Custom</option>
+          </select>
+          <input type="text" id="cf_budget_custom" class="form-input" placeholder="Enter your budget..." style="display:none;margin-top:10px;" oninput="cfSyncBudget()">
+          <input type="hidden" id="cf_budget">
+        </div>
+        <div class="form-group" style="flex:1;">
+          <label class="form-label">PROJECT DETAILS</label>
+          <textarea id="cf_message" class="form-textarea" style="flex:1;min-height:130px;" placeholder="Please describe your project, goals, preferred editing style, deadline, budget, and reference links if available."></textarea>
+        </div>
+        <input type="hidden" id="cf_package" value="None">
+        <input type="hidden" id="cf_price" value="None">
+        <input type="hidden" id="cf_lead_source" value="Contact Form">
+        <div id="cf_success" style="display:none;padding:14px 18px;background:rgba(22,163,74,0.12);border:1px solid rgba(22,163,74,0.35);border-radius:10px;color:#4ade80;font-size:14px;text-align:center;line-height:1.6;">
+          Thank you for contacting me!<br>Your inquiry has been received successfully.<br>I will carefully review your project requirements and get back to you as soon as possible.<br>Please check your inbox for a confirmation email.
+        </div>
+        <div id="cf_error" style="display:none;padding:14px 18px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.3);border-radius:10px;color:#f87171;font-size:14px;text-align:center;line-height:1.6;">
+          Oops! Something went wrong while sending your inquiry.<br>Please try again later or contact me directly via email or WhatsApp.
+        </div>
+        <button class="form-submit" onclick="handleSubmit(this)">Send Message <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications" class="section">
+  <div class="container">
+    <div class="reveal" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:48px;">
+      <div>
+        <div class="section-label">Credentials</div>
+        <h2 class="section-title">Certifications & <span>Courses</span></h2>
+        <p class="section-sub">Courses and certifications that back up the skills — including Bivinno and other platforms.</p>
+      </div>
+      <button class="admin-only" id="openCertModal" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(37,99,235,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">＋ Add Certificate</button>
+    </div>
+    <div class="cert-spotlight-wrap" id="certSpotlightWrap"><!-- injected by JS: single featured certificate --></div>
+    <div id="certEmpty" style="display:none;text-align:center;padding:60px 24px;border:2px dashed var(--border);border-radius:16px;color:var(--muted);">
+      <div style="font-size:48px;margin-bottom:12px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48px" height="48px" style="vertical-align:-0.125em;"><path d="M22 10L12 5 2 10l10 5 10-5z"></path><path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"></path><path d="M2 10v6"></path></svg></div>
+      <div style="font-size:14px;">No certifications yet. Login as admin to add the first certificate!</div>
+    </div>
+
+    <div id="certCount" style="font-size:13px;color:var(--muted);font-family:var(--font-mono);text-align:center;margin-top:16px;"></div>
+
+    <!-- MORE CERTIFICATES — slide left/right -->
+    <div id="certMoreToggleWrap" class="cert-more-toggle-wrap" style="display:none;">
+      <button type="button" class="cert-more-toggle-btn" id="certMoreToggleBtn" onclick="toggleCertMore()">
+        <span id="certMoreToggleLabel">Show More Certificates</span>
+        <svg class="icon-inline chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </button>
+    </div>
+    <div id="certMoreWrap" class="cert-more-wrap">
+      <div class="cert-more-slider-wrap">
+        <button class="review-slider-nav" id="certMorePrev" aria-label="Previous certificate">‹</button>
+        <div id="certMoreTrack" class="cert-more-track"><!-- injected by JS --></div>
+        <button class="review-slider-nav" id="certMoreNext" aria-label="Next certificate">›</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="section">
+  <div class="container">
+    <div class="reveal" style="text-align:center;max-width:600px;margin:0 auto 48px;">
+      <div class="section-label" style="justify-content:center">FAQ</div>
+      <h2 class="section-title" style="text-align:center">Common <span>Questions</span></h2>
+      <p class="section-sub" style="margin:0 auto">Everything you need to know before we start working together.</p>
+      <button class="blog-write-btn admin-only" id="openFaqModal" style="display:none;margin-top:16px;">+ Add FAQ</button>
+    </div>
+    <div class="faq-list reveal" id="faqList"></div>
   </div>
 </section>
 
@@ -4415,6 +4412,85 @@ body, body *, body *::before, body *::after {
     </div>
   </div>
 </section>
+
+<!-- CONTACT -->
+<section id="contact-links" class="section" style="background:var(--bg2)">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Get In Touch</div>
+      <h2 class="section-title">Other Ways To <span>Connect</span></h2>
+      <p class="section-sub">Prefer a different platform? Reach out to me directly below.</p>
+    </div>
+    <div class="contact-info contact-info-grid reveal">
+        <a href="mailto:vapxhasan@gmail.com" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(234,67,53,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiNFQTQzMzUiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5HbWFpbDwvdGl0bGU+PHBhdGggZD0iTTI0IDUuNDU3djEzLjkwOWMwIC45MDQtLjczMiAxLjYzNi0xLjYzNiAxLjYzNmgtMy44MTlWMTEuNzNMMTIgMTYuNjRsLTYuNTQ1LTQuOTF2OS4yNzNIMS42MzZBMS42MzYgMS42MzYgMCAwIDEgMCAxOS4zNjZWNS40NTdjMC0yLjAyMyAyLjMwOS0zLjE3OCAzLjkyNy0xLjk2NEw1LjQ1NSA0LjY0IDEyIDkuNTQ4bDYuNTQ1LTQuOTEgMS41MjgtMS4xNDVDMjEuNjkgMi4yOCAyNCAzLjQzNCAyNCA1LjQ1N3oiLz48L3N2Zz4=" alt="Email" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">EMAIL</div>
+            <div class="cl-val">vapxhasan@gmail.com</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+        <a href="https://wa.me/8801327675833" target="_blank" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(37,211,102,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMyNUQzNjYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5XaGF0c0FwcDwvdGl0bGU+PHBhdGggZD0iTTE3LjQ3MiAxNC4zODJjLS4yOTctLjE0OS0xLjc1OC0uODY3LTIuMDMtLjk2Ny0uMjczLS4wOTktLjQ3MS0uMTQ4LS42Ny4xNS0uMTk3LjI5Ny0uNzY3Ljk2Ni0uOTQgMS4xNjQtLjE3My4xOTktLjM0Ny4yMjMtLjY0NC4wNzUtLjI5Ny0uMTUtMS4yNTUtLjQ2My0yLjM5LTEuNDc1LS44ODMtLjc4OC0xLjQ4LTEuNzYxLTEuNjUzLTIuMDU5LS4xNzMtLjI5Ny0uMDE4LS40NTguMTMtLjYwNi4xMzQtLjEzMy4yOTgtLjM0Ny40NDYtLjUyLjE0OS0uMTc0LjE5OC0uMjk4LjI5OC0uNDk3LjA5OS0uMTk4LjA1LS4zNzEtLjAyNS0uNTItLjA3NS0uMTQ5LS42NjktMS42MTItLjkxNi0yLjIwNy0uMjQyLS41NzktLjQ4Ny0uNS0uNjY5LS41MS0uMTczLS4wMDgtLjM3MS0uMDEtLjU3LS4wMS0uMTk4IDAtLjUyLjA3NC0uNzkyLjM3Mi0uMjcyLjI5Ny0xLjA0IDEuMDE2LTEuMDQgMi40NzkgMCAxLjQ2MiAxLjA2NSAyLjg3NSAxLjIxMyAzLjA3NC4xNDkuMTk4IDIuMDk2IDMuMiA1LjA3NyA0LjQ4Ny43MDkuMzA2IDEuMjYyLjQ4OSAxLjY5NC42MjUuNzEyLjIyNyAxLjM2LjE5NSAxLjg3MS4xMTguNTcxLS4wODUgMS43NTgtLjcxOSAyLjAwNi0xLjQxMy4yNDgtLjY5NC4yNDgtMS4yODkuMTczLTEuNDEzLS4wNzQtLjEyNC0uMjcyLS4xOTgtLjU3LS4zNDdtLTUuNDIxIDcuNDAzaC0uMDA0YTkuODcgOS44NyAwIDAxLTUuMDMxLTEuMzc4bC0uMzYxLS4yMTQtMy43NDEuOTgyLjk5OC0zLjY0OC0uMjM1LS4zNzRhOS44NiA5Ljg2IDAgMDEtMS41MS01LjI2Yy4wMDEtNS40NSA0LjQzNi05Ljg4NCA5Ljg4OC05Ljg4NCAyLjY0IDAgNS4xMjIgMS4wMyA2Ljk4OCAyLjg5OGE5LjgyNSA5LjgyNSAwIDAxMi44OTMgNi45OTRjLS4wMDMgNS40NS00LjQzNyA5Ljg4NC05Ljg4NSA5Ljg4NG04LjQxMy0xOC4yOTdBMTEuODE1IDExLjgxNSAwIDAwMTIuMDUgMEM1LjQ5NSAwIC4xNiA1LjMzNS4xNTcgMTEuODkyYzAgMi4wOTYuNTQ3IDQuMTQyIDEuNTg4IDUuOTQ1TC4wNTcgMjRsNi4zMDUtMS42NTRhMTEuODgyIDExLjg4MiAwIDAwNS42ODMgMS40NDhoLjAwNWM2LjU1NCAwIDExLjg5LTUuMzM1IDExLjg5My0xMS44OTNhMTEuODIxIDExLjgyMSAwIDAwLTMuNDgtOC40MTNaIi8+PC9zdmc+" alt="WhatsApp" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">WHATSAPP</div>
+            <div class="cl-val">Chat on WhatsApp</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+        <a href="https://fiverr.com/vapxhasan" target="_blank" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(26,182,93,0.12)"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAIAAAAlC+aJAAAETElEQVR42u2av29bVRTHz/fc98N2YrVGbUgrArS04kerVjAgihRVQkJIVAyIgYEywAITM0KMTCz8BQyMiIUNGKjEgkSlSvyYQFVR1aQtNIHWtRPnvXfPl+HZVhonbh3HdiLelQdLvno6n3t+fe95xtmvP5C9vFT2+CoACoA9DEBhoE4xlA3BBAEgyMwXIVQAFAD/b4Cdr0IQEQAiEGwomkbuagAFIEjNZz6lSGoZhd2KGWkQu5DbOhGOAcBBm1krM1+Lq3PTByMXHqkeilwopIik5i/XF67UbwRwlMEoQg0Sy0YIAIEI60nz9IFjr8w9/+LsyYfLNae6IYQWm0tvf/+JJzHg8/tYvwMAEKFwzafvPn3uvWdeW68LjMZO9KugGlamgvLtpLENJ4wQgCKe9ukL788fPpV/VwEAEenCUAiBCXfQ7p0pow7aSFfPH395/vCpjF6EDppbT6HRPM1oRhpJ2u4qoxCs+uTJ/XPvPPWqkQ73BD06fuiu6bCyISsmDKBA4tM3j70UucDTdJ0zE8sSn169e3OpdacWVytBCZA/bi80s1WF7mwgbR/Ai5VcdHzfI+3m1UkJEaaWfXzx8x9v/iaCUJ2DE5HE0ljDDW6ZGABEzFgO4lpclXVN12gOemHh0oXFSzOlWt598yOvBPGu6MRoawVRaSdr757F5nKsESBGAujgUTc7fopwCLBgUOsTy0RIMjNfDuOt/NNIV/PceJBnxi4cB4ACjXT13GNn3jh6tuWTzPxUWDpY3t8Rb+09IvL60fnTB57IQ7/PMlKBa42/P/v1qwDKUQNAkFr2ePXQyYeO9A+wmXJtplx7wMceLO8nue0CO3gI+TTvUA66vt32Kuf7mpR7YCVbG2sSK1Sh3ML0Lqei9z7Qe8pUQIcrrDp4EqfdatinJaFdo9qf+8r68Wkhkgrk8dNHGrR8khuNzsEnPsUIAAYIIaNNhaXvrl388+6NZtpKmQVwHz13fm56hmReiIym0C9+//bLyxcenZ5l2wGAyI2V5Q+ffevM7Il8zwQAKOKg/6zVf7j+swooAiCj37BHRJZb9WuNW3eSZrcPOGg9aV6pXz8ze4KT8kBuX4AgDEMIjYxcWAk26WX7oqlIw0oQrwdY82k5iCcvJSgkCREjPW1TeeNpeSXt/gohOZKpxEjmQqPQ/WMF2JAYewkgP/m/Vv5VYA97gCNpWWMEGOcqAAqAAqAAmOwadribXy9J5vIhn0hv1Qdy+dRVeEZSYMPNTIcFqEYVB+1qn/yiE2rQy0BhOYgc1HUuAw4iItNhZUIAEJLfXP2pFleNJp05l4MuNm5F9zJQGGn4y/LlkgtTmq7bfL25NIzuwJB/eGpmrd65WslFvU6AoOWTtOd1i0IrQ9wThg6hsILNYn2rEKpI3HtJ6p8GAPrMHncgiQfZzG2MJpyoF9uqMASy61dKjz3dB1B04gKgACgACoACoADYtes/3DwHMQFVT44AAAAASUVORK5CYII=" alt="Fiverr" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">FIVERR</div>
+            <div class="cl-val">fiverr.com/vapxhasan</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+        <a href="https://www.upwork.com/freelancers/~0117eaa6462f5ba09c" target="_blank" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(20,171,98,0.1)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMxNEE4MDAiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5VcHdvcms8L3RpdGxlPjxwYXRoIGQ9Ik0xOC41NjEgMTMuMTU4Yy0xLjEwMiAwLTIuMTM1LS40NjctMy4wNzQtMS4yMjdsLjIyOC0xLjA3Ni4wMDgtLjA0MmMuMjA3LTEuMTQzLjg0OS0zLjA2IDIuODM5LTMuMDYgMS40OTIgMCAyLjcwMyAxLjIxMiAyLjcwMyAyLjcwMy0uMDAxIDEuNDg5LTEuMjEyIDIuNzAyLTIuNzA0IDIuNzAyem0wLTguMTRjLTIuNTM5IDAtNC41MSAxLjY0OS01LjMxIDQuMzY2LTEuMjItMS44MzQtMi4xNDgtNC4wMzYtMi42ODctNS44OTJINy44Mjh2Ny4xMTJjLS4wMDIgMS40MDYtMS4xNDEgMi41NDYtMi41NDcgMi41NDgtMS40MDUtLjAwMi0yLjU0My0xLjE0My0yLjU0NS0yLjU0OFYzLjQ5MkgwdjcuMTEyYzAgMi45MTQgMi4zNyA1LjMwMyA1LjI4MSA1LjMwMyAyLjkxMyAwIDUuMjgzLTIuMzg5IDUuMjgzLTUuMzAzdi0xLjE5Yy41MjkgMS4xMDcgMS4xODIgMi4yMjkgMS45NzQgMy4yMjFsLTEuNjczIDcuODczaDIuNzk3bDEuMjEzLTUuNzFjMS4wNjMuNjc5IDIuMjg1IDEuMTA5IDMuNjg2IDEuMTA5IDMgMCA1LjQzOS0yLjQ1MiA1LjQzOS01LjQ1IDAtMy0yLjQzOS01LjQzOS01LjQzOS01LjQzOXoiLz48L3N2Zz4=" alt="Upwork" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">UPWORK</div>
+            <div class="cl-val">Hire on Upwork</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+        <a href="https://instagram.com/vapxhasan" target="_blank" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(225,48,108,0.1)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiNFNDQwNUYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5JbnN0YWdyYW08L3RpdGxlPjxwYXRoIGQ9Ik03LjAzMDEuMDg0Yy0xLjI3NjguMDYwMi0yLjE0ODcuMjY0LTIuOTExLjU2MzQtLjc4ODguMzA3NS0xLjQ1NzUuNzItMi4xMjI4IDEuMzg3Ny0uNjY1Mi42Njc3LTEuMDc1IDEuMzM2OC0xLjM4MDIgMi4xMjctLjI5NTQuNzYzOC0uNDk1NiAxLjYzNjUtLjU1MiAyLjkxNC0uMDU2NCAxLjI3NzUtLjA2ODkgMS42ODgyLS4wNjI2IDQuOTQ3LjAwNjIgMy4yNTg2LjAyMDYgMy42NjcxLjA4MjUgNC45NDczLjA2MSAxLjI3NjUuMjY0IDIuMTQ4Mi41NjM1IDIuOTEwNy4zMDguNzg4OS43MiAxLjQ1NzMgMS4zODggMi4xMjI4LjY2NzkuNjY1NSAxLjMzNjUgMS4wNzQzIDIuMTI4NSAxLjM4Ljc2MzIuMjk1IDEuNjM2MS40OTYxIDIuOTEzNC41NTIgMS4yNzczLjA1NiAxLjY4ODQuMDY5IDQuOTQ2Mi4wNjI3IDMuMjU3OC0uMDA2MiAzLjY2OC0uMDIwNyA0Ljk0NzgtLjA4MTQgMS4yOC0uMDYwNyAyLjE0Ny0uMjY1MiAyLjkwOTgtLjU2MzMuNzg4OS0uMzA4NiAxLjQ1NzgtLjcyIDIuMTIyOC0xLjM4ODEuNjY1LS42NjgyIDEuMDc0NS0xLjMzNzggMS4zNzk1LTIuMTI4NC4yOTU3LS43NjMyLjQ5NjYtMS42MzYuNTUyLTIuOTEyNC4wNTYtMS4yODA5LjA2OTItMS42ODk4LjA2My00Ljk0OC0uMDA2My0zLjI1ODMtLjAyMS0zLjY2NjgtLjA4MTctNC45NDY1LS4wNjA3LTEuMjc5Ny0uMjY0LTIuMTQ4Ny0uNTYzMy0yLjkxMTctLjMwODQtLjc4ODktLjcyLTEuNDU2OC0xLjM4NzYtMi4xMjI4QzIxLjI5ODIgMS4zMyAyMC42MjguOTIwOCAxOS44Mzc4LjYxNjUgMTkuMDc0LjMyMSAxOC4yMDE3LjExOTcgMTYuOTI0NC4wNjQ1IDE1LjY0NzEuMDA5MyAxNS4yMzYtLjAwNSAxMS45NzcuMDAxNCA4LjcxOC4wMDc2IDguMzEuMDIxNSA3LjAzMDEuMDgzOW0uMTQwMiAyMS42OTMyYy0xLjE3LS4wNTA5LTEuODA1My0uMjQ1My0yLjIyODctLjQwOC0uNTYwNi0uMjE2LS45Ni0uNDc3MS0xLjM4MTktLjg5NS0uNDIyLS40MTc4LS42ODExLS44MTg2LS45LTEuMzc4LS4xNjQ0LS40MjM0LS4zNjI0LTEuMDU4LS40MTcxLTIuMjI4LS4wNTk1LTEuMjY0NS0uMDcyLTEuNjQ0Mi0uMDc5LTQuODQ4LS4wMDctMy4yMDM3LjAwNTMtMy41ODMuMDYwNy00Ljg0OC4wNS0xLjE2OS4yNDU2LTEuODA1LjQwOC0yLjIyODIuMjE2LS41NjEzLjQ3NjItLjk2Ljg5NS0xLjM4MTYuNDE4OC0uNDIxNy44MTg0LS42ODE0IDEuMzc4My0uOTAwMy40MjMtLjE2NTEgMS4wNTc1LS4zNjE0IDIuMjI3LS40MTcxIDEuMjY1NS0uMDYgMS42NDQ3LS4wNzIgNC44NDgtLjA3OSAzLjIwMzMtLjAwNyAzLjU4MzUuMDA1IDQuODQ5NS4wNjA4IDEuMTY5LjA1MDggMS44MDUzLjI0NDUgMi4yMjguNDA4LjU2MDguMjE2Ljk2LjQ3NTQgMS4zODE2Ljg5NS40MjE3LjQxOTQuNjgxNi44MTc2LjkwMDUgMS4zNzg3LjE2NTMuNDIxNy4zNjE3IDEuMDU2LjQxNjkgMi4yMjYzLjA2MDIgMS4yNjU1LjA3MzkgMS42NDUuMDc5NiA0Ljg0OC4wMDU4IDMuMjAzLS4wMDU1IDMuNTgzNC0uMDYxIDQuODQ4LS4wNTEgMS4xNy0uMjQ1IDEuODA1NS0uNDA4IDIuMjI5NC0uMjE2LjU2MDQtLjQ3NjMuOTYtLjg5NTQgMS4zODE0LS40MTkuNDIxNS0uODE4MS42ODExLTEuMzc4My45LS40MjI0LjE2NDktMS4wNTc3LjM2MTctMi4yMjYyLjQxNzQtMS4yNjU2LjA1OTUtMS42NDQ4LjA3Mi00Ljg0OTMuMDc5LTMuMjA0NS4wMDctMy41ODI1LS4wMDYtNC44NDgtLjA2MDhNMTYuOTUzIDUuNTg2NEExLjQ0IDEuNDQgMCAxIDAgMTguMzkgNC4xNDRhMS40NCAxLjQ0IDAgMCAwLTEuNDM3IDEuNDQyNE01LjgzODUgMTIuMDEyYy4wMDY3IDMuNDAzMiAyLjc3MDYgNi4xNTU3IDYuMTczIDYuMTQ5MyAzLjQwMjYtLjAwNjUgNi4xNTctMi43NzAxIDYuMTUwNi02LjE3MzMtLjAwNjUtMy40MDMyLTIuNzcxLTYuMTU2NS02LjE3NC02LjE0OTgtMy40MDMuMDA2Ny02LjE1NiAyLjc3MS02LjE0OTYgNi4xNzM4TTggMTIuMDA3N2E0IDQgMCAxIDEgNC4wMDggMy45OTIxQTMuOTk5NiAzLjk5OTYgMCAwIDEgOCAxMi4wMDc3Ii8+PC9zdmc+" alt="Instagram" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">INSTAGRAM</div>
+            <div class="cl-val">@vapxhasan</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+        <a href="https://linkedin.com/in/vapxhasan" target="_blank" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(10,102,194,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0NDggNDQ4Ij48cmVjdCB3aWR0aD0iNDQ4IiBoZWlnaHQ9IjQ0OCIgcng9IjYwIiBmaWxsPSIjMEE2NkMyIi8+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTEzNS40IDE3Nmg2My40djE5OC40aC02My40VjE3NnptMzEuNy0xMDEuNGMyMC4zIDAgMzYuNyAxNi41IDM2LjcgMzYuNyAwIDIwLjMtMTYuNSAzNi43LTM2LjcgMzYuNy0yMC4zIDAtMzYuNy0xNi41LTM2LjctMzYuNyAwLTIwLjIgMTYuNC0zNi43IDM2LjctMzYuN3pNMjMyLjkgMTc2aDYwLjh2MjcuMWguOWM4LjUtMTYgMjkuMS0zMi45IDU5LjktMzIuOSA2NCAwIDc1LjggNDIuMSA3NS44IDk2Ljl2MTA3LjNoLTYzLjRWMjc5LjljMC0yMy42LS40LTUzLjktMzIuOS01My45LTMyLjkgMC0zOCAyNS43LTM4IDUyLjJ2OTUuOGgtNjMuNFYxNzZ6Ii8+PC9zdmc+Cg==" alt="LinkedIn" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">LINKEDIN</div>
+            <div class="cl-val">@vapxhasan</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+        <a href="https://facebook.com/vapxhasan" target="_blank" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(24,119,242,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMxODc3RjIiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5GYWNlYm9vazwvdGl0bGU+PHBhdGggZD0iTTkuMTAxIDIzLjY5MXYtNy45OEg2LjYyN3YtMy42NjdoMi40NzR2LTEuNThjMC00LjA4NSAxLjg0OC01Ljk3OCA1Ljg1OC01Ljk3OC40MDEgMCAuOTU1LjA0MiAxLjQ2OC4xMDNhOC42OCA4LjY4IDAgMCAxIDEuMTQxLjE5NXYzLjMyNWE4LjYyMyA4LjYyMyAwIDAgMC0uNjUzLS4wMzYgMjYuODA1IDI2LjgwNSAwIDAgMC0uNzMzLS4wMDljLS43MDcgMC0xLjI1OS4wOTYtMS42NzUuMzA5YTEuNjg2IDEuNjg2IDAgMCAwLS42NzkuNjIyYy0uMjU4LjQyLS4zNzQuOTk1LS4zNzQgMS43NTJ2MS4yOTdoMy45MTlsLS4zODYgMi4xMDMtLjI4NyAxLjU2NGgtMy4yNDZ2OC4yNDVDMTkuMzk2IDIzLjIzOCAyNCAxOC4xNzkgMjQgMTIuMDQ0YzAtNi42MjctNS4zNzMtMTItMTItMTJzLTEyIDUuMzczLTEyIDEyYzAgNS42MjggMy44NzQgMTAuMzUgOS4xMDEgMTEuNjQ3WiIvPjwvc3ZnPg==" alt="Facebook" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">FACEBOOK</div>
+            <div class="cl-val">@vapxhasan</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+        <a href="https://calendly.com/vapxhasan/new-meeting" target="_blank" class="contact-link-card">
+          <div class="cl-icon" style="background:rgba(0,105,255,0.12)"><img src="data:image/svg+xml;base64,PHN2ZyByb2xlPSJpbWciIGZpbGw9IiMwMDY5RkYiIHdpZHRoPSIyMiIgaGVpZ2h0PSIyMiIgdmlld0JveD0iMCAwIDI0IDI0IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjx0aXRsZT5DYWxlbmRseTwvdGl0bGU+PHBhdGggZD0iTTE5LjY1NSAxNC4yNjJjLjI4MSAwIC41NTcuMDIzLjgyOC4wNjQgMCAuMDA1LS4wMDUuMDEtLjAwNS4wMTQtLjEwNS4yNjctLjIzNC41MzQtLjM4MS43ODZsLTEuMjE5IDIuMTA2Yy0xLjExMiAxLjkzNi0zLjE3NyAzLjEyNy01LjQxMSAzLjEyN2gtMi40MzJjLTIuMjMgMC00LjI5NC0xLjE5MS01LjQxMi0zLjEyN2wtMS4yMTgtMi4xMDZhNi4yNTEgNi4yNTEgMCAwIDEgMC02LjI1MmwxLjIxOC0yLjEwNkM2LjczNiA0LjgzMiA4LjggMy42NDEgMTEuMDM1IDMuNjQxaDIuNDMyYzIuMjMgMCA0LjI5NCAxLjE5MSA1LjQxMSAzLjEyN2wxLjIxOSAyLjEwNmMuMTQ3LjI1Mi4yNzEuNTE5LjM4MS43ODYgMCAuMDA0LjAwNS4wMDkuMDA1LjAxNC0uMjY3LjA0MS0uNTQzLjA2NC0uODI4LjA2NC0xLjgxNiAwLTIuNTAxLS42MDctMy4yOTEtMS4zMDYtLjc2NC0uNjc2LTEuNzExLTEuNTE3LTMuNDQtMS41MTdoLTEuMDI5Yy0xLjI1MSAwLTIuMzg3LjQ1NS0zLjIgMS4yNzgtLjc5Ni44MDUtMS4yMzMgMS45MDQtMS4yMzMgMy4wOTl2MS40MTFjMCAxLjE5Ni40MzcgMi4yOTUgMS4yMzMgMy4wOTkuODEzLjgyMyAxLjk0OSAxLjI3OCAzLjIgMS4yNzhoMS4wMzRjMS43MjkgMCAyLjY3Ni0uODQxIDMuNDM5LTEuNTE3Ljc5MS0uNzAzIDEuNDcxLTEuMzA2IDMuMjg3LTEuMzAxWm0uMDA1LTMuMjM3Yy4zOTkgMCAuNzk0LS4wMzYgMS4xNzktLjExLS4wMDItLjAwNC0uMDAyLS4wMS0uMDAyLS4wMTQtLjA3My0uNDE0LS4xOTMtLjgyMy0uMzQ5LTEuMjE4LjczMS0uMTIgMS40MDctLjM5NiAxLjk4Ni0uODE5IDAtLjAwNC0uMDA1LS4wMTMtLjAwNS0uMDE4LS4zMzEtMS4wODUtLjgzMi0yLjEwMS0xLjQ4OS0zLjAzLS42NDktLjkxNS0xLjQzNS0xLjcxOS0yLjMzMS0yLjM5NS0xLjg2Ny0xLjM5OC00LjA4OC0yLjEzOC02LjQyOC0yLjEzOC0xLjQ0OCAwLTIuODU1LjI4LTQuMTc1Ljg0MS0xLjI3My41NDMtMi40MjMgMS4zMTUtMy40MDcgMi4yOTlTMi44NzggNi41NTIgMi4zNDEgNy44M2MtLjU1NyAxLjMyNC0uODQyIDIuNzI2LS44NDIgNC4xNzUgMCAxLjQ0OC4yODEgMi44NTUuODQyIDQuMTc0LjU0MiAxLjI3NCAxLjMxNCAyLjQyMyAyLjI5OCAzLjQwN3MyLjEyOSAxLjc2MSAzLjQwNyAyLjI5OWMxLjMyNC41NTYgMi43MjcuODQxIDQuMTc1Ljg0MSAyLjM0IDAgNC41NjEtLjc0IDYuNDI4LTIuMTM3YTEwLjgxNSAxMC44MTUgMCAwIDAgMi4zMzEtMi4zOTZjLjY1Mi0uOTI5IDEuMTU4LTEuOTQ5IDEuNDg5LTMuMDMgMC0uMDA0LjAwNS0uMDE0LjAwNS0uMDE4LS41NzktLjQyMy0xLjI1NS0uNjk5LTEuOTg2LS44MTkuMTYxLS4zOTUuMjc2LS44MDQuMzQ5LTEuMjE4LjAwNS0uMDA5LjAwNS0uMDE0LjAwNS0uMDIzLjg2OS4xNjYgMS42OTIuNTA2IDIuNDA0IDEuMDM1LjY4NS41MDUuNTUyIDEuMDc1LjQ0NiAxLjQxNkMyMi4xODQgMjAuNDM3IDE3LjYxOSAyNCAxMi4yMjEgMjRjLTYuNjI1IDAtMTItNS4zNzUtMTItMTJzNS4zNy0xMiAxMi0xMmM1LjM5OCAwIDkuOTYzIDMuNTYzIDExLjQ3MSA4LjQ2NC4xMDYuMzQxLjIzOS45MTUtLjQ0NiAxLjQyMS0uNzE3LjUyOS0xLjUzNS44NzMtMi40MDQgMS4wMzQuMTI4LjcxNi4xMjggMS40NSAwIDIuMTY2LS4zODctLjA3NC0uNzgyLS4xMS0xLjE4Mi0uMTEtNC4xODQgMC0zLjk2OCAyLjgyMy02LjczNiAyLjgyM2gtMS4wMjljLTEuODk5IDAtMy4xNS0xLjM1Ny0zLjE1LTMuMDk1di0xLjQxMWMwLTEuNzM4IDEuMjUxLTMuMDk0IDMuMTUtMy4wOTRoMS4wMzRjMi43NjggMCAyLjU1MiAyLjgyMyA2LjczMSAyLjgyN1oiLz48L3N2Zz4=" alt="Calendly" width="22" height="22" loading="lazy"></div>
+          <div>
+            <div class="cl-label">BOOK A CALL</div>
+            <div class="cl-val">Schedule on Calendly</div>
+          </div>
+          <span class="cl-arrow"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></span>
+        </a>
+      </div>
+    </div>
+</section>
+
+
 
 
 
@@ -4793,6 +4869,23 @@ body, body *, body *::before, body *::after {
 
 
 <!-- FAQ ADD MODAL -->
+<div class="blog-modal-overlay" id="whyModal">
+  <div class="blog-modal">
+    <div class="blog-modal-title" id="whyModalTitle">✨ Add Reason</div>
+    <div class="blog-modal-sub">Give clients one more reason to trust you</div>
+    <label class="blog-modal-label">ICON (EMOJI)</label>
+    <input class="blog-modal-field" id="whyIconInput" placeholder="e.g. ⚡ or 🎯 or 🏆" type="text" value="⭐">
+    <label class="blog-modal-label">TITLE</label>
+    <input class="blog-modal-field" id="whyTitleInput" placeholder="e.g. Fast Turnaround" type="text">
+    <label class="blog-modal-label">DESCRIPTION</label>
+    <textarea class="blog-modal-field" id="whyDescInput" rows="4" placeholder="Explain why this matters to clients..."></textarea>
+    <div class="blog-modal-btns">
+      <button class="blog-modal-cancel" id="closeWhyModal">Cancel</button>
+      <button class="blog-modal-publish" id="whySaveBtn" onclick="saveWhy()">Add Reason <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+    </div>
+  </div>
+</div>
+
 <div class="blog-modal-overlay" id="faqModal">
   <div class="blog-modal">
     <div class="blog-modal-title"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Add FAQ</div>
@@ -5233,6 +5326,115 @@ document.getElementById('faqList').addEventListener('click', (e) => {
   document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
   if (!isOpen) item.classList.add('open');
 });
+
+// ===================================================
+// WHY CHOOSE ME
+// ===================================================
+let whyChooseMe = [
+  { icon: '⚡', title: 'Fast Turnaround', desc: 'Most projects delivered within 2–7 business days, with rush options available when you need it sooner.' },
+  { icon: '🎯', title: 'Clear Communication', desc: "No confusion, no vague updates — you'll always know exactly where your project stands." },
+  { icon: '🌍', title: 'Global Client Experience', desc: 'Delivered work to clients across 20+ countries, comfortable with international time zones and English communication.' },
+  { icon: '🏆', title: 'Top-Rated Freelancer', desc: 'Consistently high ratings on Fiverr and Upwork, backed by real client testimonials.' },
+  { icon: '🔁', title: 'Unlimited Revisions Mindset', desc: "I aim to nail the brief the first time, and I'm never precious about feedback — your satisfaction comes first." },
+  { icon: '🤖', title: 'Full Creative + AI Toolkit', desc: 'Video editing, design, automation, and prompt engineering under one roof — no need to juggle multiple freelancers.' },
+];
+let editingWhyIndex = null;
+
+function escHtmlWhy(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function renderWhyChooseMe() {
+  const grid = document.getElementById('whyGrid');
+  const empty = document.getElementById('whyEmpty');
+  if (!grid || !empty) return;
+  if (!whyChooseMe.length) {
+    grid.innerHTML = '';
+    empty.style.display = isAdmin ? 'block' : 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = whyChooseMe.map((w, i) => `
+    <div class="why-card reveal visible">
+      <div class="why-icon">${escHtmlWhy(w.icon || '⭐')}</div>
+      <div class="why-title">${escHtmlWhy(w.title)}</div>
+      <div class="why-desc">${escHtmlWhy(w.desc)}</div>
+      ${isAdmin ? `
+      <div class="why-admin-row">
+        <button onclick="openEditWhy(${i})" style="background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.25);color:var(--indigo);" onmouseover="this.style.background='rgba(37,99,235,0.2)'" onmouseout="this.style.background='rgba(37,99,235,0.1)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> Edit</button>
+        <button onclick="removeWhy(${i})" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;" onmouseover="this.style.background='rgba(255,50,50,0.16)'" onmouseout="this.style.background='rgba(255,50,50,0.08)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div class="why-move-row">
+        <button class="admin-move-btn" title="Move earlier" onclick="moveWhy(${i}, -1)" ${i <= 0 ? 'disabled' : ''}>▲</button>
+        <button class="admin-move-btn" title="Move later" onclick="moveWhy(${i}, 1)" ${i >= whyChooseMe.length - 1 ? 'disabled' : ''}>▼</button>
+      </div>` : ''}
+    </div>`).join('');
+}
+
+async function moveWhy(i, dir) {
+  if (!isAdmin) return;
+  const target = i + dir;
+  if (target < 0 || target >= whyChooseMe.length) return;
+  const tmp = whyChooseMe[i];
+  whyChooseMe[i] = whyChooseMe[target];
+  whyChooseMe[target] = tmp;
+  await sharedSet('why_choose_me', whyChooseMe);
+  renderWhyChooseMe();
+}
+
+function openWhyModal() {
+  if (!isAdmin) { alert('Admin login required. Click the Admin button.'); return; }
+  editingWhyIndex = null;
+  document.getElementById('whyModalTitle').textContent = '✨ Add Reason';
+  document.getElementById('whySaveBtn').textContent = 'Add Reason →';
+  document.getElementById('whyIconInput').value = '⭐';
+  document.getElementById('whyTitleInput').value = '';
+  document.getElementById('whyDescInput').value = '';
+  document.getElementById('whyModal').classList.add('open');
+}
+
+function openEditWhy(i) {
+  if (!isAdmin) return;
+  editingWhyIndex = i;
+  const w = whyChooseMe[i];
+  document.getElementById('whyModalTitle').textContent = '✏️ Edit Reason';
+  document.getElementById('whySaveBtn').textContent = 'Update Reason →';
+  document.getElementById('whyIconInput').value = w.icon || '⭐';
+  document.getElementById('whyTitleInput').value = w.title || '';
+  document.getElementById('whyDescInput').value = w.desc || '';
+  document.getElementById('whyModal').classList.add('open');
+}
+
+async function saveWhy() {
+  if (!isAdmin) return;
+  const icon = document.getElementById('whyIconInput').value.trim() || '⭐';
+  const title = document.getElementById('whyTitleInput').value.trim();
+  const desc = document.getElementById('whyDescInput').value.trim();
+  if (!title || !desc) { alert('Please fill in both the title and the description!'); return; }
+  const btn = document.getElementById('whySaveBtn');
+  const orig = btn.textContent;
+  btn.textContent = 'Saving...'; btn.disabled = true;
+  const item = { icon, title, desc };
+  if (editingWhyIndex !== null) {
+    whyChooseMe[editingWhyIndex] = item;
+  } else {
+    whyChooseMe.push(item);
+  }
+  await sharedSet('why_choose_me', whyChooseMe);
+  document.getElementById('whyModal').classList.remove('open');
+  btn.textContent = orig; btn.disabled = false;
+  renderWhyChooseMe();
+}
+
+async function removeWhy(i) {
+  if (!isAdmin) return;
+  if (!confirm('Delete this reason?')) return;
+  whyChooseMe.splice(i, 1);
+  await sharedSet('why_choose_me', whyChooseMe);
+  renderWhyChooseMe();
+}
+
+document.getElementById('openWhyModal').addEventListener('click', openWhyModal);
+document.getElementById('closeWhyModal').addEventListener('click', () => document.getElementById('whyModal').classList.remove('open'));
+document.getElementById('whyModal').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
 
 // ===== SERVICE / BUDGET DROPDOWN SYNC (feeds hidden fields used by handleSubmit) =====
 function cfSyncService() {
@@ -8639,6 +8841,7 @@ async function initSharedData() {
       });
     }
     if (record.certifications) certifications  = record.certifications;
+    if (record.why_choose_me) whyChooseMe     = record.why_choose_me;
     if (record.comments)       { comments        = record.comments; normalizeComments(); }
     if (record.resume !== undefined) resumeData = record.resume;
     if (record.faqs)           faqs            = record.faqs;
@@ -8666,6 +8869,7 @@ async function initSharedData() {
     fivRenderCard();
     renderProfileImages();
     renderCertifications();
+    renderWhyChooseMe();
     renderResumeButtons();
     renderFaq();
     renderAvailabilityBadge();
@@ -8690,7 +8894,7 @@ async function initSharedData() {
 // ===================================================
 function smoothScrollToContact(e) {
   if (e) e.preventDefault();
-  const target = document.getElementById('contact');
+  const target = document.getElementById('contactFormBox') || document.getElementById('contact');
   if (!target) return false;
   const nav = document.getElementById('navbar');
   const bar = document.getElementById('breakingBar');
@@ -9182,6 +9386,7 @@ function buildSearchIndex() {
   const sec = (title, desc, anchor, tags) => idx.push({ type: 'section', title, desc, anchor, tags: tags || '' });
 
   sec('About Me', 'Learn more about Hasanur Rahman and his background', 'about', 'about bio profile');
+  sec('Why Choose Me', 'Reasons clients trust and rehire Hasanur Rahman', 'why-choose', 'why choose me reasons benefits trust');
   sec('Services', 'All services offered — video editing, design, automation and more', 'services', 'services offerings');
   sec('Professional Video Editing', 'YouTube, Reels, TikTok, ads, corporate videos, color grading', 'services', 'video editing premiere pro reels tiktok youtube');
   sec('Graphic Design', 'Brand identities, social media kits, thumbnails, posters', 'services', 'graphic design branding thumbnails photoshop');
@@ -9225,6 +9430,12 @@ function buildSearchIndex() {
   try {
     (faqs || []).forEach((f, i) => {
       idx.push({ type: 'faq', title: f.q, desc: f.a, index: i });
+    });
+  } catch (e) {}
+
+  try {
+    (whyChooseMe || []).forEach((w, i) => {
+      idx.push({ type: 'section', title: w.title, desc: w.desc, anchor: 'why-choose', tags: 'why choose reason' });
     });
   } catch (e) {}
 
