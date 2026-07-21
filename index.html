@@ -230,7 +230,7 @@ nav {
   align-items: center;
   white-space: nowrap;
   will-change: transform;      /* hints the compositor to keep this on its own GPU layer */
-  transform: translate3d(0,0,0); /* base state — the JS ticker engine (BreakingTicker) drives this every frame at a constant px/sec, replacing the old fixed-duration @keyframes so speed never depends on text length */
+  transform: translate3d(0,0,0); /* base state — the JS ticker engine (BreakingTicker) drives this every frame at a constant px/sec while moving; each pass enters from the right, exits fully on the left, then holds briefly before the next pass restarts from the right */
   backface-visibility: hidden;   /* extra Safari/Chrome anti-flicker hint for GPU-composited layers */
 }
 .breaking-ticker-item {
@@ -5488,6 +5488,29 @@ async function cloudSet(record) {
   } catch(e) { console.error('Cloud write failed:', e); return false; }
 }
 
+// Comments live under their own DB path (site_data/comments) so that regular
+// visitors — who are NOT logged in as admin — can still post/see comments.
+// Firebase Realtime Database rules must allow public write ONLY on this
+// specific child path, e.g.:
+//   "site_data": {
+//     ".write": "auth != null && auth.token.email == '<ADMIN_EMAIL>'",
+//     "comments": { ".write": true, ".read": true }
+//   }
+// Everything else in site_data stays admin-only, exactly as before.
+async function saveCommentsToCloud() {
+  _record.comments = comments;
+  setCachedRecord(_record);
+  try {
+    await fbWaitReady();
+    const { ref, set, db } = window._fb;
+    await set(ref(db, FB_ROOT_PATH + '/comments'), comments);
+    return true;
+  } catch (e) {
+    console.error('Comment write failed (check Firebase rules for site_data/comments):', e);
+    return false;
+  }
+}
+
 // In-memory cache (পুরো record একসাথে)
 let _record = { yt_videos: [], yt_channel: { name: '@vapxhasan', sub: 'YouTube Channel · AI, Design & Automation', url: 'https://youtube.com/@vapxhasan' }, blog_posts: [], reviews: [] };
 
@@ -6862,7 +6885,7 @@ async function postComment() {
   const dateStr = now.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) + ' • ' + now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   comments.unshift({ name, text, date: dateStr, reply: null });
 
-  await sharedSet('comments', comments);
+  await saveCommentsToCloud();
   localStorage.setItem('lastCommentPostTime', String(Date.now()));
   document.getElementById('cmtNameInput').value = '';
   document.getElementById('cmtTextInput').value = '';
@@ -6875,7 +6898,7 @@ async function removeComment(i) {
   if (!isAdmin) return;
   if (!confirm('Delete this comment?')) return;
   comments.splice(i, 1);
-  await sharedSet('comments', comments);
+  await saveCommentsToCloud();
   renderComments();
 }
 
@@ -6894,7 +6917,7 @@ async function saveEditComment(i) {
   const val = document.getElementById(`cmtEditInput${i}`).value.trim();
   if (!val) { alert('Comment text can\'t be empty.'); return; }
   comments[i].text = val;
-  await sharedSet('comments', comments);
+  await saveCommentsToCloud();
   cmtEditingIndex = null;
   renderComments();
 }
@@ -6916,7 +6939,7 @@ async function saveReply(i) {
   const now = new Date();
   const dateStr = now.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) + ' • ' + now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
   comments[i].reply = { text: val, date: dateStr };
-  await sharedSet('comments', comments);
+  await saveCommentsToCloud();
   cmtReplyingIndex = null;
   renderComments();
 }
@@ -6924,7 +6947,7 @@ async function removeReply(i) {
   if (!isAdmin) return;
   if (!confirm('Remove this reply?')) return;
   comments[i].reply = null;
-  await sharedSet('comments', comments);
+  await saveCommentsToCloud();
   renderComments();
 }
 
@@ -8263,10 +8286,10 @@ let _breakingBarFingerprint = '';
 
 // ===================================================
 // TICKER ENGINE — professional, constant-speed, GPU-accelerated
-// infinite scroller (BBC / Bloomberg / CNN style breaking-news bar).
+// "sweep and pause" scroller (BBC / Bloomberg / CNN style breaking-news bar).
 //
 // WHY NOT A CSS @keyframes ANIMATION:
-// A CSS keyframe animation moves between 0% and -50% over a fixed
+// A CSS keyframe animation moves between two offsets over a fixed
 // *duration*. To keep constant real px/sec speed, the duration had to be
 // recalculated from the text width (duration = width / speed) every time
 // the content changed — any measurement error (fonts not yet loaded,
@@ -8276,24 +8299,41 @@ let _breakingBarFingerprint = '';
 // earlier in this thread.
 //
 // This engine instead drives the scroll with requestAnimationFrame and
-// moves the track by exactly `pxPerSecond * deltaTime` every frame. The
-// speed is therefore a true, constant real-world rate — completely
-// independent of message length, viewport size, or font-load timing.
+// moves the track by exactly `pxPerSecond * deltaTime` every frame while
+// it is moving. The speed is therefore a true, constant real-world rate —
+// completely independent of message length, viewport size, or font-load
+// timing.
+//
+// SWEEP + PAUSE BEHAVIOR (per design request):
+// Instead of an endlessly-looping duplicated track, each "pass" starts
+// fully off-screen on the RIGHT, crosses the viewport at the constant
+// px/sec speed, and finishes fully off-screen on the LEFT. Once a pass
+// fully exits, the ticker holds still (a brief, deliberate pause/"stutter")
+// before the next pass restarts from the right — same speed while moving,
+// no jitter, just a clean stop-and-go rhythm instead of one continuous
+// blur.
 // ===================================================
 const BreakingTicker = (() => {
   let track = null;          // the element being translated
   let viewport = null;       // the overflow:hidden window around it (for hover-pause)
-  let loopWidth = 0;         // px width of ONE copy of the (duplicated) content
-  let offset = 0;            // current translateX, always <= 0
+  let blockWidth = 0;        // px width of the content block (single copy — not duplicated)
+  let viewportWidth = 0;     // px width of the visible viewport window
+  let offset = 0;            // current translateX
   let lastTs = null;         // rAF timestamp of the previous frame
   let rafId = null;          // current requestAnimationFrame handle
   let running = false;       // true once there is content to animate
   let hoverPaused = false;   // paused because the pointer is over the ticker
+  let phase = 'moving';      // 'moving' while sweeping across, 'paused' while holding between passes
+  let pauseElapsed = 0;      // ms accumulated in the current pause
+
+  const PAUSE_MS = 1100;     // how long the ticker holds still between passes
 
   // Constant px/sec per breakpoint (per the design spec: desktop
   // slow/premium, tablet a little faster, mobile the fastest of the
   // three) — read live off innerWidth so it re-evaluates automatically
   // on every resize/orientation change without needing a separate cache.
+  // This speed is unchanged whether the ticker is mid-pass or between
+  // passes — only whether it's currently moving or paused changes.
   function pxPerSecond() {
     const w = window.innerWidth;
     if (w <= 600) return 70;   // mobile: fastest
@@ -8301,12 +8341,14 @@ const BreakingTicker = (() => {
     return 40;                 // desktop: slowest, but still clearly visible/legible
   }
 
-  // Reading scrollWidth forces a layout, so this is only called on
-  // meaningful events (new content, resize, font swap) — never per-frame —
-  // to avoid any unnecessary reflow/repaint cost during animation.
+  // Reading scrollWidth/clientWidth forces a layout, so this is only
+  // called on meaningful events (new content, resize, font swap) — never
+  // per-frame — to avoid any unnecessary reflow/repaint cost during
+  // animation.
   function measure() {
-    if (!track) return;
-    loopWidth = track.scrollWidth / 2; // track always holds the content x2
+    if (!track || !viewport) return;
+    blockWidth = track.scrollWidth; // single copy of the content, no duplication needed for a sweep
+    viewportWidth = viewport.clientWidth;
   }
 
   function applyTransform() {
@@ -8314,6 +8356,14 @@ const BreakingTicker = (() => {
     // on Chrome/Edge/Safari, avoiding main-thread paint work every frame —
     // this is what keeps the motion stutter-free even on lower-end hardware.
     if (track) track.style.transform = `translate3d(${offset}px,0,0)`;
+  }
+
+  // Begins a fresh pass: the whole content block starts fully off-screen
+  // to the right of the viewport.
+  function startPass() {
+    phase = 'moving';
+    offset = viewportWidth;
+    applyTransform();
   }
 
   function tick(ts) {
@@ -8336,14 +8386,29 @@ const BreakingTicker = (() => {
     const dt = Math.min((ts - lastTs) / 1000, 0.25);
     lastTs = ts;
 
-    if (loopWidth > 0) {
-      offset -= pxPerSecond() * dt;
-      // Seamless wrap: once we've scrolled exactly one loop's width, add
-      // that width back instead of resetting to 0 — this is what makes the
-      // restart invisible, since the duplicated content lines up perfectly.
-      if (offset <= -loopWidth) offset += loopWidth;
-      applyTransform();
+    if (phase === 'moving') {
+      if (blockWidth > 0) {
+        offset -= pxPerSecond() * dt;
+        // Pass complete once the content's trailing edge has fully cleared
+        // the left side of the viewport — i.e. it entered from the right
+        // and has now fully exited on the left.
+        if (offset <= -blockWidth) {
+          offset = -blockWidth;
+          applyTransform();
+          phase = 'paused';
+          pauseElapsed = 0;
+        } else {
+          applyTransform();
+        }
+      }
+    } else {
+      // 'paused' — deliberate hold between passes (the requested "stutter").
+      // Speed stays identical once movement resumes; this is purely a stop,
+      // not a slow-down, so the motion itself never looks warped.
+      pauseElapsed += dt * 1000;
+      if (pauseElapsed >= PAUSE_MS) startPass();
     }
+
     rafId = requestAnimationFrame(tick);
   }
 
@@ -8387,21 +8452,20 @@ const BreakingTicker = (() => {
     // that setting. Hover-pause and tab-visibility pause above still work.
   }
 
-  // #6/#7 — replaces the whole content with one fresh loop, duplicated once
-  // for the seamless -loopWidth wraparound, and (re)starts the engine.
+  // #6/#7 — replaces the whole content with a fresh single copy (no
+  // duplication needed for a sweep-and-pause pass) and (re)starts the
+  // engine with a brand new pass entering from the right.
   function setContent(itemsHtml) {
     if (!track) return;
-    track.innerHTML = itemsHtml + itemsHtml;
-    offset = 0;
-    applyTransform();
+    track.innerHTML = itemsHtml;
     measure();
+    startPass();
 
     // Re-measure once the real Inter webfont is active — measuring while a
     // fallback font is still showing under-reports the width, which used to
-    // be the root cause of the ticker briefly looking like it was racing.
-    // Constant px/sec makes this self-correcting either way, but an
-    // accurate loopWidth keeps the seamless-wrap point exactly on the
-    // duplicate boundary with zero visible seam.
+    // be a source of subtly-wrong pass timing. Constant px/sec makes this
+    // self-correcting either way, but an accurate blockWidth keeps the
+    // exit point exactly where the content visually clears the viewport.
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => { if (running) measure(); });
     }
@@ -8419,8 +8483,10 @@ const BreakingTicker = (() => {
     running = false;
     stopLoop();
     offset = 0;
+    phase = 'moving';
+    pauseElapsed = 0;
     if (track) { track.innerHTML = ''; applyTransform(); }
-    loopWidth = 0;
+    blockWidth = 0;
   }
 
   return { init, setContent, clear };
