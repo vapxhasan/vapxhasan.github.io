@@ -5541,7 +5541,21 @@ async function cloudSet(record) {
   if (!_masterKey) return false; // শুধু admin login করলেই write হবে
   try {
     await fbWaitReady();
-    const { ref, set, db } = window._fb;
+    const { ref, get, set, db } = window._fb;
+    // Comments live at their own path so public visitors can post/like/reply
+    // without an admin session (see saveCommentsToCloud below). This means
+    // the admin's local `record.comments` can go stale the moment a visitor
+    // posts something new. Since this function does a FULL overwrite of
+    // site_data, always re-pull the freshest comments right before writing —
+    // otherwise an admin editing something unrelated (reviews, blog, FAQ...)
+    // would silently erase any comments/replies/reactions added since the
+    // admin's page loaded.
+    try {
+      const commentsSnap = await get(ref(db, FB_ROOT_PATH + '/comments'));
+      record.comments = commentsSnap.exists() ? commentsSnap.val() : (record.comments || []);
+    } catch (e) {
+      console.error('Could not refresh latest comments before saving — keeping locally cached comments to avoid a write failure:', e);
+    }
     await set(ref(db, FB_ROOT_PATH), record);
     return true;
   } catch(e) { console.error('Cloud write failed:', e); return false; }
