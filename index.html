@@ -1559,6 +1559,56 @@ iframe.skiptranslate { display: none !important; }
   .cmt-avatar { width: 36px; height: 36px; font-size: 13px; }
 }
 
+/* ---- Reactions (like/love), threaded replies, mine badge ---- */
+.cmt-mine-badge {
+  font-size: 9.5px; font-family: var(--font-mono); letter-spacing: .5px; text-transform: uppercase;
+  background: rgba(16,185,129,0.14); color: #34D399; padding: 2px 7px; border-radius: 5px; font-weight: 700;
+}
+.cmt-react-row { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
+.cmt-react-btn {
+  display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 20px;
+  font-size: 12px; font-family: var(--font-display); font-weight: 600; cursor: pointer;
+  border: 1px solid var(--border); background: rgba(255,255,255,0.04); color: var(--muted); transition: all .2s;
+}
+.cmt-react-btn:hover { border-color: var(--indigo); color: var(--white); }
+.cmt-react-btn.active { border-color: var(--indigo); background: rgba(37,99,235,0.14); color: var(--white); }
+.cmt-react-count { font-family: var(--font-mono); }
+.cmt-replies {
+  margin-top: 14px; padding-left: 18px; border-left: 2px solid var(--border);
+  display: flex; flex-direction: column; gap: 16px;
+}
+.cmt-reply-item { display: flex; gap: 10px; }
+.cmt-reply-avatar {
+  flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: 12px; color: #fff;
+}
+.cmt-reply-body { flex: 1; min-width: 0; }
+.cmt-compose-box {
+  margin-top: 12px; padding: 12px; background: var(--card2);
+  border: 1px solid var(--border); border-radius: 10px;
+}
+.cmt-compose-box input {
+  width: 100%; margin-bottom: 8px; padding: 9px 12px; background: var(--card);
+  border: 1px solid var(--border); border-radius: 7px; color: var(--white);
+  font-size: 13px; outline: none; font-family: inherit;
+}
+.cmt-compose-box input:focus { border-color: var(--indigo); }
+
+/* ---- One-comment-at-a-time carousel (rest reachable via left/right slide) ---- */
+.cmt-carousel-outer { margin-top: 24px; }
+.cmt-carousel-wrap { display: flex; align-items: flex-start; gap: 10px; }
+.cmt-carousel-viewport { flex: 1; min-width: 0; overflow: hidden; border-radius: 14px; }
+.cmt-carousel-track { display: flex; transition: transform .35s ease-in-out; }
+.cmt-carousel-track .cmt-item { flex: 0 0 100%; width: 100%; box-sizing: border-box; }
+#cmtPrevBtn, #cmtNextBtn { margin-top: 8px; }
+.review-slider-nav:disabled { opacity: .3; cursor: default; }
+.review-slider-nav:disabled:hover { background: var(--card); border-color: var(--border); }
+.cmt-carousel-counter {
+  text-align: center; margin-top: 10px; font-size: 11.5px; font-family: var(--font-mono);
+  color: var(--muted); letter-spacing: .5px;
+}
+
 /* Review category filters now reuse the .fiv-cat-bar / .fiv-cat-btn styles
    defined in the Fiverr-pricing section above, for a consistent admin-managed
    category system across both. */
@@ -4104,7 +4154,16 @@ body, body *, body *::before, body *::after {
       </div>
     </div>
 
-    <div id="cmtList" class="cmt-list"></div>
+    <div class="cmt-carousel-outer">
+      <div class="cmt-carousel-wrap">
+        <button class="review-slider-nav" id="cmtPrevBtn" onclick="slideComments(-1)" aria-label="Previous comment">‹</button>
+        <div class="cmt-carousel-viewport">
+          <div id="cmtList" class="cmt-carousel-track"></div>
+        </div>
+        <button class="review-slider-nav" id="cmtNextBtn" onclick="slideComments(1)" aria-label="Next comment">›</button>
+      </div>
+      <div class="cmt-carousel-counter" id="cmtCarouselCounter"></div>
+    </div>
     <div id="cmtEmpty" class="cmt-empty" style="display:none;">No comments yet. Be the first to share your thoughts!</div>
   </div>
 </section>
@@ -6783,8 +6842,50 @@ document.getElementById('openReviewModal').addEventListener('click', openReviewM
 // admin can edit / delete / reply)
 // ===================================================
 let comments = [];
-let cmtEditingIndex = null;
-let cmtReplyingIndex = null;
+let cmtEditingIndex = null;   // admin: which top-level comment is being edited
+let cmtReplyingIndex = null;  // which comment currently has its reply box open (anyone can reply)
+let cmtReplyEditing = null;   // admin: { ci, ri } of a reply being edited
+
+// Per-browser anonymous "identity" — lets a visitor delete/like the comments
+// and replies they personally posted from this browser, without needing a
+// real login system. It's stored in localStorage so it survives reloads.
+// Note: this is a client-side convenience only (like the rest of this open
+// comment wall) — it identifies "this browser", not a verified person.
+function getCmtDeviceKey() {
+  let k = localStorage.getItem('cmtDeviceKey');
+  if (!k) {
+    k = 'dk_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+    localStorage.setItem('cmtDeviceKey', k);
+  }
+  return k;
+}
+const CMT_DEVICE_KEY = getCmtDeviceKey();
+
+// Keeps older comment records (posted before replies/reactions existed)
+// working with the new data shape, and migrates the old single
+// "owner reply" field into the new multi-reply list.
+function normalizeComments() {
+  comments.forEach(c => {
+    if (c.authorKey === undefined) c.authorKey = null;
+    if (!c.reactions) c.reactions = { likedBy: [], lovedBy: [] };
+    if (!Array.isArray(c.reactions.likedBy)) c.reactions.likedBy = [];
+    if (!Array.isArray(c.reactions.lovedBy)) c.reactions.lovedBy = [];
+    if (!Array.isArray(c.replies)) c.replies = [];
+    if (c.reply && c.reply.text) {
+      c.replies.unshift({
+        name: 'Hasanur Rahman', text: c.reply.text, date: c.reply.date,
+        authorKey: null, isAdmin: true, reactions: { likedBy: [], lovedBy: [] }
+      });
+    }
+    delete c.reply;
+    c.replies.forEach(r => {
+      if (r.authorKey === undefined) r.authorKey = null;
+      if (!r.reactions) r.reactions = { likedBy: [], lovedBy: [] };
+      if (!Array.isArray(r.reactions.likedBy)) r.reactions.likedBy = [];
+      if (!Array.isArray(r.reactions.lovedBy)) r.reactions.lovedBy = [];
+    });
+  });
+}
 
 const CMT_AVATAR_COLORS = [
   'linear-gradient(135deg,#2563EB,#3B82F6)',
@@ -6812,15 +6913,69 @@ function updateCmtCharCount() {
   countEl.textContent = `${el.value.length} / 500`;
 }
 
+function cmtReactBtn(active, icon, count, onclick) {
+  return `<button type="button" class="cmt-react-btn${active ? ' active' : ''}" onclick="${onclick}">${icon} <span class="cmt-react-count">${count}</span></button>`;
+}
+
+function buildReplyHtml(ci, r, ri) {
+  const isEditingReply = cmtReplyEditing && cmtReplyEditing.ci === ci && cmtReplyEditing.ri === ri;
+  const isOwn = !!(r.authorKey && r.authorKey === CMT_DEVICE_KEY);
+  const canDelete = isAdmin || isOwn;
+  const rx = r.reactions || { likedBy: [], lovedBy: [] };
+  const likeCount = (rx.likedBy || []).length;
+  const loveCount = (rx.lovedBy || []).length;
+  const iLiked = (rx.likedBy || []).includes(CMT_DEVICE_KEY);
+  const iLoved = (rx.lovedBy || []).includes(CMT_DEVICE_KEY);
+  return `
+    <div class="cmt-reply-item">
+      <div class="cmt-reply-avatar" style="background:${cmtAvatarColor(r.name)}">${cmtInitial(r.name)}</div>
+      <div class="cmt-reply-body">
+        <div class="cmt-head">
+          <span class="cmt-name">${escHtml(r.name || 'Anonymous')}</span>
+          ${r.isAdmin ? `<span class="cmt-reply-badge">Owner reply</span>` : ''}
+          ${isOwn ? `<span class="cmt-mine-badge">You</span>` : ''}
+          <span class="cmt-date">${r.date || ''}</span>
+        </div>
+        ${isEditingReply
+          ? `<textarea class="cmt-reply-input" id="cmtReplyEditInput${ci}_${ri}" maxlength="500">${escHtml(r.text || '')}</textarea>
+             <div class="cmt-admin-row">
+               <button class="cmt-admin-btn" onclick="saveEditReply(${ci},${ri})">Save</button>
+               <button class="cmt-admin-btn" onclick="cancelEditReply()">Cancel</button>
+             </div>`
+          : `<div class="cmt-text">${escHtml(r.text || '')}</div>
+             <div class="cmt-react-row">
+               ${cmtReactBtn(iLiked, '👍', likeCount, `toggleReplyReaction(${ci},${ri},'like')`)}
+               ${cmtReactBtn(iLoved, '❤️', loveCount, `toggleReplyReaction(${ci},${ri},'love')`)}
+             </div>
+             ${(canDelete || isAdmin) ? `
+             <div class="cmt-admin-row">
+               ${isAdmin ? `<button class="cmt-admin-btn" onclick="openEditReply(${ci},${ri})">Edit</button>` : ''}
+               ${canDelete ? `<button class="cmt-admin-btn danger" onclick="removeReply(${ci},${ri})">Delete</button>` : ''}
+             </div>` : ''}`}
+      </div>
+    </div>`;
+}
+
 function buildCommentHtml(c, i) {
   const isEditing = cmtEditingIndex === i;
   const isReplying = cmtReplyingIndex === i;
+  const isOwn = !!(c.authorKey && c.authorKey === CMT_DEVICE_KEY);
+  const canDelete = isAdmin || isOwn;
+  const rx = c.reactions || { likedBy: [], lovedBy: [] };
+  const likeCount = (rx.likedBy || []).length;
+  const loveCount = (rx.lovedBy || []).length;
+  const iLiked = (rx.likedBy || []).includes(CMT_DEVICE_KEY);
+  const iLoved = (rx.lovedBy || []).includes(CMT_DEVICE_KEY);
+  const replies = c.replies || [];
+  const savedName = escHtml(localStorage.getItem('cmtLastName') || '');
+
   return `
     <div class="cmt-item reveal visible">
       <div class="cmt-avatar" style="background:${cmtAvatarColor(c.name)}">${cmtInitial(c.name)}</div>
       <div class="cmt-body">
         <div class="cmt-head">
           <span class="cmt-name">${escHtml(c.name || 'Anonymous')}</span>
+          ${isOwn ? `<span class="cmt-mine-badge">You</span>` : ''}
           <span class="cmt-date">${c.date || ''}</span>
         </div>
         ${isEditing
@@ -6829,40 +6984,84 @@ function buildCommentHtml(c, i) {
                <button class="cmt-admin-btn" onclick="saveEditComment(${i})">Save</button>
                <button class="cmt-admin-btn" onclick="cancelEditComment()">Cancel</button>
              </div>`
-          : `<div class="cmt-text">${escHtml(c.text || '')}</div>`}
-        ${c.reply ? `
-        <div class="cmt-reply">
-          <div class="cmt-reply-head"><span class="cmt-reply-badge">Owner reply</span><span class="cmt-date">${c.reply.date || ''}</span></div>
-          <div class="cmt-text" style="margin-top:0;">${escHtml(c.reply.text || '')}</div>
-        </div>` : ''}
+          : `<div class="cmt-text">${escHtml(c.text || '')}</div>
+             <div class="cmt-react-row">
+               ${cmtReactBtn(iLiked, '👍', likeCount, `toggleCommentReaction(${i},'like')`)}
+               ${cmtReactBtn(iLoved, '❤️', loveCount, `toggleCommentReaction(${i},'love')`)}
+               <button type="button" class="cmt-react-btn" onclick="${isReplying ? 'cancelReplyBox()' : `openReplyBox(${i})`}">💬 <span class="cmt-react-count">Reply</span></button>
+             </div>`}
+
+        ${replies.length ? `<div class="cmt-replies">${replies.map((r, ri) => buildReplyHtml(i, r, ri)).join('')}</div>` : ''}
+
         ${isReplying ? `
-        <textarea class="cmt-reply-input" id="cmtReplyInput${i}" maxlength="500" placeholder="Write a reply as the site owner...">${escHtml((c.reply && c.reply.text) || '')}</textarea>
-        <div class="cmt-admin-row">
-          <button class="cmt-admin-btn" onclick="saveReply(${i})">Send Reply</button>
-          <button class="cmt-admin-btn" onclick="cancelReplyComment()">Cancel</button>
+        <div class="cmt-compose-box">
+          <input type="text" id="cmtReplyName${i}" placeholder="Your name" maxlength="60" value="${savedName}">
+          <textarea class="cmt-reply-input" id="cmtReplyInput${i}" maxlength="500" placeholder="Write a reply..."></textarea>
+          <div class="cmt-admin-row">
+            <button class="cmt-admin-btn" onclick="postReply(${i})">Send Reply</button>
+            <button class="cmt-admin-btn" onclick="cancelReplyBox()">Cancel</button>
+          </div>
         </div>` : ''}
+
         ${isAdmin && !isEditing ? `
         <div class="cmt-admin-row admin-only">
           <button class="cmt-admin-btn" onclick="openEditComment(${i})">Edit</button>
-          <button class="cmt-admin-btn" onclick="${isReplying ? 'cancelReplyComment()' : `openReplyComment(${i})`}">${c.reply ? 'Edit Reply' : 'Reply'}</button>
-          ${c.reply ? `<button class="cmt-admin-btn danger" onclick="removeReply(${i})">Remove Reply</button>` : ''}
           <button class="cmt-admin-btn danger" onclick="removeComment(${i})">Delete</button>
-        </div>` : ''}
+        </div>
+        <div class="admin-move-row" style="margin-top:8px;">
+          <button class="admin-move-btn" title="Move earlier (left in order)" onclick="moveComment(${i}, -1)" ${i <= 0 ? 'disabled' : ''}>◀</button>
+          <button class="admin-move-btn" title="Move later (right in order)" onclick="moveComment(${i}, 1)" ${i >= comments.length - 1 ? 'disabled' : ''}>▶</button>
+        </div>` : (!isAdmin && canDelete && !isEditing ? `
+        <div class="cmt-admin-row">
+          <button class="cmt-admin-btn danger" onclick="removeComment(${i})">Delete</button>
+        </div>` : '')}
       </div>
     </div>`;
+}
+
+let cmtSlideIndex = 0; // which single comment is currently shown in the carousel
+
+function applyCmtSlideTransform() {
+  const track = document.getElementById('cmtList');
+  const counter = document.getElementById('cmtCarouselCounter');
+  const prevBtn = document.getElementById('cmtPrevBtn');
+  const nextBtn = document.getElementById('cmtNextBtn');
+  const wrapOuter = document.querySelector('.cmt-carousel-outer');
+  const total = comments.length;
+  if (!track) return;
+  if (!total) {
+    cmtSlideIndex = 0;
+    if (wrapOuter) wrapOuter.style.display = 'none';
+    return;
+  }
+  if (wrapOuter) wrapOuter.style.display = 'block';
+  if (cmtSlideIndex < 0) cmtSlideIndex = 0;
+  if (cmtSlideIndex > total - 1) cmtSlideIndex = total - 1;
+  track.style.transform = `translateX(-${cmtSlideIndex * 100}%)`;
+  if (counter) counter.textContent = `Comment ${cmtSlideIndex + 1} of ${total}`;
+  if (prevBtn) prevBtn.disabled = cmtSlideIndex <= 0;
+  if (nextBtn) nextBtn.disabled = cmtSlideIndex >= total - 1;
+}
+
+function slideComments(dir) {
+  cmtSlideIndex += dir;
+  applyCmtSlideTransform();
 }
 
 function renderComments() {
   const list = document.getElementById('cmtList');
   const empty = document.getElementById('cmtEmpty');
   if (!list) return;
+  normalizeComments();
   if (!comments.length) {
     list.innerHTML = '';
     empty.style.display = 'block';
+    document.querySelector('.cmt-carousel-outer').style.display = 'none';
     return;
   }
   empty.style.display = 'none';
   list.innerHTML = comments.map((c, i) => buildCommentHtml(c, i)).join('');
+  applyCmtSlideTransform();
 }
 
 async function postComment() {
@@ -6883,21 +7082,50 @@ async function postComment() {
 
   const now = new Date();
   const dateStr = now.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) + ' • ' + now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  comments.unshift({ name, text, date: dateStr, reply: null });
+  comments.unshift({
+    name, text, date: dateStr,
+    authorKey: CMT_DEVICE_KEY,
+    reactions: { likedBy: [], lovedBy: [] },
+    replies: []
+  });
 
+  localStorage.setItem('cmtLastName', name);
   await saveCommentsToCloud();
   localStorage.setItem('lastCommentPostTime', String(Date.now()));
   document.getElementById('cmtNameInput').value = '';
   document.getElementById('cmtTextInput').value = '';
   updateCmtCharCount();
   btn.textContent = orig; btn.disabled = false;
+  cmtSlideIndex = 0; // new comments go to the front — slide straight to it
   renderComments();
 }
 
+// Delete: admin can delete any comment; a visitor can delete only the
+// comment their own browser posted (matched via CMT_DEVICE_KEY).
 async function removeComment(i) {
-  if (!isAdmin) return;
+  const c = comments[i];
+  if (!c) return;
+  const canDelete = isAdmin || (c.authorKey && c.authorKey === CMT_DEVICE_KEY);
+  if (!canDelete) return;
   if (!confirm('Delete this comment?')) return;
   comments.splice(i, 1);
+  if (cmtSlideIndex > i) cmtSlideIndex--;
+  await saveCommentsToCloud();
+  renderComments();
+}
+
+// Editing the original comment text stays admin-only.
+// Admin-only reordering: change which slide a comment sits at in the
+// carousel ("serial"). Anyone else's likes/replies/delete rights are
+// unaffected by this — it only changes display order.
+async function moveComment(i, dir) {
+  if (!isAdmin) return;
+  const target = i + dir;
+  if (target < 0 || target >= comments.length) return;
+  const tmp = comments[i];
+  comments[i] = comments[target];
+  comments[target] = tmp;
+  cmtSlideIndex = target;
   await saveCommentsToCloud();
   renderComments();
 }
@@ -6905,6 +7133,7 @@ async function removeComment(i) {
 function openEditComment(i) {
   if (!isAdmin) return;
   cmtReplyingIndex = null;
+  cmtReplyEditing = null;
   cmtEditingIndex = i;
   renderComments();
 }
@@ -6922,31 +7151,106 @@ async function saveEditComment(i) {
   renderComments();
 }
 
-function openReplyComment(i) {
-  if (!isAdmin) return;
+// Replies: open to any visitor (not just admin). If the site owner is
+// logged in as admin when they post one, it's flagged and badged as an
+// "Owner reply" automatically.
+function openReplyBox(i) {
   cmtEditingIndex = null;
   cmtReplyingIndex = i;
   renderComments();
 }
-function cancelReplyComment() {
+function cancelReplyBox() {
   cmtReplyingIndex = null;
   renderComments();
 }
-async function saveReply(i) {
-  if (!isAdmin) return;
-  const val = document.getElementById(`cmtReplyInput${i}`).value.trim();
-  if (!val) { alert('Reply can\'t be empty.'); return; }
+async function postReply(i) {
+  const c = comments[i];
+  if (!c) return;
+  const nameEl = document.getElementById(`cmtReplyName${i}`);
+  const textEl = document.getElementById(`cmtReplyInput${i}`);
+  const name = nameEl.value.trim();
+  const text = textEl.value.trim();
+  if (!name || !text) { alert('Please add your name and a reply.'); return; }
+  if (text.length > 500) { alert('Reply is too long (max 500 characters).'); return; }
+
+  const last = parseInt(localStorage.getItem('lastCommentPostTime') || '0', 10);
+  if (Date.now() - last < 15000) { alert('Please wait a few seconds before posting again.'); return; }
+
   const now = new Date();
   const dateStr = now.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) + ' • ' + now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  comments[i].reply = { text: val, date: dateStr };
+  if (!Array.isArray(c.replies)) c.replies = [];
+  c.replies.push({
+    name, text, date: dateStr,
+    authorKey: CMT_DEVICE_KEY,
+    isAdmin: isAdmin,
+    reactions: { likedBy: [], lovedBy: [] }
+  });
+
+  localStorage.setItem('cmtLastName', name);
   await saveCommentsToCloud();
+  localStorage.setItem('lastCommentPostTime', String(Date.now()));
   cmtReplyingIndex = null;
   renderComments();
 }
-async function removeReply(i) {
+
+// Delete a reply: admin can remove any reply; a visitor can remove only
+// the reply their own browser posted.
+async function removeReply(ci, ri) {
+  const c = comments[ci];
+  const r = c && c.replies && c.replies[ri];
+  if (!r) return;
+  const canDelete = isAdmin || (r.authorKey && r.authorKey === CMT_DEVICE_KEY);
+  if (!canDelete) return;
+  if (!confirm('Delete this reply?')) return;
+  c.replies.splice(ri, 1);
+  await saveCommentsToCloud();
+  renderComments();
+}
+
+// Editing a reply's text stays admin-only.
+function openEditReply(ci, ri) {
   if (!isAdmin) return;
-  if (!confirm('Remove this reply?')) return;
-  comments[i].reply = null;
+  cmtEditingIndex = null;
+  cmtReplyingIndex = null;
+  cmtReplyEditing = { ci, ri };
+  renderComments();
+}
+function cancelEditReply() {
+  cmtReplyEditing = null;
+  renderComments();
+}
+async function saveEditReply(ci, ri) {
+  if (!isAdmin) return;
+  const val = document.getElementById(`cmtReplyEditInput${ci}_${ri}`).value.trim();
+  if (!val) { alert('Reply can\'t be empty.'); return; }
+  comments[ci].replies[ri].text = val;
+  await saveCommentsToCloud();
+  cmtReplyEditing = null;
+  renderComments();
+}
+
+// Reactions: anyone can like/love a comment or reply. Toggling again from
+// the same browser removes the reaction. Admin's reactions behave the same
+// as anyone else's — admin's extra powers are edit/delete, not reactions.
+async function toggleCommentReaction(i, type) {
+  const c = comments[i];
+  if (!c) return;
+  if (!c.reactions) c.reactions = { likedBy: [], lovedBy: [] };
+  const key = type === 'love' ? 'lovedBy' : 'likedBy';
+  const list = c.reactions[key] || (c.reactions[key] = []);
+  const idx = list.indexOf(CMT_DEVICE_KEY);
+  if (idx === -1) list.push(CMT_DEVICE_KEY); else list.splice(idx, 1);
+  await saveCommentsToCloud();
+  renderComments();
+}
+async function toggleReplyReaction(ci, ri, type) {
+  const r = comments[ci] && comments[ci].replies && comments[ci].replies[ri];
+  if (!r) return;
+  if (!r.reactions) r.reactions = { likedBy: [], lovedBy: [] };
+  const key = type === 'love' ? 'lovedBy' : 'likedBy';
+  const list = r.reactions[key] || (r.reactions[key] = []);
+  const idx = list.indexOf(CMT_DEVICE_KEY);
+  if (idx === -1) list.push(CMT_DEVICE_KEY); else list.splice(idx, 1);
   await saveCommentsToCloud();
   renderComments();
 }
@@ -8190,7 +8494,7 @@ async function initSharedData() {
       });
     }
     if (record.certifications) certifications  = record.certifications;
-    if (record.comments)       comments        = record.comments;
+    if (record.comments)       { comments        = record.comments; normalizeComments(); }
     if (record.resume !== undefined) resumeData = record.resume;
     if (record.faqs)           faqs            = record.faqs;
     if (record.availability_messages && record.availability_messages.length) availabilityMessages = record.availability_messages;
