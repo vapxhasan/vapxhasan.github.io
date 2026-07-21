@@ -359,10 +359,16 @@ nav .container { max-width: 1300px; }
   border-radius: 14px;
   padding: 10px;
   min-width: 225px;
+  max-height: min(70vh, 480px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
   box-shadow: 0 12px 32px rgba(0,0,0,0.4);
   z-index: 1200;
   animation: dropIn .2s ease;
 }
+.nav-more-dropdown::-webkit-scrollbar { width: 5px; }
+.nav-more-dropdown::-webkit-scrollbar-track { background: transparent; }
+.nav-more-dropdown::-webkit-scrollbar-thumb { background: var(--indigo); border-radius: 10px; }
 .nav-more-wrap.open .nav-more-dropdown { display: block; }
 .nav-more-link {
   display: block;
