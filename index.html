@@ -10056,6 +10056,22 @@ renderLanguageMenus();
   dropdown.querySelectorAll('a.nav-more-link[href^="#"]').forEach(link => {
     link.addEventListener('click', () => { wrap.classList.remove('open'); btn.setAttribute('aria-expanded', 'false'); });
   });
+  // Hover to open/close on desktop (mouse users) — mobile/touch keeps the click behavior above
+  let hoverCloseTimer = null;
+  const isHoverCapable = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if (isHoverCapable) {
+    wrap.addEventListener('mouseenter', () => {
+      clearTimeout(hoverCloseTimer);
+      wrap.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    });
+    wrap.addEventListener('mouseleave', () => {
+      hoverCloseTimer = setTimeout(() => {
+        wrap.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      }, 200);
+    });
+  }
 })();
 
 // ===== DARK / LIGHT MODE TOGGLE =====
