@@ -3582,7 +3582,7 @@ body, body *, body *::before, body *::after {
         </div>
         <div class="hero-stat-divider"></div>
         <div>
-          <div class="hero-stat-num">3+</div>
+          <div class="hero-stat-num" id="heroYearsExp">3+</div>
           <div class="hero-stat-label">Years Experience</div>
         </div>
       </div>
@@ -4553,7 +4553,7 @@ body, body *, body *::before, body *::after {
       </div>
       <div>
         <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">DATE / DURATION</label>
-        <input id="certDateInput" type="text" placeholder="e.g. Jan 2026" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+        <input id="certDateInput" type="text" placeholder="e.g. Jan 2026 (leave blank to auto-fill today's month/year)" style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
       </div>
       <div>
         <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">CREDENTIAL LINK (optional)</label>
@@ -5314,7 +5314,8 @@ body, body *, body *::before, body *::after {
         <span class="footer-legal-dot">&bull;</span>
         <a href="terms-of-service.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg> Terms of Service</a>
       </div>
-      <div class="footer-copy">© 2026 <span>Hasanur Rahman</span> (@vapxhasan). All rights reserved.</div>
+      <div class="footer-copy">© <span id="footerYear">2026</span> <span>Hasanur Rahman</span> (@vapxhasan). All rights reserved.</div>
+      <script>document.getElementById('footerYear').textContent = new Date().getFullYear();</script>
       <a href="#hero" class="footer-backtotop">Back to Top <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg></a>
     </div>
   </div>
@@ -5773,6 +5774,16 @@ async function handleSubmit(btn) {
 }
 
 // ===== STAT COUNTER =====
+// Years Experience is computed from a fixed career-start date instead of being
+// hardcoded, so the number keeps itself correct year after year.
+const CAREER_START_DATE = new Date('2023-01-01');
+(function() {
+  const yearsExpEl = document.getElementById('heroYearsExp');
+  if (!yearsExpEl) return;
+  const years = Math.max(1, Math.floor((Date.now() - CAREER_START_DATE.getTime()) / (365.25 * 24 * 3600 * 1000)));
+  yearsExpEl.setAttribute('data-target', years);
+  yearsExpEl.textContent = '0+';
+})();
 function animateCount(el, target, suffix='') {
   let start = 0;
   const duration = 2000;
@@ -8816,7 +8827,7 @@ async function saveCert() {
   const cert = {
     title,
     issuer: document.getElementById('certIssuerInput').value.trim(),
-    date:   document.getElementById('certDateInput').value.trim(),
+    date:   document.getElementById('certDateInput').value.trim() || new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short' }), // fallback: month & year added, if issued date wasn't entered
     link:   document.getElementById('certLinkInput').value.trim(),
     image:  _currentCertImage,
   };
@@ -8872,7 +8883,7 @@ function renderResumeButtons() {
     const label = (resumeData.title || 'Resume');
     if (navBtn) { navBtn.style.display = 'block'; navBtn.innerHTML = resumeIconSvg + label; navBtn.href = resumeData.data; navBtn.setAttribute('download', resumeData.name || 'Resume.pdf'); navBtn.onclick = closeNavMoreDropdown; }
     if (mmBtn)  { mmBtn.style.display = 'flex'; mmBtn.innerHTML = resumeIconSvg + label; mmBtn.href = resumeData.data; mmBtn.setAttribute('download', resumeData.name || 'Resume.pdf'); mmBtn.onclick = null; }
-    if (footerLink) { footerLink.style.display = 'inline-block'; footerLink.textContent = 'Download ' + (resumeData.title || 'Resume'); footerLink.href = resumeData.data; footerLink.setAttribute('download', resumeData.name || 'Resume.pdf'); footerLink.onclick = null; }
+    if (footerLink) { footerLink.style.display = 'inline-block'; footerLink.textContent = 'Download ' + (resumeData.title || 'Resume') + (resumeData.date ? ' (Updated ' + resumeData.date + ')' : ''); footerLink.href = resumeData.data; footerLink.setAttribute('download', resumeData.name || 'Resume.pdf'); footerLink.onclick = null; }
     if (editBtn) editBtn.style.display = isAdmin ? 'flex' : 'none';
   } else if (isAdmin) {
     const openEdit = (e) => { e.preventDefault(); closeNavMoreDropdown(); openResumeModal(); };
@@ -8897,7 +8908,7 @@ function openResumeModal() {
   _currentResumeFile = null;
   const fn = document.getElementById('resumeFileName');
   if (resumeData && resumeData.data) {
-    fn.textContent = 'Current: ' + (resumeData.name || 'resume.pdf');
+    fn.textContent = 'Current: ' + (resumeData.name || 'resume.pdf') + (resumeData.date ? '  ·  Last updated: ' + resumeData.date : '');
     fn.style.display = 'block';
   } else {
     fn.style.display = 'none';
@@ -8927,10 +8938,14 @@ async function saveResume() {
   const btn = document.getElementById('resumeSaveBtn');
   const orig = btn.textContent;
   btn.textContent = 'Saving...'; btn.disabled = true;
+  const isNewFile = !!_currentResumeFile;
+  const prevDate = resumeData && resumeData.date;
+  const nowDateStr = new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
   resumeData = {
     data:  fileToSave.data,
     name:  fileToSave.name || 'Resume.pdf',
     title: document.getElementById('resumeTitleInput').value.trim() || 'Resume',
+    date:  isNewFile ? nowDateStr : (prevDate || nowDateStr), // "Last updated" — refreshed only when a new PDF is uploaded
   };
   await sharedSet('resume', resumeData);
   closeResumeModal();
