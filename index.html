@@ -1288,6 +1288,19 @@ iframe.skiptranslate { display: none !important; }
   letter-spacing: 1px; text-transform: uppercase;
   backdrop-filter: blur(4px);
 }
+.media-play-btn {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 52px; height: 52px; border-radius: 50%;
+  background: rgba(0,0,0,0.55); border: 2px solid rgba(255,255,255,0.85);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; pointer-events: none; transition: all .25s;
+}
+.media-play-btn svg { width: 20px; height: 20px; margin-left: 3px; }
+.project-media-wrap:hover .media-play-btn,
+.yt-thumb-facade:hover .media-play-btn { background: rgba(37,99,235,0.85); transform: translate(-50%,-50%) scale(1.1); }
+.yt-thumb-facade { position: relative; width: 100%; height: 100%; cursor: pointer; background: var(--card2); }
+.yt-thumb-facade img { width: 100%; height: 100%; object-fit: cover; display: block; }
 /* Pricing edit modal (used by Client Custom Pricing modal) */
 .pricing-edit-modal {
   display: none; position: fixed; inset: 0; z-index: 3000;
@@ -2426,6 +2439,7 @@ footer {
   width: 100%; height: 100%;
   border: none;
 }
+.yt-thumb-wrap .yt-thumb-facade { position: absolute; inset: 0; }
 .yt-thumb-placeholder {
   position: absolute;
   top: 0; left: 0;
@@ -4627,6 +4641,10 @@ body, body *, body *::before, body *::after {
         <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">PROJECT LINK (optional)</label>
         <input id="pLinkInput" type="url" placeholder="https://..." style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
       </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">YOUTUBE VIDEO URL (optional — shown instead of uploaded video)</label>
+        <input id="pYoutubeInput" type="text" placeholder="https://youtube.com/watch?v=..." style="width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--white);font-size:14px;outline:none;font-family:inherit;">
+      </div>
 
       <!-- MEDIA UPLOAD -->
       <div>
@@ -4645,12 +4663,37 @@ body, body *, body *::before, body *::after {
           <button onclick="clearProjectMedia()" style="position:absolute;top:6px;right:6px;background:rgba(255,50,50,0.75);color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         </div>
       </div>
+
+      <!-- CUSTOM THUMBNAIL (for YouTube link or uploaded video) -->
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">CUSTOM THUMBNAIL (optional — overrides auto thumbnail for video)</label>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div id="pThumbPreviewWrap" style="width:64px;height:64px;border-radius:10px;overflow:hidden;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <img id="pThumbPreviewImg" style="width:100%;height:100%;object-fit:cover;display:none;">
+            <span id="pThumbPreviewEmpty" style="font-size:10px;color:var(--muted);text-align:center;">No thumb</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <button type="button" style="padding:8px 16px;background:transparent;border:1px solid var(--border);color:var(--white);border-radius:8px;font-size:12px;cursor:pointer;" onclick="document.getElementById('pThumbInput').click()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg> Upload Thumbnail</button>
+            <button type="button" style="padding:8px 16px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-size:12px;cursor:pointer;" onclick="clearProjectThumb()">Remove</button>
+          </div>
+          <input type="file" id="pThumbInput" accept="image/*" style="display:none;" onchange="handleProjectThumbSelect(this)">
+        </div>
+      </div>
     </div>
 
     <div style="display:flex;gap:10px;margin-top:22px;">
       <button id="pSaveBtn" onclick="saveProject()" style="flex:1;padding:13px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;">Save Project <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
       <button onclick="closeProjectModal()" style="padding:13px 20px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:10px;font-family:var(--font-display);font-size:14px;cursor:pointer;transition:all .2s;">Cancel</button>
     </div>
+  </div>
+</div>
+
+<!-- PROJECT VIDEO PLAYBACK MODAL -->
+<div id="projectVideoModal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);z-index:3100;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#111827;border:1px solid rgba(37,99,235,0.3);border-radius:16px;padding:20px;width:100%;max-width:720px;position:relative;">
+    <button onclick="closeProjectVideoModal()" style="position:absolute;top:-14px;right:-14px;width:32px;height:32px;border-radius:50%;background:var(--indigo);border:none;color:#fff;font-size:18px;cursor:pointer;line-height:1;">&times;</button>
+    <div id="projectVideoModalBody" style="position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;"></div>
+    <div id="projectVideoModalTitle" style="margin-top:14px;font-size:15px;font-weight:700;color:var(--white);"></div>
   </div>
 </div>
 
@@ -4763,6 +4806,22 @@ body, body *, body *::before, body *::after {
           <img id="rMediaPreviewImg" style="width:100%;height:160px;object-fit:cover;display:block;" alt="preview">
           <video id="rMediaPreviewVideo" style="width:100%;height:160px;object-fit:cover;display:none;" controls></video>
           <button onclick="clearReviewMedia()" style="position:absolute;top:6px;right:6px;background:rgba(255,50,50,0.75);color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+        </div>
+      </div>
+
+      <!-- CUSTOM THUMBNAIL (for video testimonials) -->
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin-bottom:6px;">CUSTOM THUMBNAIL (optional — overrides auto thumbnail for video testimonials)</label>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div id="rThumbPreviewWrap" style="width:64px;height:64px;border-radius:10px;overflow:hidden;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <img id="rThumbPreviewImg" style="width:100%;height:100%;object-fit:cover;display:none;">
+            <span id="rThumbPreviewEmpty" style="font-size:10px;color:var(--muted);text-align:center;">No thumb</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <button type="button" style="padding:8px 16px;background:transparent;border:1px solid var(--border);color:var(--white);border-radius:8px;font-size:12px;cursor:pointer;" onclick="document.getElementById('rThumbInput').click()">Upload Thumbnail</button>
+            <button type="button" style="padding:8px 16px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-size:12px;cursor:pointer;" onclick="clearReviewThumb()">Remove</button>
+          </div>
+          <input type="file" id="rThumbInput" accept="image/*" style="display:none;" onchange="handleReviewThumbSelect(this)">
         </div>
       </div>
     </div>
@@ -4932,15 +4991,27 @@ body, body *, body *::before, body *::after {
 <!-- Add Video Modal -->
 <div class="yt-modal-overlay" id="ytModal">
   <div class="yt-modal">
-    <div class="yt-modal-title">▶ Add YouTube Video</div>
-    <div class="yt-modal-sub">Paste your YouTube video URL or embed ID below</div>
+    <div class="yt-modal-title" id="ytModalTitle">▶ Add YouTube Video</div>
+    <div class="yt-modal-sub" id="ytModalSub">Paste your YouTube video URL or embed ID below</div>
     <input class="yt-modal-input" id="ytUrlInput" placeholder="e.g. https://youtube.com/watch?v=dQw4w9WgXcQ" type="text">
     <input class="yt-modal-input" id="ytTitleInput" placeholder="Video title (optional)" type="text">
     <select class="yt-modal-input" id="ytCategoryInput" style="cursor:pointer;"></select>
     <div style="font-size:11px;color:var(--muted);margin:-8px 0 12px;">Need a new category? <button type="button" onclick="document.getElementById('ytModal').classList.remove('open');openYtCatModal(-1);" style="background:none;border:none;color:var(--indigo);font-weight:700;cursor:pointer;padding:0;font-size:11px;text-decoration:underline;">+ Add Category</button></div>
+    <label style="font-size:11px;color:var(--muted);font-family:var(--font-mono);letter-spacing:1px;display:block;margin:6px 0 8px;">CUSTOM THUMBNAIL (optional — overrides auto YouTube thumbnail)</label>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+      <div id="ytThumbPreviewWrap" style="width:64px;height:64px;border-radius:10px;overflow:hidden;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <img id="ytThumbPreviewImg" style="width:100%;height:100%;object-fit:cover;display:none;">
+        <span id="ytThumbPreviewEmpty" style="font-size:10px;color:var(--muted);text-align:center;">No thumb</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <button type="button" class="yt-modal-cancel" style="padding:8px 16px;" onclick="document.getElementById('ytThumbInput').click()">Upload Thumbnail</button>
+        <button type="button" class="yt-modal-cancel" style="padding:8px 16px;" onclick="clearYtThumb()">Remove</button>
+      </div>
+      <input type="file" id="ytThumbInput" accept="image/*" style="display:none;" onchange="handleYtThumbSelect(this)">
+    </div>
     <div class="yt-modal-btns">
       <button class="yt-modal-cancel" id="closeYtModal">Cancel</button>
-      <button class="yt-modal-add" onclick="addYtVideo()">Add Video <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+      <button class="yt-modal-add" id="ytSaveBtn" onclick="saveYtVideo()">Add Video <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
     </div>
   </div>
 </div>
@@ -5017,7 +5088,7 @@ body, body *, body *::before, body *::after {
     <div class="blog-modal-sub">Share a free downloadable resource with your clients — image, PDF, YouTube video, or Drive link</div>
     <label class="blog-modal-label">TITLE</label>
     <input class="blog-modal-field" id="resourceTitleInput" placeholder="e.g. Free Cinematic LUT Pack" type="text">
-    <label class="blog-modal-label">IMAGE (optional)</label>
+    <label class="blog-modal-label">IMAGE / CUSTOM THUMBNAIL (optional — also used as cover for the YouTube video below, overriding its auto thumbnail)</label>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
       <div id="resourceImgPreviewWrap" style="width:64px;height:64px;border-radius:10px;overflow:hidden;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
         <img id="resourceImgPreview" style="width:100%;height:100%;object-fit:cover;display:none;">
@@ -6237,6 +6308,12 @@ function renderYtChannel() {
   document.getElementById('ytChUrlInput').value = ytChannel.url;
 }
 
+function playYtEmbed(el, id, title) {
+  const wrap = el.closest('.yt-thumb-wrap');
+  if (!wrap) return;
+  wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" title="${title}" allow="autoplay; encrypted-media" allowfullscreen loading="lazy"></iframe>`;
+}
+
 function renderYtVideos() {
   const track = document.getElementById('ytVideosGrid');
   const empty = document.getElementById('ytEmpty');
@@ -6263,17 +6340,22 @@ function renderYtVideos() {
     if (countEl) countEl.textContent = '';
     return;
   }
-  track.innerHTML = filtered.map(({ v, i }) => `
+  track.innerHTML = filtered.map(({ v, i }) => {
+    const thumbSrc = (v.thumbnail && v.thumbnail.data) || `https://img.youtube.com/vi/${v.id}/hqdefault.jpg`;
+    return `
     <div class="yt-video-card reveal visible">
       <div class="yt-thumb-wrap">
-        <iframe src="https://www.youtube.com/embed/${v.id}" title="${v.title||'YouTube Video'}" allowfullscreen loading="lazy"></iframe>
+        <div class="yt-thumb-facade" onclick="playYtEmbed(this, '${v.id}', '${escAttr(v.title||'YouTube Video')}')">
+          <img src="${thumbSrc}" alt="${escAttr(v.title||'YouTube Video')}" loading="lazy">
+          <div class="media-play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>
+        </div>
       </div>
       <div class="yt-video-body">
         ${v.category ? `<div style="font-size:10.5px;font-family:var(--font-mono);color:var(--cyan);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">${escHtml(v.category)}</div>` : ''}
         <div class="yt-video-title">${v.title||'YouTube Video'}</div>
         <div class="yt-video-meta" style="display:flex;justify-content:space-between;align-items:center;">
           <span>${v.date}</span>
-          ${isAdmin ? `<button onclick="removeYtVideo(${i})" class="admin-only" style="background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);color:#ff6666;border-radius:5px;padding:3px 9px;cursor:pointer;font-size:11px;display:inline-flex;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button>` : ''}
+          ${isAdmin ? `<span style="display:flex;gap:6px;"><button onclick="openEditYtVideo(${i})" class="admin-only" style="background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.25);color:var(--indigo);border-radius:5px;padding:3px 9px;cursor:pointer;font-size:11px;display:inline-flex;">Edit</button><button onclick="removeYtVideo(${i})" class="admin-only" style="background:rgba(255,0,0,0.1);border:1px solid rgba(255,0,0,0.3);color:#ff6666;border-radius:5px;padding:3px 9px;cursor:pointer;font-size:11px;display:inline-flex;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button></span>` : ''}
         </div>
         ${isAdmin ? `
         <div class="admin-move-row" style="margin-top:8px;">
@@ -6282,7 +6364,8 @@ function renderYtVideos() {
         </div>` : ''}
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
   // Only show slide controls when there's more than one video to slide through
   const showNav = filtered.length > 1;
   prevBtn.style.display = showNav ? 'flex' : 'none';
@@ -6292,7 +6375,55 @@ function renderYtVideos() {
 document.getElementById('ytSliderPrev').addEventListener('click', () => document.getElementById('ytVideosGrid').scrollBy({ left: -320, behavior: 'smooth' }));
 document.getElementById('ytSliderNext').addEventListener('click', () => document.getElementById('ytVideosGrid').scrollBy({ left: 320, behavior: 'smooth' }));
 
-async function addYtVideo() {
+let editingYtIndex = null;
+let _currentYtThumb = null;
+
+function handleYtThumbSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    _currentYtThumb = { data: e.target.result, type: file.type, name: file.name };
+    const img = document.getElementById('ytThumbPreviewImg');
+    const empty = document.getElementById('ytThumbPreviewEmpty');
+    img.src = e.target.result; img.style.display = 'block';
+    if (empty) empty.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearYtThumb() {
+  _currentYtThumb = null;
+  const input = document.getElementById('ytThumbInput');
+  if (input) input.value = '';
+  const img = document.getElementById('ytThumbPreviewImg');
+  if (img) { img.src = ''; img.style.display = 'none'; }
+  const empty = document.getElementById('ytThumbPreviewEmpty');
+  if (empty) empty.style.display = 'block';
+}
+
+function openEditYtVideo(i) {
+  if (!isAdmin) return;
+  editingYtIndex = i;
+  const v = ytVideos[i];
+  document.getElementById('ytModalTitle').textContent = '✏️ Edit YouTube Video';
+  document.getElementById('ytModalSub').textContent = 'Update the video URL, title, category or thumbnail';
+  document.getElementById('ytSaveBtn').textContent = 'Update Video →';
+  document.getElementById('ytUrlInput').value = `https://youtube.com/watch?v=${v.id}`;
+  document.getElementById('ytTitleInput').value = v.title || '';
+  populateYtCategorySelect(v.category || '');
+  clearYtThumb();
+  if (v.thumbnail && v.thumbnail.data) {
+    _currentYtThumb = v.thumbnail;
+    const img = document.getElementById('ytThumbPreviewImg');
+    const empty = document.getElementById('ytThumbPreviewEmpty');
+    img.src = v.thumbnail.data; img.style.display = 'block';
+    if (empty) empty.style.display = 'none';
+  }
+  document.getElementById('ytModal').classList.add('open');
+}
+
+async function saveYtVideo() {
   if (!isAdmin) return;
   const url = document.getElementById('ytUrlInput').value.trim();
   const title = document.getElementById('ytTitleInput').value.trim();
@@ -6300,16 +6431,26 @@ async function addYtVideo() {
   if (!url) return;
   const id = getYtId(url);
   if (!id) { alert('Invalid YouTube URL!'); return; }
-  const btn = document.querySelector('#ytModal .yt-modal-add');
+  const btn = document.getElementById('ytSaveBtn');
+  const orig = btn.textContent;
   btn.textContent = 'Saving...'; btn.disabled = true;
-  const ytNow = new Date();
-  const ytDateStr = ytNow.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) + ' • ' + ytNow.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
-  ytVideos.unshift({ id, title: title || 'YouTube Video', category: category || '', date: ytDateStr });
+
+  if (editingYtIndex !== null) {
+    const existing = ytVideos[editingYtIndex];
+    ytVideos[editingYtIndex] = { ...existing, id, title: title || 'YouTube Video', category: category || '', thumbnail: _currentYtThumb || null };
+  } else {
+    const ytNow = new Date();
+    const ytDateStr = ytNow.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) + ' • ' + ytNow.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    ytVideos.unshift({ id, title: title || 'YouTube Video', category: category || '', date: ytDateStr, thumbnail: _currentYtThumb || null });
+  }
+
   await sharedSet('yt_videos', ytVideos);
   document.getElementById('ytUrlInput').value = '';
   document.getElementById('ytTitleInput').value = '';
+  clearYtThumb();
   document.getElementById('ytModal').classList.remove('open');
-  btn.textContent = 'Add Video →'; btn.disabled = false;
+  btn.textContent = orig; btn.disabled = false;
+  editingYtIndex = null;
   renderYtVideos();
 }
 
@@ -6346,6 +6487,13 @@ async function saveChannelInfo() {
 // modal listeners
 document.getElementById('openYtModal').addEventListener('click', () => {
   if (!isAdmin) { alert('Admin login required. Click the Admin button.'); return; }
+  editingYtIndex = null;
+  document.getElementById('ytModalTitle').textContent = '▶ Add YouTube Video';
+  document.getElementById('ytModalSub').textContent = 'Paste your YouTube video URL or embed ID below';
+  document.getElementById('ytSaveBtn').textContent = 'Add Video →';
+  document.getElementById('ytUrlInput').value = '';
+  document.getElementById('ytTitleInput').value = '';
+  clearYtThumb();
   populateYtCategorySelect();
   document.getElementById('ytModal').classList.add('open');
 });
@@ -6988,7 +7136,9 @@ function renderReviewVideoSlider(indexed) {
   if (!videoOnes.length) { section.style.display = 'none'; track.innerHTML = ''; return; }
   section.style.display = 'block';
   track.innerHTML = videoOnes.map(({ r, i }) => {
-    const thumb = (r.media && r.media.data && !(r.media.type || '').startsWith('video/')) ? r.media.data : '';
+    const thumb = (r.thumbnail && r.thumbnail.data)
+      || (r.media && r.media.data && !(r.media.type || '').startsWith('video/') ? r.media.data : '')
+      || ytThumb(r.videoUrl || '');
     return `
     <div class="review-video-card" data-i="${i}">
       ${thumb
@@ -7069,6 +7219,7 @@ function openReviewModal() {
   document.getElementById('rRatingInput').value = '5';
   populateReviewCategorySelect();
   clearReviewMedia();
+  clearReviewThumb();
   document.getElementById('reviewModal').style.display = 'flex';
 }
 
@@ -7108,6 +7259,14 @@ function openEditReview(i) {
       document.getElementById('rMediaPreviewVideo').style.display = 'none';
     }
   }
+  clearReviewThumb();
+  if (r.thumbnail && r.thumbnail.data) {
+    _currentReviewThumb = r.thumbnail;
+    const img = document.getElementById('rThumbPreviewImg');
+    const empty = document.getElementById('rThumbPreviewEmpty');
+    img.src = r.thumbnail.data; img.style.display = 'block';
+    if (empty) empty.style.display = 'none';
+  }
   document.getElementById('reviewModal').style.display = 'flex';
 }
 
@@ -7138,6 +7297,7 @@ async function saveReview() {
     rating:   parseInt(document.getElementById('rRatingInput').value) || 5,
     date:     rNow.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) + ' • ' + rNow.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),
     media:    _currentReviewMedia || null,
+    thumbnail: _currentReviewThumb || null,
   };
 
   if (editingReviewIndex !== null) {
@@ -7217,6 +7377,33 @@ function clearReviewMedia() {
   if (vid) { vid.removeAttribute('src'); vid.style.display = 'none'; }
   const input = document.getElementById('rMediaInput');
   if (input) input.value = '';
+}
+
+// ---- Custom thumbnail (overrides auto thumbnail for video testimonials) ----
+let _currentReviewThumb = null;
+
+function handleReviewThumbSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    _currentReviewThumb = { data: e.target.result, type: file.type, name: file.name };
+    const img = document.getElementById('rThumbPreviewImg');
+    const empty = document.getElementById('rThumbPreviewEmpty');
+    img.src = e.target.result; img.style.display = 'block';
+    if (empty) empty.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearReviewThumb() {
+  _currentReviewThumb = null;
+  const input = document.getElementById('rThumbInput');
+  if (input) input.value = '';
+  const img = document.getElementById('rThumbPreviewImg');
+  if (img) { img.src = ''; img.style.display = 'none'; }
+  const empty = document.getElementById('rThumbPreviewEmpty');
+  if (empty) empty.style.display = 'block';
 }
 
 document.getElementById('reviewModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeReviewModal(); });
@@ -7754,11 +7941,23 @@ function renderProjectFilters() {
 
 function buildProjectMediaHtml(p, i) {
   const glow = glowColors[i % glowColors.length];
+  const playBtn = `<div class="media-play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"></polygon></svg></div>`;
+
+  // YouTube link takes priority — use custom thumbnail if provided, else auto YouTube thumbnail
+  if (p.youtube) {
+    const thumbSrc = (p.thumbnail && p.thumbnail.data) || ytThumb(p.youtube);
+    return `<div class="project-media-wrap" style="cursor:pointer;" onclick="openProjectVideo(${i})">${thumbSrc ? `<img class="project-media-img" src="${thumbSrc}" alt="${p.title}" loading="lazy">` : `<div class="project-media-emoji">▶</div>`}${playBtn}<span class="project-media-type-badge">VIDEO</span></div>`;
+  }
+
   if (p.media && p.media.data) {
     const mt = p.media.type || '';
     if (mt.startsWith('image/')) {
       return `<div class="project-media-wrap"><img class="project-media-img" src="${p.media.data}" alt="${p.title}" loading="lazy"><span class="project-media-type-badge">IMAGE</span></div>`;
     } else if (mt.startsWith('video/')) {
+      // Custom thumbnail present → show click-to-play facade instead of autoplaying inline
+      if (p.thumbnail && p.thumbnail.data) {
+        return `<div class="project-media-wrap" style="cursor:pointer;" onclick="openProjectVideo(${i})"><img class="project-media-img" src="${p.thumbnail.data}" alt="${p.title}" loading="lazy">${playBtn}<span class="project-media-type-badge">VIDEO</span></div>`;
+      }
       return `<div class="project-media-wrap"><video class="project-media-video" src="${p.media.data}" muted playsinline loop autoplay></video><span class="project-media-type-badge">VIDEO</span></div>`;
     } else if (mt === 'application/pdf') {
       return `<div class="project-media-wrap"><div class="project-media-emoji" style="flex-direction:column;gap:8px;"><span style="font-size:48px"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="48px" height="48px" style="vertical-align:-0.125em;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></span><span style="font-size:12px;font-family:var(--font-mono);color:var(--muted);">PDF Document</span></div><span class="project-media-type-badge">PDF</span></div>`;
@@ -7894,10 +8093,11 @@ function openProjectModal() {
   document.getElementById('projectModalLabel').textContent = '// ADD PROJECT';
   document.getElementById('projectModalTitle').textContent = 'New Project';
   document.getElementById('pSaveBtn').textContent = 'Save Project →';
-  ['pEmojiInput','pTitleInput','pDescInput','pToolsInput','pResultInput','pLinkInput'].forEach(id => document.getElementById(id).value = '');
+  ['pEmojiInput','pTitleInput','pDescInput','pToolsInput','pResultInput','pLinkInput','pYoutubeInput'].forEach(id => document.getElementById(id).value = '');
   populateProjectCategorySelect();
   document.getElementById('pEmojiInput').value = '📁';
   clearProjectMedia();
+  clearProjectThumb();
   document.getElementById('projectModal').style.display = 'flex';
 }
 
@@ -7915,6 +8115,7 @@ function openEditProject(i) {
   document.getElementById('pToolsInput').value = p.tools || '';
   document.getElementById('pResultInput').value = p.result || '';
   document.getElementById('pLinkInput').value = p.link || '';
+  document.getElementById('pYoutubeInput').value = p.youtube || '';
   // restore existing media preview
   clearProjectMedia();
   if (p.media && p.media.data) {
@@ -7933,6 +8134,15 @@ function openEditProject(i) {
     } else {
       document.getElementById('pMediaPreviewPdf').style.display = 'block';
     }
+  }
+  // restore existing thumbnail preview
+  clearProjectThumb();
+  if (p.thumbnail && p.thumbnail.data) {
+    _currentProjectThumb = p.thumbnail;
+    const img = document.getElementById('pThumbPreviewImg');
+    const empty = document.getElementById('pThumbPreviewEmpty');
+    img.src = p.thumbnail.data; img.style.display = 'block';
+    if (empty) empty.style.display = 'none';
   }
   document.getElementById('projectModal').style.display = 'flex';
 }
@@ -7962,8 +8172,10 @@ async function saveProject() {
     tools:  document.getElementById('pToolsInput').value.trim(),
     result: document.getElementById('pResultInput').value.trim(),
     link:   document.getElementById('pLinkInput').value.trim(),
+    youtube: document.getElementById('pYoutubeInput').value.trim(),
     date:   pDateStr,
     media:  _currentProjectMedia || null,
+    thumbnail: _currentProjectThumb || null,
   };
 
   if (editingProjectIndex !== null) {
@@ -8043,6 +8255,59 @@ function clearProjectMedia() {
   const input = document.getElementById('pMediaInput');
   if (input) input.value = '';
 }
+
+// ---- Custom thumbnail (overrides auto YouTube/video thumbnail) ----
+let _currentProjectThumb = null;
+
+function handleProjectThumbSelect(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    _currentProjectThumb = { data: e.target.result, type: file.type, name: file.name };
+    const img = document.getElementById('pThumbPreviewImg');
+    const empty = document.getElementById('pThumbPreviewEmpty');
+    img.src = e.target.result; img.style.display = 'block';
+    if (empty) empty.style.display = 'none';
+  };
+  reader.readAsDataURL(file);
+}
+
+function clearProjectThumb() {
+  _currentProjectThumb = null;
+  const input = document.getElementById('pThumbInput');
+  if (input) input.value = '';
+  const img = document.getElementById('pThumbPreviewImg');
+  if (img) { img.src = ''; img.style.display = 'none'; }
+  const empty = document.getElementById('pThumbPreviewEmpty');
+  if (empty) empty.style.display = 'block';
+}
+
+// ---- Project video lightbox (YouTube link or uploaded video file) ----
+function openProjectVideo(i) {
+  const p = projects[i];
+  if (!p) return;
+  const modal = document.getElementById('projectVideoModal');
+  const body = document.getElementById('projectVideoModalBody');
+  const title = document.getElementById('projectVideoModalTitle');
+  title.textContent = p.title || '';
+  let inner = '';
+  if (p.youtube) {
+    const embed = ytEmbedUrl(p.youtube);
+    inner = embed
+      ? `<iframe src="${embed}?autoplay=1" style="position:absolute;inset:0;width:100%;height:100%;border:none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+      : '';
+  } else if (p.media && p.media.data) {
+    inner = `<video src="${p.media.data}" controls autoplay style="position:absolute;inset:0;width:100%;height:100%;"></video>`;
+  }
+  body.innerHTML = inner;
+  modal.style.display = 'flex';
+}
+function closeProjectVideoModal() {
+  document.getElementById('projectVideoModal').style.display = 'none';
+  document.getElementById('projectVideoModalBody').innerHTML = '';
+}
+document.getElementById('projectVideoModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeProjectVideoModal(); });
 
 // ===================================================
 // CERTIFICATIONS SECTION
