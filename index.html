@@ -4369,6 +4369,7 @@ body, body *, body *::before, body *::after {
       </div>
       <button class="blog-write-btn admin-only" id="openBlogModal" style="display:none;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Write Post</button>
     </div>
+    <div id="blogFilters" class="fiv-cat-bar" style="display:none;margin-bottom:22px;"></div>
     <div id="blogFeaturedWrap"></div>
 
     <button id="blogMoreToggle" onclick="toggleBlogMore()" data-open="0" style="display:none;align-items:center;gap:8px;margin:22px auto 0;padding:10px 22px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:100px;font-family:var(--font-mono);font-size:12.5px;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='var(--white)';this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">
@@ -4404,6 +4405,7 @@ body, body *, body *::before, body *::after {
       <button class="blog-write-btn admin-only" id="openResourceModal" style="display:none;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Add Resource</button>
     </div>
 
+    <div id="resourceFilters" class="fiv-cat-bar" style="display:none;margin-bottom:22px;"></div>
     <div id="resourceFeaturedWrap"></div>
 
     <button id="resourceMoreToggle" onclick="toggleResourceMore()" data-open="0" style="display:none;align-items:center;gap:8px;margin:22px auto 0;padding:10px 22px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:100px;font-family:var(--font-mono);font-size:12.5px;cursor:pointer;transition:all .2s;" onmouseover="this.style.color='var(--white)';this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'">
@@ -4850,6 +4852,40 @@ body, body *, body *::before, body *::after {
   </div>
 </div>
 
+<!-- BLOG CATEGORY MANAGEMENT MODAL — mirrors the Review skill-category modal -->
+<div class="fiv-modal" id="blogCatModal">
+  <div class="fiv-modal-inner">
+    <button class="fiv-modal-close" onclick="closeBlogCatModal()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    <div class="fiv-modal-title" id="blogCatModalTitle"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> Add Blog Category</div>
+
+    <div class="fiv-field">
+        <label>Category name</label>
+        <input type="text" id="blogCat_name" placeholder="e.g. AI Tips">
+    </div>
+
+    <button class="fiv-save-btn" onclick="saveBlogCat()">Save Category <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+    <button class="fiv-cancel-btn" id="blogCatDeleteBtn" style="display:none;color:#ff7777;border-color:rgba(255,80,80,0.3);" onclick="deleteBlogCat()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg> Delete Category</button>
+    <button class="fiv-cancel-btn" onclick="closeBlogCatModal()">Cancel</button>
+  </div>
+</div>
+
+<!-- FREE RESOURCE CATEGORY MANAGEMENT MODAL — mirrors the Review skill-category modal -->
+<div class="fiv-modal" id="resourceCatModal">
+  <div class="fiv-modal-inner">
+    <button class="fiv-modal-close" onclick="closeResourceCatModal()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+    <div class="fiv-modal-title" id="resourceCatModalTitle"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> Add Resource Category</div>
+
+    <div class="fiv-field">
+        <label>Category name</label>
+        <input type="text" id="resourceCat_name" placeholder="e.g. LUTs & Presets">
+    </div>
+
+    <button class="fiv-save-btn" onclick="saveResourceCat()">Save Category <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+    <button class="fiv-cancel-btn" id="resourceCatDeleteBtn" style="display:none;color:#ff7777;border-color:rgba(255,80,80,0.3);" onclick="deleteResourceCat()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg> Delete Category</button>
+    <button class="fiv-cancel-btn" onclick="closeResourceCatModal()">Cancel</button>
+  </div>
+</div>
+
 
 <!-- FIVERR PRICING EDIT MODAL -->
 <div class="fiv-modal" id="fivModal">
@@ -5088,6 +5124,9 @@ body, body *, body *::before, body *::after {
     <div class="blog-modal-sub">Share a free downloadable resource with your clients — image, PDF, YouTube video, or Drive link</div>
     <label class="blog-modal-label">TITLE</label>
     <input class="blog-modal-field" id="resourceTitleInput" placeholder="e.g. Free Cinematic LUT Pack" type="text">
+    <label class="blog-modal-label">CATEGORY</label>
+    <select class="blog-modal-field" id="resourceCatInput"></select>
+    <div style="font-size:11px;color:var(--muted);margin:-8px 0 12px;">Need a new category? <button type="button" onclick="document.getElementById('resourceModal').classList.remove('open');openResourceCatModal(-1);" style="background:none;border:none;color:var(--indigo);font-weight:700;cursor:pointer;padding:0;font-size:11px;text-decoration:underline;">+ Add Category</button></div>
     <label class="blog-modal-label">IMAGE / CUSTOM THUMBNAIL (optional — also used as cover for the YouTube video below, overriding its auto thumbnail)</label>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
       <div id="resourceImgPreviewWrap" style="width:64px;height:64px;border-radius:10px;overflow:hidden;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
@@ -5143,7 +5182,8 @@ body, body *, body *::before, body *::after {
     <label class="blog-modal-label">POST TITLE</label>
     <input class="blog-modal-field" id="blogTitleInput" placeholder="e.g. 10 AI Tools That Changed My Workflow" type="text">
     <label class="blog-modal-label">CATEGORY</label>
-    <input class="blog-modal-field" id="blogCatInput" placeholder="e.g. AI Tips, Design, Tutorial..." type="text">
+    <select class="blog-modal-field" id="blogCatInput"></select>
+    <div style="font-size:11px;color:var(--muted);margin:-8px 0 12px;">Need a new category? <button type="button" onclick="document.getElementById('blogModal').classList.remove('open');openBlogCatModal(-1);" style="background:none;border:none;color:var(--indigo);font-weight:700;cursor:pointer;padding:0;font-size:11px;text-decoration:underline;">+ Add Category</button></div>
     <label class="blog-modal-label">EMOJI / COVER (fallback if no image)</label>
     <input class="blog-modal-field" id="blogEmojiInput" placeholder="e.g. 🤖 or 🎨" type="text" value="📝">
     <label class="blog-modal-label">COVER IMAGE (optional)</label>
@@ -6511,6 +6551,114 @@ document.getElementById('ytChannelModal').addEventListener('click', e => { if (e
 // ===================================================
 let blogPosts = [];
 
+// Category management for blog posts — mirrors the Review/YouTube/Project
+// category system (admin add/edit/delete instead of a plain free-text tag).
+const DEFAULT_BLOG_CATEGORIES = [
+  { name: 'AI Tips' },
+  { name: 'Video Editing' },
+  { name: 'Design' },
+  { name: 'Automation' },
+  { name: 'Tutorial' },
+  { name: 'Digital Marketing' }
+];
+let blogCategories = DEFAULT_BLOG_CATEGORIES.map(c => ({ ...c }));
+let blogCatEditIdx = -1; // -1 = adding a new category, >=0 = editing existing index
+let blogFilterCategory = 'All';
+
+async function resetBlogCategories() {
+  if (!isAdmin) return;
+  if (!confirm('Reset blog categories to the default list? This replaces your current category list (existing posts keep their tags, but chips not in the default list will disappear from the filter bar).')) return;
+  blogCategories = DEFAULT_BLOG_CATEGORIES.map(c => ({ ...c }));
+  await sharedSet('blog_categories', blogCategories);
+  renderBlog();
+}
+
+function populateBlogCategorySelect(selected) {
+  const sel = document.getElementById('blogCatInput');
+  if (!sel) return;
+  if (!blogCategories.length) {
+    sel.innerHTML = '<option value="">No categories yet — add one first</option>';
+    return;
+  }
+  sel.innerHTML = blogCategories.map(c => `<option value="${escAttr(c.name)}">${c.name}</option>`).join('');
+  if (selected && blogCategories.some(c => c.name === selected)) sel.value = selected;
+}
+
+function openBlogCatModal(idx) {
+  if (!isAdmin) { alert('Admin login required.'); return; }
+  blogCatEditIdx = idx;
+  const isNew = idx === -1;
+  const c = isNew ? { name: '' } : blogCategories[idx];
+  document.getElementById('blogCatModalTitle').innerHTML = (isNew ? 'Add Blog Category' : 'Edit — ' + c.name);
+  document.getElementById('blogCat_name').value = c.name || '';
+  document.getElementById('blogCatDeleteBtn').style.display = !isNew ? 'block' : 'none';
+  document.getElementById('blogCatModal').classList.add('open');
+  setTimeout(() => document.getElementById('blogCat_name').focus(), 50);
+}
+
+function closeBlogCatModal() { document.getElementById('blogCatModal').classList.remove('open'); }
+document.getElementById('blogCatModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeBlogCatModal(); });
+
+async function saveBlogCat() {
+  if (!isAdmin) return;
+  const name = document.getElementById('blogCat_name').value.trim();
+  if (!name) { alert('Category name is required.'); return; }
+  if (blogCategories.some((c, i) => c.name === name && i !== blogCatEditIdx)) { alert('A category with this name already exists.'); return; }
+
+  if (blogCatEditIdx === -1) {
+    blogCategories.push({ name });
+  } else {
+    const old = blogCategories[blogCatEditIdx];
+    if (old.name !== name) {
+      // Keep existing posts tagged correctly when a category is renamed.
+      blogPosts.forEach(p => { if (p.cat === old.name) p.cat = name; });
+      await sharedSet('blog_posts', blogPosts);
+    }
+    old.name = name;
+  }
+
+  await sharedSet('blog_categories', blogCategories);
+  closeBlogCatModal();
+  populateBlogCategorySelect(name);
+  renderBlog();
+}
+
+async function deleteBlogCat() {
+  if (!isAdmin || blogCatEditIdx === -1) return;
+  const c = blogCategories[blogCatEditIdx];
+  if (!confirm(`Delete "${c.name}" category? Existing posts keep their tag but this filter chip will disappear.`)) return;
+  blogCategories.splice(blogCatEditIdx, 1);
+  await sharedSet('blog_categories', blogCategories);
+  closeBlogCatModal();
+  renderBlog();
+}
+
+function getBlogCategories() {
+  return ['All', ...blogCategories.map(c => c.name)];
+}
+
+function renderBlogFilters() {
+  const wrap = document.getElementById('blogFilters');
+  if (!wrap) return;
+  if (!blogPosts.length) { wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
+  const cats = getBlogCategories();
+  if (!cats.includes(blogFilterCategory)) blogFilterCategory = 'All';
+  wrap.style.display = 'flex';
+  wrap.innerHTML =
+    `<div class="fiv-cat-chip"><button type="button" class="fiv-cat-btn${blogFilterCategory === 'All' ? ' active' : ''}" data-cat="All">All</button></div>` +
+    blogCategories.map((c, i) =>
+      `<div class="fiv-cat-chip">
+        <button type="button" class="fiv-cat-btn${c.name === blogFilterCategory ? ' active' : ''}" data-cat="${escAttr(c.name)}">${c.name}</button>
+        ${isAdmin ? `<button type="button" class="fiv-cat-edit-btn" onclick="openBlogCatModal(${i})" title="Edit category" aria-label="Edit category">${editPencilSvg}</button>` : ''}
+      </div>`
+    ).join('') +
+    (isAdmin ? `<button type="button" class="fiv-add-cat-btn" onclick="openBlogCatModal(-1)">＋ Add Category</button>
+     <button type="button" class="fiv-add-cat-btn" onclick="resetBlogCategories()" title="Reset categories to the default list" style="border-color:rgba(148,163,184,0.35);color:var(--muted);">⟲ Reset to Default</button>` : '');
+  wrap.querySelectorAll('.fiv-cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => { blogFilterCategory = btn.dataset.cat; renderBlog(); });
+  });
+}
+
 // ===== Hide sections (and their nav links) from public until admin adds content =====
 function toggleContentSection(sectionId, hasContent, navLinkIds) {
   const show = hasContent || isAdmin;
@@ -6530,6 +6678,7 @@ function renderBlog() {
   const sliderTrack = document.getElementById('blogSliderTrack');
   if (!featuredWrap || !empty) return;
   toggleContentSection('blog', blogPosts.length > 0, ['navMoreBlogLink','mmBlogLink','footerBlogLink']);
+  renderBlogFilters();
   if (!blogPosts.length) {
     featuredWrap.innerHTML = '';
     moreBtn.style.display = 'none';
@@ -6539,10 +6688,23 @@ function renderBlog() {
   }
   empty.style.display = 'none';
 
-  // Newest post (index 0, since publishBlog unshifts) shown as the featured card
-  const p0 = blogPosts[0];
+  // Keep original array indices attached so admin edit/remove/move actions
+  // still target the right post in `blogPosts` after category filtering.
+  const indexed = blogPosts
+    .map((p, i) => ({ p, i }))
+    .filter(({ p }) => blogFilterCategory === 'All' || (p.cat || 'Article') === blogFilterCategory);
+
+  if (!indexed.length) {
+    featuredWrap.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:14px;padding:40px 20px;font-family:var(--font-mono);">No posts in this category yet.</div>`;
+    moreBtn.style.display = 'none';
+    sliderSection.style.display = 'none';
+    return;
+  }
+
+  // Newest post in the filtered list shown as the featured card
+  const { p: p0, i: i0 } = indexed[0];
   featuredWrap.innerHTML = `
-    <div class="resource-featured-card" onclick="openBlogRead(0)">
+    <div class="resource-featured-card" onclick="openBlogRead(${i0})">
       <div class="resource-featured-thumb">${p0.img ? `<img src="${p0.img}" alt="${escHtml(p0.title||'Post')}" loading="lazy">` : (p0.emoji||'📝')}</div>
       <div class="resource-featured-body">
         <span class="resource-badge-new">● NEW</span>
@@ -6550,13 +6712,13 @@ function renderBlog() {
         <div class="resource-featured-title">${escHtml(p0.title)}</div>
         <div class="resource-featured-excerpt">${escHtml((p0.content||'').substring(0,160))}${p0.content&&p0.content.length>160?'...':''}</div>
         <div class="resource-featured-date">${p0.date}</div>
-        ${isAdmin ? `<div style="margin-top:10px;display:flex;gap:10px;align-items:center;" onclick="event.stopPropagation()"><button onclick="removeBlogPost(0)" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button>
-        <div class="admin-move-row"><button class="admin-move-btn" title="Move earlier (up in serial)" onclick="moveBlogPost(0, -1)" disabled>▲</button><button class="admin-move-btn" title="Move later (down in serial)" onclick="moveBlogPost(0, 1)" ${blogPosts.length <= 1 ? 'disabled' : ''}>▼</button></div></div>` : ''}
+        ${isAdmin ? `<div style="margin-top:10px;display:flex;gap:10px;align-items:center;" onclick="event.stopPropagation()"><button onclick="removeBlogPost(${i0})" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button>
+        <div class="admin-move-row"><button class="admin-move-btn" title="Move earlier (up in serial)" onclick="moveBlogPost(${i0}, -1)" ${i0 <= 0 ? 'disabled' : ''}>▲</button><button class="admin-move-btn" title="Move later (down in serial)" onclick="moveBlogPost(${i0}, 1)" ${i0 >= blogPosts.length - 1 ? 'disabled' : ''}>▼</button></div></div>` : ''}
       </div>
     </div>
   `;
 
-  const rest = blogPosts.slice(1);
+  const rest = indexed.slice(1);
   if (!rest.length) {
     moreBtn.style.display = 'none';
     sliderSection.style.display = 'none';
@@ -6565,8 +6727,7 @@ function renderBlog() {
   moreBtn.style.display = 'inline-flex';
   document.getElementById('blogMoreLabel').textContent = `More Posts (${rest.length}) ▾`;
 
-  sliderTrack.innerHTML = rest.map((p, idx) => {
-    const realIndex = idx + 1; // actual index in the `blogPosts` array
+  sliderTrack.innerHTML = rest.map(({ p, i: realIndex }) => {
     return `
     <div class="resource-slide-card" onclick="openBlogRead(${realIndex})">
       ${p.img ? `<img class="resource-slide-thumb" src="${p.img}" alt="${escHtml(p.title||'Post')}" loading="lazy">` : `<div class="resource-slide-thumb-emoji">${p.emoji||'📝'}</div>`}
@@ -6638,7 +6799,7 @@ async function publishBlog() {
   blogPosts.unshift({ title, cat: cat||'Article', emoji: emoji||'📝', img: blogImgDataUrl||'', content, date: dateStr });
   await sharedSet('blog_posts', blogPosts);
   document.getElementById('blogTitleInput').value = '';
-  document.getElementById('blogCatInput').value = '';
+  populateBlogCategorySelect('');
   document.getElementById('blogEmojiInput').value = '📝';
   document.getElementById('blogContentInput').value = '';
   removeBlogImgSelection();
@@ -6684,6 +6845,7 @@ document.getElementById('blogReadModal').addEventListener('click', e => { if (e.
 document.getElementById('openBlogModal').addEventListener('click', () => {
   if (!isAdmin) { alert('Admin login required. Click the Admin button.'); return; }
   removeBlogImgSelection();
+  populateBlogCategorySelect('');
   document.getElementById('blogModal').classList.add('open');
 });
 document.getElementById('closeBlogModal').addEventListener('click', () => document.getElementById('blogModal').classList.remove('open'));
@@ -6693,6 +6855,113 @@ document.getElementById('blogModal').addEventListener('click', e => { if (e.targ
 // RESOURCE BOARD SYSTEM (title / image / PDF / YouTube / Drive link / details text)
 // ===================================================
 let resources = [];
+
+// Category management for free resources — mirrors the Review/YouTube/Blog
+// category system (admin add/edit/delete instead of a plain free-text tag).
+const DEFAULT_RESOURCE_CATEGORIES = [
+  { name: 'Templates' },
+  { name: 'LUTs & Presets' },
+  { name: 'Guides & Ebooks' },
+  { name: 'Video Tutorials' },
+  { name: 'Tools & Assets' }
+];
+let resourceCategories = DEFAULT_RESOURCE_CATEGORIES.map(c => ({ ...c }));
+let resourceCatEditIdx = -1; // -1 = adding a new category, >=0 = editing existing index
+let resourceFilterCategory = 'All';
+
+async function resetResourceCategories() {
+  if (!isAdmin) return;
+  if (!confirm('Reset resource categories to the default list? This replaces your current category list (existing resources keep their tags, but chips not in the default list will disappear from the filter bar).')) return;
+  resourceCategories = DEFAULT_RESOURCE_CATEGORIES.map(c => ({ ...c }));
+  await sharedSet('resource_categories', resourceCategories);
+  renderResources();
+}
+
+function populateResourceCategorySelect(selected) {
+  const sel = document.getElementById('resourceCatInput');
+  if (!sel) return;
+  if (!resourceCategories.length) {
+    sel.innerHTML = '<option value="">No categories yet — add one first</option>';
+    return;
+  }
+  sel.innerHTML = resourceCategories.map(c => `<option value="${escAttr(c.name)}">${c.name}</option>`).join('');
+  if (selected && resourceCategories.some(c => c.name === selected)) sel.value = selected;
+}
+
+function openResourceCatModal(idx) {
+  if (!isAdmin) { alert('Admin login required.'); return; }
+  resourceCatEditIdx = idx;
+  const isNew = idx === -1;
+  const c = isNew ? { name: '' } : resourceCategories[idx];
+  document.getElementById('resourceCatModalTitle').innerHTML = (isNew ? 'Add Resource Category' : 'Edit — ' + c.name);
+  document.getElementById('resourceCat_name').value = c.name || '';
+  document.getElementById('resourceCatDeleteBtn').style.display = !isNew ? 'block' : 'none';
+  document.getElementById('resourceCatModal').classList.add('open');
+  setTimeout(() => document.getElementById('resourceCat_name').focus(), 50);
+}
+
+function closeResourceCatModal() { document.getElementById('resourceCatModal').classList.remove('open'); }
+document.getElementById('resourceCatModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeResourceCatModal(); });
+
+async function saveResourceCat() {
+  if (!isAdmin) return;
+  const name = document.getElementById('resourceCat_name').value.trim();
+  if (!name) { alert('Category name is required.'); return; }
+  if (resourceCategories.some((c, i) => c.name === name && i !== resourceCatEditIdx)) { alert('A category with this name already exists.'); return; }
+
+  if (resourceCatEditIdx === -1) {
+    resourceCategories.push({ name });
+  } else {
+    const old = resourceCategories[resourceCatEditIdx];
+    if (old.name !== name) {
+      // Keep existing resources tagged correctly when a category is renamed.
+      resources.forEach(r => { if (r.category === old.name) r.category = name; });
+      await sharedSet('resources', resources);
+    }
+    old.name = name;
+  }
+
+  await sharedSet('resource_categories', resourceCategories);
+  closeResourceCatModal();
+  populateResourceCategorySelect(name);
+  renderResources();
+}
+
+async function deleteResourceCat() {
+  if (!isAdmin || resourceCatEditIdx === -1) return;
+  const c = resourceCategories[resourceCatEditIdx];
+  if (!confirm(`Delete "${c.name}" category? Existing resources keep their tag but this filter chip will disappear.`)) return;
+  resourceCategories.splice(resourceCatEditIdx, 1);
+  await sharedSet('resource_categories', resourceCategories);
+  closeResourceCatModal();
+  renderResources();
+}
+
+function getResourceCategories() {
+  return ['All', ...resourceCategories.map(c => c.name)];
+}
+
+function renderResourceFilters() {
+  const wrap = document.getElementById('resourceFilters');
+  if (!wrap) return;
+  if (!resources.length) { wrap.style.display = 'none'; wrap.innerHTML = ''; return; }
+  const cats = getResourceCategories();
+  if (!cats.includes(resourceFilterCategory)) resourceFilterCategory = 'All';
+  wrap.style.display = 'flex';
+  wrap.innerHTML =
+    `<div class="fiv-cat-chip"><button type="button" class="fiv-cat-btn${resourceFilterCategory === 'All' ? ' active' : ''}" data-cat="All">All</button></div>` +
+    resourceCategories.map((c, i) =>
+      `<div class="fiv-cat-chip">
+        <button type="button" class="fiv-cat-btn${c.name === resourceFilterCategory ? ' active' : ''}" data-cat="${escAttr(c.name)}">${c.name}</button>
+        ${isAdmin ? `<button type="button" class="fiv-cat-edit-btn" onclick="openResourceCatModal(${i})" title="Edit category" aria-label="Edit category">${editPencilSvg}</button>` : ''}
+      </div>`
+    ).join('') +
+    (isAdmin ? `<button type="button" class="fiv-add-cat-btn" onclick="openResourceCatModal(-1)">＋ Add Category</button>
+     <button type="button" class="fiv-add-cat-btn" onclick="resetResourceCategories()" title="Reset categories to the default list" style="border-color:rgba(148,163,184,0.35);color:var(--muted);">⟲ Reset to Default</button>` : '');
+  wrap.querySelectorAll('.fiv-cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => { resourceFilterCategory = btn.dataset.cat; renderResources(); });
+  });
+}
 
 function ytVideoId(url) {
   if (!url) return '';
@@ -6716,6 +6985,7 @@ function renderResources() {
   const sliderTrack = document.getElementById('resourceSliderTrack');
   if (!featuredWrap || !empty) return;
   toggleContentSection('resource', resources.length > 0, ['navMoreResourceLink','mmResourceLink']);
+  renderResourceFilters();
   if (!resources.length) {
     featuredWrap.innerHTML = '';
     moreBtn.style.display = 'none';
@@ -6725,23 +6995,37 @@ function renderResources() {
   }
   empty.style.display = 'none';
 
-  // Newest resource (index 0, since publishResource unshifts) shown as the featured card
-  const n0 = resources[0];
+  // Keep original array indices attached so admin edit/remove/move actions
+  // still target the right resource in `resources` after category filtering.
+  const indexed = resources
+    .map((n, i) => ({ n, i }))
+    .filter(({ n }) => resourceFilterCategory === 'All' || (n.category || 'Uncategorized') === resourceFilterCategory);
+
+  if (!indexed.length) {
+    featuredWrap.innerHTML = `<div style="text-align:center;color:var(--muted);font-size:14px;padding:40px 20px;font-family:var(--font-mono);">No resources in this category yet.</div>`;
+    moreBtn.style.display = 'none';
+    sliderSection.style.display = 'none';
+    return;
+  }
+
+  // Newest resource in the filtered list shown as the featured card
+  const { n: n0, i: i0 } = indexed[0];
   featuredWrap.innerHTML = `
-    <div class="resource-featured-card" onclick="openResourceRead(0)">
+    <div class="resource-featured-card" onclick="openResourceRead(${i0})">
       <div class="resource-featured-thumb">${n0.img ? `<img src="${n0.img}" alt="${escHtml(n0.title||'Resource')}" loading="lazy">` : (ytThumb(n0.yt) ? `<img src="${ytThumb(n0.yt)}" alt="${escHtml(n0.title||'Resource')}" loading="lazy">` : '🎁')}</div>
       <div class="resource-featured-body">
         <span class="resource-badge-new">● NEW</span>
+        ${n0.category ? `<div style="font-size:11px;font-family:var(--font-mono);color:var(--cyan);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">${escHtml(n0.category)}</div>` : ''}
         <div class="resource-featured-title">${escHtml(n0.title)}</div>
         <div class="resource-featured-excerpt">${escHtml((n0.content||'').substring(0,160))}${n0.content&&n0.content.length>160?'...':''}</div>
         <div class="resource-featured-date">${n0.date}</div>
-        ${isAdmin ? `<div style="margin-top:10px;display:flex;gap:10px;align-items:center;" onclick="event.stopPropagation()"><button onclick="removeResource(0)" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button>
-        <div class="admin-move-row"><button class="admin-move-btn" title="Move earlier (up in serial)" onclick="moveResource(0, -1)" disabled>▲</button><button class="admin-move-btn" title="Move later (down in serial)" onclick="moveResource(0, 1)" ${resources.length <= 1 ? 'disabled' : ''}>▼</button></div></div>` : ''}
+        ${isAdmin ? `<div style="margin-top:10px;display:flex;gap:10px;align-items:center;" onclick="event.stopPropagation()"><button onclick="removeResource(${i0})" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:4px 10px;cursor:pointer;font-size:11px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button>
+        <div class="admin-move-row"><button class="admin-move-btn" title="Move earlier (up in serial)" onclick="moveResource(${i0}, -1)" ${i0 <= 0 ? 'disabled' : ''}>▲</button><button class="admin-move-btn" title="Move later (down in serial)" onclick="moveResource(${i0}, 1)" ${i0 >= resources.length - 1 ? 'disabled' : ''}>▼</button></div></div>` : ''}
       </div>
     </div>
   `;
 
-  const rest = resources.slice(1);
+  const rest = indexed.slice(1);
   if (!rest.length) {
     moreBtn.style.display = 'none';
     sliderSection.style.display = 'none';
@@ -6750,8 +7034,7 @@ function renderResources() {
   moreBtn.style.display = 'inline-flex';
   document.getElementById('resourceMoreLabel').textContent = `More Resources (${rest.length}) ▾`;
 
-  sliderTrack.innerHTML = rest.map((n, idx) => {
-    const realIndex = idx + 1; // actual index in the `resources` array
+  sliderTrack.innerHTML = rest.map(({ n, i: realIndex }) => {
     return `
     <div class="resource-slide-card" onclick="openResourceRead(${realIndex})">
       ${n.img ? `<img class="resource-slide-thumb" src="${n.img}" alt="${escHtml(n.title||'Resource')}" loading="lazy">` : (ytThumb(n.yt) ? `<img class="resource-slide-thumb" src="${ytThumb(n.yt)}" alt="${escHtml(n.title||'Resource')}" loading="lazy">` : `<div class="resource-slide-thumb-emoji">🎁</div>`)}
@@ -6838,6 +7121,7 @@ function removeResourcePdfSelection() {
 async function publishResource() {
   if (!isAdmin) return;
   const title   = document.getElementById('resourceTitleInput').value.trim();
+  const category = document.getElementById('resourceCatInput').value.trim();
   const content = document.getElementById('resourceContentInput').value.trim();
   const yt      = document.getElementById('resourceYtInput').value.trim();
   const drive   = document.getElementById('resourceDriveInput').value.trim();
@@ -6851,6 +7135,7 @@ async function publishResource() {
   const resourceNow = new Date();
   resources.unshift({
     title, content,
+    category: category || '',
     img: resourceImgDataUrl || '',
     pdf: resourcePdfData || null,
     yt: yt || '',
@@ -6859,6 +7144,7 @@ async function publishResource() {
   });
   await sharedSet('resources', resources);
   document.getElementById('resourceTitleInput').value = '';
+  populateResourceCategorySelect('');
   document.getElementById('resourceContentInput').value = '';
   document.getElementById('resourceYtInput').value = '';
   document.getElementById('resourceDriveInput').value = '';
@@ -6892,7 +7178,7 @@ async function moveResource(origIndex, dir) {
 function openResourceRead(i) {
   const n = resources[i];
   document.getElementById('resourceReadTitle').textContent = n.title;
-  document.getElementById('resourceReadMeta').textContent = n.date;
+  document.getElementById('resourceReadMeta').textContent = n.category ? (n.category + ' • ' + n.date) : n.date;
   const imgEl = document.getElementById('resourceReadImg');
   if (n.img) { imgEl.src = n.img; imgEl.alt = n.title||''; imgEl.style.display = 'block'; }
   else { imgEl.style.display = 'none'; imgEl.src = ''; }
@@ -6935,6 +7221,7 @@ document.getElementById('openResourceModal').addEventListener('click', () => {
   if (!isAdmin) { alert('Admin login required. Click the Admin button.'); return; }
   removeResourceImgSelection();
   removeResourcePdfSelection();
+  populateResourceCategorySelect('');
   document.getElementById('resourceYtInput').value = '';
   document.getElementById('resourceDriveInput').value = '';
   document.getElementById('resourceModal').classList.add('open');
@@ -9106,7 +9393,32 @@ async function initSharedData() {
       });
     }
     if (record.blog_posts)     blogPosts      = record.blog_posts;
+    if (record.blog_categories) {
+      blogCategories = record.blog_categories;
+    } else if (blogPosts.length) {
+      // One-time migration: older posts stored category as free text with no
+      // managed list behind it. Fold any of those names into the default list
+      // so nothing existing silently disappears from the filter bar.
+      const knownBlog = new Set(blogCategories.map(c => c.name));
+      blogPosts.forEach(p => {
+        if (p.cat && !knownBlog.has(p.cat)) {
+          blogCategories.push({ name: p.cat });
+          knownBlog.add(p.cat);
+        }
+      });
+    }
     if (record.resources)        resources        = record.resources;
+    if (record.resource_categories) {
+      resourceCategories = record.resource_categories;
+    } else if (resources.length) {
+      const knownRes = new Set(resourceCategories.map(c => c.name));
+      resources.forEach(n => {
+        if (n.category && !knownRes.has(n.category)) {
+          resourceCategories.push({ name: n.category });
+          knownRes.add(n.category);
+        }
+      });
+    }
     if (record.projects)       projects       = record.projects;
     if (record.project_categories) {
       projectCategories = record.project_categories;
