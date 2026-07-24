@@ -5235,7 +5235,12 @@ body, body *, body *::before, body *::after {
     <label class="blog-modal-label">EMAIL</label>
     <input class="blog-modal-field" id="clientAuthEmailInput" placeholder="you@example.com" type="email" autocomplete="email">
     <label class="blog-modal-label">PASSWORD</label>
-    <input class="blog-modal-field" id="clientAuthPassInput" placeholder="At least 6 characters" type="password" autocomplete="current-password">
+    <div style="position:relative;">
+      <input class="blog-modal-field" id="clientAuthPassInput" placeholder="At least 6 characters" type="password" autocomplete="current-password" style="padding-right:44px;">
+      <button type="button" onclick="toggleClientPassVisibility()" aria-label="Show/hide password" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;padding:8px;display:flex;align-items:center;">
+        <svg id="clientAuthPassEyeIcon" class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18px" height="18px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+      </button>
+    </div>
 
     <div id="clientAuthError" style="display:none;background:rgba(255,0,0,0.08);border:1px solid rgba(255,0,0,0.25);color:#ff8a8a;padding:9px 12px;border-radius:8px;font-size:12.5px;margin-top:6px;font-family:var(--font-mono);"></div>
 
@@ -6382,10 +6387,24 @@ async function adminLogout() {
 let _clientAuthMode = 'login'; // 'login' | 'signup'
 let _clientAuthBusy = false;
 
+function toggleClientPassVisibility() {
+  const input = document.getElementById('clientAuthPassInput');
+  const icon  = document.getElementById('clientAuthPassEyeIcon');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+  } else {
+    input.type = 'password';
+    icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+  }
+}
+
 function openClientAuthModal(mode) {
   switchClientAuthTab(mode || 'login');
   document.getElementById('clientAuthEmailInput').value = '';
   document.getElementById('clientAuthPassInput').value = '';
+  document.getElementById('clientAuthPassInput').type = 'password';
+  document.getElementById('clientAuthPassEyeIcon').innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
   document.getElementById('clientAuthNameInput').value = '';
   document.getElementById('clientAuthError').style.display = 'none';
   document.getElementById('clientAuthModal').classList.add('open');
@@ -7574,8 +7593,11 @@ function openResourceRead(i) {
 
   document.getElementById('resourceReadTitle').textContent = n.title;
   document.getElementById('resourceReadMeta').textContent = n.category ? (n.category + ' • ' + n.date) : n.date;
+
+  // Locked resources only reveal the title/category above — thumbnail, video,
+  // and description all stay hidden until the visitor logs in / signs up.
   const imgEl = document.getElementById('resourceReadImg');
-  if (n.img) { imgEl.src = n.img; imgEl.alt = n.title||''; imgEl.style.display = 'block'; }
+  if (n.img && !locked) { imgEl.src = n.img; imgEl.alt = n.title||''; imgEl.style.display = 'block'; }
   else { imgEl.style.display = 'none'; imgEl.src = ''; }
 
   const ytWrap = document.getElementById('resourceReadYtWrap');
@@ -7588,21 +7610,22 @@ function openResourceRead(i) {
     ytWrap.innerHTML = '';
   }
 
-  document.getElementById('resourceReadContent').textContent = n.content || '';
+  document.getElementById('resourceReadContent').textContent = locked ? '' : (n.content || '');
 
   const dlWrap = document.getElementById('resourceReadDownloadsWrap');
   const btnStyle = 'display:inline-flex;align-items:center;gap:8px;padding:11px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border-radius:10px;text-decoration:none;font-family:var(--font-display);font-size:14px;font-weight:700;';
 
   if (locked) {
-    // Clients-only resource — visitor isn't logged in, show a lock screen instead of the actual downloads
+    // Clients-only resource — visitor isn't logged in. Only the title/category
+    // (already set above) are visible; everything else is replaced by this lock prompt.
     dlWrap.innerHTML = `
       <div style="width:100%;text-align:center;padding:22px 16px;background:rgba(37,99,235,0.06);border:1px dashed rgba(37,99,235,0.3);border-radius:12px;">
         <div style="font-size:26px;margin-bottom:8px;">🔒</div>
         <div style="font-family:var(--font-display);font-weight:700;color:var(--white);margin-bottom:6px;">Clients-only resource</div>
-        <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Log in or create a free client account to unlock this download.</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Create a free client account (or log in) to unlock the full details and download.</div>
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-          <button onclick="closeResourceRead();openClientAuthModal('login')" style="${btnStyle};border:none;cursor:pointer;">Login</button>
-          <button onclick="closeResourceRead();openClientAuthModal('signup')" style="display:inline-flex;align-items:center;gap:8px;padding:11px 20px;background:transparent;border:1px solid var(--border);color:var(--white);border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;">Create Account</button>
+          <button onclick="closeResourceRead();openClientAuthModal('signup')" style="${btnStyle};border:none;cursor:pointer;">Create Free Account</button>
+          <button onclick="closeResourceRead();openClientAuthModal('login')" style="display:inline-flex;align-items:center;gap:8px;padding:11px 20px;background:transparent;border:1px solid var(--border);color:var(--white);border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;">Login</button>
         </div>
       </div>`;
     document.getElementById('resourceReadModal').classList.add('open');
