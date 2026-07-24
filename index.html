@@ -2492,8 +2492,9 @@ footer {
   background: rgba(0,0,0,0.7);
   backdrop-filter: blur(8px);
   z-index: 2000;
-  display: flex; align-items: center; justify-content: center;
-  padding: 20px;
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 40px 20px;
+  overflow-y: auto;
   opacity: 0; pointer-events: none;
   transition: opacity .3s;
 }
@@ -2505,6 +2506,7 @@ footer {
   padding: 32px;
   width: 100%;
   max-width: 480px;
+  margin: auto;
   transform: translateY(20px);
   transition: transform .3s;
 }
@@ -3299,6 +3301,11 @@ body, body *, body *::before, body *::after {
     if (_sdkTag) _sdkTag.addEventListener('load', () => initEmailJS(0));
     initEmailJS(0); // also try immediately in case it's already loaded/cached
   </script>
+<style>
+  /* Hide the floating reCAPTCHA v3 badge — required disclosure text is shown
+     near the contact form instead, per Google's reCAPTCHA terms of service. */
+  .grecaptcha-badge { visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
+</style>
 </head>
 <body>
 <div id="google_translate_element"></div>
@@ -4306,6 +4313,11 @@ body, body *, body *::before, body *::after {
           Oops! Something went wrong while sending your inquiry.<br>Please try again later or contact me directly via email or WhatsApp.
         </div>
         <button class="form-submit" onclick="handleSubmit(this)">Send Message <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+        <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5;">
+          This site is protected by reCAPTCHA and the Google
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline;">Privacy Policy</a> and
+          <a href="https://policies.google.com/terms" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline;">Terms of Service</a> apply.
+        </div>
     </div>
   </div>
 </section>
@@ -5193,7 +5205,7 @@ body, body *, body *::before, body *::after {
       </select>
       <input type="number" id="availabilityIntervalCustom" min="1" placeholder="seconds" style="display:none;width:90px;flex-shrink:0;background:var(--card);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:8px;font-size:13px;font-family:inherit;">
     </div>
-    <div id="availabilityRows" style="display:flex;flex-direction:column;gap:10px;max-height:380px;overflow-y:auto;padding-right:4px;margin-bottom:6px;"></div>
+    <div id="availabilityRows" style="display:flex;flex-direction:column;gap:10px;max-height:300px;overflow-y:auto;padding-right:4px;margin-bottom:6px;"></div>
     <button type="button" onclick="addAvailabilityRow()" style="background:rgba(59,130,246,0.08);border:1px dashed rgba(59,130,246,0.35);color:var(--cyan);border-radius:8px;padding:8px;font-size:12px;cursor:pointer;width:100%;font-family:var(--font-mono);margin-bottom:14px;">+ Add Message</button>
     <div class="yt-modal-btns">
       <button class="yt-modal-cancel" id="closeAvailabilityModal">Cancel</button>
