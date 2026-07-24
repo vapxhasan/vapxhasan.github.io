@@ -3254,17 +3254,39 @@ body, body *, body *::before, body *::after {
 .exit-popup-cta:hover { background: #1ebd5a; box-shadow: 0 6px 20px rgba(37,211,102,0.4); }
 .exit-popup-cta svg { width: 20px; height: 20px; }
 </style>
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer id="emailjsSdk"></script>
   <script defer>
     // limitRate blocks the SDK from actually dispatching a second request for
     // 8 seconds after the first one — a hard, built-in guarantee against
     // duplicate sends (accidental double-click, double-tap, etc.), regardless
     // of what caused it. This doesn't affect legitimate normal use since one
     // person submitting the contact form once is nowhere near 8 seconds apart.
-    emailjs.init({
-      publicKey: 'e0awi-tK6bi_VJHzU',
-      limitRate: { id: 'contact_form', throttle: 8000 },
-    });
+    //
+    // Previously this called emailjs.init() immediately, assuming the SDK
+    // script (loaded via a separate <script defer> above) had already
+    // finished loading by the time this ran. Normally true — but if that CDN
+    // request is slow, blocked (ad-blocker/firewall), or briefly fails, this
+    // line throws "emailjs is not defined" and EmailJS never gets
+    // initialized for the rest of the page, breaking the contact form.
+    // Now it waits for the SDK's own 'load' event before calling init(),
+    // and retries a couple of times if the SDK still isn't ready.
+    function initEmailJS(attempt) {
+      attempt = attempt || 0;
+      if (typeof emailjs !== 'undefined') {
+        emailjs.init({
+          publicKey: 'e0awi-tK6bi_VJHzU',
+          limitRate: { id: 'contact_form', throttle: 8000 },
+        });
+        window._emailjsReady = true;
+      } else if (attempt < 5) {
+        setTimeout(() => initEmailJS(attempt + 1), 400); // brief retry in case the CDN script is just slow
+      } else {
+        console.warn('EmailJS SDK failed to load (cdn.jsdelivr.net may be blocked by an ad-blocker/firewall). Contact form emails will not send until this loads.');
+      }
+    }
+    const _sdkTag = document.getElementById('emailjsSdk');
+    if (_sdkTag) _sdkTag.addEventListener('load', () => initEmailJS(0));
+    initEmailJS(0); // also try immediately in case it's already loaded/cached
   </script>
 </head>
 <body>
@@ -5664,6 +5686,14 @@ function cfSyncBudget() {
 
 // ===== FORM SUBMIT =====
 async function handleSubmit(btn) {
+  const successEl0 = document.getElementById('cf_success');
+  const errorEl0   = document.getElementById('cf_error');
+  if (typeof emailjs === 'undefined' || !window._emailjsReady) {
+    errorEl0.textContent = 'Email service is still loading — please wait a couple seconds and press Send again. (If this keeps happening, try disabling any ad-blocker and reloading the page.)';
+    errorEl0.style.display = 'block';
+    successEl0.style.display = 'none';
+    return;
+  }
   const name    = document.getElementById('cf_name').value.trim();
   const email   = document.getElementById('cf_email').value.trim();
   const service = document.getElementById('cf_service').value.trim();
