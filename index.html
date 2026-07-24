@@ -6458,6 +6458,42 @@ function logClientSignupToSheet({ name, email, date, uid }) {
   } catch (e) { /* silently ignore */ }
 }
 
+// Welcome email sent to a client right after they create a free account.
+// This intentionally uses a SEPARATE/NEW EmailJS account from the one that
+// powers the contact form (service_tfcdfkh + its two templates above) — that
+// existing setup is untouched. EmailJS lets you override the public key
+// per-send (4th argument), so this call can use a different EmailJS account
+// without re-running emailjs.init() and without affecting any other email on
+// the site.
+//
+// ⚠️ SETUP NEEDED — from your NEW EmailJS account, paste in:
+//   1) CLIENT_WELCOME_PUBLIC_KEY  → Account → General → Public Key
+//   2) CLIENT_WELCOME_SERVICE_ID  → Email Services → your connected service's ID
+//   3) CLIENT_WELCOME_TEMPLATE_ID → Email Templates → the welcome template's ID
+// Until all three are set, this silently skips (signup itself still works).
+const CLIENT_WELCOME_PUBLIC_KEY   = '89IQfhqyRD_rUy-PY';
+const CLIENT_WELCOME_SERVICE_ID   = 'service_i4xsnh6';
+const CLIENT_WELCOME_TEMPLATE_ID  = 'template_bgxphgk';
+
+function sendClientWelcomeEmail({ name, email }) {
+  try {
+    if (typeof emailjs === 'undefined') return;
+    if (CLIENT_WELCOME_PUBLIC_KEY === 'PASTE_NEW_EMAILJS_PUBLIC_KEY_HERE' ||
+        CLIENT_WELCOME_SERVICE_ID === 'PASTE_NEW_EMAILJS_SERVICE_ID_HERE' ||
+        CLIENT_WELCOME_TEMPLATE_ID === 'PASTE_NEW_EMAILJS_TEMPLATE_ID_HERE') {
+      console.warn('Client welcome email skipped: set CLIENT_WELCOME_PUBLIC_KEY / SERVICE_ID / TEMPLATE_ID.');
+      return;
+    }
+    emailjs.send(CLIENT_WELCOME_SERVICE_ID, CLIENT_WELCOME_TEMPLATE_ID, {
+      to_name:  name,
+      to_email: email,
+      name,
+      email,
+    }, { publicKey: CLIENT_WELCOME_PUBLIC_KEY })
+      .catch(err => console.warn('Client welcome email failed:', err));
+  } catch (e) { console.warn('Client welcome email failed:', e); }
+}
+
 async function submitClientAuth() {
   if (_clientAuthBusy) return;
   const errEl = document.getElementById('clientAuthError');
@@ -6506,6 +6542,7 @@ async function submitClientAuth() {
         joinedAt,
       });
       logClientSignupToSheet({ name, email, date: joinedAt, uid: cred.user.uid });
+      sendClientWelcomeEmail({ name, email });
     } else {
       await signIn(auth, email, pass);
       loginLockReset('client');
