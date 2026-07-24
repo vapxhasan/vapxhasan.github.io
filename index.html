@@ -63,7 +63,7 @@
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDb5Q289UUYHkXSa4wYP74hisA5g9vzH8A",
@@ -82,7 +82,7 @@
 
   // expose to the regular (non-module) script below
   window._fb = { ref, get, set, db: fbDb };
-  window._fbAuth = { auth: fbAuth, signIn: signInWithEmailAndPassword, signOut, onAuthStateChanged };
+  window._fbAuth = { auth: fbAuth, signIn: signInWithEmailAndPassword, signUp: createUserWithEmailAndPassword, updateProfile, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence, browserLocalPersistence };
   window._fbReady = true;
   window.dispatchEvent(new Event('firebase-ready'));
 </script>
@@ -4415,7 +4415,10 @@ body, body *, body *::before, body *::after {
         <h2 class="section-title">Free <span>Resources</span></h2>
         <p class="section-sub">Free templates, presets, LUTs, guides, and videos — download and use in your own projects.</p>
       </div>
-      <button class="blog-write-btn admin-only" id="openResourceModal" style="display:none;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Add Resource</button>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <div id="clientAuthWidget"></div>
+        <button class="blog-write-btn admin-only" id="openResourceModal" style="display:none;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Add Resource</button>
+      </div>
     </div>
 
     <div id="resourceFilters" class="fiv-cat-bar" style="display:none;margin-bottom:22px;"></div>
@@ -5135,6 +5138,11 @@ body, body *, body *::before, body *::after {
   <div class="blog-modal">
     <div class="blog-modal-title"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg> Add Resource</div>
     <div class="blog-modal-sub">Share a free downloadable resource with your clients — image, PDF, YouTube video, or Drive link</div>
+    <label class="blog-modal-label">ACCESS <span style="text-transform:none;letter-spacing:0;color:var(--cyan);">— who can download this</span></label>
+    <select class="blog-modal-field" id="resourceAccessInput" style="margin-bottom:14px;">
+      <option value="public">Public — anyone can download</option>
+      <option value="clients-only">Clients Only — login required</option>
+    </select>
     <label class="blog-modal-label">TITLE</label>
     <input class="blog-modal-field" id="resourceTitleInput" placeholder="e.g. Free Cinematic LUT Pack" type="text">
     <label class="blog-modal-label">CATEGORY</label>
@@ -5187,7 +5195,34 @@ body, body *, body *::before, body *::after {
   </div>
 </div>
 
-<!-- Blog Write Modal -->
+<!-- Client Login / Sign Up Modal -->
+<div class="blog-modal-overlay" id="clientAuthModal">
+  <div class="blog-modal" style="max-width:420px;">
+    <div style="display:flex;gap:4px;margin-bottom:18px;background:var(--card2);border-radius:10px;padding:4px;">
+      <button type="button" id="clientAuthTabLogin" onclick="switchClientAuthTab('login')" style="flex:1;padding:9px;border:none;border-radius:7px;font-family:var(--font-mono);font-size:12.5px;cursor:pointer;background:var(--indigo);color:#fff;transition:all .2s;">Login</button>
+      <button type="button" id="clientAuthTabSignup" onclick="switchClientAuthTab('signup')" style="flex:1;padding:9px;border:none;border-radius:7px;font-family:var(--font-mono);font-size:12.5px;cursor:pointer;background:transparent;color:var(--muted);transition:all .2s;">Sign Up</button>
+    </div>
+
+    <div class="blog-modal-title" id="clientAuthTitle" style="font-size:20px;">Client Login</div>
+    <div class="blog-modal-sub" id="clientAuthSub">Log in to unlock client-only resources.</div>
+
+    <div id="clientAuthNameWrap" style="display:none;">
+      <label class="blog-modal-label">NAME</label>
+      <input class="blog-modal-field" id="clientAuthNameInput" placeholder="Your full name" type="text" autocomplete="name">
+    </div>
+    <label class="blog-modal-label">EMAIL</label>
+    <input class="blog-modal-field" id="clientAuthEmailInput" placeholder="you@example.com" type="email" autocomplete="email">
+    <label class="blog-modal-label">PASSWORD</label>
+    <input class="blog-modal-field" id="clientAuthPassInput" placeholder="At least 6 characters" type="password" autocomplete="current-password">
+
+    <div id="clientAuthError" style="display:none;background:rgba(255,0,0,0.08);border:1px solid rgba(255,0,0,0.25);color:#ff8a8a;padding:9px 12px;border-radius:8px;font-size:12.5px;margin-top:6px;font-family:var(--font-mono);"></div>
+
+    <div class="blog-modal-btns">
+      <button class="blog-modal-cancel" id="closeClientAuthModal">Cancel</button>
+      <button class="blog-modal-publish" id="clientAuthSubmitBtn" onclick="submitClientAuth()">Login <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+    </div>
+  </div>
+</div>
 <div class="blog-modal-overlay" id="blogModal">
   <div class="blog-modal">
     <div class="blog-modal-title"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Write Blog Post</div>
@@ -6060,8 +6095,44 @@ const _isLoginRoute = new URLSearchParams(window.location.search).get('AdminH@sa
 // এখানে শুধু নিশ্চিত করা হয় যে সফল login টা সঠিক admin email দিয়েই হয়েছে।
 const ADMIN_EMAIL = 'hasanur.rahman.editor@gmail.com';
 let isAdmin = false;
-let _loginAttempts = 0;
-let _loginLockUntil = 0;
+let isClient = false;
+let currentClient = null; // { uid, name, email }
+
+// ===================================================
+// SHARED LOGIN LOCKOUT (persists across page reloads, exponential backoff)
+// ===================================================
+// Old lockout was just a JS variable — a page refresh wiped it out, so anyone
+// could brute-force by reloading. This version keeps the fail-count/lock-time
+// in localStorage per form ('admin' / 'client'), and the lock duration grows
+// the more times someone gets locked out: 30s → 2min → 10min → capped at 30min.
+function _loginLockState(scope) {
+  try { return JSON.parse(localStorage.getItem('_loginLock_' + scope)) || { attempts: 0, lockUntil: 0, cycles: 0 }; }
+  catch (e) { return { attempts: 0, lockUntil: 0, cycles: 0 }; }
+}
+function _loginLockSave(scope, state) {
+  try { localStorage.setItem('_loginLock_' + scope, JSON.stringify(state)); } catch (e) {}
+}
+function loginLockCheck(scope) {
+  const s = _loginLockState(scope);
+  const now = Date.now();
+  if (now < s.lockUntil) return Math.ceil((s.lockUntil - now) / 1000); // seconds remaining, still locked
+  return 0;
+}
+function loginLockRecordFail(scope) {
+  const s = _loginLockState(scope);
+  s.attempts = (s.attempts || 0) + 1;
+  if (s.attempts >= 5) {
+    s.cycles = (s.cycles || 0) + 1;
+    const tiersSeconds = [30, 120, 600, 1800]; // 30s, 2min, 10min, 30min (cap)
+    const secs = tiersSeconds[Math.min(s.cycles - 1, tiersSeconds.length - 1)];
+    s.lockUntil = Date.now() + secs * 1000;
+    s.attempts = 0;
+  }
+  _loginLockSave(scope, s);
+}
+function loginLockReset(scope) {
+  _loginLockSave(scope, { attempts: 0, lockUntil: 0, cycles: 0 });
+}
 
 function checkAdmin() {
   // Firebase session-only persistence ব্যবহার করছে (browserSessionPersistence) —
@@ -6069,17 +6140,55 @@ function checkAdmin() {
   // browser/device থেকে normal URL-এ আসলে admin mode চালু হবে না।
   fbWaitReady().then(() => {
     const { auth, onAuthStateChanged } = window._fbAuth;
-    onAuthStateChanged(auth, (user) => {
+    onAuthStateChanged(auth, async (user) => {
       if (user && user.email === ADMIN_EMAIL) {
         _masterKey = 'firebase-admin';
         isAdmin = true;
+        isClient = false;
+        currentClient = null;
         showAdminUI();
         renderYtVideos(); renderBlog(); renderProjects(); renderReviews(); renderComments();
         renderClientPricing(); fivRenderCats(); fivRenderHeadline(); fivRenderTabs(); fivRenderCard();
         renderCertifications(); renderResumeButtons(); renderFaq();
-      } else {
+      } else if (user) {
+        // একজন client লগইন করে আছে (admin না)
         isAdmin = false;
         _masterKey = null;
+        try {
+          const { db, ref, get } = window._fb;
+          const snap = await get(ref(db, 'clients/' + user.uid));
+          const profile = snap.exists() ? snap.val() : null;
+
+          if (profile && profile.status === 'blocked') {
+            // Google Sheet থেকে "Blocked" করা হয়েছে — সাথে সাথে সাইন আউট করে দাও
+            isClient = false;
+            currentClient = null;
+            const { auth, signOut } = window._fbAuth;
+            await signOut(auth);
+            alert('Your client account has been blocked. Please contact the site admin.');
+          } else {
+            isClient = true;
+            currentClient = {
+              uid: user.uid,
+              name: (profile && profile.name) || user.displayName || 'Client',
+              email: user.email,
+              status: (profile && profile.status) || 'approved',
+              plan: (profile && profile.plan) || 'free', // 'free' | 'premium' — controllable from the Google Sheet
+            };
+          }
+        } catch (e) {
+          isClient = true;
+          currentClient = { uid: user.uid, name: user.displayName || 'Client', email: user.email, status: 'approved', plan: 'free' };
+        }
+        renderClientAuthUI();
+        renderResources();
+      } else {
+        isAdmin = false;
+        isClient = false;
+        currentClient = null;
+        _masterKey = null;
+        renderClientAuthUI();
+        renderResources();
       }
     });
   });
@@ -6116,12 +6225,13 @@ async function doAdminLogin() {
 
   errEl.style.display = 'none';
 
-  // simple client-side lockout against rapid repeated attempts (extra layer;
-  // Firebase Auth itself already rate-limits/blocks brute-force on its end)
-  const now = Date.now();
-  if (now < _loginLockUntil) {
-    const secs = Math.ceil((_loginLockUntil - now) / 1000);
-    errEl.textContent = `⏳ Too many attempts. Try again in ${secs}s.`;
+  // Persistent, exponential-backoff lockout against repeated attempts (extra layer;
+  // Firebase Auth itself already rate-limits/blocks brute-force on its end).
+  // Unlike before, this survives a page refresh (stored in localStorage).
+  const lockedSecs = loginLockCheck('admin');
+  if (lockedSecs > 0) {
+    const mins = Math.ceil(lockedSecs / 60);
+    errEl.textContent = lockedSecs > 90 ? `⏳ Too many attempts. Try again in ~${mins} min.` : `⏳ Too many attempts. Try again in ${lockedSecs}s.`;
     errEl.style.display = 'block';
     return;
   }
@@ -6148,14 +6258,10 @@ async function doAdminLogin() {
 
     _masterKey = 'firebase-admin';
     isAdmin = true;
-    _loginAttempts = 0;
+    loginLockReset('admin');
   } catch (e) {
     console.error('Admin login failed:', e && e.code ? e.code : e);
-    _loginAttempts++;
-    if (_loginAttempts >= 5) {
-      _loginLockUntil = Date.now() + 30000; // 30s cooldown after 5 failed tries
-      _loginAttempts = 0;
-    }
+    loginLockRecordFail('admin');
     errEl.textContent = 'Invalid email or password.';
     errEl.style.display = 'block';
     btn.textContent = 'Login to Admin Panel →';
@@ -6165,6 +6271,7 @@ async function doAdminLogin() {
 
   closeAdminLoginModal();
   showAdminUI();
+  sendAdminLoginAlert(); // security: notify the real admin's inbox every time this account logs in
   renderYtVideos();
   renderBlog();
   renderProjects();
@@ -6185,6 +6292,34 @@ async function doAdminLogin() {
   const url = new URL(window.location.href);
   url.searchParams.delete('AdminH@san');
   window.history.replaceState({}, '', url.pathname);
+}
+
+// Security alert: fires on every successful admin login (even legitimate ones),
+// so if the account is ever logged into without your knowledge, you'll see it
+// in your inbox. Uses its own dedicated EmailJS template (see
+// admin-login-alert-template.html) — NOT the contact-form template.
+//
+// ⚠️ SETUP NEEDED: replace 'PASTE_YOUR_TEMPLATE_ID_HERE' below with the
+// Template ID EmailJS gives you after you create the "Admin Login Alert"
+// template (Step 1). Until you do this, login alert emails will silently fail
+// (everything else on the site keeps working normally).
+const ADMIN_ALERT_TEMPLATE_ID = 'PASTE_YOUR_TEMPLATE_ID_HERE';
+
+function sendAdminLoginAlert() {
+  try {
+    if (typeof emailjs === 'undefined') return;
+    if (!ADMIN_ALERT_TEMPLATE_ID || ADMIN_ALERT_TEMPLATE_ID === 'PASTE_YOUR_TEMPLATE_ID_HERE') {
+      console.warn('Admin login alert skipped: set ADMIN_ALERT_TEMPLATE_ID to your EmailJS template ID.');
+      return;
+    }
+    const now = new Date();
+    const whenStr = now.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' }) + ' at ' + now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
+    emailjs.send('service_tfcdfkh', ADMIN_ALERT_TEMPLATE_ID, {
+      login_time:   whenStr,
+      browser_info: navigator.userAgent,
+      page_url:     window.location.href,
+    }).catch(err => console.warn('Admin login alert email failed:', err));
+  } catch (e) { console.warn('Admin login alert failed:', e); }
 }
 
 async function adminLogout() {
@@ -6209,6 +6344,171 @@ async function adminLogout() {
   renderCertifications();
   renderResumeButtons();
   renderFaq();
+}
+
+// ===================================================
+// CLIENT ACCOUNT SYSTEM (Free Resources — client-only gating)
+// ===================================================
+let _clientAuthMode = 'login'; // 'login' | 'signup'
+let _clientAuthBusy = false;
+
+function openClientAuthModal(mode) {
+  switchClientAuthTab(mode || 'login');
+  document.getElementById('clientAuthEmailInput').value = '';
+  document.getElementById('clientAuthPassInput').value = '';
+  document.getElementById('clientAuthNameInput').value = '';
+  document.getElementById('clientAuthError').style.display = 'none';
+  document.getElementById('clientAuthModal').classList.add('open');
+}
+function closeClientAuthModalFn() { document.getElementById('clientAuthModal').classList.remove('open'); }
+document.getElementById('closeClientAuthModal').addEventListener('click', closeClientAuthModalFn);
+document.getElementById('clientAuthModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeClientAuthModalFn(); });
+
+function switchClientAuthTab(mode) {
+  _clientAuthMode = mode;
+  const loginTab  = document.getElementById('clientAuthTabLogin');
+  const signupTab = document.getElementById('clientAuthTabSignup');
+  const nameWrap  = document.getElementById('clientAuthNameWrap');
+  const title     = document.getElementById('clientAuthTitle');
+  const sub       = document.getElementById('clientAuthSub');
+  const submitBtn = document.getElementById('clientAuthSubmitBtn');
+  document.getElementById('clientAuthError').style.display = 'none';
+  if (mode === 'signup') {
+    loginTab.style.background = 'transparent'; loginTab.style.color = 'var(--muted)';
+    signupTab.style.background = 'var(--indigo)'; signupTab.style.color = '#fff';
+    nameWrap.style.display = 'block';
+    title.textContent = 'Create Client Account';
+    sub.textContent = 'Sign up with your name, email & password to unlock client-only resources.';
+    submitBtn.innerHTML = 'Sign Up <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
+  } else {
+    signupTab.style.background = 'transparent'; signupTab.style.color = 'var(--muted)';
+    loginTab.style.background = 'var(--indigo)'; loginTab.style.color = '#fff';
+    nameWrap.style.display = 'none';
+    title.textContent = 'Client Login';
+    sub.textContent = 'Log in to unlock client-only resources.';
+    submitBtn.innerHTML = 'Login <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
+  }
+}
+
+// ⚠️ SETUP NEEDED: replace with your Apps Script Web App URL (see
+// apps-script-client-signup-log.gs). Until set, signups still work fine —
+// this just silently skips the sheet logging.
+const CLIENT_SHEET_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbwzaMaZForrdh9Qho0K0KQQ4iYfZ3YGhoi8ZrO8_HqW2QfNv13FkB4L0euoLCEQvAY3/exec';
+
+function logClientSignupToSheet({ name, email, date, uid }) {
+  if (!CLIENT_SHEET_WEBHOOK_URL || CLIENT_SHEET_WEBHOOK_URL === 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE') return;
+  try {
+    // 'no-cors' — Apps Script Web Apps don't send CORS headers back, so the
+    // response can't be read from JS anyway; the request still reaches and
+    // runs on the script's side, which is all that's needed here.
+    fetch(CLIENT_SHEET_WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      body: JSON.stringify({ name, email, date, uid }),
+    }).catch(() => {}); // never let a sheet-logging failure affect signup
+  } catch (e) { /* silently ignore */ }
+}
+
+async function submitClientAuth() {
+  if (_clientAuthBusy) return;
+  const errEl = document.getElementById('clientAuthError');
+  errEl.style.display = 'none';
+  const name  = document.getElementById('clientAuthNameInput').value.trim();
+  const email = document.getElementById('clientAuthEmailInput').value.trim();
+  const pass  = document.getElementById('clientAuthPassInput').value;
+
+  // Lockout only guards LOGIN (a guessing attack surface). Signup isn't
+  // password-guessing, so it isn't gated here — that would just punish
+  // real users retyping a typo'd password while creating an account.
+  if (_clientAuthMode === 'login') {
+    const lockedSecs = loginLockCheck('client');
+    if (lockedSecs > 0) {
+      const mins = Math.ceil(lockedSecs / 60);
+      errEl.textContent = lockedSecs > 90 ? `⏳ Too many attempts. Try again in ~${mins} min.` : `⏳ Too many attempts. Try again in ${lockedSecs}s.`;
+      errEl.style.display = 'block';
+      return;
+    }
+  }
+
+  if (!email || !pass) { errEl.textContent = 'Please enter both email and password.'; errEl.style.display = 'block'; return; }
+  if (_clientAuthMode === 'signup' && !name) { errEl.textContent = 'Please enter your name.'; errEl.style.display = 'block'; return; }
+  if (pass.length < 6) { errEl.textContent = 'Password must be at least 6 characters.'; errEl.style.display = 'block'; return; }
+  if (email === ADMIN_EMAIL) { errEl.textContent = 'This email is not available.'; errEl.style.display = 'block'; return; }
+
+  const btn = document.getElementById('clientAuthSubmitBtn');
+  const origHtml = btn.innerHTML;
+  btn.textContent = 'Please wait...'; btn.disabled = true;
+  _clientAuthBusy = true;
+
+  try {
+    await fbWaitReady();
+    const { auth, signIn, signUp, updateProfile, setPersistence, browserLocalPersistence } = window._fbAuth;
+    await setPersistence(auth, browserLocalPersistence); // client login persists across visits, unlike the admin's session-only login
+
+    if (_clientAuthMode === 'signup') {
+      const cred = await signUp(auth, email, pass);
+      await updateProfile(cred.user, { displayName: name });
+      const { db, ref, set } = window._fb;
+      const joinedAt = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+      await set(ref(db, 'clients/' + cred.user.uid), {
+        name, email,
+        status: 'approved', // auto-approve
+        plan: 'free',
+        joinedAt,
+      });
+      logClientSignupToSheet({ name, email, date: joinedAt, uid: cred.user.uid });
+    } else {
+      await signIn(auth, email, pass);
+      loginLockReset('client');
+    }
+    closeClientAuthModalFn();
+  } catch (e) {
+    console.error('Client auth failed:', e && e.code ? e.code : e);
+    if (_clientAuthMode === 'login') loginLockRecordFail('client');
+    const map = {
+      'auth/email-already-in-use': 'An account with this email already exists — try logging in instead.',
+      'auth/invalid-email': 'Please enter a valid email address.',
+      'auth/weak-password': 'Password must be at least 6 characters.',
+      'auth/user-not-found': 'No account found with this email.',
+      'auth/wrong-password': 'Incorrect password.',
+      'auth/invalid-credential': 'Incorrect email or password.',
+      'auth/too-many-requests': 'Too many attempts. Please try again later.',
+    };
+    errEl.textContent = map[e && e.code] || 'Something went wrong. Please try again.';
+    errEl.style.display = 'block';
+  }
+
+  btn.innerHTML = origHtml; btn.disabled = false;
+  _clientAuthBusy = false;
+}
+
+async function clientLogout() {
+  try {
+    await fbWaitReady();
+    const { auth, signOut } = window._fbAuth;
+    await signOut(auth);
+  } catch (e) { console.error('Client sign out failed:', e); }
+  isClient = false;
+  currentClient = null;
+  renderClientAuthUI();
+  renderResources();
+}
+
+// Small account widget shown in the Free Resources section header
+function renderClientAuthUI() {
+  const wrap = document.getElementById('clientAuthWidget');
+  if (!wrap) return;
+  if (isClient && currentClient) {
+    wrap.innerHTML = `
+      <div style="display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:12.5px;color:var(--muted);">
+        <span>👋 ${escHtml(currentClient.name)}</span>
+        <button onclick="clientLogout()" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:100px;padding:7px 14px;cursor:pointer;font-family:var(--font-mono);font-size:12px;transition:all .2s;" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--muted)'">Logout</button>
+      </div>`;
+  } else if (!isAdmin) {
+    wrap.innerHTML = `<button onclick="openClientAuthModal('login')" style="display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:100px;padding:9px 16px;cursor:pointer;font-family:var(--font-mono);font-size:12.5px;transition:all .2s;" onmouseover="this.style.color='var(--white)';this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path></svg> Client Login</button>`;
+  } else {
+    wrap.innerHTML = '';
+  }
 }
 
 function showAdminUI() {
@@ -7071,10 +7371,11 @@ function renderResources() {
   const { n: n0, i: i0 } = indexed[0];
   featuredWrap.innerHTML = `
     <div class="resource-featured-card" onclick="openResourceRead(${i0})">
-      <div class="resource-featured-thumb">${n0.img ? `<img src="${n0.img}" alt="${escHtml(n0.title||'Resource')}" loading="lazy">` : (ytThumb(n0.yt) ? `<img src="${ytThumb(n0.yt)}" alt="${escHtml(n0.title||'Resource')}" loading="lazy">` : '🎁')}</div>
+      <div class="resource-featured-thumb" style="position:relative;">${n0.img ? `<img src="${n0.img}" alt="${escHtml(n0.title||'Resource')}" loading="lazy">` : (ytThumb(n0.yt) ? `<img src="${ytThumb(n0.yt)}" alt="${escHtml(n0.title||'Resource')}" loading="lazy">` : '🎁')}${n0.access === 'clients-only' && !isClient && !isAdmin ? `<div style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.65);color:#fff;border-radius:6px;padding:3px 7px;font-size:11px;">🔒</div>` : ''}</div>
       <div class="resource-featured-body">
         <span class="resource-badge-new">● NEW</span>
         ${n0.category ? `<div style="font-size:11px;font-family:var(--font-mono);color:var(--cyan);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">${escHtml(n0.category)}</div>` : ''}
+        ${n0.access === 'clients-only' ? `<div style="display:inline-block;font-size:10px;font-family:var(--font-mono);color:var(--indigo);border:1px solid rgba(37,99,235,0.35);border-radius:100px;padding:2px 8px;margin-bottom:6px;">🔒 Clients Only</div>` : ''}
         <div class="resource-featured-title">${escHtml(n0.title)}</div>
         <div class="resource-featured-excerpt">${escHtml((n0.content||'').substring(0,160))}${n0.content&&n0.content.length>160?'...':''}</div>
         <div class="resource-featured-date">${n0.date}</div>
@@ -7098,7 +7399,7 @@ function renderResources() {
     <div class="resource-slide-card" onclick="openResourceRead(${realIndex})">
       ${n.img ? `<img class="resource-slide-thumb" src="${n.img}" alt="${escHtml(n.title||'Resource')}" loading="lazy">` : (ytThumb(n.yt) ? `<img class="resource-slide-thumb" src="${ytThumb(n.yt)}" alt="${escHtml(n.title||'Resource')}" loading="lazy">` : `<div class="resource-slide-thumb-emoji">🎁</div>`)}
       <div class="resource-slide-body">
-        <div class="resource-slide-title">${escHtml(n.title)}</div>
+        <div class="resource-slide-title">${n.access === 'clients-only' ? '🔒 ' : ''}${escHtml(n.title)}</div>
         <div class="resource-slide-date">${n.date}</div>
         ${isAdmin ? `<div style="margin-top:6px;display:flex;gap:8px;align-items:center;" onclick="event.stopPropagation()"><button onclick="removeResource(${realIndex})" class="admin-only" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:5px;padding:3px 8px;cursor:pointer;font-size:10.5px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
         <div class="admin-move-row"><button class="admin-move-btn" title="Move earlier (up in serial)" onclick="moveResource(${realIndex}, -1)" ${realIndex <= 0 ? 'disabled' : ''}>▲</button><button class="admin-move-btn" title="Move later (down in serial)" onclick="moveResource(${realIndex}, 1)" ${realIndex >= resources.length - 1 ? 'disabled' : ''}>▼</button></div></div>` : ''}
@@ -7184,6 +7485,7 @@ async function publishResource() {
   const content = document.getElementById('resourceContentInput').value.trim();
   const yt      = document.getElementById('resourceYtInput').value.trim();
   const drive   = document.getElementById('resourceDriveInput').value.trim();
+  const access  = document.getElementById('resourceAccessInput').value || 'public';
   if (!title) { alert('Please add a title!'); return; }
   if (!content && !resourceImgDataUrl && !resourcePdfData && !yt && !drive) {
     alert('Add at least one of: details text, image, PDF, YouTube link, or Drive link.');
@@ -7199,6 +7501,7 @@ async function publishResource() {
     pdf: resourcePdfData || null,
     yt: yt || '',
     drive: drive || '',
+    access, // "public" | "clients-only"
     date: resourceNow.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) + ' • ' + resourceNow.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})
   });
   await sharedSet('resources', resources);
@@ -7207,6 +7510,7 @@ async function publishResource() {
   document.getElementById('resourceContentInput').value = '';
   document.getElementById('resourceYtInput').value = '';
   document.getElementById('resourceDriveInput').value = '';
+  document.getElementById('resourceAccessInput').value = 'public';
   removeResourceImgSelection();
   removeResourcePdfSelection();
   document.getElementById('resourceModal').classList.remove('open');
@@ -7236,6 +7540,8 @@ async function moveResource(origIndex, dir) {
 
 function openResourceRead(i) {
   const n = resources[i];
+  const locked = n.access === 'clients-only' && !isClient && !isAdmin;
+
   document.getElementById('resourceReadTitle').textContent = n.title;
   document.getElementById('resourceReadMeta').textContent = n.category ? (n.category + ' • ' + n.date) : n.date;
   const imgEl = document.getElementById('resourceReadImg');
@@ -7244,7 +7550,7 @@ function openResourceRead(i) {
 
   const ytWrap = document.getElementById('resourceReadYtWrap');
   const embedUrl = ytEmbedUrl(n.yt);
-  if (embedUrl) {
+  if (embedUrl && !locked) {
     ytWrap.style.display = 'block';
     ytWrap.innerHTML = `<div style="position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#000;"><iframe src="${embedUrl}" title="${escHtml(n.title||'Resource video')}" style="position:absolute;inset:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
   } else {
@@ -7255,8 +7561,25 @@ function openResourceRead(i) {
   document.getElementById('resourceReadContent').textContent = n.content || '';
 
   const dlWrap = document.getElementById('resourceReadDownloadsWrap');
-  let dlBtns = '';
   const btnStyle = 'display:inline-flex;align-items:center;gap:8px;padding:11px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border-radius:10px;text-decoration:none;font-family:var(--font-display);font-size:14px;font-weight:700;';
+
+  if (locked) {
+    // Clients-only resource — visitor isn't logged in, show a lock screen instead of the actual downloads
+    dlWrap.innerHTML = `
+      <div style="width:100%;text-align:center;padding:22px 16px;background:rgba(37,99,235,0.06);border:1px dashed rgba(37,99,235,0.3);border-radius:12px;">
+        <div style="font-size:26px;margin-bottom:8px;">🔒</div>
+        <div style="font-family:var(--font-display);font-weight:700;color:var(--white);margin-bottom:6px;">Clients-only resource</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">Log in or create a free client account to unlock this download.</div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button onclick="closeResourceRead();openClientAuthModal('login')" style="${btnStyle};border:none;cursor:pointer;">Login</button>
+          <button onclick="closeResourceRead();openClientAuthModal('signup')" style="display:inline-flex;align-items:center;gap:8px;padding:11px 20px;background:transparent;border:1px solid var(--border);color:var(--white);border-radius:10px;font-family:var(--font-display);font-size:14px;font-weight:700;cursor:pointer;">Create Account</button>
+        </div>
+      </div>`;
+    document.getElementById('resourceReadModal').classList.add('open');
+    return;
+  }
+
+  let dlBtns = '';
   if (n.pdf && n.pdf.data) {
     dlBtns += `<a href="${n.pdf.data}" download="${escHtml(n.pdf.name||'resource.pdf')}" style="${btnStyle}"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> Download PDF</a>`;
   }
@@ -7283,6 +7606,7 @@ document.getElementById('openResourceModal').addEventListener('click', () => {
   populateResourceCategorySelect('');
   document.getElementById('resourceYtInput').value = '';
   document.getElementById('resourceDriveInput').value = '';
+  document.getElementById('resourceAccessInput').value = 'public';
   document.getElementById('resourceModal').classList.add('open');
 });
 document.getElementById('closeResourceModal').addEventListener('click', () => document.getElementById('resourceModal').classList.remove('open'));
@@ -9536,6 +9860,7 @@ async function initSharedData() {
     renderYtChannel();
     renderYtVideos();
     renderBlog();
+    renderClientAuthUI();
     renderResources();
     renderProjects();
     renderReviews();
