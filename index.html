@@ -4966,7 +4966,7 @@ body, body *, body *::before, body *::after {
   <div class="fiv-modal-inner" style="max-width:640px;">
     <button class="fiv-modal-close" onclick="closeManageClientsModal()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
     <div class="fiv-modal-title"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> Manage Clients</div>
-    <div style="font-size:12px;color:var(--muted);margin:-8px 0 16px;">Set each client's plan here. Free Resources marked with a Required Plan will only unlock for clients on that plan.</div>
+    <div style="font-size:12px;color:var(--muted);margin:-8px 0 16px;">Every client account is either a 👤 Free Member or a 👑 Premium Member. Set that here — Free Resources assigned to a Plan (in Add Resource) will only unlock for clients on the matching plan. Visitors who aren't logged in are treated as 🌐 Guests.</div>
     <div id="manageClientsList" style="display:flex;flex-direction:column;gap:10px;max-height:60vh;overflow-y:auto;padding-right:4px;"></div>
     <button class="fiv-cancel-btn" onclick="closeManageClientsModal()" style="margin-top:16px;">Close</button>
   </div>
@@ -5221,19 +5221,12 @@ body, body *, body *::before, body *::after {
   <div class="blog-modal">
     <div class="blog-modal-title" id="resourceModalTitleLabel"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg> Add Resource</div>
     <div class="blog-modal-sub">Share a free downloadable resource with your clients — image, PDF, YouTube video, or Drive link</div>
-    <label class="blog-modal-label">ACCESS <span style="text-transform:none;letter-spacing:0;color:var(--cyan);">— who can download this</span></label>
-    <select class="blog-modal-field" id="resourceAccessInput" style="margin-bottom:14px;" onchange="toggleResourcePlanField()">
-      <option value="public">Public — anyone can download</option>
-      <option value="clients-only">Clients Only — login required</option>
+    <label class="blog-modal-label">PLAN <span style="text-transform:none;letter-spacing:0;color:var(--cyan);">— who can access this resource</span></label>
+    <select class="blog-modal-field" id="resourcePlanInput" style="margin-bottom:14px;">
+      <option value="guest">🌐 Guest — Public, anyone can download</option>
+      <option value="free">👤 Free Member — free account required</option>
+      <option value="premium">👑 Premium Member — Premium plan required</option>
     </select>
-    <div id="resourcePlanFieldWrap" style="display:none;">
-      <label class="blog-modal-label">REQUIRED PLAN <span style="text-transform:none;letter-spacing:0;color:var(--cyan);">— optional, restricts this resource to one client plan</span></label>
-      <select class="blog-modal-field" id="resourcePlanInput" style="margin-bottom:14px;">
-        <option value="">Any Plan — all logged-in clients</option>
-        <option value="free">Free</option>
-        <option value="Premium">Premium</option>
-      </select>
-    </div>
     <label class="blog-modal-label">TITLE</label>
     <input class="blog-modal-field" id="resourceTitleInput" placeholder="e.g. Free Cinematic LUT Pack" type="text">
     <label class="blog-modal-label">CATEGORY</label>
@@ -7042,6 +7035,21 @@ function mmClientAction() {
 // ===================================================
 const CLIENT_PLAN_OPTIONS = ['free', 'Premium'];
 
+// Shared display labels for the 3-tier plan system used across the site:
+// 🌐 Guest (not logged in / public), 👤 Free Member, 👑 Premium Member.
+function planLabel(key) {
+  const k = (key || '').toLowerCase();
+  if (k === 'premium') return '👑 Premium Member';
+  if (k === 'free' || k === '') return '👤 Free Member';
+  return '👤 ' + (key || 'Free Member');
+}
+function planLabelPlain(key) {
+  const k = (key || '').toLowerCase();
+  if (k === 'premium') return 'Premium Member';
+  if (k === 'free' || k === '') return 'Free Member';
+  return key || 'Free Member';
+}
+
 async function openManageClientsModal() {
   if (!isAdmin) return;
   const listEl = document.getElementById('manageClientsList');
@@ -7067,7 +7075,7 @@ async function openManageClientsModal() {
 
 function renderClientRow(uid, c) {
   const plan = c.plan || 'free';
-  const opts = CLIENT_PLAN_OPTIONS.map(p => `<option value="${escAttr(p)}" ${plan === p ? 'selected' : ''}>${p === 'free' ? 'Free' : p}</option>`).join('');
+  const opts = CLIENT_PLAN_OPTIONS.map(p => `<option value="${escAttr(p)}" ${plan === p ? 'selected' : ''}>${planLabel(p)}</option>`).join('');
   return `
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;flex-wrap:wrap;">
       <div style="min-width:160px;">
@@ -7972,7 +7980,7 @@ function renderResources() {
       <div class="resource-featured-body">
         <span class="resource-badge-new">● NEW</span>
         ${n0.category ? `<div style="font-size:11px;font-family:var(--font-mono);color:var(--cyan);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">${escHtml(n0.category)}</div>` : ''}
-        ${n0.access === 'clients-only' ? `<div style="display:inline-block;font-size:10px;font-family:var(--font-mono);color:var(--indigo);border:1px solid rgba(37,99,235,0.35);border-radius:100px;padding:2px 8px;margin-bottom:6px;">🔒 ${n0.requiredPlan ? n0.requiredPlan + ' Plan Only' : 'Clients Only'}</div>` : ''}
+        ${n0.access === 'clients-only' ? `<div style="display:inline-block;font-size:10px;font-family:var(--font-mono);color:var(--indigo);border:1px solid rgba(37,99,235,0.35);border-radius:100px;padding:2px 8px;margin-bottom:6px;">🔒 ${planLabel(n0.requiredPlan)} Only</div>` : ''}
         <div class="resource-featured-title">${escHtml(n0.title)}</div>
         <div class="resource-featured-excerpt">${escHtml((n0.content||'').substring(0,160))}${n0.content&&n0.content.length>160?'...':''}</div>
         <div class="resource-featured-date">${n0.date}</div>
@@ -8078,11 +8086,17 @@ function removeResourcePdfSelection() {
   fn.textContent = ''; fn.style.display = 'none';
 }
 
-function toggleResourcePlanField() {
-  const access = document.getElementById('resourceAccessInput').value;
-  const wrap = document.getElementById('resourcePlanFieldWrap');
-  wrap.style.display = access === 'clients-only' ? 'block' : 'none';
-  if (access !== 'clients-only') document.getElementById('resourcePlanInput').value = '';
+// Converts the unified 3-tier Plan select ('guest' | 'free' | 'premium') into
+// the internal fields resources are stored/gated with: access + requiredPlan.
+function resourcePlanSelectToFields(val) {
+  if (val === 'premium') return { access: 'clients-only', requiredPlan: 'Premium' };
+  if (val === 'free') return { access: 'clients-only', requiredPlan: 'free' };
+  return { access: 'public', requiredPlan: '' };
+}
+// Reverse mapping — pre-fills the Plan select when editing an existing resource.
+function resourceFieldsToPlanSelect(n) {
+  if (n.access !== 'clients-only') return 'guest';
+  return (n.requiredPlan || '').toLowerCase() === 'premium' ? 'premium' : 'free';
 }
 
 async function publishResource() {
@@ -8092,8 +8106,9 @@ async function publishResource() {
   const content = document.getElementById('resourceContentInput').value.trim();
   const yt      = document.getElementById('resourceYtInput').value.trim();
   const drive   = document.getElementById('resourceDriveInput').value.trim();
-  const access  = document.getElementById('resourceAccessInput').value || 'public';
-  const requiredPlan = access === 'clients-only' ? (document.getElementById('resourcePlanInput').value || '') : '';
+  const planFields = resourcePlanSelectToFields(document.getElementById('resourcePlanInput').value);
+  const access = planFields.access;
+  const requiredPlan = planFields.requiredPlan;
   if (!title) { alert('Please add a title!'); return; }
   if (!content && !resourceImgDataUrl && !resourcePdfData && !yt && !drive) {
     alert('Add at least one of: details text, image, PDF, YouTube link, or Drive link.');
@@ -8138,8 +8153,7 @@ async function publishResource() {
   document.getElementById('resourceContentInput').value = '';
   document.getElementById('resourceYtInput').value = '';
   document.getElementById('resourceDriveInput').value = '';
-  document.getElementById('resourceAccessInput').value = 'public';
-  toggleResourcePlanField();
+  document.getElementById('resourcePlanInput').value = 'guest';
   removeResourceImgSelection();
   removeResourcePdfSelection();
   document.getElementById('resourceModal').classList.remove('open');
@@ -8166,9 +8180,7 @@ function openEditResource(i) {
   document.getElementById('resourceContentInput').value = n.content || '';
   document.getElementById('resourceYtInput').value = n.yt || '';
   document.getElementById('resourceDriveInput').value = n.drive || '';
-  document.getElementById('resourceAccessInput').value = n.access || 'public';
-  toggleResourcePlanField();
-  if (n.access === 'clients-only') document.getElementById('resourcePlanInput').value = n.requiredPlan || '';
+  document.getElementById('resourcePlanInput').value = resourceFieldsToPlanSelect(n);
 
   removeResourceImgSelection();
   resourceImgDataUrl = n.img || '';
@@ -8245,8 +8257,8 @@ function openResourceRead(i) {
     dlWrap.innerHTML = needsUpgrade ? `
       <div style="width:100%;text-align:center;padding:22px 16px;background:rgba(37,99,235,0.06);border:1px dashed rgba(37,99,235,0.3);border-radius:12px;">
         <div style="font-size:26px;margin-bottom:8px;">🔒</div>
-        <div style="font-family:var(--font-display);font-weight:700;color:var(--white);margin-bottom:6px;">${escHtml(n.requiredPlan)} Plan required</div>
-        <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">This resource is only available to clients on the ${escHtml(n.requiredPlan)} plan. Reach out and I'll get you upgraded.</div>
+        <div style="font-family:var(--font-display);font-weight:700;color:var(--white);margin-bottom:6px;">${planLabel(n.requiredPlan)} required</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:16px;">This resource is only available to ${planLabelPlain(n.requiredPlan)}s. Reach out and I'll get you upgraded.</div>
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
           <a href="#contact" onclick="closeResourceRead()" style="${btnStyle}">Contact Me</a>
         </div>
@@ -8296,8 +8308,7 @@ document.getElementById('openResourceModal').addEventListener('click', () => {
   populateResourceCategorySelect('');
   document.getElementById('resourceYtInput').value = '';
   document.getElementById('resourceDriveInput').value = '';
-  document.getElementById('resourceAccessInput').value = 'public';
-  toggleResourcePlanField();
+  document.getElementById('resourcePlanInput').value = 'guest';
   document.getElementById('resourceModal').classList.add('open');
 });
 document.getElementById('closeResourceModal').addEventListener('click', () => { document.getElementById('resourceModal').classList.remove('open'); editingResourceIndex = null; });
