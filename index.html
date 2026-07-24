@@ -3266,8 +3266,6 @@ body, body *, body *::before, body *::after {
 .exit-popup-cta svg { width: 20px; height: 20px; }
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer id="emailjsSdk"></script>
-  <!-- Google reCAPTCHA v3 — invisible, runs in background, produces a token per submit -->
-  <script src="https://www.google.com/recaptcha/api.js?render=6LfRKmMtAAAAAN_lr3fG0Ntze1SfwuH5Heu38i6Q" async defer id="recaptchaSdk"></script>
   <script defer>
     // limitRate blocks the SDK from actually dispatching a second request for
     // 8 seconds after the first one — a hard, built-in guarantee against
@@ -3302,9 +3300,6 @@ body, body *, body *::before, body *::after {
     initEmailJS(0); // also try immediately in case it's already loaded/cached
   </script>
 <style>
-  /* Hide the floating reCAPTCHA v3 badge — required disclosure text is shown
-     near the contact form instead, per Google's reCAPTCHA terms of service. */
-  .grecaptcha-badge { visibility: hidden !important; opacity: 0 !important; pointer-events: none !important; }
 </style>
 </head>
 <body>
@@ -4306,6 +4301,16 @@ body, body *, body *::before, body *::after {
         <input type="hidden" id="cf_package" value="None">
         <input type="hidden" id="cf_price" value="None">
         <input type="hidden" id="cf_lead_source" value="Contact Form">
+        <div class="form-group">
+          <label class="form-label">SECURITY CHECK</label>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <div id="cf_captcha_question" style="font-family:var(--font-mono);font-size:15px;font-weight:700;color:var(--white);background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:11px 16px;letter-spacing:0.5px;user-select:none;white-space:nowrap;">3 + 5 = ?</div>
+            <button type="button" onclick="cfNewCaptcha()" title="Get a new question" aria-label="Get a new question" style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;border:1px solid var(--btn-ghost-border);background:var(--btn-ghost-fill);color:var(--muted);cursor:pointer;flex-shrink:0;transition:all .2s;" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--muted)'">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            </button>
+            <input type="text" id="cf_captcha_answer" class="form-input" placeholder="Your answer" inputmode="numeric" autocomplete="off" style="max-width:140px;">
+          </div>
+        </div>
         <div id="cf_success" style="display:none;padding:14px 18px;background:rgba(22,163,74,0.12);border:1px solid rgba(22,163,74,0.35);border-radius:10px;color:#4ade80;font-size:14px;text-align:center;line-height:1.6;">
           Thank you for contacting me!<br>Your inquiry has been received successfully.<br>I will carefully review your project requirements and get back to you as soon as possible.<br>Please check your inbox for a confirmation email.
         </div>
@@ -4313,11 +4318,6 @@ body, body *, body *::before, body *::after {
           Oops! Something went wrong while sending your inquiry.<br>Please try again later or contact me directly via email or WhatsApp.
         </div>
         <button class="form-submit" onclick="handleSubmit(this)">Send Message <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
-        <div style="font-size:11px;color:var(--muted);text-align:center;margin-top:10px;line-height:1.5;">
-          This site is protected by reCAPTCHA and the Google
-          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline;">Privacy Policy</a> and
-          <a href="https://policies.google.com/terms" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:underline;">Terms of Service</a> apply.
-        </div>
     </div>
   </div>
 </section>
@@ -5813,6 +5813,35 @@ function cfSyncBudget() {
   }
 }
 
+// ===== SIMPLE MATH CAPTCHA =====
+// Generates a small addition/subtraction question, stores the correct answer
+// on window, and shows the question text in the label. Called once on load
+// and again after every submit attempt (success or failure) so the same
+// question can't be reused.
+function cfNewCaptcha() {
+  const a = Math.floor(Math.random() * 10) + 1;
+  const b = Math.floor(Math.random() * 10) + 1;
+  const useSum = Math.random() < 0.5;
+  window._cfCaptchaAnswer = useSum ? (a + b) : (a - b);
+  const question = document.getElementById('cf_captcha_question');
+  const input = document.getElementById('cf_captcha_answer');
+  if (question) question.textContent = `${a} ${useSum ? '+' : '−'} ${b} = ?`;
+  if (input) input.value = '';
+}
+document.addEventListener('DOMContentLoaded', cfNewCaptcha);
+document.addEventListener('DOMContentLoaded', () => {
+  const captchaInput = document.getElementById('cf_captcha_answer');
+  if (captchaInput) {
+    captchaInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const sendBtn = document.querySelector('.form-submit');
+        if (sendBtn) sendBtn.click();
+      }
+    });
+  }
+});
+
 // ===== FORM SUBMIT =====
 async function handleSubmit(btn) {
   const successEl0 = document.getElementById('cf_success');
@@ -5837,24 +5866,17 @@ async function handleSubmit(btn) {
     return;
   }
 
-  // reCAPTCHA v3 — invisible check, produces a token that the server (Google
-  // Apps Script) verifies against Google before treating the lead as real.
-  // If the SDK hasn't loaded yet, we still let the submit through rather than
-  // blocking real users — the server-side check will just see an empty token.
-  let recaptchaToken = '';
-  const RECAPTCHA_SITE_KEY = '6LfRKmMtAAAAAN_lr3fG0Ntze1SfwuH5Heu38i6Q';
-  try {
-    if (typeof grecaptcha !== 'undefined' && grecaptcha.execute) {
-      recaptchaToken = await new Promise((resolve) => {
-        grecaptcha.ready(() => {
-          grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'contact_form' })
-            .then(resolve)
-            .catch(() => resolve(''));
-        });
-      });
-    }
-  } catch (err) {
-    console.warn('reCAPTCHA token generation failed:', err);
+  // Simple math captcha check — the question/answer pair was generated when
+  // the form loaded (see cfNewCaptcha below). If it doesn't match, block the
+  // submit before anything is sent.
+  const captchaInput = document.getElementById('cf_captcha_answer');
+  const captchaOk = captchaInput && parseInt(captchaInput.value.trim(), 10) === window._cfCaptchaAnswer;
+  if (!captchaOk) {
+    errorEl0.textContent = 'Please answer the security question correctly.';
+    errorEl0.style.display = 'block';
+    successEl0.style.display = 'none';
+    cfNewCaptcha();
+    return;
   }
 
   const name    = document.getElementById('cf_name').value.trim();
@@ -5933,7 +5955,6 @@ async function handleSubmit(btn) {
     package_price_block:  package_price_block,
     client_package_line:  client_package_line,
     status:                'New',
-    recaptcha_token:       recaptchaToken,
   };
 
   // 1) Google Sheets-এ data save করো — এটা সবার আগে ও independently, কারণ এটাই
@@ -6013,6 +6034,7 @@ async function handleSubmit(btn) {
     } catch (resetErr) {
       console.warn('Non-critical form reset error:', resetErr);
     }
+    cfNewCaptcha();
 
     setTimeout(() => {
       btn.textContent = original;
@@ -6027,6 +6049,7 @@ async function handleSubmit(btn) {
     btn.disabled = false;
     errorEl.textContent = 'Oops! Something went wrong while sending your inquiry. Please try again later or contact me directly via email or WhatsApp.';
     errorEl.style.display = 'block';
+    cfNewCaptcha();
   }
 }
 
