@@ -5319,7 +5319,7 @@ body, body *, body *::before, body *::after {
 
     <div class="blog-modal-btns">
       <button class="blog-modal-cancel" id="closeClientAuthModal">Cancel</button>
-      <button class="blog-modal-publish" id="clientAuthSubmitBtn" onclick="submitClientAuth()">🚀 Sign In</button>
+      <button class="blog-modal-publish" id="clientAuthSubmitBtn" onclick="submitClientAuth()">Sign In</button>
     </div>
 
     <div style="text-align:center;margin-top:20px;padding-top:18px;border-top:1px solid var(--border);font-size:13px;color:var(--muted);">
@@ -6730,7 +6730,7 @@ function switchClientAuthTab(mode) {
     nameWrap.style.display = 'block';
     title.textContent = 'Create Your Free Account';
     sub.textContent = 'Join free to unlock the Creator Resource Library, downloads, and exclusive member benefits.';
-    submitBtn.innerHTML = '🚀 Sign Up';
+    submitBtn.innerHTML = 'Sign Up';
     icon.innerHTML = '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line>';
     rememberRow.style.display = 'none';
     toggleQ.textContent = 'Already have an account?';
@@ -6739,7 +6739,7 @@ function switchClientAuthTab(mode) {
     nameWrap.style.display = 'none';
     title.textContent = 'Member Login';
     sub.textContent = 'Welcome back! Sign in to access your Creator Resource Library, downloads, and exclusive member benefits.';
-    submitBtn.innerHTML = '🚀 Sign In';
+    submitBtn.innerHTML = 'Sign In';
     icon.innerHTML = '<rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path>';
     rememberRow.style.display = 'flex';
     toggleQ.textContent = "Don't have an account?";
@@ -6940,12 +6940,12 @@ function renderClientAuthUI() {
     if (isClient && currentClient) {
       wrap.innerHTML = `
         <div style="display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:12.5px;color:var(--muted);">
-          <span>👋 ${escHtml(currentClient.name)}</span>
+          <span>${escHtml(currentClient.name)}</span>
           <button onclick="clientLogout()" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:100px;padding:7px 14px;cursor:pointer;font-family:var(--font-mono);font-size:12px;transition:all .2s;" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--muted)'">Logout</button>
           <button onclick="openDeleteAccountModal()" style="background:transparent;border:1px solid rgba(220,38,38,0.3);color:#f87171;border-radius:100px;padding:7px 14px;cursor:pointer;font-family:var(--font-mono);font-size:12px;transition:all .2s;" onmouseover="this.style.borderColor='#EF4444';this.style.color='#EF4444'" onmouseout="this.style.borderColor='rgba(220,38,38,0.3)';this.style.color='#f87171'">Delete Account</button>
         </div>`;
     } else if (!isAdmin) {
-      wrap.innerHTML = `<button onclick="openClientAuthModal('login')" style="display:inline-flex;align-items:center;gap:8px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.25);color:var(--white);border-radius:100px;padding:9px 18px;cursor:pointer;font-family:var(--font-mono);font-size:12.5px;font-weight:600;letter-spacing:0.2px;transition:all .2s;" onmouseover="this.style.borderColor='var(--cyan)';this.style.background='rgba(59,130,246,0.12)'" onmouseout="this.style.borderColor='rgba(59,130,246,0.25)';this.style.background='rgba(59,130,246,0.06)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> Sign In</button>`;
+      wrap.innerHTML = `<button onclick="openClientAuthModal('login')" style="display:inline-flex;align-items:center;gap:8px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.25);color:var(--white);border-radius:100px;padding:9px 18px;cursor:pointer;font-family:var(--font-mono);font-size:12.5px;font-weight:600;letter-spacing:0.2px;transition:all .2s;" onmouseover="this.style.borderColor='var(--cyan)';this.style.background='rgba(59,130,246,0.12)'" onmouseout="this.style.borderColor='rgba(59,130,246,0.25)';this.style.background='rgba(59,130,246,0.06)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Sign In</button>`;
     } else {
       wrap.innerHTML = '';
     }
@@ -6980,7 +6980,7 @@ function renderNavClientUI() {
     if (dropdown) {
       dropdown.innerHTML = `
         <div class="settings-item settings-item-static">
-          <span class="settings-item-label">👋 ${escHtml(currentClient.name)}</span>
+          <span class="settings-item-label">${escHtml(currentClient.name)}</span>
         </div>
         <div class="settings-item" onclick="document.getElementById('navClientDropdown').classList.remove('open');clientLogout();">
           <span class="settings-item-label">Logout</span>
@@ -6989,7 +6989,7 @@ function renderNavClientUI() {
           <span class="settings-item-label" style="color:#EF4444;">Delete Account</span>
         </div>`;
     }
-    if (mmLabel) mmLabel.textContent = currentClient.name ? `👋 ${currentClient.name}` : 'My Account';
+    if (mmLabel) mmLabel.textContent = currentClient.name ? currentClient.name : 'My Account';
   } else {
     if (btn) btn.title = 'Sign In';
     if (dropdown) dropdown.innerHTML = '';
