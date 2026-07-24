@@ -7029,9 +7029,11 @@ function mmClientAction() {
 }
 
 // ===================================================
-// MANAGE CLIENTS (admin) — view every client account & set their plan.
-// A resource's "Required Plan" (set in Add Resource) only unlocks for a
-// client whose plan here matches it exactly.
+// MANAGE CLIENTS (admin) — view every client account, set their plan,
+// and block/unblock their access. A resource's "Required Plan" (set in
+// Add Resource) only unlocks for a client whose plan here matches it
+// exactly. Blocking a client sets status to 'blocked', which immediately
+// signs them out (see checkAdmin()) and prevents login until unblocked.
 // ===================================================
 const CLIENT_PLAN_OPTIONS = ['free', 'Premium'];
 
@@ -7075,16 +7077,23 @@ async function openManageClientsModal() {
 
 function renderClientRow(uid, c) {
   const plan = c.plan || 'free';
+  const status = c.status || 'approved';
+  const isBlocked = status === 'blocked';
   const opts = CLIENT_PLAN_OPTIONS.map(p => `<option value="${escAttr(p)}" ${plan === p ? 'selected' : ''}>${planLabel(p)}</option>`).join('');
   return `
     <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:var(--card);border:1px solid var(--border);border-radius:10px;flex-wrap:wrap;">
       <div style="min-width:160px;">
-        <div style="font-weight:700;color:var(--white);font-size:13.5px;">${escHtml(c.name || 'Client')}</div>
+        <div style="font-weight:700;color:var(--white);font-size:13.5px;">${escHtml(c.name || 'Client')}${isBlocked ? ' <span style="color:#ff7777;font-size:11px;font-weight:600;">(Blocked)</span>' : ''}</div>
         <div style="font-size:11.5px;color:var(--muted);">${escHtml(c.email || '')}${c.joinedAt ? ' • Joined ' + escHtml(c.joinedAt) : ''}</div>
       </div>
-      <select data-uid="${escAttr(uid)}" onchange="updateClientPlan('${uid}', this.value, this)" style="background:var(--bg2);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:7px 10px;font-family:var(--font-mono);font-size:12.5px;">
-        ${opts}
-      </select>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+        <select data-uid="${escAttr(uid)}" onchange="updateClientPlan('${uid}', this.value, this)" style="background:var(--bg2);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:7px 10px;font-family:var(--font-mono);font-size:12.5px;">
+          ${opts}
+        </select>
+        <button type="button" data-uid="${escAttr(uid)}" onclick="updateClientStatus('${uid}', '${isBlocked ? 'approved' : 'blocked'}', this)" style="background:${isBlocked ? 'rgba(34,197,94,0.12)' : 'rgba(255,90,90,0.12)'};border:1px solid ${isBlocked ? 'rgba(34,197,94,0.35)' : 'rgba(255,90,90,0.35)'};color:${isBlocked ? '#4ade80' : '#ff7777'};border-radius:8px;padding:7px 12px;font-family:var(--font-mono);font-size:12px;font-weight:600;cursor:pointer;">
+          ${isBlocked ? 'Unblock' : 'Block'}
+        </button>
+      </div>
     </div>`;
 }
 
@@ -7101,6 +7110,27 @@ async function updateClientPlan(uid, newPlan, selectEl) {
     alert('Failed to update plan. Please check your connection and try again.');
   }
   if (selectEl) selectEl.disabled = prevDisabled;
+}
+
+async function updateClientStatus(uid, newStatus, btnEl) {
+  if (!isAdmin) return;
+  if (newStatus === 'blocked') {
+    const ok = confirm('Block this client? They will be signed out immediately and won\'t be able to log back in until unblocked.');
+    if (!ok) return;
+  }
+  const prevDisabled = btnEl ? btnEl.disabled : false;
+  if (btnEl) btnEl.disabled = true;
+  try {
+    await fbWaitReady();
+    const { db, ref, set } = window._fb;
+    await set(ref(db, 'clients/' + uid + '/status'), newStatus);
+    // Refresh the row's visuals in place without reloading the whole list.
+    openManageClientsModal();
+  } catch (e) {
+    console.error('Failed to update client status:', e);
+    alert('Failed to update status. Please check your connection and try again.');
+  }
+  if (btnEl) btnEl.disabled = prevDisabled;
 }
 
 function closeManageClientsModal() { document.getElementById('manageClientsModal').classList.remove('open'); }
