@@ -62,8 +62,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence, browserLocalPersistence, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getDatabase, ref, get, set, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence, browserLocalPersistence, sendPasswordResetEmail, deleteUser, reauthenticateWithCredential, EmailAuthProvider } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDb5Q289UUYHkXSa4wYP74hisA5g9vzH8A",
@@ -81,8 +81,8 @@
   setPersistence(fbAuth, browserSessionPersistence); // tab বন্ধ হলেই session শেষ — অন্য কেউ URL জানলেও admin থাকবে না
 
   // expose to the regular (non-module) script below
-  window._fb = { ref, get, set, db: fbDb };
-  window._fbAuth = { auth: fbAuth, signIn: signInWithEmailAndPassword, signUp: createUserWithEmailAndPassword, updateProfile, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence, browserLocalPersistence, sendPasswordResetEmail };
+  window._fb = { ref, get, set, remove, db: fbDb };
+  window._fbAuth = { auth: fbAuth, signIn: signInWithEmailAndPassword, signUp: createUserWithEmailAndPassword, updateProfile, signOut, onAuthStateChanged, setPersistence, browserSessionPersistence, browserLocalPersistence, sendPasswordResetEmail, deleteUser, reauthenticateWithCredential, EmailAuthProvider };
   window._fbReady = true;
   window.dispatchEvent(new Event('firebase-ready'));
 </script>
@@ -3255,6 +3255,8 @@ body, body *, body *::before, body *::after {
 .exit-popup-cta svg { width: 20px; height: 20px; }
 </style>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer id="emailjsSdk"></script>
+  <!-- Google reCAPTCHA v3 — invisible, runs in background, produces a token per submit -->
+  <script src="https://www.google.com/recaptcha/api.js?render=6LfRKmMtAAAAAN_lr3fG0Ntze1SfwuH5Heu38i6Q" async defer id="recaptchaSdk"></script>
   <script defer>
     // limitRate blocks the SDK from actually dispatching a second request for
     // 8 seconds after the first one — a hard, built-in guarantee against
@@ -4229,6 +4231,12 @@ body, body *, body *::before, body *::after {
       <p class="section-sub">Have a project in mind? Send a message below and I'll get back to you within 2 hours.</p>
     </div>
     <div class="contact-form reveal contact-form-standalone" id="contactFormBox">
+        <!-- Honeypot — invisible to real users, but most simple spam bots auto-fill every
+             input they find. If this field has any value on submit, we silently drop it. -->
+        <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+          <label for="cf_website">Website</label>
+          <input type="text" id="cf_website" name="website" tabindex="-1" autocomplete="off">
+        </div>
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">YOUR NAME</label>
@@ -5293,6 +5301,44 @@ body, body *, body *::before, body *::after {
 
   </div>
 </div>
+<div class="blog-modal-overlay" id="deleteAccountModal">
+  <div class="blog-modal" style="max-width:420px;">
+
+    <div style="display:flex;justify-content:center;margin-bottom:18px;">
+      <div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg, #DC2626, #EF4444);display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(220,38,38,0.35);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M3 6h18"></path><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+      </div>
+    </div>
+
+    <div class="blog-modal-title" style="font-size:21px;text-align:center;color:#EF4444;">Delete Account</div>
+    <div class="blog-modal-sub" style="text-align:center;max-width:340px;margin-left:auto;margin-right:auto;line-height:1.55;">This will permanently delete your member account — your profile, saved plan, and access to member resources. <strong>This action cannot be undone.</strong></div>
+
+    <div style="background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.25);border-radius:10px;padding:12px 14px;margin:16px 0 4px;font-size:12.5px;color:#fca5a5;line-height:1.6;">
+      Signed in as <strong id="deleteAccountEmailLabel" style="color:#fff;">—</strong>. To confirm it's really you, please re-enter your password below.
+    </div>
+
+    <label class="blog-modal-label">PASSWORD</label>
+    <div style="position:relative;">
+      <input class="blog-modal-field" id="deleteAccountPassInput" placeholder="Enter your current password" type="password" autocomplete="current-password" style="padding-right:44px;">
+      <button type="button" onclick="toggleDeleteAccountPassVisibility()" aria-label="Show/hide password" style="position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;padding:8px;display:flex;align-items:center;">
+        <svg id="deleteAccountPassEyeIcon" class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18px" height="18px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+      </button>
+    </div>
+
+    <label style="display:flex;align-items:flex-start;gap:9px;margin:14px 0 4px;font-size:12.5px;color:var(--muted);cursor:pointer;font-family:var(--font-mono);line-height:1.5;">
+      <input type="checkbox" id="deleteAccountConfirmCheck" style="width:15px;height:15px;margin-top:2px;accent-color:#EF4444;cursor:pointer;flex-shrink:0;">
+      I understand this is permanent and my account data cannot be recovered.
+    </label>
+
+    <div id="deleteAccountError" style="display:none;background:rgba(255,0,0,0.08);border:1px solid rgba(255,0,0,0.25);color:#ff8a8a;padding:9px 12px;border-radius:8px;font-size:12.5px;margin-top:10px;font-family:var(--font-mono);"></div>
+
+    <div class="blog-modal-btns">
+      <button class="blog-modal-cancel" id="closeDeleteAccountModal">Cancel</button>
+      <button class="blog-modal-publish" id="deleteAccountSubmitBtn" onclick="confirmDeleteClientAccount()" style="background:#DC2626;box-shadow:0 8px 20px rgba(220,38,38,0.3);">🗑 Delete My Account</button>
+    </div>
+
+  </div>
+</div>
 <div class="blog-modal-overlay" id="blogModal">
   <div class="blog-modal">
     <div class="blog-modal-title"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Write Blog Post</div>
@@ -5736,12 +5782,46 @@ function cfSyncBudget() {
 async function handleSubmit(btn) {
   const successEl0 = document.getElementById('cf_success');
   const errorEl0   = document.getElementById('cf_error');
+
+  // Honeypot check — a real visitor never sees or fills this field, so any
+  // value here means a bot filled every input it could find. Pretend the
+  // submit succeeded (no error shown, no clue given to the bot) but skip
+  // sending anything at all.
+  const honeypot = document.getElementById('cf_website');
+  if (honeypot && honeypot.value.trim() !== '') {
+    console.warn('Honeypot triggered — likely spam bot, submission silently dropped.');
+    successEl0.style.display = 'block';
+    setTimeout(() => { successEl0.style.display = 'none'; }, 5000);
+    return;
+  }
+
   if (typeof emailjs === 'undefined' || !window._emailjsReady) {
     errorEl0.textContent = 'Email service is still loading — please wait a couple seconds and press Send again. (If this keeps happening, try disabling any ad-blocker and reloading the page.)';
     errorEl0.style.display = 'block';
     successEl0.style.display = 'none';
     return;
   }
+
+  // reCAPTCHA v3 — invisible check, produces a token that the server (Google
+  // Apps Script) verifies against Google before treating the lead as real.
+  // If the SDK hasn't loaded yet, we still let the submit through rather than
+  // blocking real users — the server-side check will just see an empty token.
+  let recaptchaToken = '';
+  const RECAPTCHA_SITE_KEY = '6LfRKmMtAAAAAN_lr3fG0Ntze1SfwuH5Heu38i6Q';
+  try {
+    if (typeof grecaptcha !== 'undefined' && grecaptcha.execute) {
+      recaptchaToken = await new Promise((resolve) => {
+        grecaptcha.ready(() => {
+          grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'contact_form' })
+            .then(resolve)
+            .catch(() => resolve(''));
+        });
+      });
+    }
+  } catch (err) {
+    console.warn('reCAPTCHA token generation failed:', err);
+  }
+
   const name    = document.getElementById('cf_name').value.trim();
   const email   = document.getElementById('cf_email').value.trim();
   const service = document.getElementById('cf_service').value.trim();
@@ -5818,24 +5898,53 @@ async function handleSubmit(btn) {
     package_price_block:  package_price_block,
     client_package_line:  client_package_line,
     status:                'New',
+    recaptcha_token:       recaptchaToken,
   };
 
+  // 1) Google Sheets-এ data save করো — এটা সবার আগে ও independently, কারণ এটাই
+  //    আসল lead data। এর আগে email পাঠানো হলে email fail করলে (quota শেষ,
+  //    network glitch ইত্যাদি) এই lead data-ই হারিয়ে যেত — client নিজের কোনো
+  //    ভুল ছাড়াই।
+  let sheetOk = true;
   try {
-    // ১) তোমার (admin) কাছে notification email যাবে
-    await emailjs.send('service_tfcdfkh', 'template_z8eqf3f', templateParams);
-
-    // ২) client-কে confirmation/auto-reply email যাবে — EmailJS-এ এই নামে
-    // একটা নতুন template বানিয়ে নিচের ID-টা বসিয়ে দিন (client-confirmation-email-template.html দেখুন)
-    emailjs.send('service_tfcdfkh', 'template_6r0z0rk', templateParams)
-      .catch(err => console.warn('Client confirmation email failed:', err));
-
-    // Google Sheets-এ data save করো
-    fetch('https://script.google.com/macros/s/AKfycbzyah_6V91jFMOxSfph4Cm3bCnK2Nv_J5szv0m17Q9e5bZilugVrocbJFQFGHnjpzwH/exec', {
+    await fetch('https://script.google.com/macros/s/AKfycbzyah_6V91jFMOxSfph4Cm3bCnK2Nv_J5szv0m17Q9e5bZilugVrocbJFQFGHnjpzwH/exec', {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(templateParams),
       mode: 'no-cors'
-    }).catch(err => console.warn('Sheets save failed:', err));
+    });
+  } catch (err) {
+    sheetOk = false;
+    console.warn('Sheets save failed:', err);
+  }
+
+  // 2) তোমার (admin) কাছে notification email — client-এর email আলাদা try/catch-এ
+  //    থাকায়, এটা fail করলেও client-এর auto-reply পাঠানোর চেষ্টা চলবে।
+  let adminEmailOk = true;
+  try {
+    await emailjs.send('service_tfcdfkh', 'template_z8eqf3f', templateParams);
+  } catch (err) {
+    adminEmailOk = false;
+    console.error('Admin notification email failed:', err);
+  }
+
+  // ৩) client-কে confirmation/auto-reply email — EmailJS-এ এই নামে
+  // একটা নতুন template বানিয়ে নিচের ID-টা বসিয়ে দিন (client-confirmation-email-template.html দেখুন)
+  let clientEmailOk = true;
+  try {
+    await emailjs.send('service_tfcdfkh', 'template_6r0z0rk', templateParams);
+  } catch (err) {
+    clientEmailOk = false;
+    console.warn('Client confirmation email failed:', err);
+  }
+
+  try {
+    // Sheet-এ lead টা save হয়ে গেলেই আসল কাজ হয়ে যায় — email কোনো একটা miss
+    // হলেও lead হারায় না, শুধু console-এ log থাকে যাতে পরে চেক করা যায়।
+    if (!sheetOk && !adminEmailOk) {
+      // দুটোই fail করলে সত্যিই কিছু যায়নি কোথাও — user-কে জানানো উচিত।
+      throw new Error('Both the lead-sheet save and the admin notification email failed.');
+    }
 
     // Success
     btn.textContent = 'Sent!';
@@ -6458,6 +6567,102 @@ function closeClientAuthModalFn() { document.getElementById('clientAuthModal').c
 document.getElementById('closeClientAuthModal').addEventListener('click', closeClientAuthModalFn);
 document.getElementById('clientAuthModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeClientAuthModalFn(); });
 
+// ===================================================
+// DELETE ACCOUNT (client/member self-service) — requires password
+// re-confirmation + an explicit checkbox before anything is removed.
+// ===================================================
+function toggleDeleteAccountPassVisibility() {
+  const input = document.getElementById('deleteAccountPassInput');
+  const icon  = document.getElementById('deleteAccountPassEyeIcon');
+  if (input.type === 'password') {
+    input.type = 'text';
+    icon.innerHTML = '<path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.6 18.6 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line>';
+  } else {
+    input.type = 'password';
+    icon.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle>';
+  }
+}
+
+function openDeleteAccountModal() {
+  document.getElementById('navClientDropdown').classList.remove('open');
+  if (!isClient || !currentClient) return;
+  document.getElementById('deleteAccountEmailLabel').textContent = currentClient.email || '';
+  document.getElementById('deleteAccountPassInput').value = '';
+  document.getElementById('deleteAccountPassInput').type = 'password';
+  document.getElementById('deleteAccountConfirmCheck').checked = false;
+  document.getElementById('deleteAccountError').style.display = 'none';
+  document.getElementById('deleteAccountModal').classList.add('open');
+}
+function closeDeleteAccountModalFn() { document.getElementById('deleteAccountModal').classList.remove('open'); }
+document.getElementById('closeDeleteAccountModal').addEventListener('click', closeDeleteAccountModalFn);
+document.getElementById('deleteAccountModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeDeleteAccountModalFn(); });
+
+let _deleteAccountBusy = false;
+async function confirmDeleteClientAccount() {
+  if (_deleteAccountBusy) return;
+  const errEl = document.getElementById('deleteAccountError');
+  errEl.style.display = 'none';
+
+  const password = document.getElementById('deleteAccountPassInput').value;
+  const agreed    = document.getElementById('deleteAccountConfirmCheck').checked;
+
+  if (!password) {
+    errEl.textContent = 'Please enter your password to confirm.';
+    errEl.style.display = 'block';
+    return;
+  }
+  if (!agreed) {
+    errEl.textContent = 'Please check the confirmation box — this action is permanent.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  _deleteAccountBusy = true;
+  const btn = document.getElementById('deleteAccountSubmitBtn');
+  const origHtml = btn.innerHTML;
+  btn.innerHTML = 'Deleting…';
+  btn.disabled = true;
+
+  try {
+    await fbWaitReady();
+    const { auth, reauthenticateWithCredential, EmailAuthProvider, deleteUser, signOut } = window._fbAuth;
+    const { db, ref, remove } = window._fb;
+    const user = auth.currentUser;
+    if (!user) throw { code: 'auth/no-current-user' };
+
+    // Re-confirm identity before touching anything — Firebase also requires
+    // a "recent login" for deleteUser(), so this covers both purposes.
+    const credential = EmailAuthProvider.credential(user.email, password);
+    await reauthenticateWithCredential(user, credential);
+
+    // Remove the member's data record first, then the auth account itself.
+    try { await remove(ref(db, 'clients/' + user.uid)); } catch (e) { console.error('Could not remove client record:', e); }
+    await deleteUser(user);
+
+    closeDeleteAccountModalFn();
+    isClient = false;
+    currentClient = null;
+    renderClientAuthUI();
+    renderResources();
+    alert('Your account has been permanently deleted. Thank you for having been a member — you\'re welcome back anytime.');
+  } catch (e) {
+    console.error('Account deletion failed:', e && e.code ? e.code : e);
+    const map = {
+      'auth/wrong-password': 'Incorrect password. Please try again.',
+      'auth/invalid-credential': 'Incorrect password. Please try again.',
+      'auth/too-many-requests': 'Too many attempts. Please wait a moment and try again.',
+      'auth/no-current-user': 'Your session has expired. Please log in again before deleting your account.',
+      'auth/network-request-failed': 'Network error. Please check your connection and try again.',
+    };
+    errEl.textContent = map[e && e.code] || 'Could not delete your account. Please try again or contact support.';
+    errEl.style.display = 'block';
+  }
+
+  btn.innerHTML = origHtml;
+  btn.disabled = false;
+  _deleteAccountBusy = false;
+}
+
 function switchClientAuthTab(mode) {
   _clientAuthMode = mode;
   const nameWrap    = document.getElementById('clientAuthNameWrap');
@@ -6686,6 +6891,7 @@ function renderClientAuthUI() {
         <div style="display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:12.5px;color:var(--muted);">
           <span>👋 ${escHtml(currentClient.name)}</span>
           <button onclick="clientLogout()" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:100px;padding:7px 14px;cursor:pointer;font-family:var(--font-mono);font-size:12px;transition:all .2s;" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--muted)'">Logout</button>
+          <button onclick="openDeleteAccountModal()" style="background:transparent;border:1px solid rgba(220,38,38,0.3);color:#f87171;border-radius:100px;padding:7px 14px;cursor:pointer;font-family:var(--font-mono);font-size:12px;transition:all .2s;" onmouseover="this.style.borderColor='#EF4444';this.style.color='#EF4444'" onmouseout="this.style.borderColor='rgba(220,38,38,0.3)';this.style.color='#f87171'">Delete Account</button>
         </div>`;
     } else if (!isAdmin) {
       wrap.innerHTML = `<button onclick="openClientAuthModal('login')" style="display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:100px;padding:9px 16px;cursor:pointer;font-family:var(--font-mono);font-size:12.5px;transition:all .2s;" onmouseover="this.style.color='var(--white)';this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path></svg> Client Login</button>`;
@@ -6727,6 +6933,9 @@ function renderNavClientUI() {
         </div>
         <div class="settings-item" onclick="document.getElementById('navClientDropdown').classList.remove('open');clientLogout();">
           <span class="settings-item-label">Logout</span>
+        </div>
+        <div class="settings-item" onclick="openDeleteAccountModal();" style="border-top:1px solid var(--border);">
+          <span class="settings-item-label" style="color:#EF4444;">Delete Account</span>
         </div>`;
     }
     if (mmLabel) mmLabel.textContent = currentClient.name ? `👋 ${currentClient.name}` : 'My Account';
