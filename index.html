@@ -753,6 +753,15 @@ iframe.skiptranslate { display: none !important; }
 .hero-badge-dot.status-yellow { background: #F5A623; box-shadow: 0 0 8px #F5A623; }
 .hero-badge-dot.status-red { background: #FF5C5C; box-shadow: 0 0 8px #FF5C5C; }
 @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:.3; } }
+.hero-badge-dot-pop { animation: badgeDotPop .5s ease; }
+@keyframes badgeDotPop {
+  0% { transform: scale(1); }
+  35% { transform: scale(2.1); box-shadow: 0 0 16px currentColor; }
+  100% { transform: scale(1); }
+}
+#heroBadgeText { display: inline-block; transition: opacity .22s ease, transform .22s ease, filter .22s ease; }
+#heroBadgeText.avail-text-out { opacity: 0; transform: translateY(-4px); filter: blur(2px); }
+#heroBadgeText.avail-text-in { opacity: 1; transform: translateY(0); filter: blur(0); }
 .hero-h1 {
   font-family: var(--font-display);
   font-size: clamp(32px, 5.4vw, 72px);
@@ -3453,7 +3462,7 @@ body, body *, body *::before, body *::after {
         <div class="nav-lang-dropdown notranslate" id="navLangDropdown" translate="no"></div>
       </div>
       <div class="nav-settings-wrap" id="navClientWrap">
-        <button class="nav-settings-btn" id="navClientBtn" aria-label="Client Portal" title="Client Portal"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></button>
+        <button class="nav-settings-btn" id="navClientBtn" aria-label="Sign In" title="Sign In"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></button>
         <div class="nav-settings-dropdown" id="navClientDropdown"></div>
       </div>
       <div class="nav-settings-wrap" id="navSettingsWrap">
@@ -3514,7 +3523,7 @@ body, body *, body *::before, body *::after {
   <a href="#youtube" class="mm-link"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg> YouTube</a>
   <a href="#blog" class="mm-link" id="mmBlogLink"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg> Blog</a>
   <a href="#resource" class="mm-link" id="mmResourceLink"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" style="vertical-align:-0.125em;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Free Resources</a>
-  <a href="#" class="mm-link" id="mmClientBtn" onclick="mmClientAction(); return false;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" style="vertical-align:-0.125em;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> <span id="mmClientBtnLabel">Client Login</span></a>
+  <a href="#" class="mm-link" id="mmClientBtn" onclick="mmClientAction(); return false;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" style="vertical-align:-0.125em;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> <span id="mmClientBtnLabel">Sign In</span></a>
   <div id="mmSettingsWrap">
     <button class="mm-link" type="button" id="mmSettingsBtn" style="background:none;border:none;text-align:left;width:100%;cursor:pointer;font:inherit;justify-content:space-between;">
       <span style="display:flex;align-items:center;gap:10px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Settings</span>
@@ -3567,7 +3576,7 @@ body, body *, body *::before, body *::after {
   <div class="container" style="position:relative;">
 
     <div class="hero-content">
-      <a href="#contact" class="hero-badge hero-reveal hr-1" onclick="return smoothScrollToContact(event)">
+      <a href="#contact" class="hero-badge hero-reveal hr-1" onclick="return handleAvailabilityBadgeClick(event)">
         <span class="hero-badge-dot" id="heroBadgeDot"></span>
         <span id="heroBadgeText">Available for new projects</span>
         <button class="admin-only" id="openAvailabilityModal" title="Edit availability messages" style="display:none;margin-left:6px;background:none;border:none;color:inherit;cursor:pointer;padding:0;opacity:.7;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></button>
@@ -5169,7 +5178,21 @@ body, body *, body *::before, body *::after {
 <div class="yt-modal-overlay" id="availabilityModal">
   <div class="yt-modal" style="max-width:540px;">
     <div class="yt-modal-title"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg> Edit Availability Messages</div>
-    <div class="yt-modal-sub">These rotate automatically on the hero badge — 10 minutes each, cycling continuously.</div>
+    <div class="yt-modal-sub">These rotate automatically on the hero badge — each one pulses in for a set time, then the dot pulses and it changes to the next. Give each message its own link so a click can send visitors anywhere you like.</div>
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.16);border-radius:10px;padding:10px 12px;">
+      <label style="font-size:12px;color:var(--muted);font-family:var(--font-mono);white-space:nowrap;">Pulse every</label>
+      <select id="availabilityIntervalSelect" style="background:var(--card);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:8px;font-size:13px;font-family:inherit;flex:1;min-width:0;">
+        <option value="10">10 seconds</option>
+        <option value="30">30 seconds</option>
+        <option value="60">1 minute</option>
+        <option value="300">5 minutes</option>
+        <option value="600">10 minutes</option>
+        <option value="1800">30 minutes</option>
+        <option value="3600">1 hour</option>
+        <option value="custom">Custom…</option>
+      </select>
+      <input type="number" id="availabilityIntervalCustom" min="1" placeholder="seconds" style="display:none;width:90px;flex-shrink:0;background:var(--card);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:8px;font-size:13px;font-family:inherit;">
+    </div>
     <div id="availabilityRows" style="display:flex;flex-direction:column;gap:10px;max-height:380px;overflow-y:auto;padding-right:4px;margin-bottom:6px;"></div>
     <button type="button" onclick="addAvailabilityRow()" style="background:rgba(59,130,246,0.08);border:1px dashed rgba(59,130,246,0.35);color:var(--cyan);border-radius:8px;padding:8px;font-size:12px;cursor:pointer;width:100%;font-family:var(--font-mono);margin-bottom:14px;">+ Add Message</button>
     <div class="yt-modal-btns">
@@ -5251,7 +5274,7 @@ body, body *, body *::before, body *::after {
   </div>
 </div>
 
-<!-- Client Login / Sign Up Modal -->
+<!-- Sign In / Sign Up Modal -->
 <div class="blog-modal-overlay" id="clientAuthModal">
   <div class="blog-modal client-auth-modal" style="max-width:420px;">
 
@@ -6894,7 +6917,7 @@ function renderClientAuthUI() {
           <button onclick="openDeleteAccountModal()" style="background:transparent;border:1px solid rgba(220,38,38,0.3);color:#f87171;border-radius:100px;padding:7px 14px;cursor:pointer;font-family:var(--font-mono);font-size:12px;transition:all .2s;" onmouseover="this.style.borderColor='#EF4444';this.style.color='#EF4444'" onmouseout="this.style.borderColor='rgba(220,38,38,0.3)';this.style.color='#f87171'">Delete Account</button>
         </div>`;
     } else if (!isAdmin) {
-      wrap.innerHTML = `<button onclick="openClientAuthModal('login')" style="display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:100px;padding:9px 16px;cursor:pointer;font-family:var(--font-mono);font-size:12.5px;transition:all .2s;" onmouseover="this.style.color='var(--white)';this.style.borderColor='rgba(255,255,255,0.3)'" onmouseout="this.style.color='var(--muted)';this.style.borderColor='var(--border)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path></svg> Client Login</button>`;
+      wrap.innerHTML = `<button onclick="openClientAuthModal('login')" style="display:inline-flex;align-items:center;gap:8px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.25);color:var(--white);border-radius:100px;padding:9px 18px;cursor:pointer;font-family:var(--font-mono);font-size:12.5px;font-weight:600;letter-spacing:0.2px;transition:all .2s;" onmouseover="this.style.borderColor='var(--cyan)';this.style.background='rgba(59,130,246,0.12)'" onmouseout="this.style.borderColor='rgba(59,130,246,0.25)';this.style.background='rgba(59,130,246,0.06)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> Sign In</button>`;
     } else {
       wrap.innerHTML = '';
     }
@@ -6925,7 +6948,7 @@ function renderNavClientUI() {
   if (mmBtn) mmBtn.style.display = 'flex';
 
   if (isClient && currentClient) {
-    if (btn) btn.title = currentClient.name || 'Client Portal';
+    if (btn) btn.title = currentClient.name || 'Sign In';
     if (dropdown) {
       dropdown.innerHTML = `
         <div class="settings-item settings-item-static">
@@ -6940,9 +6963,9 @@ function renderNavClientUI() {
     }
     if (mmLabel) mmLabel.textContent = currentClient.name ? `👋 ${currentClient.name}` : 'My Account';
   } else {
-    if (btn) btn.title = 'Client Login';
+    if (btn) btn.title = 'Sign In';
     if (dropdown) dropdown.innerHTML = '';
-    if (mmLabel) mmLabel.textContent = 'Client Login';
+    if (mmLabel) mmLabel.textContent = 'Sign In';
   }
 }
 
@@ -8250,13 +8273,14 @@ document.getElementById('resourceModal').addEventListener('click', e => { if (e.
 // ===================================================
 let reviews = [];
 let availabilityMessages = [
-  { text: "Available for new projects — let's talk", status: 'green' },
-  { text: 'Currently accepting 2 more projects this month', status: 'green' },
-  { text: '3 slots left this month — booking fast', status: 'green' },
-  { text: 'Fast response — usually replies within 2 hours', status: 'green' },
-  { text: 'Booking for next month — reserve your spot now', status: 'yellow' },
-  { text: 'High demand this week — limited slots remaining', status: 'yellow' }
+  { text: "Available for new projects — let's talk", status: 'green', link: '' },
+  { text: 'Currently accepting 2 more projects this month', status: 'green', link: '' },
+  { text: '3 slots left this month — booking fast', status: 'green', link: '' },
+  { text: 'Fast response — usually replies within 2 hours', status: 'green', link: '' },
+  { text: 'Booking for next month — reserve your spot now', status: 'yellow', link: '' }
 ];
+let availabilityIntervalSeconds = 600; // default 10 minutes, admin-editable in seconds
+let availabilityRotationTimer = null;
 let editingReviewIndex = null;
 let _currentReviewMedia = null;
 
@@ -10481,6 +10505,10 @@ async function initSharedData() {
     if (record.resume !== undefined) resumeData = record.resume;
     if (record.faqs)           faqs            = record.faqs;
     if (record.availability_messages && record.availability_messages.length) availabilityMessages = record.availability_messages;
+    if (record.availability_interval_seconds) {
+      const s = parseInt(record.availability_interval_seconds, 10);
+      if (!isNaN(s) && s > 0) availabilityIntervalSeconds = s;
+    }
     if (record.breaking_update !== undefined) {
       // Support the old single-object format from before multi-update support existed
       breakingUpdates = Array.isArray(record.breaking_update)
@@ -10508,7 +10536,8 @@ async function initSharedData() {
     renderWhyChooseMe();
     renderResumeButtons();
     renderFaq();
-    renderAvailabilityBadge();
+    renderAvailabilityBadge(true);
+    startAvailabilityRotation();
     renderBreakingBar();
   }
 
@@ -10553,18 +10582,68 @@ function smoothScrollToContact(e) {
 }
 
 // ===================================================
-// LIVE AVAILABILITY BADGE (rotates every 10 min, admin-editable)
+// LIVE AVAILABILITY BADGE (rotates on an admin-set interval, one message
+// changes at a time right as the dot pulses; each message can link anywhere)
 // ===================================================
-function renderAvailabilityBadge() {
-  if (!availabilityMessages || !availabilityMessages.length) return;
-  const idx = Math.floor(Date.now() / (10 * 60 * 1000)) % availabilityMessages.length;
-  const msg = availabilityMessages[idx];
+let _availLastIdx = -1;
+function currentAvailabilityMessage() {
+  if (!availabilityMessages || !availabilityMessages.length) return null;
+  const intervalMs = Math.max(1000, (availabilityIntervalSeconds || 600) * 1000);
+  const idx = Math.floor(Date.now() / intervalMs) % availabilityMessages.length;
+  return { idx, msg: availabilityMessages[idx] };
+}
+function renderAvailabilityBadge(force) {
+  const current = currentAvailabilityMessage();
+  if (!current) return;
+  const { idx, msg } = current;
   const textEl = document.getElementById('heroBadgeText');
   const dotEl = document.getElementById('heroBadgeDot');
-  if (textEl) textEl.textContent = msg.text;
-  if (dotEl) dotEl.className = 'hero-badge-dot' + (msg.status && msg.status !== 'green' ? ' status-' + msg.status : '');
+  const changed = force || idx !== _availLastIdx;
+  _availLastIdx = idx;
+  if (dotEl) {
+    dotEl.className = 'hero-badge-dot' + (msg.status && msg.status !== 'green' ? ' status-' + msg.status : '');
+    if (changed && !force) {
+      // extra bright pulse right at the moment the message changes
+      dotEl.classList.add('hero-badge-dot-pop');
+      setTimeout(() => dotEl.classList.remove('hero-badge-dot-pop'), 500);
+    }
+  }
+  if (textEl) {
+    if (changed && !force && textEl.textContent) {
+      textEl.classList.add('avail-text-out');
+      setTimeout(() => {
+        textEl.textContent = msg.text;
+        textEl.classList.remove('avail-text-out');
+        textEl.classList.add('avail-text-in');
+        setTimeout(() => textEl.classList.remove('avail-text-in'), 350);
+      }, 220);
+    } else {
+      textEl.textContent = msg.text;
+    }
+  }
 }
-setInterval(renderAvailabilityBadge, 30000); // re-check every 30s so the 10-min rotation stays accurate even on a long-open tab
+function startAvailabilityRotation() {
+  if (availabilityRotationTimer) clearInterval(availabilityRotationTimer);
+  const intervalMs = Math.max(1000, (availabilityIntervalSeconds || 600) * 1000);
+  // Check often enough to catch the exact pulse moment even for short custom
+  // intervals, but never more often than every 250ms or less than once/5s.
+  const checkEvery = Math.max(250, Math.min(intervalMs / 4, 5000));
+  availabilityRotationTimer = setInterval(() => renderAvailabilityBadge(false), checkEvery);
+}
+// Clicking the badge goes to that message's own link if it has one, else scrolls to contact
+function handleAvailabilityBadgeClick(e) {
+  const current = currentAvailabilityMessage();
+  const link = current && current.msg && current.msg.link ? current.msg.link.trim() : '';
+  if (!link || link === '#contact') return smoothScrollToContact(e);
+  if (e) e.preventDefault();
+  if (link.startsWith('#')) {
+    const el = document.getElementById(link.slice(1));
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    return false;
+  }
+  window.open(link, '_blank', 'noopener');
+  return false;
+}
 
 // ===================================================
 // BREAKING UPDATE TICKER (multiple admin-set updates, auto-expiring, TV-news style scroll)
@@ -10593,36 +10672,31 @@ let _breakingBarFingerprint = '';
 // completely independent of message length, viewport size, or font-load
 // timing.
 //
-// SWEEP + PAUSE BEHAVIOR (per design request):
-// Instead of an endlessly-looping duplicated track, each "pass" starts
-// fully off-screen on the RIGHT, crosses the viewport at the constant
-// px/sec speed, and finishes fully off-screen on the LEFT. Once a pass
-// fully exits, the ticker holds still (a brief, deliberate pause/"stutter")
-// before the next pass restarts from the right — same speed while moving,
-// no jitter, just a clean stop-and-go rhythm instead of one continuous
-// blur.
+// SEAMLESS CONTINUOUS LOOP (per design request):
+// The track holds TWO back-to-back copies of the content. As the first
+// copy's tail is still crossing the viewport, the second (identical) copy
+// is already following directly behind it — so the "next" text is visibly
+// approaching from the right well before the current text has fully left
+// on the left. Once the first copy has scrolled exactly one copy-width
+// (blockWidth) to the left, the offset wraps by adding blockWidth back;
+// because the two copies are identical, this wrap is invisible and the
+// stream looks perfectly continuous — no full-stop pause, ever.
 // ===================================================
 const BreakingTicker = (() => {
   let track = null;          // the element being translated
   let viewport = null;       // the overflow:hidden window around it (for hover-pause)
-  let blockWidth = 0;        // px width of the content block (single copy — not duplicated)
+  let blockWidth = 0;        // px width of ONE copy of the content (track holds two copies)
   let viewportWidth = 0;     // px width of the visible viewport window
   let offset = 0;            // current translateX
   let lastTs = null;         // rAF timestamp of the previous frame
   let rafId = null;          // current requestAnimationFrame handle
   let running = false;       // true once there is content to animate
   let hoverPaused = false;   // paused because the pointer is over the ticker
-  let phase = 'moving';      // 'moving' while sweeping across, 'paused' while holding between passes
-  let pauseElapsed = 0;      // ms accumulated in the current pause
-
-  const PAUSE_MS = 1100;     // how long the ticker holds still between passes
 
   // Constant px/sec per breakpoint (per the design spec: desktop
   // slow/premium, tablet a little faster, mobile the fastest of the
   // three) — read live off innerWidth so it re-evaluates automatically
   // on every resize/orientation change without needing a separate cache.
-  // This speed is unchanged whether the ticker is mid-pass or between
-  // passes — only whether it's currently moving or paused changes.
   function pxPerSecond() {
     const w = window.innerWidth;
     if (w <= 600) return 70;   // mobile: fastest
@@ -10636,7 +10710,9 @@ const BreakingTicker = (() => {
   // animation.
   function measure() {
     if (!track || !viewport) return;
-    blockWidth = track.scrollWidth; // single copy of the content, no duplication needed for a sweep
+    // track.innerHTML holds two identical copies back-to-back, so one
+    // copy's width is exactly half of the full track's scrollWidth.
+    blockWidth = track.scrollWidth / 2;
     viewportWidth = viewport.clientWidth;
   }
 
@@ -10647,10 +10723,9 @@ const BreakingTicker = (() => {
     if (track) track.style.transform = `translate3d(${offset}px,0,0)`;
   }
 
-  // Begins a fresh pass: the whole content block starts fully off-screen
-  // to the right of the viewport.
+  // Very first appearance only: content starts fully off-screen to the
+  // right, same as before, so it doesn't just pop into view.
   function startPass() {
-    phase = 'moving';
     offset = viewportWidth;
     applyTransform();
   }
@@ -10675,27 +10750,14 @@ const BreakingTicker = (() => {
     const dt = Math.min((ts - lastTs) / 1000, 0.25);
     lastTs = ts;
 
-    if (phase === 'moving') {
-      if (blockWidth > 0) {
-        offset -= pxPerSecond() * dt;
-        // Pass complete once the content's trailing edge has fully cleared
-        // the left side of the viewport — i.e. it entered from the right
-        // and has now fully exited on the left.
-        if (offset <= -blockWidth) {
-          offset = -blockWidth;
-          applyTransform();
-          phase = 'paused';
-          pauseElapsed = 0;
-        } else {
-          applyTransform();
-        }
-      }
-    } else {
-      // 'paused' — deliberate hold between passes (the requested "stutter").
-      // Speed stays identical once movement resumes; this is purely a stop,
-      // not a slow-down, so the motion itself never looks warped.
-      pauseElapsed += dt * 1000;
-      if (pauseElapsed >= PAUSE_MS) startPass();
+    if (blockWidth > 0) {
+      offset -= pxPerSecond() * dt;
+      // Wrap by exactly one copy-width once the first copy has scrolled
+      // fully past — since the second copy is identical and was already
+      // following directly behind it, this wrap is seamless: the stream
+      // never stops or gaps, it just keeps flowing right-to-left forever.
+      while (offset <= -blockWidth) offset += blockWidth;
+      applyTransform();
     }
 
     rafId = requestAnimationFrame(tick);
@@ -10744,11 +10806,18 @@ const BreakingTicker = (() => {
   // #6/#7 — replaces the whole content with a fresh single copy (no
   // duplication needed for a sweep-and-pause pass) and (re)starts the
   // engine with a brand new pass entering from the right.
+  let hasStarted = false; // true once the very first pass has begun
+
   function setContent(itemsHtml) {
     if (!track) return;
-    track.innerHTML = itemsHtml;
+    // Two identical copies back-to-back — this is what makes the loop
+    // seamless (see comments above on the engine).
+    track.innerHTML = itemsHtml + itemsHtml;
     measure();
-    startPass();
+    if (!hasStarted) {
+      startPass();
+      hasStarted = true;
+    }
 
     // Re-measure once the real Inter webfont is active — measuring while a
     // fallback font is still showing under-reports the width, which used to
@@ -10772,8 +10841,7 @@ const BreakingTicker = (() => {
     running = false;
     stopLoop();
     offset = 0;
-    phase = 'moving';
-    pauseElapsed = 0;
+    hasStarted = false;
     if (track) { track.innerHTML = ''; applyTransform(); }
     blockWidth = 0;
   }
@@ -10914,19 +10982,22 @@ async function clearBreakingBar() {
   closeBreakingBarModal();
 }
 
-function addAvailabilityRow(text, status) {
+function addAvailabilityRow(text, status, link) {
   const wrap = document.getElementById('availabilityRows');
   const row = document.createElement('div');
   row.className = 'avail-row';
-  row.style.cssText = 'display:flex;gap:8px;align-items:center;';
+  row.style.cssText = 'display:flex;flex-direction:column;gap:6px;padding:10px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;';
   row.innerHTML = `
-    <input class="yt-modal-input avail-text" style="margin:0;flex:1;" type="text" placeholder="e.g. 3 slots left this month" value="${text ? escHtml(text) : ''}">
-    <select class="avail-status" style="background:var(--card);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:10px 8px;font-size:13px;font-family:inherit;">
-      <option value="green" ${status==='green'||!status?'selected':''}>🟢 Available</option>
-      <option value="yellow" ${status==='yellow'?'selected':''}>🟡 Busy</option>
-      <option value="red" ${status==='red'?'selected':''}>🔴 Full</option>
-    </select>
-    <button type="button" onclick="this.parentElement.remove()" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:6px;width:34px;height:38px;cursor:pointer;flex-shrink:0;">✕</button>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <input class="yt-modal-input avail-text" style="margin:0;flex:1;" type="text" placeholder="e.g. 3 slots left this month" value="${text ? escHtml(text) : ''}">
+      <select class="avail-status" style="background:var(--card);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:10px 8px;font-size:13px;font-family:inherit;flex-shrink:0;">
+        <option value="green" ${status==='green'||!status?'selected':''}>🟢 Available</option>
+        <option value="yellow" ${status==='yellow'?'selected':''}>🟡 Busy</option>
+        <option value="red" ${status==='red'?'selected':''}>🔴 Full</option>
+      </select>
+      <button type="button" onclick="this.closest('.avail-row').remove()" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:6px;width:34px;height:38px;cursor:pointer;flex-shrink:0;">✕</button>
+    </div>
+    <input class="yt-modal-input avail-link" style="margin:0;font-size:12px;" type="text" placeholder="Link when clicked (optional) — e.g. https://... or #contact" value="${link ? escHtml(link) : ''}">
   `;
   wrap.appendChild(row);
 }
@@ -10934,9 +11005,25 @@ function addAvailabilityRow(text, status) {
 function openAvailabilityModalFn() {
   const wrap = document.getElementById('availabilityRows');
   wrap.innerHTML = '';
-  availabilityMessages.forEach(m => addAvailabilityRow(m.text, m.status));
+  availabilityMessages.forEach(m => addAvailabilityRow(m.text, m.status, m.link));
+  const sel = document.getElementById('availabilityIntervalSelect');
+  const custom = document.getElementById('availabilityIntervalCustom');
+  const presets = ['10','30','60','300','600','1800','3600'];
+  const secs = String(availabilityIntervalSeconds || 600);
+  if (presets.includes(secs)) {
+    sel.value = secs;
+    custom.style.display = 'none';
+  } else {
+    sel.value = 'custom';
+    custom.style.display = 'block';
+    custom.value = secs;
+  }
   document.getElementById('availabilityModal').classList.add('open');
 }
+
+document.getElementById('availabilityIntervalSelect').addEventListener('change', function() {
+  document.getElementById('availabilityIntervalCustom').style.display = this.value === 'custom' ? 'block' : 'none';
+});
 
 async function saveAvailabilityMessages() {
   const rows = document.querySelectorAll('#availabilityRows .avail-row');
@@ -10944,12 +11031,19 @@ async function saveAvailabilityMessages() {
   rows.forEach(row => {
     const text = row.querySelector('.avail-text').value.trim();
     const status = row.querySelector('.avail-status').value;
-    if (text) msgs.push({ text, status });
+    const link = row.querySelector('.avail-link').value.trim();
+    if (text) msgs.push({ text, status, link });
   });
   if (!msgs.length) { alert('Add at least one message.'); return; }
+  const sel = document.getElementById('availabilityIntervalSelect');
+  let seconds = sel.value === 'custom' ? parseInt(document.getElementById('availabilityIntervalCustom').value, 10) : parseInt(sel.value, 10);
+  if (!seconds || seconds < 1) seconds = 600;
   availabilityMessages = msgs;
+  availabilityIntervalSeconds = seconds;
   await sharedSet('availability_messages', availabilityMessages);
-  renderAvailabilityBadge();
+  await sharedSet('availability_interval_seconds', availabilityIntervalSeconds);
+  renderAvailabilityBadge(true);
+  startAvailabilityRotation();
   document.getElementById('availabilityModal').classList.remove('open');
 }
 
