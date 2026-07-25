@@ -2052,6 +2052,55 @@ iframe.skiptranslate { display: none !important; }
 .fiv-custom-sub { font-size: 12.5px; color: var(--muted); }
 .fiv-custom-arrow { margin-left: auto; color: var(--cyan); font-size: 18px; transition: transform .2s; }
 .fiv-custom-card:hover .fiv-custom-arrow { transform: translateX(4px); }
+
+/* ===== PAYMENT METHODS — trust badge row (pricing section) ===== */
+.pay-badge-row {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px 22px;
+  margin-top: 28px;
+  text-align: center;
+}
+.pay-badge-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.pay-badge-icons svg { width: 20px; height: 20px; color: var(--muted); flex-shrink: 0; }
+.pay-badge-sep { width: 1px; height: 16px; background: var(--border); margin: 0 2px; }
+.pay-badge-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+.pay-badge-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 10px;
+  opacity: .8;
+}
+
+/* ===== PAYMENT METHODS — footer strip ===== */
+.pay-footer-strip {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.pay-footer-strip .pay-badge-label { font-size: 12px; }
+.pay-footer-strip .pay-badge-icons { gap: 14px; }
+.pay-footer-strip .pay-badge-icons svg { width: 18px; height: 18px; }
+@media (max-width: 560px) {
+  .pay-badge-icons { gap: 10px; }
+  .pay-footer-strip { justify-content: center; text-align: center; }
+}
 @media (max-width: 600px) { .fiv-wrap { max-width: 100%; } }
 
 /* ===== CLIENT CUSTOM PRICING ===== */
@@ -4217,6 +4266,23 @@ body, body *, body *::before, body *::after {
       </a>
     </div>
 
+    <!-- PAYMENT METHODS — trust badge row -->
+    <div class="pay-badge-row reveal">
+      <div class="pay-badge-icons">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 9V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"></path><path d="M17 12h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a2 2 0 0 1 0-4z"></path></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V9l7-5 7 5v12"></path><path d="M9 21v-6h6v6"></path></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="6" x2="12" y2="18"></line><path d="M15 9.5a2.5 2.5 0 0 0-2.5-1.5h-1A2.5 2.5 0 0 0 9 10.5c0 1.4 1.1 2.1 2.5 2.5s2.5 1.1 2.5 2.5A2.5 2.5 0 0 1 11.5 18h-1A2.5 2.5 0 0 1 8 16"></path></svg>
+        <span class="pay-badge-sep"></span>
+        <span class="pay-badge-label">bKash</span>
+        <span class="pay-badge-label">Nagad</span>
+        <span class="pay-badge-label">Bank Transfer</span>
+        <span class="pay-badge-label">PayPal</span>
+        <span class="pay-badge-label">Payoneer</span>
+      </div>
+      <div class="pay-badge-note">Payment details shared securely once we've agreed on your project.</div>
+    </div>
+
     <!-- CLIENT CUSTOM PRICING -->
     <div id="clientPricingSection" class="client-pricing-wrap">
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;margin:56px 0 24px;">
@@ -4293,6 +4359,23 @@ body, body *, body *::before, body *::after {
           </select>
           <input type="text" id="cf_budget_custom" class="form-input" placeholder="Enter your budget..." style="display:none;margin-top:10px;" oninput="cfSyncBudget()">
           <input type="hidden" id="cf_budget">
+        </div>
+        <div class="form-group">
+          <label class="form-label">PREFERRED PAYMENT METHOD <span style="color:var(--muted);font-weight:400;text-transform:none;">(optional)</span></label>
+          <select id="cf_payment_select" class="form-input" onchange="cfSyncPayment()">
+            <option value="" selected>No preference / will discuss</option>
+            <option value="bKash">bKash</option>
+            <option value="Nagad">Nagad</option>
+            <option value="Rocket">Rocket</option>
+            <option value="Bank Transfer">Bank Transfer</option>
+            <option value="PayPal">PayPal</option>
+            <option value="Payoneer">Payoneer</option>
+            <option value="Wise">Wise</option>
+            <option value="Fiverr / Upwork Escrow">Fiverr / Upwork Escrow</option>
+            <option value="Custom">Other</option>
+          </select>
+          <input type="text" id="cf_payment_custom" class="form-input" placeholder="Enter your preferred method..." style="display:none;margin-top:10px;" oninput="cfSyncPayment()">
+          <input type="hidden" id="cf_payment">
         </div>
         <div class="form-group" style="flex:1;">
           <label class="form-label">PROJECT DETAILS</label>
@@ -5485,6 +5568,14 @@ body, body *, body *::before, body *::after {
         <div class="footer-legal-row"><a href="terms-of-service.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg> Terms of Service</a></div>
       </div>
     </div>
+    <div class="pay-footer-strip">
+      <span class="pay-badge-label">Payments accepted: bKash, Nagad, Bank Transfer, PayPal, Payoneer</span>
+      <div class="pay-badge-icons">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 9V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"></path><path d="M17 12h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a2 2 0 0 1 0-4z"></path></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V9l7-5 7 5v12"></path><path d="M9 21v-6h6v6"></path></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="6" x2="12" y2="18"></line><path d="M15 9.5a2.5 2.5 0 0 0-2.5-1.5h-1A2.5 2.5 0 0 0 9 10.5c0 1.4 1.1 2.1 2.5 2.5s2.5 1.1 2.5 2.5A2.5 2.5 0 0 1 11.5 18h-1A2.5 2.5 0 0 1 8 16"></path></svg>
+      </div>
+    </div>
     <div class="footer-bottom">
       <div class="footer-legal-mobile">
         <a href="privacy-policy.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg> Privacy Policy</a>
@@ -5805,6 +5896,20 @@ function cfSyncBudget() {
     hidden.value = sel.value;
   }
 }
+function cfSyncPayment() {
+  const sel = document.getElementById('cf_payment_select');
+  const custom = document.getElementById('cf_payment_custom');
+  const hidden = document.getElementById('cf_payment');
+  if (!sel || !custom || !hidden) return;
+  if (sel.value === 'Custom') {
+    custom.style.display = 'block';
+    hidden.value = custom.value.trim();
+  } else {
+    custom.style.display = 'none';
+    custom.value = '';
+    hidden.value = sel.value;
+  }
+}
 
 // ===== SIMPLE MATH CAPTCHA =====
 // Generates a small addition/subtraction question, stores the correct answer
@@ -5876,6 +5981,8 @@ async function handleSubmit(btn) {
   const email   = document.getElementById('cf_email').value.trim();
   const service = document.getElementById('cf_service').value.trim();
   const budget  = document.getElementById('cf_budget').value.trim();
+  const paymentEl = document.getElementById('cf_payment');
+  const payment_method = paymentEl ? paymentEl.value.trim() : '';
   const message = document.getElementById('cf_message').value.trim();
   const pkgEl      = document.getElementById('cf_package');
   const priceEl    = document.getElementById('cf_price');
@@ -5940,6 +6047,7 @@ async function handleSubmit(btn) {
     from_email:           email,
     service:              service || 'Not specified',
     budget:                budget  || 'Not specified',
+    payment_method:       payment_method || 'No preference',
     project_details:      message,
     message:              message,
     lead_source:          leadSource || 'Contact Form',
@@ -6024,6 +6132,12 @@ async function handleSubmit(btn) {
       document.getElementById('cf_service_custom').value = '';
       document.getElementById('cf_budget_custom').style.display = 'none';
       document.getElementById('cf_budget_custom').value = '';
+      if (document.getElementById('cf_payment')) document.getElementById('cf_payment').value = '';
+      if (document.getElementById('cf_payment_select')) document.getElementById('cf_payment_select').selectedIndex = 0;
+      if (document.getElementById('cf_payment_custom')) {
+        document.getElementById('cf_payment_custom').style.display = 'none';
+        document.getElementById('cf_payment_custom').value = '';
+      }
     } catch (resetErr) {
       console.warn('Non-critical form reset error:', resetErr);
     }
