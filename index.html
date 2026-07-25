@@ -6942,7 +6942,6 @@ function renderClientAuthUI() {
         <div style="display:flex;align-items:center;gap:10px;font-family:var(--font-mono);font-size:12.5px;color:var(--muted);">
           <span>${escHtml(currentClient.name)}</span>
           <button onclick="clientLogout()" style="background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:100px;padding:7px 14px;cursor:pointer;font-family:var(--font-mono);font-size:12px;transition:all .2s;" onmouseover="this.style.color='var(--white)'" onmouseout="this.style.color='var(--muted)'">Logout</button>
-          <button onclick="openDeleteAccountModal()" style="background:transparent;border:1px solid rgba(220,38,38,0.3);color:#f87171;border-radius:100px;padding:7px 14px;cursor:pointer;font-family:var(--font-mono);font-size:12px;transition:all .2s;" onmouseover="this.style.borderColor='#EF4444';this.style.color='#EF4444'" onmouseout="this.style.borderColor='rgba(220,38,38,0.3)';this.style.color='#f87171'">Delete Account</button>
         </div>`;
     } else if (!isAdmin) {
       wrap.innerHTML = `<button onclick="openClientAuthModal('login')" style="display:inline-flex;align-items:center;gap:8px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.25);color:var(--white);border-radius:100px;padding:9px 18px;cursor:pointer;font-family:var(--font-mono);font-size:12.5px;font-weight:600;letter-spacing:0.2px;transition:all .2s;" onmouseover="this.style.borderColor='var(--cyan)';this.style.background='rgba(59,130,246,0.12)'" onmouseout="this.style.borderColor='rgba(59,130,246,0.25)';this.style.background='rgba(59,130,246,0.06)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="var(--cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Sign In</button>`;
@@ -8053,7 +8052,10 @@ function renderResources() {
       <div class="resource-featured-body">
         <span class="resource-badge-new">● NEW</span>
         ${n0.category ? `<div style="font-size:11px;font-family:var(--font-mono);color:var(--cyan);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">${escHtml(n0.category)}</div>` : ''}
-        ${n0.access === 'clients-only' ? `<div style="display:inline-block;font-size:10px;font-family:var(--font-mono);color:var(--indigo);border:1px solid rgba(37,99,235,0.35);border-radius:100px;padding:2px 8px;margin-bottom:6px;">🔒 ${planLabel(n0.requiredPlan)} Only</div>` : ''}
+        ${n0.access === 'clients-only' ? (resourceIsLocked(n0)
+          ? `<div style="display:inline-block;font-size:10px;font-family:var(--font-mono);color:var(--indigo);border:1px solid rgba(37,99,235,0.35);border-radius:100px;padding:2px 8px;margin-bottom:6px;">🔒 ${planLabel(n0.requiredPlan)} Only</div>`
+          : `<div style="display:inline-block;font-size:10px;font-family:var(--font-mono);color:#34D399;border:1px solid rgba(52,211,153,0.35);border-radius:100px;padding:2px 8px;margin-bottom:6px;">✓ Unlocked${isAdmin ? ' (Admin)' : ''}</div>`
+        ) : ''}
         <div class="resource-featured-title">${escHtml(n0.title)}</div>
         <div class="resource-featured-excerpt">${escHtml((n0.content||'').substring(0,160))}${n0.content&&n0.content.length>160?'...':''}</div>
         <div class="resource-featured-date">${n0.date}</div>
