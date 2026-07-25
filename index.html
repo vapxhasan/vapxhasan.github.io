@@ -478,25 +478,6 @@ nav .container { max-width: 1300px; }
 .settings-item-static { cursor: default; }
 .settings-item-static:hover { background: none; }
 
-/* LANGUAGE SWITCHER (nav icon) */
-.nav-lang-wrap { position: relative; display: block; flex-shrink: 0; }
-.nav-lang-dropdown {
-  display: none;
-  position: absolute;
-  top: calc(100% + 10px);
-  right: 0;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 8px;
-  min-width: 190px;
-  max-height: 320px;
-  overflow-y: auto;
-  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
-  z-index: 1200;
-  animation: dropIn .2s ease;
-}
-.nav-lang-dropdown.open { display: block; }
 .lang-item {
   display: flex;
   align-items: center;
@@ -514,7 +495,7 @@ nav .container { max-width: 1300px; }
 .lang-item.active { color: var(--cyan); }
 .lang-item .lang-check { color: var(--cyan); font-size: 13px; opacity: 0; }
 .lang-item.active .lang-check { opacity: 1; }
-.lang-submenu {
+.settings-submenu {
   display: none;
   margin-top: 4px;
   padding: 4px;
@@ -524,7 +505,7 @@ nav .container { max-width: 1300px; }
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
 }
-.lang-submenu.open { display: block; }
+.settings-submenu.open { display: block; }
 
 /* Hide Google Translate's default widget/banner completely — we drive it via our own UI */
 #google_translate_element { display: none !important; }
@@ -534,9 +515,6 @@ body { top: 0 !important; position: static !important; }
 .goog-text-highlight { background-color: transparent !important; border: none !important; box-shadow: none !important; }
 .goog-tooltip, .goog-tooltip:hover { display: none !important; }
 iframe.skiptranslate { display: none !important; }
-@media (max-width: 768px) {
-  .nav-lang-wrap { display: none; }
-}
 
 /* MOBILE DRAWER BACKDROP */
 .drawer-backdrop {
@@ -2776,6 +2754,14 @@ footer {
 }
 
 /* ===== RESPONSIVE ===== */
+@media (min-width: 901px) and (max-width: 1180px) {
+  .nav-inner { gap: 14px; }
+  .nav-links { gap: 18px; }
+  .nav-links a { font-size: 15px; }
+  .nav-more-btn { font-size: 15px; }
+  .nav-cta { padding: 10px 18px; font-size: 13.5px; }
+  .nav-settings-btn { width: 38px; height: 38px; font-size: 17px; }
+}
 @media (max-width: 900px) {
   .about-grid { grid-template-columns: 1fr; gap: 48px; }
   .about-visual { display: block; }
@@ -3508,17 +3494,16 @@ body, body *, body *::before, body *::after {
         </div>
       </div>
       <a href="#contact" class="nav-cta">Hire Me <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></a>
-      <div class="nav-lang-wrap" id="navLangWrap">
-        <button class="nav-settings-btn" id="navLangBtn" aria-label="Change language" title="Language"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></button>
-        <div class="nav-lang-dropdown notranslate" id="navLangDropdown" translate="no"></div>
-      </div>
-      <div class="nav-settings-wrap" id="navClientWrap">
-        <button class="nav-settings-btn" id="navClientBtn" aria-label="Sign In" title="Sign In"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></button>
-        <div class="nav-settings-dropdown" id="navClientDropdown"></div>
-      </div>
       <div class="nav-settings-wrap" id="navSettingsWrap">
         <button class="nav-settings-btn" id="navSettingsBtn" aria-label="Settings"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>
         <div class="nav-settings-dropdown" id="navSettingsDropdown">
+          <div id="settingsAccountWrap" style="display:block;">
+            <div class="settings-item" id="settingsAccountToggle" onclick="handleSettingsAccountClick(event)" style="border-bottom:1px solid var(--border);border-radius:0;margin-bottom:4px;padding:10px 12px 14px;">
+              <span class="settings-item-label" id="settingsAccountLabel">Sign In</span>
+              <span class="settings-item-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></span>
+            </div>
+            <div class="settings-submenu" id="settingsAccountSubmenu"></div>
+          </div>
           <div class="settings-item" onclick="toggleThemeMode()">
             <span class="settings-item-label" id="themeLabel">Dark Mode</span>
             <span class="settings-item-icon" id="themeIcon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span>
@@ -3527,11 +3512,11 @@ body, body *, body *::before, body *::after {
             <span class="settings-item-label">Search</span>
             <span class="settings-item-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
           </div>
-          <div class="settings-item" id="settingsLangToggle" onclick="toggleLangSubmenu('settingsLangSubmenu', event)">
+          <div class="settings-item" id="settingsLangToggle" onclick="toggleSettingsSubmenu('settingsLangSubmenu', event)">
             <span class="settings-item-label">Language</span>
             <span class="settings-item-icon notranslate" id="settingsLangCurrent" translate="no" style="font-size:12px;color:var(--muted);font-weight:600;">English</span>
           </div>
-          <div class="lang-submenu notranslate" id="settingsLangSubmenu" translate="no"></div>
+          <div class="settings-submenu notranslate" id="settingsLangSubmenu" translate="no"></div>
         </div>
       </div>
     </div>
@@ -3589,11 +3574,11 @@ body, body *, body *::before, body *::after {
         <span class="settings-item-label">Search</span>
         <span class="settings-item-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></span>
       </div>
-      <div class="settings-item" id="mmSettingsLangToggle" onclick="toggleLangSubmenu('mmLangSubmenu', event)">
+      <div class="settings-item" id="mmSettingsLangToggle" onclick="toggleSettingsSubmenu('mmLangSubmenu', event)">
         <span class="settings-item-label">Language</span>
         <span class="settings-item-icon notranslate" id="mmSettingsLangCurrent" translate="no" style="font-size:12px;color:var(--muted);font-weight:600;">English</span>
       </div>
-      <div class="lang-submenu notranslate" id="mmLangSubmenu" translate="no"></div>
+      <div class="settings-submenu notranslate" id="mmLangSubmenu" translate="no"></div>
     </div>
   </div>
   <a href="#contact" class="mm-link drawer-hire-btn"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"></path><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"></path></svg> Hire Me</a>
@@ -6749,7 +6734,10 @@ function toggleDeleteAccountPassVisibility() {
 }
 
 function openDeleteAccountModal() {
-  document.getElementById('navClientDropdown').classList.remove('open');
+  const accountSubmenu = document.getElementById('settingsAccountSubmenu');
+  if (accountSubmenu) accountSubmenu.classList.remove('open');
+  const settingsDropdown = document.getElementById('navSettingsDropdown');
+  if (settingsDropdown) settingsDropdown.classList.remove('open');
   if (!isClient || !currentClient) return;
   document.getElementById('deleteAccountEmailLabel').textContent = currentClient.email || '';
   document.getElementById('deleteAccountPassInput').value = '';
@@ -7067,14 +7055,15 @@ function renderClientAuthUI() {
 }
 
 // ===================================================
-// CLIENT PORTAL — nav bar icon (desktop) + drawer link (mobile)
-// Mirrors the Free Resources login/logout widget above, just placed
-// somewhere visible site-wide instead of only inside that one section.
+// CLIENT PORTAL — Account row inside the Settings dropdown (desktop) +
+// drawer link (mobile). Mirrors the Free Resources login/logout widget
+// above, just placed somewhere visible site-wide instead of only inside
+// that one section.
 // ===================================================
 function renderNavClientUI() {
-  const wrap     = document.getElementById('navClientWrap');
-  const btn      = document.getElementById('navClientBtn');
-  const dropdown = document.getElementById('navClientDropdown');
+  const wrap     = document.getElementById('settingsAccountWrap');
+  const label    = document.getElementById('settingsAccountLabel');
+  const submenu  = document.getElementById('settingsAccountSubmenu');
   const mmBtn    = document.getElementById('mmClientBtn');
   const mmLabel  = document.getElementById('mmClientBtnLabel');
 
@@ -7089,44 +7078,37 @@ function renderNavClientUI() {
   if (mmBtn) mmBtn.style.display = 'flex';
 
   if (isClient && currentClient) {
-    if (btn) btn.title = currentClient.name || 'Sign In';
-    if (dropdown) {
-      dropdown.innerHTML = `
-        <div class="settings-item settings-item-static">
-          <span class="settings-item-label">${escHtml(currentClient.name)}</span>
-        </div>
-        <div class="settings-item" onclick="document.getElementById('navClientDropdown').classList.remove('open');clientLogout();">
+    if (label) label.textContent = currentClient.name || 'Account';
+    if (submenu) {
+      submenu.innerHTML = `
+        <div class="settings-item" onclick="document.getElementById('settingsAccountSubmenu').classList.remove('open');clientLogout();">
           <span class="settings-item-label">Logout</span>
         </div>
-        <div class="settings-item" onclick="openDeleteAccountModal();" style="border-top:1px solid var(--border);">
+        <div class="settings-item" onclick="openDeleteAccountModal();">
           <span class="settings-item-label" style="color:#EF4444;">Delete Account</span>
         </div>`;
     }
     if (mmLabel) mmLabel.textContent = currentClient.name ? currentClient.name : 'My Account';
   } else {
-    if (btn) btn.title = 'Sign In';
-    if (dropdown) dropdown.innerHTML = '';
+    if (label) label.textContent = 'Sign In';
+    if (submenu) submenu.innerHTML = '';
     if (mmLabel) mmLabel.textContent = 'Sign In';
   }
 }
 
-// Clicking the nav icon either opens the login/signup modal (logged out) or
-// toggles the small "name + logout" dropdown (logged in) — never both.
-(function() {
-  const btn = document.getElementById('navClientBtn');
-  const dropdown = document.getElementById('navClientDropdown');
-  if (!btn || !dropdown) return;
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    if (isClient && currentClient) {
-      dropdown.classList.toggle('open');
-    } else {
-      openClientAuthModal('login');
-    }
-  });
-  document.addEventListener('click', () => dropdown.classList.remove('open'));
-  dropdown.addEventListener('click', (e) => e.stopPropagation());
-})();
+// Clicking the Account row either opens the login/signup modal (logged out)
+// or expands the small "Logout / Delete Account" submenu (logged in) — the
+// same show-one-at-a-time behavior as the Language row uses.
+function handleSettingsAccountClick(e) {
+  if (e) e.stopPropagation();
+  if (isClient && currentClient) {
+    toggleSettingsSubmenu('settingsAccountSubmenu', e);
+  } else {
+    const settingsDropdown = document.getElementById('navSettingsDropdown');
+    if (settingsDropdown) settingsDropdown.classList.remove('open');
+    openClientAuthModal('login');
+  }
+}
 
 // Mobile drawer version of the same control — no room for a dropdown there,
 // so logged-in clients get scrolled to the Free Resources section instead,
@@ -11670,9 +11652,6 @@ function renderLanguageMenus() {
   const currentName = (SITE_LANGS.find(l => l.code === current) || SITE_LANGS[0]).name.split(' (')[0];
   const html = buildLangListHTML(current);
 
-  const navList = document.getElementById('navLangDropdown');
-  if (navList) navList.innerHTML = html;
-
   const settingsSub = document.getElementById('settingsLangSubmenu');
   if (settingsSub) settingsSub.innerHTML = html;
 
@@ -11699,26 +11678,14 @@ function setSiteLanguage(code) {
   window.location.reload();
 }
 
-function toggleLangSubmenu(id, e) {
+function toggleSettingsSubmenu(id, e) {
   if (e) e.stopPropagation();
   const sub = document.getElementById(id);
   if (!sub) return;
   const wasOpen = sub.classList.contains('open');
-  document.querySelectorAll('.lang-submenu').forEach(s => s.classList.remove('open'));
+  document.querySelectorAll('.settings-submenu').forEach(s => s.classList.remove('open'));
   if (!wasOpen) sub.classList.add('open');
 }
-
-(function() {
-  const btn = document.getElementById('navLangBtn');
-  const drop = document.getElementById('navLangDropdown');
-  if (!btn || !drop) return;
-  btn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    drop.classList.toggle('open');
-  });
-  document.addEventListener('click', () => drop.classList.remove('open'));
-  drop.addEventListener('click', (e) => e.stopPropagation());
-})();
 
 renderLanguageMenus();
 
