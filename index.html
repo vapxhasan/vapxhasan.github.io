@@ -2131,6 +2131,9 @@ iframe.skiptranslate { display: none !important; }
 .pm-method-desc { font-size: 12px; color: var(--muted); margin: -6px 0 10px 44px; line-height:1.5; }
 .pm-copy-row { display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-left: 0; }
 .pm-copy-value { flex: 1; font-family: var(--font-mono); font-size: 13px; color: var(--white); word-break: break-all; }
+.pm-copy-row-stack { flex-direction: column; align-items: stretch; }
+.pm-copy-row-stack .pm-copy-value { word-break: normal; overflow-wrap: break-word; white-space: pre-line; line-height: 1.75; }
+.pm-copy-row-stack .pm-copy-btn { align-self: flex-end; margin-top: 10px; }
 .pm-copy-btn { background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.3); color: var(--cyan); border-radius: 6px; padding: 6px 10px; font-size: 11px; font-family: var(--font-mono); cursor: pointer; flex-shrink: 0; white-space: nowrap; }
 .pm-copy-btn:hover { background: rgba(37,99,235,0.28); }
 .pm-copy-btn.pm-copied { background: rgba(34,197,94,0.2); border-color: rgba(34,197,94,0.4); color: #4ade80; }
@@ -4333,9 +4336,11 @@ body, body *, body *::before, body *::after {
         <span class="pay-badge-sep"></span>
         <span class="pay-badge-label">bKash</span>
         <span class="pay-badge-label">Nagad</span>
+        <span class="pay-badge-label">Rocket</span>
         <span class="pay-badge-label">Bank Transfer</span>
-        <span class="pay-badge-label">PayPal</span>
         <span class="pay-badge-label">Payoneer</span>
+        <span class="pay-badge-label">Elevate Pay</span>
+        <span class="pay-badge-label">PrioPay</span>
       </div>
       <div class="pay-badge-note">Payment details shared securely once we've agreed on your project.</div>
       <div style="text-align:center;">
@@ -4428,8 +4433,9 @@ body, body *, body *::before, body *::after {
             <option value="Nagad">Nagad</option>
             <option value="Rocket">Rocket</option>
             <option value="Bank Transfer">Bank Transfer</option>
-            <option value="PayPal">PayPal</option>
             <option value="Payoneer">Payoneer</option>
+            <option value="Elevate Pay">Elevate Pay</option>
+            <option value="PrioPay">PrioPay</option>
             <option value="Wise">Wise</option>
             <option value="Fiverr / Upwork Escrow">Fiverr / Upwork Escrow</option>
             <option value="Custom">Other</option>
@@ -4933,7 +4939,7 @@ body, body *, body *::before, body *::after {
           <span class="pm-region-emoji">🌍</span>
           <span>
             <span class="pm-region-name" style="display:block;">International Client</span>
-            <span class="pm-region-sub">PayPal · Payoneer</span>
+            <span class="pm-region-sub">Payoneer · Elevate Pay · PrioPay · Bank Wire</span>
           </span>
         </button>
         <button type="button" class="pm-region-card" onclick="showPaymentRegion('bd')">
@@ -4954,16 +4960,39 @@ body, body *, body *::before, body *::after {
       <div class="pm-modal-title">Choose a payment method</div>
       <div class="pm-method-list">
         <div class="pm-method-card">
-          <div class="pm-method-head"><span class="pm-method-icon">P</span><span class="pm-method-name">PayPal</span></div>
-          <div class="pm-method-desc">Fast, buyer-protected, works worldwide.</div>
-          <a id="pmPaypalLink" class="pm-paypal-btn" href="https://paypal.me/vapxhasan" target="_blank" rel="noopener">Pay with PayPal ↗</a>
-        </div>
-        <div class="pm-method-card">
           <div class="pm-method-head"><span class="pm-method-icon">$</span><span class="pm-method-name">Payoneer</span></div>
           <div class="pm-method-desc">Send to the email below, or ask for a Payoneer payment request.</div>
           <div class="pm-copy-row">
-            <span class="pm-copy-value" id="pmPayoneerEmail">vapxhasan@gmail.com</span>
+            <span class="pm-copy-value" id="pmPayoneerEmail">hasanur.rahman.editor@gmail.com</span>
             <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmPayoneerEmail', this)">Copy</button>
+          </div>
+        </div>
+        <div class="pm-method-card">
+          <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(34,197,94,0.12);color:#22c55e;">E</span><span class="pm-method-name">Elevate Pay</span></div>
+          <div class="pm-method-desc">Send to the email below, or ask for an Elevate Pay payment request.</div>
+          <div class="pm-copy-row">
+            <span class="pm-copy-value" id="pmElevateEmail">hasanur.rahman.editor@gmail.com</span>
+            <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmElevateEmail', this)">Copy</button>
+          </div>
+        </div>
+        <div class="pm-method-card">
+          <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(168,85,247,0.12);color:#a855f7;">Pr</span><span class="pm-method-name">PrioPay</span></div>
+          <div class="pm-method-desc">Send to the email below, or ask for a PrioPay payment request.</div>
+          <div class="pm-copy-row">
+            <span class="pm-copy-value" id="pmPrioPayEmail">hasanur.rahman.editor@gmail.com</span>
+            <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmPrioPayEmail', this)">Copy</button>
+          </div>
+        </div>
+        <div class="pm-method-card">
+          <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(59,130,246,0.12);color:#3b82f6;">B</span><span class="pm-method-name">Bank Wire Transfer</span></div>
+          <div class="pm-method-desc">SWIFT wire transfer — use the details below at your bank.</div>
+          <div class="pm-copy-row pm-copy-row-stack">
+            <span class="pm-copy-value" id="pmBankDetailsIntl">Bank Name: Islami Bank Bangladesh PLC
+Beneficiary Name: MD HASANUR RAHMAN
+Account Number: 20503696700143208
+SWIFT Code: IBBLBDDH
+Branch: Panchbibi Branch, Joypurhat, Bangladesh</span>
+            <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmBankDetailsIntl', this)">Copy</button>
           </div>
         </div>
       </div>
@@ -4980,7 +5009,7 @@ body, body *, body *::before, body *::after {
           <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(226,26,26,0.12);color:#e21a1a;">bK</span><span class="pm-method-name">bKash (Send Money)</span></div>
           <div class="pm-method-desc">Open bKash app → Send Money → enter the number below.</div>
           <div class="pm-copy-row">
-            <span class="pm-copy-value" id="pmBkashNumber">01XXXXXXXXX</span>
+            <span class="pm-copy-value" id="pmBkashNumber">01521731046</span>
             <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmBkashNumber', this)">Copy</button>
           </div>
         </div>
@@ -4988,20 +5017,32 @@ body, body *, body *::before, body *::after {
           <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(249,115,22,0.12);color:#f97316;">N</span><span class="pm-method-name">Nagad (Send Money)</span></div>
           <div class="pm-method-desc">Open Nagad app → Send Money → enter the number below.</div>
           <div class="pm-copy-row">
-            <span class="pm-copy-value" id="pmNagadNumber">01XXXXXXXXX</span>
+            <span class="pm-copy-value" id="pmNagadNumber">01521731046</span>
             <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmNagadNumber', this)">Copy</button>
+          </div>
+        </div>
+        <div class="pm-method-card">
+          <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(147,51,234,0.12);color:#9333ea;">R</span><span class="pm-method-name">Rocket (Send Money)</span></div>
+          <div class="pm-method-desc">Open Rocket app → Send Money → enter the number below.</div>
+          <div class="pm-copy-row">
+            <span class="pm-copy-value" id="pmRocketNumber">01521731046</span>
+            <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmRocketNumber', this)">Copy</button>
           </div>
         </div>
         <div class="pm-method-card">
           <div class="pm-method-head"><span class="pm-method-icon">B</span><span class="pm-method-name">Bank Transfer</span></div>
           <div class="pm-method-desc">Use these details from your bank app or branch.</div>
-          <div class="pm-copy-row">
-            <span class="pm-copy-value" id="pmBankDetails">Account Name: Hasanur Rahman · Bank: [Bank Name] · A/C: [Account Number] · Branch: [Branch]</span>
+          <div class="pm-copy-row pm-copy-row-stack">
+            <span class="pm-copy-value" id="pmBankDetails">Bank Name: Islami Bank Bangladesh PLC
+Beneficiary Name: MD HASANUR RAHMAN
+Account Number: 20503696700143208
+SWIFT Code: IBBLBDDH
+Branch: Panchbibi Branch, Joypurhat, Bangladesh</span>
             <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmBankDetails', this)">Copy</button>
           </div>
         </div>
       </div>
-      <div class="pm-warning-note"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16px" height="16px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> I will never call or message asking for your bKash/Nagad OTP or PIN. Only send money to the number shown above.</div>
+      <div class="pm-warning-note"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16px" height="16px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> I will never call or message asking for your bKash/Nagad/Rocket OTP or PIN. Only send money to the number shown above.</div>
       <div class="pm-secure-note"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14px" height="14px" style="flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> After sending, please share a screenshot on <a href="#" onclick="closePaymentModal();toggleWaWidget();return false;" style="color:var(--cyan);">WhatsApp</a> so I can confirm your payment right away.</div>
     </div>
 
@@ -5728,7 +5769,7 @@ body, body *, body *::before, body *::after {
       </div>
     </div>
     <div class="pay-footer-strip">
-      <span class="pay-badge-label">Payments accepted: bKash, Nagad, Bank Transfer, PayPal, Payoneer</span>
+      <span class="pay-badge-label">Payments accepted: bKash, Nagad, Rocket, Bank Transfer, Payoneer, Elevate Pay, PrioPay</span>
       <div class="pay-badge-icons">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 9V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"></path><path d="M17 12h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a2 2 0 0 1 0-4z"></path></svg>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V9l7-5 7 5v12"></path><path d="M9 21v-6h6v6"></path></svg>
@@ -5837,7 +5878,7 @@ if (sg) skillObserver.observe(sg);
 let faqs = [
   { q: 'How long does it take to complete a project?', a: "It depends on scope, but most projects are delivered within 2–7 business days. Rush delivery is available. I'll give you a clear timeline after reviewing your brief before any work starts." },
   { q: 'Do you offer revisions?', a: 'Yes. Standard packages include 2–3 revision rounds. I aim to nail the brief in the first delivery, but revisions are part of a healthy creative process — your satisfaction is the goal.' },
-  { q: 'What payment methods do you accept?', a: 'I accept payments through Fiverr, Upwork, PayPal, and direct bank transfer. All platforms offer buyer protection. Pricing is project-based and agreed upfront — no hidden fees.' },
+  { q: 'What payment methods do you accept?', a: 'I accept payments through Fiverr, Upwork, and direct bank transfer, along with bKash, Nagad, Rocket, Payoneer, Elevate Pay, and PrioPay. Pricing is project-based and agreed upfront — no hidden fees.' },
   { q: 'Can I see examples of your previous work?', a: 'Absolutely! The portfolio section above shows selected projects. I can also share additional, niche-specific samples relevant to your industry during our initial conversation. Just ask!' },
   { q: 'Do you work with international clients?', a: "Yes, 100%. I work with clients from the US, UK, Europe, Middle East, Canada, and Australia. I'm fluent in English and communicate clearly across time zones. Remote-first is my default." },
   { q: 'What AI tools do you use?', a: 'I work with the best tools in each category: Midjourney, DALL·E, Stable Diffusion for images; Sora, Runway, Kling for video; ElevenLabs, Suno for audio; ChatGPT, Claude for automation; Make.com, Zapier, n8n for workflows.' },
@@ -6070,6 +6111,62 @@ function cfSyncPayment() {
   }
 }
 
+// ===== AUTO-REPLY EMAIL: PAYMENT INSTRUCTIONS BLOCK =====
+// Client ফর্মে যে payment method বেছে নেয় (bKash/Nagad/Rocket/Bank/Payoneer/
+// Elevate Pay/PrioPay/No preference), সেই অনুযায়ী auto-reply email-এ দেখানোর জন্য একটা HTML
+// block বানায়। bKash/Nagad/Rocket নম্বর, Bank details, Payoneer/Elevate/PrioPay email —
+// সবগুলোই সরাসরি Pay/Order Now modal-এর ভ্যালু থেকে নেওয়া হয় (single source
+// of truth), তাই modal-এ কিছু বদলালে এই email block-ও নিজে থেকেই আপডেট হয়ে যায়।
+function buildPaymentInstructionsBlock(method) {
+  const bkash      = (document.getElementById('pmBkashNumber')?.textContent || '01XXXXXXXXX').trim();
+  const nagad      = (document.getElementById('pmNagadNumber')?.textContent || '01XXXXXXXXX').trim();
+  const rocket     = (document.getElementById('pmRocketNumber')?.textContent || '01XXXXXXXXX').trim();
+  const bank       = (document.getElementById('pmBankDetails')?.textContent || 'Please ask for bank details.').trim();
+  const payoneer   = (document.getElementById('pmPayoneerEmail')?.textContent || 'hasanur.rahman.editor@gmail.com').trim();
+  const elevate    = (document.getElementById('pmElevateEmail')?.textContent || 'hasanur.rahman.editor@gmail.com').trim();
+  const priopay    = (document.getElementById('pmPrioPayEmail')?.textContent || 'hasanur.rahman.editor@gmail.com').trim();
+
+  const row = (label, value) =>
+    `<tr><td style="padding:6px 0;font-size:13px;color:#94a3b8;">${label}</td><td style="padding:6px 0;font-size:13px;color:#e5e9f0;font-weight:700;" align="right">${value}</td></tr>`;
+
+  const rows = {
+    bKash:    row('bKash (Send Money)', bkash),
+    Nagad:    row('Nagad (Send Money)', nagad),
+    Rocket:   row('Rocket (Send Money)', rocket),
+    Bank:     row('Bank Transfer', bank),
+    Payoneer: row('Payoneer', payoneer),
+    Elevate:  row('Elevate Pay', elevate),
+    PrioPay:  row('PrioPay', priopay),
+  };
+
+  let rowsHtml = '';
+  let heading  = 'Payment Details';
+  const m = (method || '').toLowerCase();
+  if (m === 'bkash')                 rowsHtml = rows.bKash;
+  else if (m === 'nagad')            rowsHtml = rows.Nagad;
+  else if (m === 'rocket')           rowsHtml = rows.Rocket;
+  else if (m.includes('bank'))       rowsHtml = rows.Bank;
+  else if (m === 'payoneer')         rowsHtml = rows.Payoneer;
+  else if (m === 'elevate pay')      rowsHtml = rows.Elevate;
+  else if (m === 'priopay')          rowsHtml = rows.PrioPay;
+  else {
+    // No preference selected (or a custom/unrecognized value) — show every option
+    // so the client can pick whichever works for them.
+    rowsHtml = rows.bKash + rows.Nagad + rows.Rocket + rows.Bank + rows.Payoneer + rows.Elevate + rows.PrioPay;
+    heading  = 'Payment Options';
+  }
+
+  return (
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0b0f1e;border:1px solid #232b3d;border-radius:10px;margin:16px 0;">' +
+      '<tr><td style="padding:16px 18px;">' +
+        `<div style="font-size:13px;color:#6b7488;margin-bottom:8px;">💳 ${heading}</div>` +
+        `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${rowsHtml}</table>` +
+        '<div style="margin-top:12px;font-size:11.5px;line-height:16px;color:#f59e0b;">⚠️ I will never call or message asking for your OTP or PIN. After sending payment, please share a quick screenshot on WhatsApp or reply to this email so I can confirm right away.</div>' +
+      '</td></tr>' +
+    '</table>'
+  );
+}
+
 // ===== SIMPLE MATH CAPTCHA =====
 // Generates a small addition/subtraction question, stores the correct answer
 // on window, and shows the question text in the label. Called once on load
@@ -6201,6 +6298,10 @@ async function handleSubmit(btn) {
       '</table>';
   }
 
+  // Client যে payment method বেছেছে (বা কিছু না বেছে থাকলে সব অপশন) তার
+  // ভিত্তিতে auto-reply email-এর জন্য payment instructions block তৈরি করা।
+  const payment_instructions_block = buildPaymentInstructionsBlock(payment_method);
+
   const templateParams = {
     from_name:            name,
     from_email:           email,
@@ -6214,6 +6315,7 @@ async function handleSubmit(btn) {
     price:                 price || 'None',
     package_price_block:  package_price_block,
     client_package_line:  client_package_line,
+    payment_instructions_block: payment_instructions_block,
     status:                'New',
   };
 
