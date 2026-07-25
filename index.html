@@ -2100,6 +2100,9 @@ iframe.skiptranslate { display: none !important; }
   font-size: 12px;
   font-weight: 600;
   color: var(--white);
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
   transition: transform .2s ease, border-color .2s ease;
 }
 .footer-pay-chip::before {
@@ -2160,7 +2163,8 @@ iframe.skiptranslate { display: none !important; }
 .pm-region-name { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
 .pm-region-sub { font-size: 12px; color: var(--muted); font-weight: 400; }
 .pm-method-list { display: flex; flex-direction: column; gap: 12px; }
-.pm-method-card { border: 1px solid var(--border); border-radius: 14px; padding: 16px; background: rgba(255,255,255,0.02); }
+.pm-method-card { border: 1px solid var(--border); border-radius: 14px; padding: 16px; background: rgba(255,255,255,0.02); transition: border-color .3s ease, box-shadow .3s ease; }
+.pm-method-card.pm-highlight { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(34,211,238,0.18); }
 .pm-method-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .pm-method-icon { width: 34px; height: 34px; border-radius: 9px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; background: rgba(37,99,235,0.12); color: var(--cyan); font-weight:800; font-family: var(--font-display); }
 .pm-method-name { font-family: var(--font-display); font-weight: 700; color: var(--white); font-size: 14.5px; }
@@ -5008,7 +5012,7 @@ body, body *, body *::before, body *::after {
       <div class="pm-modal-eyebrow">🌍 INTERNATIONAL</div>
       <div class="pm-modal-title">Choose a payment method</div>
       <div class="pm-method-list">
-        <div class="pm-method-card">
+        <div class="pm-method-card" id="pmCard-payoneer">
           <div class="pm-method-head"><span class="pm-method-icon">$</span><span class="pm-method-name">Payoneer</span></div>
           <div class="pm-method-desc">Send to the email below, or ask for a Payoneer payment request.</div>
           <div class="pm-copy-row">
@@ -5016,7 +5020,7 @@ body, body *, body *::before, body *::after {
             <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmPayoneerEmail', this)">Copy</button>
           </div>
         </div>
-        <div class="pm-method-card">
+        <div class="pm-method-card" id="pmCard-elevate">
           <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(34,197,94,0.12);color:#22c55e;">E</span><span class="pm-method-name">Elevate Pay</span></div>
           <div class="pm-method-desc">Send to the email below, or ask for an Elevate Pay payment request.</div>
           <div class="pm-copy-row">
@@ -5024,7 +5028,7 @@ body, body *, body *::before, body *::after {
             <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmElevateEmail', this)">Copy</button>
           </div>
         </div>
-        <div class="pm-method-card">
+        <div class="pm-method-card" id="pmCard-priopay">
           <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(168,85,247,0.12);color:#a855f7;">Pr</span><span class="pm-method-name">PrioPay</span></div>
           <div class="pm-method-desc">Send to the email below, or ask for a PrioPay payment request.</div>
           <div class="pm-copy-row">
@@ -5032,7 +5036,7 @@ body, body *, body *::before, body *::after {
             <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmPrioPayEmail', this)">Copy</button>
           </div>
         </div>
-        <div class="pm-method-card">
+        <div class="pm-method-card" id="pmCard-bankwire">
           <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(59,130,246,0.12);color:#3b82f6;">B</span><span class="pm-method-name">Bank Wire Transfer</span></div>
           <div class="pm-method-desc">SWIFT wire transfer — use the details below at your bank.</div>
           <div class="pm-copy-row pm-copy-row-stack">
@@ -5054,7 +5058,7 @@ Branch: Panchbibi Branch, Joypurhat, Bangladesh</span>
       <div class="pm-modal-eyebrow">🇧🇩 BANGLADESH</div>
       <div class="pm-modal-title">Choose a payment method</div>
       <div class="pm-method-list">
-        <div class="pm-method-card">
+        <div class="pm-method-card" id="pmCard-bkash">
           <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(226,26,26,0.12);color:#e21a1a;">bK</span><span class="pm-method-name">bKash (Send Money)</span></div>
           <div class="pm-method-desc">Open bKash app → Send Money → enter the number below.</div>
           <div class="pm-copy-row">
@@ -5062,7 +5066,7 @@ Branch: Panchbibi Branch, Joypurhat, Bangladesh</span>
             <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmBkashNumber', this)">Copy</button>
           </div>
         </div>
-        <div class="pm-method-card">
+        <div class="pm-method-card" id="pmCard-nagad">
           <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(249,115,22,0.12);color:#f97316;">N</span><span class="pm-method-name">Nagad (Send Money)</span></div>
           <div class="pm-method-desc">Open Nagad app → Send Money → enter the number below.</div>
           <div class="pm-copy-row">
@@ -5070,7 +5074,7 @@ Branch: Panchbibi Branch, Joypurhat, Bangladesh</span>
             <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmNagadNumber', this)">Copy</button>
           </div>
         </div>
-        <div class="pm-method-card">
+        <div class="pm-method-card" id="pmCard-rocket">
           <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(147,51,234,0.12);color:#9333ea;">R</span><span class="pm-method-name">Rocket (Send Money)</span></div>
           <div class="pm-method-desc">Open Rocket app → Send Money → enter the number below.</div>
           <div class="pm-copy-row">
@@ -5078,7 +5082,7 @@ Branch: Panchbibi Branch, Joypurhat, Bangladesh</span>
             <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmRocketNumber', this)">Copy</button>
           </div>
         </div>
-        <div class="pm-method-card">
+        <div class="pm-method-card" id="pmCard-banktransfer">
           <div class="pm-method-head"><span class="pm-method-icon">B</span><span class="pm-method-name">Bank Transfer</span></div>
           <div class="pm-method-desc">Use these details from your bank app or branch.</div>
           <div class="pm-copy-row pm-copy-row-stack">
@@ -5820,13 +5824,13 @@ Branch: Panchbibi Branch, Joypurhat, Bangladesh</span>
     <div class="pay-footer-strip">
       <div class="footer-pay-heading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Payments Accepted</div>
       <div class="footer-pay-chips">
-        <span class="footer-pay-chip" style="--chip-accent:#E2136E;">bKash</span>
-        <span class="footer-pay-chip" style="--chip-accent:#F7941D;">Nagad</span>
-        <span class="footer-pay-chip" style="--chip-accent:#8E44AD;">Rocket</span>
-        <span class="footer-pay-chip" style="--chip-accent:#64748B;">Bank Transfer</span>
-        <span class="footer-pay-chip" style="--chip-accent:#FF4800;">Payoneer</span>
-        <span class="footer-pay-chip" style="--chip-accent:#0EA5A4;">Elevate Pay</span>
-        <span class="footer-pay-chip" style="--chip-accent:#6366F1;">PrioPay</span>
+        <button type="button" class="footer-pay-chip" style="--chip-accent:#E2136E;" onclick="openPaymentModalFor('bkash')">bKash</button>
+        <button type="button" class="footer-pay-chip" style="--chip-accent:#F7941D;" onclick="openPaymentModalFor('nagad')">Nagad</button>
+        <button type="button" class="footer-pay-chip" style="--chip-accent:#8E44AD;" onclick="openPaymentModalFor('rocket')">Rocket</button>
+        <button type="button" class="footer-pay-chip" style="--chip-accent:#64748B;" onclick="openPaymentModalFor('banktransfer')">Bank Transfer</button>
+        <button type="button" class="footer-pay-chip" style="--chip-accent:#FF4800;" onclick="openPaymentModalFor('payoneer')">Payoneer</button>
+        <button type="button" class="footer-pay-chip" style="--chip-accent:#0EA5A4;" onclick="openPaymentModalFor('elevate')">Elevate Pay</button>
+        <button type="button" class="footer-pay-chip" style="--chip-accent:#6366F1;" onclick="openPaymentModalFor('priopay')">PrioPay</button>
       </div>
     </div>
     <div class="footer-bottom">
@@ -6591,6 +6595,26 @@ function guessLinkMediaType(url) {
 function openPaymentModal() {
   showPaymentStep('region');
   document.getElementById('paymentModalOverlay').classList.add('open');
+}
+// Opens the modal straight to the relevant region step for a given method,
+// skipping the "Where are you paying from?" screen, and briefly highlights
+// + scrolls to that method's card so the account/number is easy to spot.
+const PM_METHOD_REGION = {
+  bkash: 'bd', nagad: 'bd', rocket: 'bd', banktransfer: 'bd',
+  payoneer: 'intl', elevate: 'intl', priopay: 'intl', bankwire: 'intl'
+};
+function openPaymentModalFor(method) {
+  const region = PM_METHOD_REGION[method] || 'bd';
+  showPaymentStep(region);
+  document.getElementById('paymentModalOverlay').classList.add('open');
+  const card = document.getElementById('pmCard-' + method);
+  if (card) {
+    setTimeout(() => {
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      card.classList.add('pm-highlight');
+      setTimeout(() => card.classList.remove('pm-highlight'), 2200);
+    }, 150);
+  }
 }
 function closePaymentModal() {
   document.getElementById('paymentModalOverlay').classList.remove('open');
