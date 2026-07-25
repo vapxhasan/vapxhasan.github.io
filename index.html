@@ -3723,6 +3723,7 @@ body, body *, body *::before, body *::after {
                     </div>
                   </label>
                   <input type="file" id="avatarInput" accept="image/*" style="display:none;">
+                  <button type="button" id="avatarLinkBtn" onclick="useAvatarLink()" title="Google Drive/link দিয়ে ছবি বসান" style="display:none;position:absolute;bottom:-6px;right:-6px;width:26px;height:26px;border-radius:50%;background:var(--indigo);color:#fff;border:2px solid var(--bg);align-items:center;justify-content:center;cursor:pointer;z-index:2;font-size:13px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13px" height="13px"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button>
                 </div>
               </div>
               <div class="about-img-label">AI Avatar</div>
@@ -3740,6 +3741,7 @@ body, body *, body *::before, body *::after {
                   <span>Professional<br>Photo</span>
                 </label>
                 <input type="file" id="proPhotoInput" accept="image/*" style="display:none;">
+                <button type="button" id="proPhotoLinkBtn" onclick="useProPhotoLink()" title="Google Drive/link দিয়ে ছবি বসান" style="display:none;position:absolute;bottom:6px;right:6px;width:26px;height:26px;border-radius:50%;background:var(--indigo);color:#fff;border:2px solid var(--bg);align-items:center;justify-content:center;cursor:pointer;z-index:2;font-size:13px;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13px" height="13px"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg></button>
               </div>
               <div class="photo-slot-label">Real Photo</div>
             </div>
@@ -4695,6 +4697,7 @@ body, body *, body *::before, body *::after {
           <span id="certFileName" style="font-size:11px;color:var(--cyan);font-family:var(--font-mono);display:none;word-break:break-all;text-align:center;"></span>
           <input id="certImageInput" type="file" accept="image/*" style="display:none;" onchange="handleCertImageSelect(this)">
         </label>
+        <button type="button" onclick="useCertImageLink()" style="margin-top:8px;width:100%;padding:9px;background:transparent;border:1px solid var(--border);color:var(--cyan);border-radius:8px;font-size:12px;cursor:pointer;font-family:var(--font-mono);">🔗 অথবা লিংক পেস্ট করুন (Google Drive ইত্যাদি)</button>
         <div id="certPreviewWrap" style="display:none;margin-top:10px;border-radius:10px;overflow:hidden;max-height:180px;position:relative;">
           <img id="certPreviewImg" style="width:100%;height:180px;object-fit:cover;display:block;" alt="preview">
           <button onclick="clearCertImage()" style="position:absolute;top:6px;right:6px;background:rgba(255,50,50,0.75);color:#fff;border:none;border-radius:50%;width:24px;height:24px;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
@@ -4734,6 +4737,7 @@ body, body *, body *::before, body *::after {
           <span id="resumeFileName" style="font-size:11px;color:var(--cyan);font-family:var(--font-mono);display:none;word-break:break-all;text-align:center;"></span>
           <input id="resumeFileInput" type="file" accept="application/pdf" style="display:none;" onchange="handleResumeFileSelect(this)">
         </label>
+        <button type="button" onclick="useResumeLink()" style="margin-top:8px;width:100%;padding:9px;background:transparent;border:1px solid var(--border);color:var(--cyan);border-radius:8px;font-size:12px;cursor:pointer;font-family:var(--font-mono);">🔗 অথবা PDF-এর লিংক পেস্ট করুন (Google Drive ইত্যাদি)</button>
       </div>
     </div>
 
@@ -4798,6 +4802,7 @@ body, body *, body *::before, body *::after {
           <span id="pMediaFileName" style="font-size:11px;color:var(--cyan);font-family:var(--font-mono);display:none;word-break:break-all;text-align:center;"></span>
           <input id="pMediaInput" type="file" accept="image/*,video/*,.pdf" style="display:none;" onchange="handleProjectMediaSelect(this)">
         </label>
+        <button type="button" onclick="useProjectMediaLink()" style="margin-top:8px;width:100%;padding:9px;background:transparent;border:1px solid var(--border);color:var(--cyan);border-radius:8px;font-size:12px;cursor:pointer;font-family:var(--font-mono);">🔗 অথবা লিংক পেস্ট করুন (Google Drive ইত্যাদি)</button>
         <!-- Preview -->
         <div id="pMediaPreview" style="display:none;margin-top:10px;border-radius:10px;overflow:hidden;max-height:160px;position:relative;">
           <img id="pMediaPreviewImg" style="width:100%;height:160px;object-fit:cover;display:none;" alt="preview">
@@ -4817,6 +4822,7 @@ body, body *, body *::before, body *::after {
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;">
             <button type="button" style="padding:8px 16px;background:transparent;border:1px solid var(--border);color:var(--white);border-radius:8px;font-size:12px;cursor:pointer;" onclick="document.getElementById('pThumbInput').click()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg> Upload Thumbnail</button>
+            <button type="button" style="padding:8px 16px;background:transparent;border:1px solid var(--border);color:var(--cyan);border-radius:8px;font-size:12px;cursor:pointer;" onclick="useProjectThumbLink()">🔗 Link দিন</button>
             <button type="button" style="padding:8px 16px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-size:12px;cursor:pointer;" onclick="clearProjectThumb()">Remove</button>
           </div>
           <input type="file" id="pThumbInput" accept="image/*" style="display:none;" onchange="handleProjectThumbSelect(this)">
@@ -4944,6 +4950,7 @@ body, body *, body *::before, body *::after {
           <span id="rMediaFileName" style="font-size:11px;color:var(--cyan);font-family:var(--font-mono);display:none;word-break:break-all;text-align:center;"></span>
           <input id="rMediaInput" type="file" accept="image/*,video/*" style="display:none;" onchange="handleReviewMediaSelect(this)">
         </label>
+        <button type="button" onclick="useReviewMediaLink()" style="margin-top:8px;width:100%;padding:9px;background:transparent;border:1px solid var(--border);color:var(--cyan);border-radius:8px;font-size:12px;cursor:pointer;font-family:var(--font-mono);">🔗 অথবা লিংক পেস্ট করুন (Google Drive ইত্যাদি)</button>
         <!-- Preview -->
         <div id="rMediaPreview" style="display:none;margin-top:10px;border-radius:10px;overflow:hidden;max-height:160px;position:relative;">
           <img id="rMediaPreviewImg" style="width:100%;height:160px;object-fit:cover;display:block;" alt="preview">
@@ -4962,6 +4969,7 @@ body, body *, body *::before, body *::after {
           </div>
           <div style="display:flex;flex-direction:column;gap:6px;">
             <button type="button" style="padding:8px 16px;background:transparent;border:1px solid var(--border);color:var(--white);border-radius:8px;font-size:12px;cursor:pointer;" onclick="document.getElementById('rThumbInput').click()">Upload Thumbnail</button>
+            <button type="button" style="padding:8px 16px;background:transparent;border:1px solid var(--border);color:var(--cyan);border-radius:8px;font-size:12px;cursor:pointer;" onclick="useReviewThumbLink()">🔗 Link দিন</button>
             <button type="button" style="padding:8px 16px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-size:12px;cursor:pointer;" onclick="clearReviewThumb()">Remove</button>
           </div>
           <input type="file" id="rThumbInput" accept="image/*" style="display:none;" onchange="handleReviewThumbSelect(this)">
@@ -5194,6 +5202,7 @@ body, body *, body *::before, body *::after {
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <button type="button" class="yt-modal-cancel" style="padding:8px 16px;" onclick="document.getElementById('ytThumbInput').click()">Upload Thumbnail</button>
+        <button type="button" class="yt-modal-cancel" style="padding:8px 16px;" onclick="useYtThumbLink()">🔗 Link দিন</button>
         <button type="button" class="yt-modal-cancel" style="padding:8px 16px;" onclick="clearYtThumb()">Remove</button>
       </div>
       <input type="file" id="ytThumbInput" accept="image/*" style="display:none;" onchange="handleYtThumbSelect(this)">
@@ -5308,6 +5317,7 @@ body, body *, body *::before, body *::after {
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" onclick="document.getElementById('resourceImgInput').click()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg> Upload Image</button>
+        <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" onclick="useResourceImgLink()">🔗 Link দিন</button>
         <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" id="resourceImgRemoveBtn" onclick="removeResourceImgSelection()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button>
       </div>
       <input type="file" id="resourceImgInput" accept="image/*" style="display:none;">
@@ -5315,6 +5325,7 @@ body, body *, body *::before, body *::after {
     <label class="blog-modal-label">PDF ATTACHMENT (optional)</label>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px;">
       <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" onclick="document.getElementById('resourcePdfInput').click()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> Upload PDF</button>
+      <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" onclick="useResourcePdfLink()">🔗 Link দিন</button>
       <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" id="resourcePdfRemoveBtn" onclick="removeResourcePdfSelection()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button>
       <input type="file" id="resourcePdfInput" accept="application/pdf" style="display:none;">
     </div>
@@ -5454,6 +5465,7 @@ body, body *, body *::before, body *::after {
       </div>
       <div style="display:flex;flex-direction:column;gap:6px;">
         <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" onclick="document.getElementById('blogImgInput').click()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg> Upload Image</button>
+        <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" onclick="useBlogImgLink()">🔗 Link দিন</button>
         <button type="button" class="blog-modal-cancel" style="padding:8px 16px;" id="blogImgRemoveBtn" onclick="removeBlogImgSelection()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> Remove</button>
       </div>
       <input type="file" id="blogImgInput" accept="image/*" style="display:none;">
@@ -6226,18 +6238,49 @@ function compressImageFile(file, maxDim, quality) {
   });
 }
 
+// ===================================================
+// "LINK দিয়ে যোগ করুন" — যেকোনো upload বক্সের পাশে থাকা অপশন।
+// ফাইল আপলোড না করে Google Drive / Imgur / YouTube ইত্যাদির direct link পেস্ট করলেই
+// কাজ হয়ে যাবে — সাইটে বড় base64 ফাইল জমা না হওয়ায় সাইট লোডও অনেক দ্রুত হবে।
+// ===================================================
+function normalizeMediaLink(raw) {
+  let url = (raw || '').trim();
+  if (!url) return '';
+  // Google Drive "share" link -> direct-view link
+  let m = url.match(/drive\.google\.com\/file\/d\/([^/]+)/);
+  if (m) return 'https://drive.google.com/uc?export=view&id=' + m[1];
+  m = url.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/);
+  if (m) return 'https://drive.google.com/uc?export=view&id=' + m[1];
+  return url;
+}
+function askForLink(hint) {
+  const raw = prompt((hint ? hint + '\n\n' : '') + 'Google Drive (Anyone with the link) বা অন্য যেকোনো সরাসরি লিংক পেস্ট করুন:');
+  if (raw === null) return null;
+  const url = normalizeMediaLink(raw);
+  return url || null;
+}
+function guessLinkMediaType(url) {
+  const u = url.toLowerCase();
+  if (/\.pdf(\?|$)/.test(u)) return 'application/pdf';
+  if (/\.(mp4|webm|mov|m4v)(\?|$)/.test(u) || /youtube\.com|youtu\.be|vimeo\.com/.test(u)) return 'video/mp4';
+  return 'image/*';
+}
+
 // Admin হলে avatar + pro photo দুটোই upload enable হবে
 function updateAvatarUploadAccess() {
   const label = document.getElementById('avatarUploadLabel');
+  const linkBtn = document.getElementById('avatarLinkBtn');
   if (!label) return;
   if (isAdmin) {
     label.style.pointerEvents = 'auto';
     label.style.cursor = 'pointer';
     label.title = 'Click to upload your photo';
+    if (linkBtn) linkBtn.style.display = 'flex';
   } else {
     label.style.pointerEvents = 'none';
     label.style.cursor = 'default';
     label.title = '';
+    if (linkBtn) linkBtn.style.display = 'none';
   }
   updateProPhotoAccess();
 }
@@ -6246,6 +6289,7 @@ function updateProPhotoAccess() {
   const label = document.getElementById('proPhotoPlaceholder');
   const slot = document.getElementById('proPhotoSlot');
   const img = document.getElementById('proPhotoImg');
+  const linkBtn = document.getElementById('proPhotoLinkBtn');
   if (!label) return;
   if (isAdmin) {
     label.style.pointerEvents = 'auto';
@@ -6253,12 +6297,14 @@ function updateProPhotoAccess() {
     label.title = 'Click to upload your photo';
     if (slot) slot.classList.add('is-admin');
     if (img) img.style.cursor = 'pointer';
+    if (linkBtn) linkBtn.style.display = 'flex';
   } else {
     label.style.pointerEvents = 'none';
     label.style.cursor = 'default';
     label.title = '';
     if (slot) slot.classList.remove('is-admin');
     if (img) img.style.cursor = 'default';
+    if (linkBtn) linkBtn.style.display = 'none';
   }
 }
 
@@ -6345,6 +6391,26 @@ proPhotoInput.addEventListener('change', async function() {
     placeholder.innerHTML = origHtml;
   }
 });
+
+async function useAvatarLink() {
+  if (!isAdmin) return;
+  const url = askForLink('AI Avatar ছবির লিংক');
+  if (!url) return;
+  avatarImg.src = url;
+  avatarImg.style.display = 'block';
+  avatarPlaceholder.style.display = 'none';
+  await sharedSet('avatar_img', url);
+}
+
+async function useProPhotoLink() {
+  if (!isAdmin) return;
+  const url = askForLink('Professional Photo-র লিংক');
+  if (!url) return;
+  proPhotoImg.src = url;
+  proPhotoImg.style.display = 'block';
+  document.getElementById('proPhotoPlaceholder').style.display = 'none';
+  await sharedSet('pro_photo_img', url);
+}
 
 // ===================================================
 // FIREBASE REALTIME DATABASE CONFIG
@@ -7547,6 +7613,16 @@ function handleYtThumbSelect(input) {
   reader.readAsDataURL(file);
 }
 
+function useYtThumbLink() {
+  const url = askForLink('Thumbnail ছবির লিংক');
+  if (!url) return;
+  _currentYtThumb = { data: url, type: 'image/*', name: url };
+  const img = document.getElementById('ytThumbPreviewImg');
+  const empty = document.getElementById('ytThumbPreviewEmpty');
+  img.src = url; img.style.display = 'block';
+  if (empty) empty.style.display = 'none';
+}
+
 function clearYtThumb() {
   _currentYtThumb = null;
   const input = document.getElementById('ytThumbInput');
@@ -7893,6 +7969,14 @@ document.getElementById('blogImgInput').addEventListener('change', async functio
     document.getElementById('blogImgPreviewEmpty').style.display = 'none';
   } catch (e) { console.warn('Blog image compress failed:', e); }
 });
+function useBlogImgLink() {
+  const url = askForLink('Blog cover ছবির লিংক');
+  if (!url) return;
+  blogImgDataUrl = url;
+  document.getElementById('blogImgPreview').src = url;
+  document.getElementById('blogImgPreview').style.display = 'block';
+  document.getElementById('blogImgPreviewEmpty').style.display = 'none';
+}
 function removeBlogImgSelection() {
   blogImgDataUrl = '';
   document.getElementById('blogImgInput').value = '';
@@ -8226,6 +8310,14 @@ document.getElementById('resourceImgInput').addEventListener('change', async fun
     document.getElementById('resourceImgPreviewEmpty').style.display = 'none';
   } catch (e) { console.warn('Resource image compress failed:', e); }
 });
+function useResourceImgLink() {
+  const url = askForLink('Resource ছবির লিংক');
+  if (!url) return;
+  resourceImgDataUrl = url;
+  document.getElementById('resourceImgPreview').src = url;
+  document.getElementById('resourceImgPreview').style.display = 'block';
+  document.getElementById('resourceImgPreviewEmpty').style.display = 'none';
+}
 function removeResourceImgSelection() {
   resourceImgDataUrl = '';
   document.getElementById('resourceImgInput').value = '';
@@ -8250,6 +8342,13 @@ document.getElementById('resourcePdfInput').addEventListener('change', function(
   };
   reader.readAsDataURL(file);
 });
+function useResourcePdfLink() {
+  const url = askForLink('PDF-এর লিংক');
+  if (!url) return;
+  resourcePdfData = { data: url, name: url.split('/').pop() || 'file.pdf' };
+  const fn = document.getElementById('resourcePdfFileName');
+  fn.textContent = '📄 ' + url; fn.style.display = 'block';
+}
 function removeResourcePdfSelection() {
   resourcePdfData = null;
   document.getElementById('resourcePdfInput').value = '';
@@ -8943,6 +9042,22 @@ function handleReviewMediaSelect(input) {
   reader.readAsDataURL(file);
 }
 
+function useReviewMediaLink() {
+  const url = askForLink('Review media লিংক (ছবি বা ভিডিও)');
+  if (!url) return;
+  const type = guessLinkMediaType(url);
+  const isVideo = type.startsWith('video/');
+  _currentReviewMedia = { data: url, type, name: url.split('/').pop() || url };
+  const fn = document.getElementById('rMediaFileName');
+  fn.textContent = url; fn.style.display = 'block';
+  const prev = document.getElementById('rMediaPreview');
+  const img  = document.getElementById('rMediaPreviewImg');
+  const vid  = document.getElementById('rMediaPreviewVideo');
+  if (isVideo) { vid.src = url; vid.style.display = 'block'; img.style.display = 'none'; }
+  else { img.src = url; img.style.display = 'block'; vid.style.display = 'none'; vid.removeAttribute('src'); }
+  prev.style.display = 'block';
+}
+
 function clearReviewMedia() {
   _currentReviewMedia = null;
   const fn = document.getElementById('rMediaFileName');
@@ -8972,6 +9087,16 @@ function handleReviewThumbSelect(input) {
     if (empty) empty.style.display = 'none';
   };
   reader.readAsDataURL(file);
+}
+
+function useReviewThumbLink() {
+  const url = askForLink('Thumbnail ছবির লিংক');
+  if (!url) return;
+  _currentReviewThumb = { data: url, type: 'image/*', name: url };
+  const img = document.getElementById('rThumbPreviewImg');
+  const empty = document.getElementById('rThumbPreviewEmpty');
+  img.src = url; img.style.display = 'block';
+  if (empty) empty.style.display = 'none';
 }
 
 function clearReviewThumb() {
@@ -9818,6 +9943,24 @@ function handleProjectMediaSelect(input) {
   reader.readAsDataURL(file);
 }
 
+function useProjectMediaLink() {
+  const url = askForLink('Project media লিংক (ছবি, ভিডিও বা PDF — .pdf/.mp4 দিয়ে শেষ হলে বা YouTube/Vimeo হলে ঠিক টাইপ ধরা হবে)');
+  if (!url) return;
+  const type = guessLinkMediaType(url);
+  _currentProjectMedia = { data: url, type, name: url.split('/').pop() || url };
+  const fn = document.getElementById('pMediaFileName');
+  fn.textContent = url; fn.style.display = 'block';
+  const prev = document.getElementById('pMediaPreview');
+  const img  = document.getElementById('pMediaPreviewImg');
+  const vid  = document.getElementById('pMediaPreviewVid');
+  const pdf  = document.getElementById('pMediaPreviewPdf');
+  img.style.display = 'none'; vid.style.display = 'none'; pdf.style.display = 'none';
+  prev.style.display = 'block';
+  if (type.startsWith('video/')) { vid.src = url; vid.style.display = 'block'; }
+  else if (type === 'application/pdf') { pdf.style.display = 'block'; }
+  else { img.src = url; img.style.display = 'block'; }
+}
+
 function clearProjectMedia() {
   _currentProjectMedia = null;
   const fn = document.getElementById('pMediaFileName');
@@ -9849,6 +9992,16 @@ function handleProjectThumbSelect(input) {
     if (empty) empty.style.display = 'none';
   };
   reader.readAsDataURL(file);
+}
+
+function useProjectThumbLink() {
+  const url = askForLink('Thumbnail ছবির লিংক');
+  if (!url) return;
+  _currentProjectThumb = { data: url, type: 'image/*', name: url };
+  const img = document.getElementById('pThumbPreviewImg');
+  const empty = document.getElementById('pThumbPreviewEmpty');
+  img.src = url; img.style.display = 'block';
+  if (empty) empty.style.display = 'none';
 }
 
 function clearProjectThumb() {
@@ -10036,6 +10189,16 @@ function handleCertImageSelect(input) {
   reader.readAsDataURL(file);
 }
 
+function useCertImageLink() {
+  const url = askForLink('Certificate ছবির লিংক');
+  if (!url) return;
+  _currentCertImage = { data: url, type: 'image/*', name: url };
+  const fn = document.getElementById('certFileName');
+  fn.textContent = url; fn.style.display = 'block';
+  document.getElementById('certPreviewWrap').style.display = 'block';
+  document.getElementById('certPreviewImg').src = url;
+}
+
 function clearCertImage() {
   _currentCertImage = null;
   const input = document.getElementById('certImageInput');
@@ -10161,6 +10324,14 @@ function handleResumeFileSelect(input) {
     fn.textContent = file.name;
   };
   reader.readAsDataURL(file);
+}
+
+function useResumeLink() {
+  const url = askForLink('Resume PDF-এর লিংক');
+  if (!url) return;
+  _currentResumeFile = { data: url, type: 'application/pdf', name: url.split('/').pop() || 'Resume.pdf' };
+  const fn = document.getElementById('resumeFileName');
+  fn.textContent = url; fn.style.display = 'block';
 }
 
 async function saveResume() {
