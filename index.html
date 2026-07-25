@@ -2081,6 +2081,76 @@ iframe.skiptranslate { display: none !important; }
 }
 @media (max-width: 600px) { .fiv-wrap { max-width: 100%; } }
 
+/* ===== PAYMENT METHOD PICKER (Pay / Order Now modal) ===== */
+.pay-now-btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 16px;
+  padding: 12px 26px;
+  background: linear-gradient(135deg, var(--indigo), var(--cyan));
+  color: #fff; border: none; border-radius: 10px;
+  font-family: var(--font-display); font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 8px 24px rgba(37,99,235,0.25);
+}
+.pay-now-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(37,99,235,0.35); }
+.pm-modal-overlay {
+  display: none; position: fixed; inset: 0; z-index: 4200;
+  background: rgba(0,0,0,0.8); backdrop-filter: blur(10px);
+  align-items: center; justify-content: center; padding: 20px;
+}
+.pm-modal-overlay.open { display: flex; }
+.pm-modal {
+  background: #111827; border: 1px solid rgba(37,99,235,0.3); border-radius: 20px;
+  padding: 30px; width: 100%; max-width: 460px; position: relative;
+  box-shadow: 0 0 60px rgba(37,99,235,0.2); max-height: 88vh; overflow-y: auto;
+}
+.pm-modal-close {
+  position: absolute; top: 16px; right: 18px; background: none; border: none;
+  color: var(--muted); font-size: 22px; cursor: pointer; line-height: 1;
+}
+.pm-modal-eyebrow { font-size: 12px; font-family: var(--font-mono); color: var(--cyan); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; display:flex; align-items:center; gap:8px; }
+.pm-modal-title { font-size: 20px; font-weight: 800; color: var(--white); margin-bottom: 22px; }
+.pm-back-btn { background:none; border:none; color:var(--muted); font-size:12px; font-family:var(--font-mono); cursor:pointer; display:flex; align-items:center; gap:4px; margin-bottom:14px; padding:0; }
+.pm-back-btn:hover { color: var(--cyan); }
+.pm-region-grid { display: flex; flex-direction: column; gap: 12px; }
+.pm-region-card {
+  display: flex; align-items: center; gap: 14px;
+  padding: 18px; border: 1px solid var(--border); border-radius: 14px;
+  background: rgba(37,99,235,0.04); cursor: pointer; transition: all .2s;
+  text-align: left; color: var(--white); font-family: var(--font-display);
+}
+.pm-region-card:hover { border-color: var(--indigo); background: rgba(37,99,235,0.1); transform: translateY(-2px); }
+.pm-region-emoji { font-size: 26px; flex-shrink: 0; }
+.pm-region-name { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+.pm-region-sub { font-size: 12px; color: var(--muted); font-weight: 400; }
+.pm-method-list { display: flex; flex-direction: column; gap: 12px; }
+.pm-method-card { border: 1px solid var(--border); border-radius: 14px; padding: 16px; background: rgba(255,255,255,0.02); }
+.pm-method-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.pm-method-icon { width: 34px; height: 34px; border-radius: 9px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; background: rgba(37,99,235,0.12); color: var(--cyan); font-weight:800; font-family: var(--font-display); }
+.pm-method-name { font-family: var(--font-display); font-weight: 700; color: var(--white); font-size: 14.5px; }
+.pm-method-desc { font-size: 12px; color: var(--muted); margin: -6px 0 10px 44px; line-height:1.5; }
+.pm-copy-row { display: flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin-left: 0; }
+.pm-copy-value { flex: 1; font-family: var(--font-mono); font-size: 13px; color: var(--white); word-break: break-all; }
+.pm-copy-btn { background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.3); color: var(--cyan); border-radius: 6px; padding: 6px 10px; font-size: 11px; font-family: var(--font-mono); cursor: pointer; flex-shrink: 0; white-space: nowrap; }
+.pm-copy-btn:hover { background: rgba(37,99,235,0.28); }
+.pm-copy-btn.pm-copied { background: rgba(34,197,94,0.2); border-color: rgba(34,197,94,0.4); color: #4ade80; }
+.pm-paypal-btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  width: 100%; padding: 14px; margin-top: 4px;
+  background: linear-gradient(135deg, var(--indigo), var(--cyan)); color: #fff;
+  border: none; border-radius: 10px; font-family: var(--font-display); font-weight: 700; font-size: 14px;
+  cursor: pointer; text-decoration: none;
+}
+.pm-secure-note { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--muted); margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); line-height: 1.6; }
+.pm-warning-note {
+  display: flex; gap: 10px; align-items: flex-start;
+  background: rgba(234,179,8,0.08); border: 1px solid rgba(234,179,8,0.25);
+  border-radius: 10px; padding: 12px 14px; margin-top: 14px;
+  font-size: 12px; color: #eab308; line-height: 1.6;
+}
+.pm-warning-note svg { flex-shrink: 0; margin-top: 1px; }
+@media (max-width: 480px) { .pm-modal { padding: 22px 18px; } }
+
 /* ===== CLIENT CUSTOM PRICING ===== */
 .client-pricing-wrap { display: none; max-width: 900px; margin: 0 auto; }
 .client-pricing-wrap.visible { display: block; }
@@ -4268,6 +4338,9 @@ body, body *, body *::before, body *::after {
         <span class="pay-badge-label">Payoneer</span>
       </div>
       <div class="pay-badge-note">Payment details shared securely once we've agreed on your project.</div>
+      <div style="text-align:center;">
+        <button type="button" class="pay-now-btn" onclick="openPaymentModal()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16px" height="16px"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> Pay / Order Now</button>
+      </div>
     </div>
 
     <!-- CLIENT CUSTOM PRICING -->
@@ -4843,6 +4916,95 @@ body, body *, body *::before, body *::after {
     <button onclick="closeProjectVideoModal()" style="position:absolute;top:-14px;right:-14px;width:32px;height:32px;border-radius:50%;background:var(--indigo);border:none;color:#fff;font-size:18px;cursor:pointer;line-height:1;">&times;</button>
     <div id="projectVideoModalBody" style="position:relative;width:100%;padding-top:56.25%;border-radius:10px;overflow:hidden;background:#000;"></div>
     <div id="projectVideoModalTitle" style="margin-top:14px;font-size:15px;font-weight:700;color:var(--white);"></div>
+  </div>
+</div>
+
+<!-- PAYMENT METHOD PICKER MODAL -->
+<div class="pm-modal-overlay" id="paymentModalOverlay" onclick="if(event.target===this) closePaymentModal();">
+  <div class="pm-modal">
+    <button class="pm-modal-close" onclick="closePaymentModal()"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+
+    <!-- STEP 1: choose region -->
+    <div id="pmStepRegion">
+      <div class="pm-modal-eyebrow">// PAYMENT</div>
+      <div class="pm-modal-title">Where are you paying from?</div>
+      <div class="pm-region-grid">
+        <button type="button" class="pm-region-card" onclick="showPaymentRegion('intl')">
+          <span class="pm-region-emoji">🌍</span>
+          <span>
+            <span class="pm-region-name" style="display:block;">International Client</span>
+            <span class="pm-region-sub">PayPal · Payoneer</span>
+          </span>
+        </button>
+        <button type="button" class="pm-region-card" onclick="showPaymentRegion('bd')">
+          <span class="pm-region-emoji">🇧🇩</span>
+          <span>
+            <span class="pm-region-name" style="display:block;">Bangladeshi Client</span>
+            <span class="pm-region-sub">bKash · Nagad · Bank Transfer</span>
+          </span>
+        </button>
+      </div>
+      <div class="pm-secure-note"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14px" height="14px" style="flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Secure — your payment info is never stored on this site.</div>
+    </div>
+
+    <!-- STEP 2A: international -->
+    <div id="pmStepIntl" style="display:none;">
+      <button type="button" class="pm-back-btn" onclick="showPaymentStep('region')"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12px" height="12px"><polyline points="15 18 9 12 15 6"></polyline></svg> Back</button>
+      <div class="pm-modal-eyebrow">🌍 INTERNATIONAL</div>
+      <div class="pm-modal-title">Choose a payment method</div>
+      <div class="pm-method-list">
+        <div class="pm-method-card">
+          <div class="pm-method-head"><span class="pm-method-icon">P</span><span class="pm-method-name">PayPal</span></div>
+          <div class="pm-method-desc">Fast, buyer-protected, works worldwide.</div>
+          <a id="pmPaypalLink" class="pm-paypal-btn" href="https://paypal.me/vapxhasan" target="_blank" rel="noopener">Pay with PayPal ↗</a>
+        </div>
+        <div class="pm-method-card">
+          <div class="pm-method-head"><span class="pm-method-icon">$</span><span class="pm-method-name">Payoneer</span></div>
+          <div class="pm-method-desc">Send to the email below, or ask for a Payoneer payment request.</div>
+          <div class="pm-copy-row">
+            <span class="pm-copy-value" id="pmPayoneerEmail">vapxhasan@gmail.com</span>
+            <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmPayoneerEmail', this)">Copy</button>
+          </div>
+        </div>
+      </div>
+      <div class="pm-secure-note"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14px" height="14px" style="flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> After paying, please send a quick screenshot on <a href="#" onclick="closePaymentModal();toggleWaWidget();return false;" style="color:var(--cyan);">WhatsApp</a> or email so I can confirm right away.</div>
+    </div>
+
+    <!-- STEP 2B: bangladesh -->
+    <div id="pmStepBd" style="display:none;">
+      <button type="button" class="pm-back-btn" onclick="showPaymentStep('region')"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12px" height="12px"><polyline points="15 18 9 12 15 6"></polyline></svg> Back</button>
+      <div class="pm-modal-eyebrow">🇧🇩 BANGLADESH</div>
+      <div class="pm-modal-title">Choose a payment method</div>
+      <div class="pm-method-list">
+        <div class="pm-method-card">
+          <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(226,26,26,0.12);color:#e21a1a;">bK</span><span class="pm-method-name">bKash (Send Money)</span></div>
+          <div class="pm-method-desc">Open bKash app → Send Money → enter the number below.</div>
+          <div class="pm-copy-row">
+            <span class="pm-copy-value" id="pmBkashNumber">01XXXXXXXXX</span>
+            <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmBkashNumber', this)">Copy</button>
+          </div>
+        </div>
+        <div class="pm-method-card">
+          <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(249,115,22,0.12);color:#f97316;">N</span><span class="pm-method-name">Nagad (Send Money)</span></div>
+          <div class="pm-method-desc">Open Nagad app → Send Money → enter the number below.</div>
+          <div class="pm-copy-row">
+            <span class="pm-copy-value" id="pmNagadNumber">01XXXXXXXXX</span>
+            <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmNagadNumber', this)">Copy</button>
+          </div>
+        </div>
+        <div class="pm-method-card">
+          <div class="pm-method-head"><span class="pm-method-icon">B</span><span class="pm-method-name">Bank Transfer</span></div>
+          <div class="pm-method-desc">Use these details from your bank app or branch.</div>
+          <div class="pm-copy-row">
+            <span class="pm-copy-value" id="pmBankDetails">Account Name: Hasanur Rahman · Bank: [Bank Name] · A/C: [Account Number] · Branch: [Branch]</span>
+            <button type="button" class="pm-copy-btn" onclick="pmCopyValue('pmBankDetails', this)">Copy</button>
+          </div>
+        </div>
+      </div>
+      <div class="pm-warning-note"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16px" height="16px"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> I will never call or message asking for your bKash/Nagad OTP or PIN. Only send money to the number shown above.</div>
+      <div class="pm-secure-note"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14px" height="14px" style="flex-shrink:0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> After sending, please share a screenshot on <a href="#" onclick="closePaymentModal();toggleWaWidget();return false;" style="color:var(--cyan);">WhatsApp</a> so I can confirm your payment right away.</div>
+    </div>
+
   </div>
 </div>
 
@@ -6264,6 +6426,45 @@ function guessLinkMediaType(url) {
   if (/\.pdf(\?|$)/.test(u)) return 'application/pdf';
   if (/\.(mp4|webm|mov|m4v)(\?|$)/.test(u) || /youtube\.com|youtu\.be|vimeo\.com/.test(u)) return 'video/mp4';
   return 'image/*';
+}
+
+// ===================================================
+// PAYMENT METHOD PICKER ("Pay / Order Now" modal)
+// bKash/Nagad নম্বর এবং Bank details বদলাতে চাইলে নিচের তিনটা লাইনের
+// মান পাল্টে দিলেই মডালে সাথে সাথে আপডেট হয়ে যাবে।
+// ===================================================
+function openPaymentModal() {
+  showPaymentStep('region');
+  document.getElementById('paymentModalOverlay').classList.add('open');
+}
+function closePaymentModal() {
+  document.getElementById('paymentModalOverlay').classList.remove('open');
+}
+function showPaymentStep(step) {
+  document.getElementById('pmStepRegion').style.display = step === 'region' ? 'block' : 'none';
+  document.getElementById('pmStepIntl').style.display = step === 'intl' ? 'block' : 'none';
+  document.getElementById('pmStepBd').style.display = step === 'bd' ? 'block' : 'none';
+}
+function showPaymentRegion(region) {
+  showPaymentStep(region === 'intl' ? 'intl' : 'bd');
+}
+function pmCopyValue(elId, btn) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  const text = el.textContent.trim();
+  const done = () => {
+    const orig = btn.textContent;
+    btn.textContent = 'Copied ✓';
+    btn.classList.add('pm-copied');
+    setTimeout(() => { btn.textContent = orig; btn.classList.remove('pm-copied'); }, 1800);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(() => {
+      window.prompt('Copy this manually (Ctrl+C / Cmd+C):', text);
+    });
+  } else {
+    window.prompt('Copy this manually (Ctrl+C / Cmd+C):', text);
+  }
 }
 
 // Admin হলে avatar + pro photo দুটোই upload enable হবে
