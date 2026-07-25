@@ -7875,6 +7875,12 @@ document.getElementById('blogModal').addEventListener('click', e => { if (e.targ
 // RESOURCE BOARD SYSTEM (title / image / PDF / YouTube / Drive link / details text)
 // ===================================================
 let resources = [];
+// `resources` is stored as an ARRAY in Firebase (index-keyed), so a security
+// rule can't reliably look up "the resource with id=X" inside it. This is a
+// small parallel object, keyed by resource id, holding ONLY {access,
+// requiredPlan} — cheap, public, and exactly what the resource_content
+// Firebase Rule needs to decide who's allowed to read a given id's payload.
+let resourceAccessMap = {};
 
 // Category management for free resources — mirrors the Review/YouTube/Blog
 // category system (admin add/edit/delete instead of a plain free-text tag).
@@ -8218,6 +8224,8 @@ async function publishResource() {
   }
 
   await sharedSet('resources', resources);
+  resourceAccessMap[resId] = { access, requiredPlan: requiredPlan || '' };
+  await sharedSet('resource_access', resourceAccessMap);
   await saveResourceContent(resId, {
     content,
     pdf: resourcePdfData || null,
@@ -8290,7 +8298,11 @@ async function removeResource(i) {
   const removed = resources[i];
   resources.splice(i, 1);
   await sharedSet('resources', resources);
-  if (removed && removed.id) await deleteResourceContent(removed.id);
+  if (removed && removed.id) {
+    delete resourceAccessMap[removed.id];
+    await sharedSet('resource_access', resourceAccessMap);
+    await deleteResourceContent(removed.id);
+  }
   renderResources();
 }
 
@@ -10593,6 +10605,7 @@ async function initSharedData() {
       });
     }
     if (record.resources)        resources        = record.resources;
+    if (record.resource_access)  resourceAccessMap = record.resource_access;
     if (record.resource_categories) {
       resourceCategories = record.resource_categories;
     } else if (resources.length) {
