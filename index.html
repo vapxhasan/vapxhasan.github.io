@@ -7166,6 +7166,43 @@ async function sharedSet(key, val) {
 }
 
 // ===================================================
+// PROTECTED RESOURCE CONTENT (paywall fix)
+// ===================================================
+// The gated payload of a "clients-only" resource (full text, PDF, YouTube
+// link, Drive link) lives OUTSIDE `site_data` — under its own top-level
+// `resource_content/{id}` path with its own Firebase Rule (public resource,
+// admin, or matching client plan only). `site_data` stays publicly readable
+// so cards/thumbnails still render for everyone, but the actual file/link of
+// a locked resource never reaches an ineligible visitor's browser.
+function genResId() {
+  return 'res_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+}
+async function saveResourceContent(id, data) {
+  await fbWaitReady();
+  const { ref, set, db } = window._fb;
+  await set(ref(db, 'resource_content/' + id), data);
+}
+async function loadResourceContent(id) {
+  if (!id) return null;
+  await fbWaitReady();
+  const { ref, get, db } = window._fb;
+  try {
+    const snap = await get(ref(db, 'resource_content/' + id));
+    return snap.exists() ? snap.val() : null;
+  } catch (e) {
+    // Permission denied (wrong/no plan) lands here — treat exactly like "no content".
+    console.warn('resource_content read blocked or missing:', e && e.code ? e.code : e);
+    return null;
+  }
+}
+async function deleteResourceContent(id) {
+  if (!id) return;
+  await fbWaitReady();
+  const { ref, remove, db } = window._fb;
+  try { await remove(ref(db, 'resource_content/' + id)); } catch (e) { console.error('resource_content delete failed:', e); }
+}
+
+// ===================================================
 // YOUTUBE SECTION
 // ===================================================
 let ytVideos = [];
@@ -8148,29 +8185,32 @@ async function publishResource() {
   const btn = document.getElementById('resourceSaveBtn');
   btn.textContent = isEditing ? 'Updating...' : 'Publishing...'; btn.disabled = true;
 
+  let resId;
   if (isEditing) {
-    // Keep the resource's original publish date instead of resetting it
+    // Keep the resource's original publish date instead of resetting it.
+    // NOTE: only public metadata fields go in `resources` now — content/pdf/
+    // yt/drive are written separately to resource_content/{id} below, so an
+    // old-format resource that still has those fields inline gets "cleaned"
+    // the next time it's edited and re-published.
     const existing = resources[editingResourceIndex];
+    resId = existing.id || genResId();
     resources[editingResourceIndex] = {
-      ...existing,
-      title, content,
+      id: resId,
+      title,
       category: category || '',
       img: resourceImgDataUrl || '',
-      pdf: resourcePdfData || null,
-      yt: yt || '',
-      drive: drive || '',
       access,
       requiredPlan: requiredPlan || '',
+      date: existing.date,
     };
   } else {
+    resId = genResId();
     const resourceNow = new Date();
     resources.unshift({
-      title, content,
+      id: resId,
+      title,
       category: category || '',
       img: resourceImgDataUrl || '',
-      pdf: resourcePdfData || null,
-      yt: yt || '',
-      drive: drive || '',
       access, // "public" | "clients-only"
       requiredPlan: requiredPlan || '', // '' = any client plan; else must match client's plan exactly
       date: resourceNow.toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'}) + ' • ' + resourceNow.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})
@@ -8178,6 +8218,12 @@ async function publishResource() {
   }
 
   await sharedSet('resources', resources);
+  await saveResourceContent(resId, {
+    content,
+    pdf: resourcePdfData || null,
+    yt: yt || '',
+    drive: drive || '',
+  });
   document.getElementById('resourceTitleInput').value = '';
   populateResourceCategorySelect('');
   document.getElementById('resourceContentInput').value = '';
@@ -8197,7 +8243,7 @@ async function publishResource() {
 // Opens the resource modal pre-filled with an existing resource's data so the
 // admin can update it in place (title, image, PDF, links, access/plan, etc.)
 // instead of only being able to delete-and-recreate it.
-function openEditResource(i) {
+async function openEditResource(i) {
   if (!isAdmin) return;
   editingResourceIndex = i;
   const n = resources[i];
@@ -8207,9 +8253,6 @@ function openEditResource(i) {
 
   document.getElementById('resourceTitleInput').value = n.title || '';
   populateResourceCategorySelect(n.category || '');
-  document.getElementById('resourceContentInput').value = n.content || '';
-  document.getElementById('resourceYtInput').value = n.yt || '';
-  document.getElementById('resourceDriveInput').value = n.drive || '';
   document.getElementById('resourcePlanInput').value = resourceFieldsToPlanSelect(n);
 
   removeResourceImgSelection();
@@ -8220,11 +8263,21 @@ function openEditResource(i) {
     document.getElementById('resourceImgPreviewEmpty').style.display = 'none';
   }
 
+  // Protected fields (text, PDF, yt, drive) live at resource_content/{id} now.
+  // Admin always has read access to it per the Firebase rule. For an older
+  // resource saved before this split, these fields may still be sitting
+  // directly on `n` — fall back to that so nothing looks empty.
+  const cd = (await loadResourceContent(n.id)) || { content: n.content || '', pdf: n.pdf || null, yt: n.yt || '', drive: n.drive || '' };
+
+  document.getElementById('resourceContentInput').value = cd.content || '';
+  document.getElementById('resourceYtInput').value = cd.yt || '';
+  document.getElementById('resourceDriveInput').value = cd.drive || '';
+
   removeResourcePdfSelection();
-  resourcePdfData = n.pdf || null;
-  if (n.pdf && n.pdf.name) {
+  resourcePdfData = cd.pdf || null;
+  if (cd.pdf && cd.pdf.name) {
     const fn = document.getElementById('resourcePdfFileName');
-    fn.textContent = '📄 ' + n.pdf.name + ' (existing)';
+    fn.textContent = '📄 ' + cd.pdf.name + ' (existing)';
     fn.style.display = 'block';
   }
 
@@ -8234,8 +8287,10 @@ function openEditResource(i) {
 async function removeResource(i) {
   if (!isAdmin) return;
   if (!confirm('Delete this resource?')) return;
+  const removed = resources[i];
   resources.splice(i, 1);
   await sharedSet('resources', resources);
+  if (removed && removed.id) await deleteResourceContent(removed.id);
   renderResources();
 }
 
@@ -8251,7 +8306,7 @@ async function moveResource(origIndex, dir) {
   renderResources();
 }
 
-function openResourceRead(i) {
+async function openResourceRead(i) {
   const n = resources[i];
   const locked = resourceIsLocked(n);
   const needsUpgrade = locked && isClient && !!n.requiredPlan; // logged in, but wrong plan
@@ -8266,24 +8321,18 @@ function openResourceRead(i) {
   else { imgEl.style.display = 'none'; imgEl.src = ''; }
 
   const ytWrap = document.getElementById('resourceReadYtWrap');
-  const embedUrl = ytEmbedUrl(n.yt);
-  if (embedUrl && !locked) {
-    ytWrap.style.display = 'block';
-    ytWrap.innerHTML = `<div style="position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#000;"><iframe src="${embedUrl}" title="${escHtml(n.title||'Resource video')}" style="position:absolute;inset:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
-  } else {
-    ytWrap.style.display = 'none';
-    ytWrap.innerHTML = '';
-  }
-
-  document.getElementById('resourceReadContent').textContent = locked ? '' : (n.content || '');
-
   const dlWrap = document.getElementById('resourceReadDownloadsWrap');
   const btnStyle = 'display:inline-flex;align-items:center;gap:8px;padding:11px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border-radius:10px;text-decoration:none;font-family:var(--font-display);font-size:14px;font-weight:700;';
 
   if (locked) {
     // Clients-only resource — either the visitor isn't logged in, or they're a
-    // client on the wrong plan. Only the title/category (already set above)
-    // are visible; everything else is replaced by this lock prompt.
+    // client on the wrong plan. We deliberately do NOT fetch resource_content
+    // here: the Firebase rule would reject it anyway for an ineligible
+    // visitor, so there's no point even attempting the read. Only the
+    // title/category (already set above, both public metadata) are visible;
+    // everything else is replaced by this lock prompt.
+    ytWrap.style.display = 'none'; ytWrap.innerHTML = '';
+    document.getElementById('resourceReadContent').textContent = '';
     dlWrap.innerHTML = needsUpgrade ? `
       <div style="width:100%;text-align:center;padding:22px 16px;background:rgba(37,99,235,0.06);border:1px dashed rgba(37,99,235,0.3);border-radius:12px;">
         <div style="font-size:26px;margin-bottom:8px;">🔒</div>
@@ -8306,18 +8355,34 @@ function openResourceRead(i) {
     return;
   }
 
+  // Unlocked — safe to fetch the protected payload now (Firebase rule allows
+  // it: resource is public, or requester is admin/matching-plan client).
+  // Legacy fallback covers resources saved before this split.
+  const cd = (await loadResourceContent(n.id)) || { content: n.content || '', pdf: n.pdf || null, yt: n.yt || '', drive: n.drive || '' };
+
+  const embedUrl = ytEmbedUrl(cd.yt);
+  if (embedUrl) {
+    ytWrap.style.display = 'block';
+    ytWrap.innerHTML = `<div style="position:relative;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#000;"><iframe src="${embedUrl}" title="${escHtml(n.title||'Resource video')}" style="position:absolute;inset:0;width:100%;height:100%;border:0;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
+  } else {
+    ytWrap.style.display = 'none';
+    ytWrap.innerHTML = '';
+  }
+
+  document.getElementById('resourceReadContent').textContent = cd.content || '';
+
   let dlBtns = '';
-  if (n.pdf && n.pdf.data) {
-    dlBtns += `<a href="${n.pdf.data}" download="${escHtml(n.pdf.name||'resource.pdf')}" style="${btnStyle}"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> Download PDF</a>`;
+  if (cd.pdf && cd.pdf.data) {
+    dlBtns += `<a href="${cd.pdf.data}" download="${escHtml(cd.pdf.name||'resource.pdf')}" style="${btnStyle}"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg> Download PDF</a>`;
   }
   if (n.img) {
     dlBtns += `<a href="${n.img}" download="${escHtml((n.title||'resource')+'.jpg')}" style="${btnStyle}"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg> Download Image</a>`;
   }
-  if (n.yt) {
-    dlBtns += `<a href="${n.yt}" target="_blank" rel="noopener" style="${btnStyle}"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Watch on YouTube</a>`;
+  if (cd.yt) {
+    dlBtns += `<a href="${cd.yt}" target="_blank" rel="noopener" style="${btnStyle}"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg> Watch on YouTube</a>`;
   }
-  if (n.drive) {
-    dlBtns += `<a href="${n.drive}" target="_blank" rel="noopener" style="${btnStyle}"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Open Drive Link</a>`;
+  if (cd.drive) {
+    dlBtns += `<a href="${cd.drive}" target="_blank" rel="noopener" style="${btnStyle}"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> Open Drive Link</a>`;
   }
   dlWrap.innerHTML = dlBtns;
 
