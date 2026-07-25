@@ -2064,20 +2064,56 @@ iframe.skiptranslate { display: none !important; }
 /* ===== PAYMENT METHODS — footer strip ===== */
 .pay-footer-strip {
   border-top: 1px solid var(--border);
-  padding-top: 16px;
+  padding-top: 20px;
   margin-top: 16px;
+}
+.footer-pay-heading {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 12px;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 14px;
 }
-.pay-footer-strip .pay-badge-label { font-size: 12px; }
-.pay-footer-strip .pay-badge-icons { gap: 14px; }
-.pay-footer-strip .pay-badge-icons svg { width: 18px; height: 18px; }
+.footer-pay-heading svg { width: 13px; height: 13px; color: var(--cyan); flex-shrink: 0; }
+.footer-pay-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.footer-pay-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--white);
+  transition: transform .2s ease, border-color .2s ease;
+}
+.footer-pay-chip::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--chip-accent, var(--cyan));
+  flex-shrink: 0;
+}
+.footer-pay-chip:hover { transform: translateY(-2px); border-color: var(--chip-accent, var(--indigo)); }
 @media (max-width: 560px) {
-  .pay-badge-icons { gap: 10px; }
-  .pay-footer-strip { justify-content: center; text-align: center; }
+  .footer-pay-chips { gap: 8px; }
+  .footer-pay-chip { font-size: 11.5px; padding: 6px 12px; }
 }
 @media (max-width: 600px) { .fiv-wrap { max-width: 100%; } }
 
@@ -5782,11 +5818,15 @@ Branch: Panchbibi Branch, Joypurhat, Bangladesh</span>
       </div>
     </div>
     <div class="pay-footer-strip">
-      <span class="pay-badge-label">Payments accepted: bKash, Nagad, Rocket, Bank Transfer, Payoneer, Elevate Pay, PrioPay</span>
-      <div class="pay-badge-icons">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 9V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-2"></path><path d="M17 12h4a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-4a2 2 0 0 1 0-4z"></path></svg>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"></path><path d="M5 21V9l7-5 7 5v12"></path><path d="M9 21v-6h6v6"></path></svg>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="6" x2="12" y2="18"></line><path d="M15 9.5a2.5 2.5 0 0 0-2.5-1.5h-1A2.5 2.5 0 0 0 9 10.5c0 1.4 1.1 2.1 2.5 2.5s2.5 1.1 2.5 2.5A2.5 2.5 0 0 1 11.5 18h-1A2.5 2.5 0 0 1 8 16"></path></svg>
+      <div class="footer-pay-heading"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Payments Accepted</div>
+      <div class="footer-pay-chips">
+        <span class="footer-pay-chip" style="--chip-accent:#E2136E;">bKash</span>
+        <span class="footer-pay-chip" style="--chip-accent:#F7941D;">Nagad</span>
+        <span class="footer-pay-chip" style="--chip-accent:#8E44AD;">Rocket</span>
+        <span class="footer-pay-chip" style="--chip-accent:#64748B;">Bank Transfer</span>
+        <span class="footer-pay-chip" style="--chip-accent:#FF4800;">Payoneer</span>
+        <span class="footer-pay-chip" style="--chip-accent:#0EA5A4;">Elevate Pay</span>
+        <span class="footer-pay-chip" style="--chip-accent:#6366F1;">PrioPay</span>
       </div>
     </div>
     <div class="footer-bottom">
