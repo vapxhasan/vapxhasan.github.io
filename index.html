@@ -2066,6 +2066,10 @@ iframe.skiptranslate { display: none !important; }
   padding: 22px 0;
   border-bottom: 1px solid var(--border);
 }
+.trust-bar-inner {
+  max-width: 830px;
+  margin: 0 auto;
+}
 .trust-bar-head {
   position: relative;
   display: flex;
@@ -3878,12 +3882,14 @@ body, body *, body *::before, body *::after {
 <!-- TRUST BAR -->
 <div class="trust-bar-wrap" id="trustBarWrap">
   <div class="container">
-    <div class="trust-bar-head">
-      <span class="trust-bar-heading"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic2"></use></svg> Credentials &amp; Trust</span>
-      <span class="trust-bar-hidden-note" id="trustBarHiddenNote" style="display:none;">Hidden from visitors</span>
-      <button type="button" class="admin-only trust-bar-edit-btn" id="openTrustBarModal" title="Manage trust bar" style="display:none;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic8"></use></svg> Manage</button>
+    <div class="trust-bar-inner">
+      <div class="trust-bar-head">
+        <span class="trust-bar-heading"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic2"></use></svg> Credentials &amp; Trust</span>
+        <span class="trust-bar-hidden-note" id="trustBarHiddenNote" style="display:none;">Hidden from visitors</span>
+        <button type="button" class="admin-only trust-bar-edit-btn" id="openTrustBarModal" title="Manage trust bar" style="display:none;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic8"></use></svg> Manage</button>
+      </div>
+      <div class="trust-bar-chips" id="trustBarTrack"></div>
     </div>
-    <div class="trust-bar-chips" id="trustBarTrack"></div>
   </div>
 </div>
 
