@@ -2061,6 +2061,29 @@ iframe.skiptranslate { display: none !important; }
   opacity: .8;
 }
 
+/* ===== TRUST BAR (under hero) ===== */
+.trust-bar-wrap {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+}
+.trust-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--white);
+}
+.trust-chip svg { width: 14px; height: 14px; color: var(--cyan); flex-shrink: 0; }
+@media (max-width: 560px) {
+  .trust-chip { font-size: 11.5px; padding: 6px 12px; }
+}
+
 /* ===== PAYMENT METHODS — footer strip ===== */
 .pay-footer-strip {
   border-top: 1px solid var(--border);
@@ -3765,19 +3788,19 @@ body, body *, body *::before, body *::after {
         <a href="#contact" class="btn-outline"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic31"></use></svg> Let's Work Together</a>
         <a href="mailto:vapxhasan@gmail.com" class="btn-ghost"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic27"></use></svg> Get in Touch</a>
       </div>
-      <div class="hero-stats hero-reveal hr-7">
+      <div class="hero-stats hero-reveal hr-7" style="position:relative;">
         <div>
-          <div class="hero-stat-num" data-target="150">0+</div>
+          <div class="hero-stat-num" id="heroStatProjects" data-target="150">0+</div>
           <div class="hero-stat-label">Projects Done</div>
         </div>
         <div class="hero-stat-divider"></div>
         <div>
-          <div class="hero-stat-num" data-target="60">0+</div>
+          <div class="hero-stat-num" id="heroStatClients" data-target="60">0+</div>
           <div class="hero-stat-label">Happy Clients</div>
         </div>
         <div class="hero-stat-divider"></div>
         <div>
-          <div class="hero-stat-num">5<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic13"></use></svg></div>
+          <div class="hero-stat-num"><span id="heroStatRating">5</span><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic13"></use></svg></div>
           <div class="hero-stat-label">Avg. Rating</div>
         </div>
         <div class="hero-stat-divider"></div>
@@ -3785,11 +3808,19 @@ body, body *, body *::before, body *::after {
           <div class="hero-stat-num" id="heroYearsExp">3+</div>
           <div class="hero-stat-label">Years Experience</div>
         </div>
+        <button type="button" class="admin-only" id="openHeroStatsModal" title="Edit hero stats" style="display:none;position:absolute;top:-10px;right:-10px;background:var(--card);border:1px solid var(--border);color:var(--muted);border-radius:50%;width:26px;height:26px;align-items:center;justify-content:center;cursor:pointer;padding:0;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><use href="#ic8"></use></svg></button>
       </div>
     </div>
   </div>
 </section>
 
+<!-- TRUST BAR -->
+<div class="trust-bar-wrap">
+  <div class="container" style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;">
+    <div id="trustBarTrack" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;"></div>
+    <button type="button" class="admin-only" id="openTrustBarModal" title="Edit trust bar" style="display:none;background:none;border:1px dashed var(--border);color:var(--muted);border-radius:8px;padding:6px 10px;font-size:11px;cursor:pointer;font-family:var(--font-mono);">Edit Trust Bar</button>
+  </div>
+</div>
 
 
 <!-- MARQUEE -->
@@ -5547,6 +5578,40 @@ Branch: Panchbibi Branch, Joypurhat, Bangladesh</span>
   </div>
 </div>
 
+<!-- TRUST BAR MODAL -->
+<div class="yt-modal-overlay" id="trustBarModal">
+  <div class="yt-modal" style="max-width:520px;">
+    <div class="yt-modal-title"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic13"></use></svg> Edit Trust Bar</div>
+    <div class="yt-modal-sub">Small credibility badges shown right under the hero — e.g. platform ratings, client counts, or where you're active. Pick an icon and write the label for each.</div>
+    <div id="trustBarRows" style="display:flex;flex-direction:column;gap:10px;max-height:300px;overflow-y:auto;padding-right:4px;margin-bottom:6px;"></div>
+    <button type="button" onclick="addTrustBadgeRow()" style="background:rgba(59,130,246,0.08);border:1px dashed rgba(59,130,246,0.35);color:var(--cyan);border-radius:8px;padding:8px;font-size:12px;cursor:pointer;width:100%;font-family:var(--font-mono);margin-bottom:14px;">+ Add Badge</button>
+    <div class="yt-modal-btns">
+      <button class="yt-modal-cancel" id="closeTrustBarModal">Cancel</button>
+      <button class="yt-modal-add" onclick="saveTrustBadges()">Save <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic5"></use></svg></button>
+    </div>
+  </div>
+</div>
+
+<!-- HERO STATS MODAL -->
+<div class="yt-modal-overlay" id="heroStatsModal">
+  <div class="yt-modal" style="max-width:440px;">
+    <div class="yt-modal-title"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic8"></use></svg> Edit Hero Stats</div>
+    <div class="yt-modal-sub">The four numbers shown right under the hero buttons.</div>
+    <label style="font-size:12px;color:var(--muted);font-family:var(--font-mono);display:block;margin-bottom:6px;">Projects Done</label>
+    <input class="yt-modal-input" id="heroStatsProjectsInput" type="number" min="0" placeholder="e.g. 150">
+    <label style="font-size:12px;color:var(--muted);font-family:var(--font-mono);display:block;margin-bottom:6px;">Happy Clients</label>
+    <input class="yt-modal-input" id="heroStatsClientsInput" type="number" min="0" placeholder="e.g. 60">
+    <label style="font-size:12px;color:var(--muted);font-family:var(--font-mono);display:block;margin-bottom:6px;">Avg. Rating</label>
+    <input class="yt-modal-input" id="heroStatsRatingInput" type="text" placeholder="e.g. 5 or 4.9">
+    <label style="font-size:12px;color:var(--muted);font-family:var(--font-mono);display:block;margin-bottom:6px;">Career Start Year <span style="opacity:.7;">(Years Experience auto-calculates from this every year)</span></label>
+    <input class="yt-modal-input" id="heroStatsStartYearInput" type="number" min="2000" max="2100" placeholder="e.g. 2023">
+    <div class="yt-modal-btns">
+      <button class="yt-modal-cancel" id="closeHeroStatsModal">Cancel</button>
+      <button class="yt-modal-add" onclick="saveHeroStats()">Save <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic5"></use></svg></button>
+    </div>
+  </div>
+</div>
+
 
 
 <!-- Resource Write Modal -->
@@ -6479,15 +6544,31 @@ async function handleSubmit(btn) {
 }
 
 // ===== STAT COUNTER =====
-// Years Experience is computed from a fixed career-start date instead of being
-// hardcoded, so the number keeps itself correct year after year.
-const CAREER_START_DATE = new Date('2023-01-01');
-(function() {
+// Projects Done, Happy Clients, Avg. Rating and Career Start Year are all
+// admin-editable (see heroStatsData / renderHeroStats below). Years
+// Experience keeps computing itself from the start year instead of being
+// hardcoded, so the number stays correct year after year.
+let heroStatsData = { projects: 150, clients: 60, rating: '5', careerStartYear: 2023 };
+function updateYearsExpTarget() {
   const yearsExpEl = document.getElementById('heroYearsExp');
   if (!yearsExpEl) return;
-  const years = Math.max(1, Math.floor((Date.now() - CAREER_START_DATE.getTime()) / (365.25 * 24 * 3600 * 1000)));
+  const startDate = new Date(heroStatsData.careerStartYear + '-01-01');
+  const years = Math.max(1, Math.floor((Date.now() - startDate.getTime()) / (365.25 * 24 * 3600 * 1000)));
   yearsExpEl.setAttribute('data-target', years);
-  yearsExpEl.textContent = '0+';
+}
+function renderHeroStats() {
+  const p = document.getElementById('heroStatProjects');
+  const c = document.getElementById('heroStatClients');
+  const r = document.getElementById('heroStatRating');
+  if (p) p.setAttribute('data-target', heroStatsData.projects);
+  if (c) c.setAttribute('data-target', heroStatsData.clients);
+  if (r) r.textContent = heroStatsData.rating;
+  updateYearsExpTarget();
+}
+(function() {
+  const yearsExpEl = document.getElementById('heroYearsExp');
+  if (yearsExpEl) yearsExpEl.textContent = '0+';
+  updateYearsExpTarget();
 })();
 function animateCount(el, target, suffix='') {
   let start = 0;
@@ -9028,6 +9109,34 @@ let availabilityRotationTimer = null;
 let editingReviewIndex = null;
 let _currentReviewMedia = null;
 
+// ===================================================
+// TRUST BAR (small credibility strip under the hero) —
+// admin-editable via the "Edit Trust Bar" modal; placeholder
+// content below until the admin fills in real details.
+// ===================================================
+let trustBadges = [
+  { icon: 'award',   text: 'Fiverr · Level 2 Seller' },
+  { icon: 'shield',  text: 'Upwork · Top Rated' },
+  { icon: 'youtube', text: '50+ Channels Edited' },
+  { icon: 'tag',     text: 'Secure Payments' }
+];
+const TRUST_ICON_MAP = { star: 'ic13', users: 'ic31', youtube: 'ic16', award: 'ic9', shield: 'ic2', tag: 'ic44' };
+const TRUST_ICON_OPTIONS = [
+  { value: 'star',    label: '★ Star / Rating' },
+  { value: 'users',   label: '◍ Users / Clients' },
+  { value: 'youtube', label: '▶ YouTube' },
+  { value: 'award',   label: '🎓 Award / Certified' },
+  { value: 'shield',  label: '🛡 Shield / Trust' },
+  { value: 'tag',     label: '🏷 Tag / Verified' }
+];
+function renderTrustBar() {
+  const track = document.getElementById('trustBarTrack');
+  if (!track) return;
+  track.innerHTML = trustBadges.map(b => `
+    <span class="trust-chip"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#${TRUST_ICON_MAP[b.icon] || 'ic13'}"></use></svg>${escHtml(b.text)}</span>
+  `).join('');
+}
+
 // Skill/category management for reviews — mirrors the Fiverr-pricing category
 // system (icon + name, admin add/edit/delete) instead of a plain free-text tag.
 const DEFAULT_REVIEW_CATEGORIES = [
@@ -11322,6 +11431,8 @@ async function initSharedData() {
     if (record.resume !== undefined) resumeData = record.resume;
     if (record.faqs)           faqs            = record.faqs;
     if (record.availability_messages && record.availability_messages.length) availabilityMessages = record.availability_messages;
+    if (record.trust_badges && record.trust_badges.length) trustBadges = record.trust_badges;
+    if (record.hero_stats) heroStatsData = Object.assign({}, heroStatsData, record.hero_stats);
     if (record.availability_interval_seconds) {
       const s = parseInt(record.availability_interval_seconds, 10);
       if (!isNaN(s) && s > 0) availabilityIntervalSeconds = s;
@@ -11356,6 +11467,8 @@ async function initSharedData() {
     renderAvailabilityBadge(true);
     startAvailabilityRotation();
     renderBreakingBar();
+    renderTrustBar();
+    renderHeroStats();
   }
 
   // Fast path: paint instantly from whatever was cached on the last visit,
@@ -11872,6 +11985,92 @@ document.getElementById('openAvailabilityModal').addEventListener('click', (e) =
 });
 document.getElementById('closeAvailabilityModal').addEventListener('click', () => document.getElementById('availabilityModal').classList.remove('open'));
 document.getElementById('availabilityModal').addEventListener('click', e => { if (e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
+
+function addTrustBadgeRow(icon, text) {
+  const wrap = document.getElementById('trustBarRows');
+  const row = document.createElement('div');
+  row.className = 'trust-row';
+  row.style.cssText = 'display:flex;gap:8px;align-items:center;';
+  row.innerHTML = `
+    <select class="trust-icon" style="background:var(--card);border:1px solid var(--border);color:var(--white);border-radius:8px;padding:10px 8px;font-size:13px;font-family:inherit;flex-shrink:0;">
+      ${TRUST_ICON_OPTIONS.map(o => `<option value="${o.value}" ${o.value === icon ? 'selected' : ''}>${o.label}</option>`).join('')}
+    </select>
+    <input class="yt-modal-input trust-text" style="margin:0;flex:1;" type="text" placeholder="e.g. 4.9/5 Avg. Rating" value="${text ? escHtml(text) : ''}">
+    <button type="button" onclick="this.closest('.trust-row').remove()" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;border-radius:6px;width:34px;height:38px;cursor:pointer;flex-shrink:0;">✕</button>
+  `;
+  wrap.appendChild(row);
+}
+
+function openTrustBarModalFn() {
+  const wrap = document.getElementById('trustBarRows');
+  wrap.innerHTML = '';
+  trustBadges.forEach(b => addTrustBadgeRow(b.icon, b.text));
+  document.getElementById('trustBarModal').classList.add('open');
+}
+
+async function saveTrustBadges() {
+  const rows = document.querySelectorAll('#trustBarRows .trust-row');
+  const badges = [];
+  rows.forEach(row => {
+    const icon = row.querySelector('.trust-icon').value;
+    const text = row.querySelector('.trust-text').value.trim();
+    if (text) badges.push({ icon, text });
+  });
+  if (!badges.length) { alert('Add at least one badge.'); return; }
+  trustBadges = badges;
+  await sharedSet('trust_badges', trustBadges);
+  renderTrustBar();
+  document.getElementById('trustBarModal').classList.remove('open');
+}
+
+document.getElementById('openTrustBarModal').addEventListener('click', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (!isAdmin) { alert('Admin login required.'); return; }
+  openTrustBarModalFn();
+});
+document.getElementById('closeTrustBarModal').addEventListener('click', () => document.getElementById('trustBarModal').classList.remove('open'));
+document.getElementById('trustBarModal').addEventListener('click', e => { if (e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
+
+function openHeroStatsModalFn() {
+  document.getElementById('heroStatsProjectsInput').value = heroStatsData.projects;
+  document.getElementById('heroStatsClientsInput').value = heroStatsData.clients;
+  document.getElementById('heroStatsRatingInput').value = heroStatsData.rating;
+  document.getElementById('heroStatsStartYearInput').value = heroStatsData.careerStartYear;
+  document.getElementById('heroStatsModal').classList.add('open');
+}
+
+async function saveHeroStats() {
+  const projects = parseInt(document.getElementById('heroStatsProjectsInput').value, 10);
+  const clients = parseInt(document.getElementById('heroStatsClientsInput').value, 10);
+  const rating = document.getElementById('heroStatsRatingInput').value.trim();
+  const careerStartYear = parseInt(document.getElementById('heroStatsStartYearInput').value, 10);
+  if (isNaN(projects) || isNaN(clients) || !rating || isNaN(careerStartYear)) {
+    alert('Please fill in all four fields.');
+    return;
+  }
+  heroStatsData = { projects, clients, rating, careerStartYear };
+  await sharedSet('hero_stats', heroStatsData);
+  renderHeroStats();
+  // The scroll-triggered count-up may have already run once, so also push
+  // the corrected numbers straight into view instead of waiting on it.
+  const pEl = document.getElementById('heroStatProjects');
+  const cEl = document.getElementById('heroStatClients');
+  const yEl = document.getElementById('heroYearsExp');
+  if (pEl) pEl.textContent = projects + '+';
+  if (cEl) cEl.textContent = clients + '+';
+  if (yEl) yEl.textContent = yEl.getAttribute('data-target') + '+';
+  document.getElementById('heroStatsModal').classList.remove('open');
+}
+
+document.getElementById('openHeroStatsModal').addEventListener('click', (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  if (!isAdmin) { alert('Admin login required.'); return; }
+  openHeroStatsModalFn();
+});
+document.getElementById('closeHeroStatsModal').addEventListener('click', () => document.getElementById('heroStatsModal').classList.remove('open'));
+document.getElementById('heroStatsModal').addEventListener('click', e => { if (e.target===e.currentTarget) e.currentTarget.classList.remove('open'); });
 
 
 // ===== MARQUEE — JS controlled (PC slow, mobile fast) =====
