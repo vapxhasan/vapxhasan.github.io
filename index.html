@@ -1713,35 +1713,54 @@ iframe.skiptranslate { display: none !important; }
   .resource-featured-thumb { width: 100%; aspect-ratio: 4 / 3; height: auto; }
 }
 
-/* ===== PROCESS ===== */
-.process-steps { display: flex; align-items: flex-start; gap: 0; margin-top: 60px; position: relative; }
-.process-steps::before {
-  content: '';
-  position: absolute;
-  top: 28px; left: 28px; right: 28px;
-  height: 1px;
-  background: linear-gradient(90deg, var(--indigo), var(--cyan), var(--violet));
-  z-index: 0;
-}
-.process-step { flex: 1; text-align: center; position: relative; z-index: 1; padding: 0 10px; }
-.step-num {
-  width: 56px; height: 56px;
+/* ===== PROCESS (professional vertical timeline) ===== */
+.ptl { position: relative; margin-top: 64px; max-width: 780px; margin-left: auto; margin-right: auto; }
+.ptl-item { display: grid; grid-template-columns: 64px 1fr; column-gap: 28px; position: relative; }
+.ptl-rail { position: relative; display: flex; flex-direction: column; align-items: center; }
+.ptl-num {
+  width: 58px; height: 58px;
   border-radius: 50%;
   background: var(--card);
   border: 2px solid var(--indigo);
   display: flex; align-items: center; justify-content: center;
-  margin: 0 auto 16px;
   font-family: var(--font-display);
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 800;
   color: var(--indigo);
   box-shadow: 0 0 20px rgba(37,99,235,0.3);
   transition: all .3s;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
 }
-.process-step:hover .step-num { background: var(--indigo); color: #fff; box-shadow: 0 0 30px rgba(37,99,235,0.6); }
-.step-icon { font-size: 24px; margin-bottom: 10px; }
-.step-title { font-family: var(--font-display); font-size: 14px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
-.step-desc { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.ptl-item:hover .ptl-num { background: var(--indigo); color: #fff; box-shadow: 0 0 30px rgba(37,99,235,0.6); transform: scale(1.06); }
+.ptl-connector { flex: 1; width: 2px; min-height: 44px; margin: 6px 0; background: linear-gradient(180deg, var(--indigo), var(--cyan)); opacity: .3; border-radius: 2px; }
+.ptl-item:last-child .ptl-connector { display: none; }
+.ptl-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px 26px;
+  margin-bottom: 28px;
+  transition: all .3s ease;
+}
+.ptl-item:hover .ptl-card { border-color: rgba(37,99,235,0.35); transform: translateX(4px); box-shadow: 0 16px 44px rgba(37,99,235,0.14); }
+.ptl-card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.ptl-icon {
+  width: 34px; height: 34px;
+  border-radius: 9px;
+  background: rgba(37,99,235,0.12);
+  border: 1px solid var(--border2);
+  color: var(--cyan);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  font-size: 16px;
+}
+.ptl-title { font-family: var(--font-display); font-size: 17px; font-weight: 700; color: var(--white); }
+.ptl-desc { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+.ptl-admin-row { display: flex; gap: 8px; margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border); }
+.ptl-admin-row button { flex: 1; padding: 7px; border-radius: 7px; font-size: 12px; cursor: pointer; font-family: var(--font-display); font-weight: 600; transition: all .2s; }
+.ptl-move-row { display: flex; gap: 6px; margin-top: 8px; }
 
 /* ===== PRICING ===== */
 .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; align-items: start; margin-top: 20px; }
@@ -2975,9 +2994,9 @@ footer {
   .contact-grid { grid-template-columns: 1fr; }
   .contact-form { height: auto; }
   .contact-info-grid { grid-template-columns: 1fr; }
-  .process-steps { flex-wrap: wrap; }
-  .process-steps::before { display: none; }
-  .process-step { flex: 0 0 calc(50% - 10px); }
+  .ptl-item { grid-template-columns: 52px 1fr; column-gap: 18px; }
+  .ptl-num { width: 48px; height: 48px; font-size: 15px; }
+  .ptl-card { padding: 20px 20px; }
   .nav-links { display: none; }
   .nav-more-wrap { display: none; }
   .nav-cta { display: none; }
@@ -3015,7 +3034,8 @@ footer {
   .section { padding: 70px 0; }
   .hero-h1 { letter-spacing: -1px; }
   .hero-stat-divider { display: none; }
-  .process-step { flex: 0 0 100%; }
+  .ptl-title { font-size: 15.5px; }
+  .ptl-desc { font-size: 13px; }
   .form-row { grid-template-columns: 1fr; }
   .footer-inner { flex-direction: column; align-items: stretch; gap: 0; }
   .footer-brand {
@@ -4303,40 +4323,41 @@ body, body *, body *::before, body *::after {
       <h2 class="section-title" style="text-align:center">My <span>Process</span></h2>
       <p class="section-sub" style="margin:0 auto">A proven workflow that ensures quality, clarity, and on-time delivery — every single time.</p>
     </div>
-    <div class="process-steps reveal">
-      <div class="process-step">
-        <div class="step-num">01</div>
-        <div class="step-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic22"></use></svg></div>
-        <div class="step-title">Discovery</div>
-        <div class="step-desc">Deep-dive into your goals, audience, brand, and project requirements. We align before anything starts.</div>
-      </div>
-      <div class="process-step">
-        <div class="step-num">02</div>
-        <div class="step-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic40"></use></svg></div>
-        <div class="step-title">Planning</div>
-        <div class="step-desc">Strategy, scope, timeline, and tools selected. You receive a clear roadmap before work begins.</div>
-      </div>
-      <div class="process-step">
-        <div class="step-num">03</div>
-        <div class="step-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic10"></use></svg></div>
-        <div class="step-title">Creation</div>
-        <div class="step-desc">Execution with full focus. Regular updates keep you in the loop without micromanagement.</div>
-      </div>
-      <div class="process-step">
-        <div class="step-num">04</div>
-        <div class="step-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic12"></use></svg></div>
-        <div class="step-title">Revision</div>
-        <div class="step-desc">Your feedback shapes the final result. Revisions are collaborative, not transactional.</div>
-      </div>
-      <div class="process-step">
-        <div class="step-num">05</div>
-        <div class="step-icon"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic28"></use></svg></div>
-        <div class="step-title">Delivery</div>
-        <div class="step-desc">Final files, documentation, and support — delivered clean, organized, and ready to use.</div>
-      </div>
+    <div class="ptl reveal" id="ptlContainer"></div>
+    <div style="text-align:center;margin-top:8px;">
+      <button class="admin-only" id="openProcessModal" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(37,99,235,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">＋ Add Step</button>
     </div>
   </div>
 </section>
+
+<!-- PROCESS STEP ADD/EDIT MODAL -->
+<div class="blog-modal-overlay" id="processModal">
+  <div class="blog-modal">
+    <div class="blog-modal-title" id="processModalTitle">✨ Add Process Step</div>
+    <div class="blog-modal-sub">Show clients exactly how a project moves from brief to delivery</div>
+    <label class="blog-modal-label">ICON</label>
+    <select class="blog-modal-field" id="processIconInput">
+      <option value="ic22">🔍 Discovery / Research</option>
+      <option value="ic7">📄 Proposal / Document</option>
+      <option value="ic4">🔒 Approval / Secure Payment</option>
+      <option value="ic10">⚡ Creation / Execution</option>
+      <option value="ic12">🔁 Revision / Feedback</option>
+      <option value="ic28">🚀 Delivery / Launch</option>
+      <option value="ic27">✉️ Communication</option>
+      <option value="ic40">🗂 Planning / Strategy</option>
+      <option value="ic35">✅ Quality Check</option>
+      <option value="ic8">✏️ Design</option>
+    </select>
+    <label class="blog-modal-label">TITLE</label>
+    <input class="blog-modal-field" id="processTitleInput" placeholder="e.g. Discovery" type="text">
+    <label class="blog-modal-label">DESCRIPTION</label>
+    <textarea class="blog-modal-field" id="processDescInput" rows="4" placeholder="Explain what happens in this step..."></textarea>
+    <div class="blog-modal-btns">
+      <button class="blog-modal-cancel" id="closeProcessModal">Cancel</button>
+      <button class="blog-modal-publish" id="processSaveBtn" onclick="saveProcessStep()">Add Step <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic5"></use></svg></button>
+    </div>
+  </div>
+</div>
 
 <!-- PORTFOLIO -->
 <section id="portfolio" class="section">
@@ -6227,6 +6248,116 @@ document.getElementById('openWhyModal').addEventListener('click', openWhyModal);
 document.getElementById('closeWhyModal').addEventListener('click', () => document.getElementById('whyModal').classList.remove('open'));
 document.getElementById('whyModal').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
 
+// ===== PROCESS TIMELINE (admin can add/edit/remove/reorder steps) =====
+let processSteps = [
+  { icon: 'ic22', title: 'Discovery', desc: 'We discuss your project requirements, goals, timeline, and budget in detail — so everything is clear before any work begins.' },
+  { icon: 'ic7',  title: 'Proposal', desc: 'You receive a custom proposal with transparent pricing, defined scope, timeline, and deliverables tailored to your project.' },
+  { icon: 'ic4',  title: 'Secure Payment', desc: 'Once you approve the proposal, a secure invoice or payment instructions are shared, and the project officially kicks off.' },
+  { icon: 'ic10', title: 'Development', desc: 'I build your project with full focus and share regular progress updates along the way, so you\u2019re always in the loop.' },
+  { icon: 'ic12', title: 'Review', desc: 'You review the work and share feedback. Revisions are handled collaboratively, according to the agreed scope.' },
+  { icon: 'ic28', title: 'Final Delivery', desc: 'After the remaining payment is completed, you receive all final files, source files, documentation, and ongoing support.' },
+];
+let editingProcessIndex = null;
+
+function processIconSvg(key) {
+  return `<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><use href="#${key || 'ic22'}"></use></svg>`;
+}
+
+function renderProcessSteps() {
+  const wrap = document.getElementById('ptlContainer');
+  if (!wrap) return;
+  wrap.innerHTML = processSteps.map((p, i) => `
+    <div class="ptl-item">
+      <div class="ptl-rail">
+        <div class="ptl-num">${String(i + 1).padStart(2, '0')}</div>
+        ${i < processSteps.length - 1 ? '<div class="ptl-connector"></div>' : ''}
+      </div>
+      <div class="ptl-card">
+        <div class="ptl-card-head">
+          <span class="ptl-icon">${processIconSvg(p.icon)}</span>
+          <span class="ptl-title">${escHtml(p.title)}</span>
+        </div>
+        <div class="ptl-desc">${escHtml(p.desc)}</div>
+        ${isAdmin ? `
+        <div class="ptl-admin-row">
+          <button onclick="openEditProcessStep(${i})" style="background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.25);color:var(--indigo);" onmouseover="this.style.background='rgba(37,99,235,0.2)'" onmouseout="this.style.background='rgba(37,99,235,0.1)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic8"></use></svg> Edit</button>
+          <button onclick="removeProcessStep(${i})" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;" onmouseover="this.style.background='rgba(255,50,50,0.16)'" onmouseout="this.style.background='rgba(255,50,50,0.08)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic1"></use></svg> Remove</button>
+        </div>
+        <div class="ptl-move-row">
+          <button class="admin-move-btn" title="Move earlier" onclick="moveProcessStep(${i}, -1)" ${i <= 0 ? 'disabled' : ''}>▲</button>
+          <button class="admin-move-btn" title="Move later" onclick="moveProcessStep(${i}, 1)" ${i >= processSteps.length - 1 ? 'disabled' : ''}>▼</button>
+        </div>` : ''}
+      </div>
+    </div>`).join('');
+}
+
+async function moveProcessStep(i, dir) {
+  if (!isAdmin) return;
+  const target = i + dir;
+  if (target < 0 || target >= processSteps.length) return;
+  const tmp = processSteps[i];
+  processSteps[i] = processSteps[target];
+  processSteps[target] = tmp;
+  await sharedSet('process_steps', processSteps);
+  renderProcessSteps();
+}
+
+function openProcessModal() {
+  if (!isAdmin) { alert('Admin login required. Click the Admin button.'); return; }
+  editingProcessIndex = null;
+  document.getElementById('processModalTitle').textContent = '✨ Add Process Step';
+  document.getElementById('processSaveBtn').textContent = 'Add Step →';
+  document.getElementById('processIconInput').value = 'ic22';
+  document.getElementById('processTitleInput').value = '';
+  document.getElementById('processDescInput').value = '';
+  document.getElementById('processModal').classList.add('open');
+}
+
+function openEditProcessStep(i) {
+  if (!isAdmin) return;
+  editingProcessIndex = i;
+  const p = processSteps[i];
+  document.getElementById('processModalTitle').textContent = '✏️ Edit Process Step';
+  document.getElementById('processSaveBtn').textContent = 'Update Step →';
+  document.getElementById('processIconInput').value = p.icon || 'ic22';
+  document.getElementById('processTitleInput').value = p.title || '';
+  document.getElementById('processDescInput').value = p.desc || '';
+  document.getElementById('processModal').classList.add('open');
+}
+
+async function saveProcessStep() {
+  if (!isAdmin) return;
+  const icon = document.getElementById('processIconInput').value || 'ic22';
+  const title = document.getElementById('processTitleInput').value.trim();
+  const desc = document.getElementById('processDescInput').value.trim();
+  if (!title || !desc) { alert('Please fill in both the title and the description!'); return; }
+  const btn = document.getElementById('processSaveBtn');
+  const orig = btn.textContent;
+  btn.textContent = 'Saving...'; btn.disabled = true;
+  const item = { icon, title, desc };
+  if (editingProcessIndex !== null) {
+    processSteps[editingProcessIndex] = item;
+  } else {
+    processSteps.push(item);
+  }
+  await sharedSet('process_steps', processSteps);
+  document.getElementById('processModal').classList.remove('open');
+  btn.textContent = orig; btn.disabled = false;
+  renderProcessSteps();
+}
+
+async function removeProcessStep(i) {
+  if (!isAdmin) return;
+  if (!confirm('Delete this process step?')) return;
+  processSteps.splice(i, 1);
+  await sharedSet('process_steps', processSteps);
+  renderProcessSteps();
+}
+
+document.getElementById('openProcessModal').addEventListener('click', openProcessModal);
+document.getElementById('closeProcessModal').addEventListener('click', () => document.getElementById('processModal').classList.remove('open'));
+document.getElementById('processModal').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
+
 // ===== SERVICE / BUDGET DROPDOWN SYNC (feeds hidden fields used by handleSubmit) =====
 function cfSyncService() {
   const sel = document.getElementById('cf_service_select');
@@ -7084,7 +7215,7 @@ function checkAdmin() {
         showAdminUI();
         renderYtVideos(); renderBlog(); renderProjects(); renderReviews(); renderComments();
         renderClientPricing(); fivRenderCats(); fivRenderHeadline(); fivRenderTabs(); fivRenderCard();
-        renderCertifications(); renderResumeButtons(); renderFaq();
+        renderCertifications(); renderResumeButtons(); renderFaq(); renderProcessSteps();
       } else if (user) {
         // একজন client লগইন করে আছে (admin না)
         isAdmin = false;
@@ -7279,6 +7410,7 @@ async function adminLogout() {
   renderCertifications();
   renderResumeButtons();
   renderFaq();
+  renderProcessSteps();
 }
 
 // ===================================================
@@ -11505,6 +11637,7 @@ async function initSharedData() {
     }
     if (record.certifications) certifications  = record.certifications;
     if (record.why_choose_me) whyChooseMe     = record.why_choose_me;
+    if (record.process_steps && record.process_steps.length) processSteps = record.process_steps;
     if (record.comments)       { comments        = record.comments; normalizeComments(); }
     if (record.resume !== undefined) resumeData = record.resume;
     if (record.faqs)           faqs            = record.faqs;
@@ -11541,6 +11674,7 @@ async function initSharedData() {
     renderProfileImages();
     renderCertifications();
     renderWhyChooseMe();
+    renderProcessSteps();
     renderResumeButtons();
     renderFaq();
     renderAvailabilityBadge(true);
