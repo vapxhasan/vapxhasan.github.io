@@ -1187,6 +1187,7 @@ iframe.skiptranslate { display: none !important; }
   border-radius: 19px;
   padding: 30px 26px 26px;
   height: 100%;
+  min-height: 540px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1328,6 +1329,16 @@ iframe.skiptranslate { display: none !important; }
 }
 .svc-card-outer:hover .svc-cta svg { transform: translateX(4px); }
 .svc-cta:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.svc-admin-row { display: flex; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+.svc-admin-row button { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 7px; border-radius: 7px; font-size: 12px; cursor: pointer; font-family: var(--font-display); font-weight: 600; transition: all .2s; }
+.svc-move-row { display: flex; gap: 6px; margin-top: 8px; }
+.svc-modal-list-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+.svc-modal-list-row input.blog-modal-field { margin-bottom: 0; flex: 1; }
+.svc-modal-row-remove { width: 34px; height: 34px; flex-shrink: 0; border-radius: 8px; background: rgba(255,50,50,0.08); border: 1px solid rgba(255,50,50,0.2); color: #ff7777; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .2s; padding: 0; }
+.svc-modal-row-remove:hover { background: rgba(255,50,50,0.16); }
+.svc-modal-row-remove svg { width: 14px; height: 14px; }
+.svc-modal-add-row-btn { display: inline-flex; align-items: center; gap: 6px; margin: 2px 0 14px; padding: 8px 14px; border-radius: 8px; background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.25); color: var(--indigo); font-size: 12px; font-weight: 700; font-family: var(--font-display); cursor: pointer; transition: all .2s; }
+.svc-modal-add-row-btn:hover { background: rgba(37,99,235,0.2); }
 
 @media (prefers-reduced-motion: reduce) {
   .svc-card-outer::before { animation: none !important; }
@@ -1335,7 +1346,7 @@ iframe.skiptranslate { display: none !important; }
 }
 @media (max-width: 600px) {
   .services-grid { gap: 18px; }
-  .svc-card { padding: 24px 20px 20px; }
+  .svc-card { padding: 24px 20px 20px; min-height: 0; }
   .svc-icon-wrap { width: 50px; height: 50px; font-size: 21px; margin-bottom: 16px; }
   .svc-title { font-size: 16.5px; }
 }
@@ -4222,204 +4233,10 @@ body, body *, body *::before, body *::after {
       <h2 class="section-title">Services That <span>Drive Results</span></h2>
       <p class="section-sub">Cinematic video editing as the core, backed by a complete creative and AI toolkit for modern brands that want to stand out.</p>
     </div>
-    <div class="services-grid">
-
-      <div class="svc-featured reveal">
-        <span class="svc-badge"><svg class="icon-inline" viewBox="0 0 24 24" fill="currentColor" stroke="none" width="1em" height="1em"><use href="#ic13"></use></svg> Featured Service</span>
-        <div class="svc-card-outer">
-          <div class="svc-card">
-            <span class="svc-num">01</span>
-            <div class="svc-icon-wrap"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><use href="#ic30"></use></svg></div>
-            <div class="svc-title">Professional Video Editing</div>
-            <div class="svc-desc">Professional edits for YouTube, Reels, TikTok, ads, and corporate videos. Dynamic pacing, motion graphics, captions, and color grading that make viewers stay.</div>
-            <div class="svc-section-label">Deliverables</div>
-            <div class="svc-deliverables">
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Fully edited video, optimized per platform</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Color-graded &amp; sound-mixed footage</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Custom captions &amp; motion graphics</div>
-            </div>
-            <div class="svc-section-label">Tools Used</div>
-            <div class="svc-tools">
-              <span class="svc-tool-chip">Premiere Pro</span>
-              <span class="svc-tool-chip">After Effects</span>
-              <span class="svc-tool-chip">DaVinci Resolve</span>
-            </div>
-            <button type="button" class="svc-cta" aria-label="Explore Professional Video Editing service" onclick="svcExploreService('Video Editing')">Explore Service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic5"></use></svg></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="reveal">
-        <div class="svc-card-outer">
-          <div class="svc-card">
-            <span class="svc-num">02</span>
-            <div class="svc-icon-wrap"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><use href="#ic16"></use></svg></div>
-            <div class="svc-title">AI Video Generation</div>
-            <div class="svc-desc">Transform scripts and ideas into stunning AI-generated video content for marketing, education, or entertainment — without expensive production budgets.</div>
-            <div class="svc-section-label">Deliverables</div>
-            <div class="svc-deliverables">
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Publish-ready AI-generated video clips</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Script-to-video storyboard</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Multiple style &amp; resolution variants</div>
-            </div>
-            <div class="svc-section-label">Tools Used</div>
-            <div class="svc-tools">
-              <span class="svc-tool-chip">Sora</span>
-              <span class="svc-tool-chip">Runway</span>
-              <span class="svc-tool-chip">Kling</span>
-              <span class="svc-tool-chip">Pika</span>
-            </div>
-            <button type="button" class="svc-cta" aria-label="Explore AI Video Generation service" onclick="svcExploreService('AI Video Generation')">Explore Service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic5"></use></svg></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="reveal">
-        <div class="svc-card-outer">
-          <div class="svc-card">
-            <span class="svc-num">03</span>
-            <div class="svc-icon-wrap"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><use href="#ic36"></use></svg></div>
-            <div class="svc-title">AI Audio Generation</div>
-            <div class="svc-desc">Custom AI voiceovers, background music, sound effects, and full audio tracks — perfect for videos, podcasts, ads, and content creators on any budget.</div>
-            <div class="svc-section-label">Deliverables</div>
-            <div class="svc-deliverables">
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Custom AI voiceover track</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Background music &amp; SFX bed</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Podcast-ready mixed audio file</div>
-            </div>
-            <div class="svc-section-label">Tools Used</div>
-            <div class="svc-tools">
-              <span class="svc-tool-chip">ElevenLabs</span>
-              <span class="svc-tool-chip">Suno</span>
-              <span class="svc-tool-chip">Udio</span>
-            </div>
-            <button type="button" class="svc-cta" aria-label="Explore AI Audio Generation service" onclick="svcExploreService('AI Audio Generation')">Explore Service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic5"></use></svg></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="reveal">
-        <div class="svc-card-outer">
-          <div class="svc-card">
-            <span class="svc-num">04</span>
-            <div class="svc-icon-wrap"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><use href="#ic37"></use></svg></div>
-            <div class="svc-title">AI Image Generation</div>
-            <div class="svc-desc">High-quality AI-generated visuals for ads, products, concepts, and campaigns. Cinematic, editorial, or commercial — any style, delivered fast.</div>
-            <div class="svc-section-label">Deliverables</div>
-            <div class="svc-deliverables">
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> High-resolution campaign visuals</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Multiple concept variations</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Print &amp; web-ready file formats</div>
-            </div>
-            <div class="svc-section-label">Tools Used</div>
-            <div class="svc-tools">
-              <span class="svc-tool-chip">Midjourney</span>
-              <span class="svc-tool-chip">Stable Diffusion</span>
-              <span class="svc-tool-chip">Firefly</span>
-              <span class="svc-tool-chip">Ideogram</span>
-            </div>
-            <button type="button" class="svc-cta" aria-label="Explore AI Image Generation service" onclick="svcExploreService('AI Image Generation')">Explore Service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic5"></use></svg></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="reveal">
-        <div class="svc-card-outer">
-          <div class="svc-card">
-            <span class="svc-num">05</span>
-            <div class="svc-icon-wrap"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><use href="#ic19"></use></svg></div>
-            <div class="svc-title">AI Automation</div>
-            <div class="svc-desc">Build smart workflows that run your content, marketing, and operations on autopilot. Save 20+ hours per week and scale without hiring more people.</div>
-            <div class="svc-section-label">Deliverables</div>
-            <div class="svc-deliverables">
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> End-to-end automated workflow</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Integration across your existing tools</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Documentation &amp; handover walkthrough</div>
-            </div>
-            <div class="svc-section-label">Tools Used</div>
-            <div class="svc-tools">
-              <span class="svc-tool-chip">Make.com</span>
-              <span class="svc-tool-chip">Zapier</span>
-              <span class="svc-tool-chip">n8n</span>
-            </div>
-            <button type="button" class="svc-cta" aria-label="Explore AI Automation service" onclick="svcExploreService('AI Automation')">Explore Service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic5"></use></svg></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="reveal">
-        <div class="svc-card-outer">
-          <div class="svc-card">
-            <span class="svc-num">06</span>
-            <div class="svc-icon-wrap"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><use href="#ic38"></use></svg></div>
-            <div class="svc-title">Prompt Engineering</div>
-            <div class="svc-desc">Crafting optimized, production-ready prompts for ChatGPT, Midjourney, Claude, DALL·E, and more. Unlock the full potential of any AI model for your workflow.</div>
-            <div class="svc-section-label">Deliverables</div>
-            <div class="svc-deliverables">
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Production-ready prompt library</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Model-specific optimization notes</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Testing &amp; iteration report</div>
-            </div>
-            <div class="svc-section-label">Tools Used</div>
-            <div class="svc-tools">
-              <span class="svc-tool-chip">ChatGPT</span>
-              <span class="svc-tool-chip">Midjourney</span>
-              <span class="svc-tool-chip">Claude</span>
-              <span class="svc-tool-chip">DALL·E</span>
-            </div>
-            <button type="button" class="svc-cta" aria-label="Explore Prompt Engineering service" onclick="svcExploreService('Prompt Engineering')">Explore Service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic5"></use></svg></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="reveal">
-        <div class="svc-card-outer">
-          <div class="svc-card">
-            <span class="svc-num">07</span>
-            <div class="svc-icon-wrap"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><use href="#ic39"></use></svg></div>
-            <div class="svc-title">Graphic Design</div>
-            <div class="svc-desc">Brand identities, social media kits, thumbnails, posters, and UI assets that stop the scroll and communicate your value instantly. Every pixel is intentional.</div>
-            <div class="svc-section-label">Deliverables</div>
-            <div class="svc-deliverables">
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Brand identity asset pack</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Social media kit &amp; templates</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Print-ready &amp; web-ready files</div>
-            </div>
-            <div class="svc-section-label">Tools Used</div>
-            <div class="svc-tools">
-              <span class="svc-tool-chip">Photoshop</span>
-              <span class="svc-tool-chip">Illustrator</span>
-              <span class="svc-tool-chip">Figma</span>
-            </div>
-            <button type="button" class="svc-cta" aria-label="Explore Graphic Design service" onclick="svcExploreService('Graphic Design')">Explore Service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic5"></use></svg></button>
-          </div>
-        </div>
-      </div>
-
-      <div class="reveal">
-        <div class="svc-card-outer">
-          <div class="svc-card">
-            <span class="svc-num">08</span>
-            <div class="svc-icon-wrap"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em"><use href="#ic29"></use></svg></div>
-            <div class="svc-title">Digital Marketing</div>
-            <div class="svc-desc">Strategy, content calendars, ad creatives, and growth systems for social media. Turn followers into customers with data-driven, AI-assisted marketing.</div>
-            <div class="svc-section-label">Deliverables</div>
-            <div class="svc-deliverables">
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Content calendar &amp; strategy doc</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Ready-to-run ad creative set</div>
-              <div class="svc-deliverable-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic35"></use></svg> Performance report &amp; recommendations</div>
-            </div>
-            <div class="svc-section-label">Tools Used</div>
-            <div class="svc-tools">
-              <span class="svc-tool-chip">Meta Ads</span>
-              <span class="svc-tool-chip">SEO Tools</span>
-              <span class="svc-tool-chip">Analytics</span>
-            </div>
-            <button type="button" class="svc-cta" aria-label="Explore Digital Marketing service" onclick="svcExploreService('Digital Marketing')">Explore Service <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic5"></use></svg></button>
-          </div>
-        </div>
-      </div>
-
+    <div class="services-grid" id="servicesGrid"></div>
+    <div id="servicesEmpty" style="display:none;text-align:center;color:var(--muted);font-size:14px;margin-top:24px;">No services yet. Login as admin to add the first one!</div>
+    <div style="display:flex;justify-content:center;margin-top:32px;">
+      <button type="button" class="admin-only" id="openServiceModal" style="display:none;align-items:center;gap:8px;padding:10px 20px;background:linear-gradient(135deg,var(--indigo),var(--violet));color:#fff;border:none;border-radius:10px;font-family:var(--font-display);font-size:13px;font-weight:700;cursor:pointer;box-shadow:0 4px 16px rgba(37,99,235,0.35);transition:all .2s;" onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform=''">＋ Add Service</button>
     </div>
   </div>
 </section>
@@ -5762,6 +5579,43 @@ body, body *, body *::before, body *::after {
   </div>
 </div>
 
+<div class="blog-modal-overlay" id="svcModal">
+  <div class="blog-modal">
+    <div class="blog-modal-title" id="svcModalTitle">✨ Add Service</div>
+    <div class="blog-modal-sub">Showcase a service you offer, with deliverables and tools</div>
+    <label class="blog-modal-label">ICON</label>
+    <select class="blog-modal-field" id="svcIconInput">
+      <option value="video">🎬 Video Editing</option>
+      <option value="ai-video">🤖 AI Video</option>
+      <option value="ai-audio">🎧 AI Audio</option>
+      <option value="ai-image">🖼 AI Image</option>
+      <option value="automation">⚙️ Automation</option>
+      <option value="prompt">💻 Prompt Engineering</option>
+      <option value="design">🎨 Graphic Design</option>
+      <option value="marketing">📈 Marketing</option>
+      <option value="briefcase">💼 General / Business</option>
+      <option value="star">⭐ Other</option>
+    </select>
+    <label class="blog-modal-label">TITLE</label>
+    <input class="blog-modal-field" id="svcTitleInput" placeholder="e.g. Social Media Management" type="text">
+    <label class="blog-modal-label">DESCRIPTION</label>
+    <textarea class="blog-modal-field" id="svcDescInput" rows="3" placeholder="What this service covers and who it's for..."></textarea>
+    <label class="blog-modal-label">DELIVERABLES</label>
+    <div id="svcDeliverablesList"></div>
+    <button type="button" class="svc-modal-add-row-btn" id="svcAddDeliverableBtn">＋ Add Deliverable</button>
+    <label class="blog-modal-label">TOOLS USED</label>
+    <div id="svcToolsList"></div>
+    <button type="button" class="svc-modal-add-row-btn" id="svcAddToolBtn">＋ Add Tool</button>
+    <label class="blog-modal-label" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
+      <input type="checkbox" id="svcFeaturedInput" style="width:auto;"> MARK AS FEATURED SERVICE
+    </label>
+    <div class="blog-modal-btns">
+      <button class="blog-modal-cancel" id="closeSvcModal">Cancel</button>
+      <button class="blog-modal-publish" id="svcSaveBtn" onclick="saveService()">Add Service <svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic5"></use></svg></button>
+    </div>
+  </div>
+</div>
+
 <div class="blog-modal-overlay" id="faqModal">
   <div class="blog-modal">
     <div class="blog-modal-title"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic15"></use></svg> Add FAQ</div>
@@ -6500,6 +6354,188 @@ async function removeWhy(i) {
 document.getElementById('openWhyModal').addEventListener('click', openWhyModal);
 document.getElementById('closeWhyModal').addEventListener('click', () => document.getElementById('whyModal').classList.remove('open'));
 document.getElementById('whyModal').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
+
+// ===================================================
+// SERVICES — admin-editable (icon, deliverables, tools, featured)
+// ===================================================
+const SVC_ICONS = {
+  video:      '<rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect><line x1="7" y1="2" x2="7" y2="22"></line><line x1="17" y1="2" x2="17" y2="22"></line><line x1="2" y1="12" x2="22" y2="12"></line><line x1="2" y1="7" x2="7" y2="7"></line><line x1="2" y1="17" x2="7" y2="17"></line><line x1="17" y1="17" x2="22" y2="17"></line><line x1="17" y1="7" x2="22" y2="7"></line>',
+  'ai-video': '<polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect>',
+  'ai-audio': '<path d="M9 18V5l12-2v13"></path><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="16" r="3"></circle>',
+  'ai-image': '<rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline>',
+  automation: '<circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>',
+  prompt:     '<rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line>',
+  design:     '<circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path>',
+  marketing:  '<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline>',
+  briefcase:  '<rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>',
+  star:       '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>'
+};
+const SVC_ICON_LABELS = {
+  video: '🎬 Video Editing', 'ai-video': '🤖 AI Video', 'ai-audio': '🎧 AI Audio', 'ai-image': '🖼 AI Image',
+  automation: '⚙️ Automation', prompt: '💻 Prompt Engineering', design: '🎨 Graphic Design',
+  marketing: '📈 Marketing', briefcase: '💼 General / Business', star: '⭐ Other'
+};
+function svcIconSvg(key) {
+  const paths = SVC_ICONS[key] || SVC_ICONS.star;
+  return `<svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em">${paths}</svg>`;
+}
+const SVC_CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+const SVC_ARROW_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
+
+let services = [
+  { featured: true, icon: 'video', title: 'Professional Video Editing', desc: 'Professional edits for YouTube, Reels, TikTok, ads, and corporate videos. Dynamic pacing, motion graphics, captions, and color grading that make viewers stay.', deliverables: ['Fully edited video, optimized per platform', 'Color-graded & sound-mixed footage', 'Custom captions & motion graphics'], tools: ['Premiere Pro', 'After Effects', 'DaVinci Resolve'], cta: 'Video Editing' },
+  { featured: false, icon: 'ai-video', title: 'AI Video Generation', desc: 'Transform scripts and ideas into stunning AI-generated video content for marketing, education, or entertainment — without expensive production budgets.', deliverables: ['Publish-ready AI-generated video clips', 'Script-to-video storyboard', 'Multiple style & resolution variants'], tools: ['Sora', 'Runway', 'Kling', 'Pika'], cta: 'AI Video Generation' },
+  { featured: false, icon: 'ai-audio', title: 'AI Audio Generation', desc: 'Custom AI voiceovers, background music, sound effects, and full audio tracks — perfect for videos, podcasts, ads, and content creators on any budget.', deliverables: ['Custom AI voiceover track', 'Background music & SFX bed', 'Podcast-ready mixed audio file'], tools: ['ElevenLabs', 'Suno', 'Udio'], cta: 'AI Audio Generation' },
+  { featured: false, icon: 'ai-image', title: 'AI Image Generation', desc: 'High-quality AI-generated visuals for ads, products, concepts, and campaigns. Cinematic, editorial, or commercial — any style, delivered fast.', deliverables: ['High-resolution campaign visuals', 'Multiple concept variations', 'Print & web-ready file formats'], tools: ['Midjourney', 'Stable Diffusion', 'Firefly', 'Ideogram'], cta: 'AI Image Generation' },
+  { featured: false, icon: 'automation', title: 'AI Automation', desc: 'Build smart workflows that run your content, marketing, and operations on autopilot. Save 20+ hours per week and scale without hiring more people.', deliverables: ['End-to-end automated workflow', 'Integration across your existing tools', 'Documentation & handover walkthrough'], tools: ['Make.com', 'Zapier', 'n8n'], cta: 'AI Automation' },
+  { featured: false, icon: 'prompt', title: 'Prompt Engineering', desc: 'Crafting optimized, production-ready prompts for ChatGPT, Midjourney, Claude, DALL·E, and more. Unlock the full potential of any AI model for your workflow.', deliverables: ['Production-ready prompt library', 'Model-specific optimization notes', 'Testing & iteration report'], tools: ['ChatGPT', 'Midjourney', 'Claude', 'DALL·E'], cta: 'Prompt Engineering' },
+  { featured: false, icon: 'design', title: 'Graphic Design', desc: 'Brand identities, social media kits, thumbnails, posters, and UI assets that stop the scroll and communicate your value instantly. Every pixel is intentional.', deliverables: ['Brand identity asset pack', 'Social media kit & templates', 'Print-ready & web-ready files'], tools: ['Photoshop', 'Illustrator', 'Figma'], cta: 'Graphic Design' },
+  { featured: false, icon: 'marketing', title: 'Digital Marketing', desc: 'Strategy, content calendars, ad creatives, and growth systems for social media. Turn followers into customers with data-driven, AI-assisted marketing.', deliverables: ['Content calendar & strategy doc', 'Ready-to-run ad creative set', 'Performance report & recommendations'], tools: ['Meta Ads', 'SEO Tools', 'Analytics'], cta: 'Digital Marketing' }
+];
+let editingServiceIndex = null;
+
+function renderServices() {
+  const grid = document.getElementById('servicesGrid');
+  const empty = document.getElementById('servicesEmpty');
+  if (!grid || !empty) return;
+  if (!services.length) {
+    grid.innerHTML = '';
+    empty.style.display = isAdmin ? 'block' : 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  grid.innerHTML = services.map((s, i) => `
+    <div class="${s.featured ? 'svc-featured' : ''} reveal visible">
+      ${s.featured ? `<span class="svc-badge"><svg class="icon-inline" viewBox="0 0 24 24" fill="currentColor" stroke="none" width="1em" height="1em"><use href="#ic13"></use></svg> Featured Service</span>` : ''}
+      <div class="svc-card-outer">
+        <div class="svc-card">
+          <span class="svc-num">${String(i + 1).padStart(2, '0')}</span>
+          <div class="svc-icon-wrap">${svcIconSvg(s.icon)}</div>
+          <div class="svc-title">${escHtmlWhy(s.title)}</div>
+          <div class="svc-desc">${escHtmlWhy(s.desc)}</div>
+          ${(s.deliverables && s.deliverables.length) ? `
+          <div class="svc-section-label">Deliverables</div>
+          <div class="svc-deliverables">
+            ${s.deliverables.map(d => `<div class="svc-deliverable-item">${SVC_CHECK_SVG} ${escHtmlWhy(d)}</div>`).join('')}
+          </div>` : ''}
+          ${(s.tools && s.tools.length) ? `
+          <div class="svc-section-label">Tools Used</div>
+          <div class="svc-tools">
+            ${s.tools.map(t => `<span class="svc-tool-chip">${escHtmlWhy(t)}</span>`).join('')}
+          </div>` : ''}
+          <button type="button" class="svc-cta" aria-label="Explore ${escHtmlWhy(s.title)} service" onclick="svcExploreService('${escHtmlWhy(s.cta || s.title).replace(/'/g, "\\'")}')">Explore Service ${SVC_ARROW_SVG}</button>
+          ${isAdmin ? `
+          <div class="svc-admin-row">
+            <button onclick="openEditService(${i})" style="background:rgba(37,99,235,0.1);border:1px solid rgba(37,99,235,0.25);color:var(--indigo);" onmouseover="this.style.background='rgba(37,99,235,0.2)'" onmouseout="this.style.background='rgba(37,99,235,0.1)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic8"></use></svg> Edit</button>
+            <button onclick="removeService(${i})" style="background:rgba(255,50,50,0.08);border:1px solid rgba(255,50,50,0.2);color:#ff7777;" onmouseover="this.style.background='rgba(255,50,50,0.16)'" onmouseout="this.style.background='rgba(255,50,50,0.08)'"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic1"></use></svg></button>
+          </div>
+          <div class="svc-move-row admin-move-row">
+            <button class="admin-move-btn" title="Move earlier" onclick="moveService(${i}, -1)" ${i <= 0 ? 'disabled' : ''}>▲</button>
+            <button class="admin-move-btn" title="Move later" onclick="moveService(${i}, 1)" ${i >= services.length - 1 ? 'disabled' : ''}>▼</button>
+          </div>` : ''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+async function moveService(i, dir) {
+  if (!isAdmin) return;
+  const target = i + dir;
+  if (target < 0 || target >= services.length) return;
+  const tmp = services[i];
+  services[i] = services[target];
+  services[target] = tmp;
+  await sharedSet('services', services);
+  renderServices();
+}
+
+// Builds one removable input row inside a deliverables/tools list container
+function svcAddListRow(containerId, value) {
+  const container = document.getElementById(containerId);
+  const row = document.createElement('div');
+  row.className = 'svc-modal-list-row';
+  row.innerHTML = `
+    <input class="blog-modal-field" type="text" value="${(value || '').replace(/"/g, '&quot;')}" placeholder="${containerId === 'svcDeliverablesList' ? 'e.g. Fully edited video, optimized per platform' : 'e.g. Premiere Pro'}">
+    <button type="button" class="svc-modal-row-remove" title="Remove"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic1"></use></svg></button>`;
+  row.querySelector('.svc-modal-row-remove').addEventListener('click', () => row.remove());
+  container.appendChild(row);
+}
+function svcResetListRows(containerId, values) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  (values && values.length ? values : ['']).forEach(v => svcAddListRow(containerId, v));
+}
+function svcReadListRows(containerId) {
+  return Array.from(document.querySelectorAll('#' + containerId + ' input')).map(i => i.value.trim()).filter(Boolean);
+}
+document.getElementById('svcAddDeliverableBtn').addEventListener('click', () => svcAddListRow('svcDeliverablesList', ''));
+document.getElementById('svcAddToolBtn').addEventListener('click', () => svcAddListRow('svcToolsList', ''));
+
+function openServiceModalFn() {
+  if (!isAdmin) { alert('Admin login required. Click the Admin button.'); return; }
+  editingServiceIndex = null;
+  document.getElementById('svcModalTitle').textContent = '✨ Add Service';
+  document.getElementById('svcSaveBtn').textContent = 'Add Service →';
+  document.getElementById('svcIconInput').value = 'star';
+  document.getElementById('svcTitleInput').value = '';
+  document.getElementById('svcDescInput').value = '';
+  svcResetListRows('svcDeliverablesList', []);
+  svcResetListRows('svcToolsList', []);
+  document.getElementById('svcFeaturedInput').checked = false;
+  document.getElementById('svcModal').classList.add('open');
+}
+
+function openEditService(i) {
+  if (!isAdmin) return;
+  editingServiceIndex = i;
+  const s = services[i];
+  document.getElementById('svcModalTitle').textContent = '✏️ Edit Service';
+  document.getElementById('svcSaveBtn').textContent = 'Update Service →';
+  document.getElementById('svcIconInput').value = SVC_ICONS[s.icon] ? s.icon : 'star';
+  document.getElementById('svcTitleInput').value = s.title || '';
+  document.getElementById('svcDescInput').value = s.desc || '';
+  svcResetListRows('svcDeliverablesList', s.deliverables || []);
+  svcResetListRows('svcToolsList', s.tools || []);
+  document.getElementById('svcFeaturedInput').checked = !!s.featured;
+  document.getElementById('svcModal').classList.add('open');
+}
+
+async function saveService() {
+  if (!isAdmin) return;
+  const icon = document.getElementById('svcIconInput').value || 'star';
+  const title = document.getElementById('svcTitleInput').value.trim();
+  const desc = document.getElementById('svcDescInput').value.trim();
+  const deliverables = svcReadListRows('svcDeliverablesList');
+  const tools = svcReadListRows('svcToolsList');
+  const featured = document.getElementById('svcFeaturedInput').checked;
+  if (!title || !desc) { alert('Please fill in both the title and the description!'); return; }
+  const btn = document.getElementById('svcSaveBtn');
+  const orig = btn.textContent;
+  btn.textContent = 'Saving...'; btn.disabled = true;
+  const item = { icon, title, desc, deliverables, tools, featured, cta: title };
+  if (editingServiceIndex !== null) {
+    item.cta = services[editingServiceIndex].cta || title;
+    services[editingServiceIndex] = item;
+  } else {
+    services.push(item);
+  }
+  await sharedSet('services', services);
+  document.getElementById('svcModal').classList.remove('open');
+  btn.textContent = orig; btn.disabled = false;
+  renderServices();
+}
+
+async function removeService(i) {
+  if (!isAdmin) return;
+  if (!confirm('Delete this service?')) return;
+  services.splice(i, 1);
+  await sharedSet('services', services);
+  renderServices();
+}
+
+document.getElementById('openServiceModal').addEventListener('click', openServiceModalFn);
+document.getElementById('closeSvcModal').addEventListener('click', () => document.getElementById('svcModal').classList.remove('open'));
+document.getElementById('svcModal').addEventListener('click', e => { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); });
 
 // ===== PROCESS TIMELINE (admin can add/edit/remove/reorder steps) =====
 let processSteps = [
@@ -7468,7 +7504,7 @@ function checkAdmin() {
         showAdminUI();
         renderYtVideos(); renderBlog(); renderProjects(); renderReviews(); renderComments();
         renderClientPricing(); fivRenderCats(); fivRenderHeadline(); fivRenderTabs(); fivRenderCard();
-        renderCertifications(); renderResumeButtons(); renderFaq(); renderProcessSteps();
+        renderCertifications(); renderResumeButtons(); renderFaq(); renderProcessSteps(); renderServices();
       } else if (user) {
         // একজন client লগইন করে আছে (admin না)
         isAdmin = false;
@@ -7664,6 +7700,7 @@ async function adminLogout() {
   renderResumeButtons();
   renderFaq();
   renderProcessSteps();
+  renderServices();
 }
 
 // ===================================================
@@ -11890,6 +11927,7 @@ async function initSharedData() {
     }
     if (record.certifications) certifications  = record.certifications;
     if (record.why_choose_me) whyChooseMe     = record.why_choose_me;
+    if (record.services)      services        = record.services;
     if (record.process_steps && record.process_steps.length) processSteps = record.process_steps;
     if (record.comments)       { comments        = record.comments; normalizeComments(); }
     if (record.resume !== undefined) resumeData = record.resume;
@@ -11927,6 +11965,7 @@ async function initSharedData() {
     renderProfileImages();
     renderCertifications();
     renderWhyChooseMe();
+    renderServices();
     renderProcessSteps();
     renderResumeButtons();
     renderFaq();
