@@ -2063,8 +2063,65 @@ iframe.skiptranslate { display: none !important; }
 
 /* ===== TRUST BAR (under hero) ===== */
 .trust-bar-wrap {
-  padding: 20px 0;
+  padding: 22px 0;
   border-bottom: 1px solid var(--border);
+}
+.trust-bar-head {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.trust-bar-heading {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.trust-bar-heading svg { width: 13px; height: 13px; color: var(--cyan); flex-shrink: 0; }
+.trust-bar-hidden-note {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #F97316;
+  background: rgba(249,115,22,0.1);
+  border: 1px solid rgba(249,115,22,0.25);
+  border-radius: 100px;
+  padding: 2px 9px;
+}
+.trust-bar-edit-btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1px dashed var(--border);
+  color: var(--muted);
+  border-radius: 8px;
+  padding: 5px 11px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  transition: border-color .2s, color .2s;
+}
+.trust-bar-edit-btn svg { width: 12px; height: 12px; }
+.trust-bar-edit-btn:hover { border-color: var(--cyan); color: var(--cyan); }
+.trust-bar-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 .trust-chip {
   display: inline-flex;
@@ -2080,6 +2137,10 @@ iframe.skiptranslate { display: none !important; }
   color: var(--white);
 }
 .trust-chip svg { width: 14px; height: 14px; color: var(--cyan); flex-shrink: 0; }
+@media (max-width: 700px) {
+  .trust-bar-edit-btn { position: static; transform: none; }
+  .trust-bar-head { flex-direction: column; gap: 8px; }
+}
 @media (max-width: 560px) {
   .trust-chip { font-size: 11.5px; padding: 6px 12px; }
 }
@@ -3815,10 +3876,14 @@ body, body *, body *::before, body *::after {
 </section>
 
 <!-- TRUST BAR -->
-<div class="trust-bar-wrap">
-  <div class="container" style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;">
-    <div id="trustBarTrack" style="display:flex;flex-wrap:wrap;justify-content:center;gap:10px;"></div>
-    <button type="button" class="admin-only" id="openTrustBarModal" title="Edit trust bar" style="display:none;background:none;border:1px dashed var(--border);color:var(--muted);border-radius:8px;padding:6px 10px;font-size:11px;cursor:pointer;font-family:var(--font-mono);">Edit Trust Bar</button>
+<div class="trust-bar-wrap" id="trustBarWrap">
+  <div class="container">
+    <div class="trust-bar-head">
+      <span class="trust-bar-heading"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic2"></use></svg> Credentials &amp; Trust</span>
+      <span class="trust-bar-hidden-note" id="trustBarHiddenNote" style="display:none;">Hidden from visitors</span>
+      <button type="button" class="admin-only trust-bar-edit-btn" id="openTrustBarModal" title="Manage trust bar" style="display:none;"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#ic8"></use></svg> Manage</button>
+    </div>
+    <div class="trust-bar-chips" id="trustBarTrack"></div>
   </div>
 </div>
 
@@ -5583,6 +5648,10 @@ Branch: Panchbibi Branch, Joypurhat, Bangladesh</span>
   <div class="yt-modal" style="max-width:520px;">
     <div class="yt-modal-title"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="1em" height="1em" style="vertical-align:-0.125em;"><use href="#ic13"></use></svg> Edit Trust Bar</div>
     <div class="yt-modal-sub">Small credibility badges shown right under the hero — e.g. platform ratings, client counts, or where you're active. Pick an icon and write the label for each.</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:10px;padding:10px 12px;">
+      <span style="font-size:13px;color:var(--white);font-weight:600;">Show trust bar on the site</span>
+      <label class="fiv-toggle"><input type="checkbox" id="trustBarShowToggle" checked><span class="fiv-toggle-slider"></span></label>
+    </div>
     <div id="trustBarRows" style="display:flex;flex-direction:column;gap:10px;max-height:300px;overflow-y:auto;padding-right:4px;margin-bottom:6px;"></div>
     <button type="button" onclick="addTrustBadgeRow()" style="background:rgba(59,130,246,0.08);border:1px dashed rgba(59,130,246,0.35);color:var(--cyan);border-radius:8px;padding:8px;font-size:12px;cursor:pointer;width:100%;font-family:var(--font-mono);margin-bottom:14px;">+ Add Badge</button>
     <div class="yt-modal-btns">
@@ -7795,6 +7864,7 @@ function showAdminUI() {
     el.style.display = el.tagName === 'BUTTON' ? 'inline-flex' : 'flex';
   });
   updateAvatarUploadAccess();
+  renderTrustBar();
 }
 
 function hideAdminUI() {
@@ -7802,6 +7872,7 @@ function hideAdminUI() {
   document.getElementById('adminLoginBtn').style.display = 'none';
   document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
   updateAvatarUploadAccess();
+  renderTrustBar();
 }
 
 // ===================================================
@@ -9137,6 +9208,7 @@ let trustBadges = [
   { icon: 'youtube', text: '50+ Channels Edited' },
   { icon: 'tag',     text: 'Secure Payments' }
 ];
+let trustBarHidden = false;
 const TRUST_ICON_MAP = { star: 'ic13', users: 'ic31', youtube: 'ic16', award: 'ic9', shield: 'ic2', tag: 'ic44' };
 const TRUST_ICON_OPTIONS = [
   { value: 'star',    label: '★ Star / Rating' },
@@ -9152,6 +9224,10 @@ function renderTrustBar() {
   track.innerHTML = trustBadges.map(b => `
     <span class="trust-chip"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#${TRUST_ICON_MAP[b.icon] || 'ic13'}"></use></svg>${escHtml(b.text)}</span>
   `).join('');
+  const wrap = document.getElementById('trustBarWrap');
+  const note = document.getElementById('trustBarHiddenNote');
+  if (wrap) wrap.style.display = (trustBarHidden && !isAdmin) ? 'none' : '';
+  if (note) note.style.display = (trustBarHidden && isAdmin) ? 'inline-block' : 'none';
 }
 
 // Skill/category management for reviews — mirrors the Fiverr-pricing category
@@ -11449,6 +11525,7 @@ async function initSharedData() {
     if (record.faqs)           faqs            = record.faqs;
     if (record.availability_messages && record.availability_messages.length) availabilityMessages = record.availability_messages;
     if (record.trust_badges && record.trust_badges.length) trustBadges = record.trust_badges;
+    if (record.trust_bar_hidden !== undefined) trustBarHidden = !!record.trust_bar_hidden;
     if (record.hero_stats) heroStatsData = Object.assign({}, heroStatsData, record.hero_stats);
     if (record.availability_interval_seconds) {
       const s = parseInt(record.availability_interval_seconds, 10);
@@ -12022,6 +12099,7 @@ function openTrustBarModalFn() {
   const wrap = document.getElementById('trustBarRows');
   wrap.innerHTML = '';
   trustBadges.forEach(b => addTrustBadgeRow(b.icon, b.text));
+  document.getElementById('trustBarShowToggle').checked = !trustBarHidden;
   document.getElementById('trustBarModal').classList.add('open');
 }
 
@@ -12035,7 +12113,9 @@ async function saveTrustBadges() {
   });
   if (!badges.length) { alert('Add at least one badge.'); return; }
   trustBadges = badges;
+  trustBarHidden = !document.getElementById('trustBarShowToggle').checked;
   await sharedSet('trust_badges', trustBadges);
+  await sharedSet('trust_bar_hidden', trustBarHidden);
   renderTrustBar();
   document.getElementById('trustBarModal').classList.remove('open');
 }
