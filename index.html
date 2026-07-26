@@ -6549,6 +6549,8 @@ async function handleSubmit(btn) {
 // Experience keeps computing itself from the start year instead of being
 // hardcoded, so the number stays correct year after year.
 let heroStatsData = { projects: 150, clients: 60, rating: '5', careerStartYear: 2023 };
+let _heroStatsObserveStarted = false;
+let _heroStatsAnimated = false;
 function updateYearsExpTarget() {
   const yearsExpEl = document.getElementById('heroYearsExp');
   if (!yearsExpEl) return;
@@ -6560,15 +6562,30 @@ function renderHeroStats() {
   const p = document.getElementById('heroStatProjects');
   const c = document.getElementById('heroStatClients');
   const r = document.getElementById('heroStatRating');
+  const y = document.getElementById('heroYearsExp');
   if (p) p.setAttribute('data-target', heroStatsData.projects);
   if (c) c.setAttribute('data-target', heroStatsData.clients);
   if (r) r.textContent = heroStatsData.rating;
   updateYearsExpTarget();
+  if (_heroStatsAnimated) {
+    // The count-up already ran once (e.g. real data arrived from the
+    // network after the cached/default numbers had already animated in) —
+    // snap the visible numbers to the corrected values instead of leaving
+    // them stuck on stale ones.
+    if (p) p.textContent = heroStatsData.projects + '+';
+    if (c) c.textContent = heroStatsData.clients + '+';
+    if (y) y.textContent = y.getAttribute('data-target') + '+';
+  } else if (!_heroStatsObserveStarted) {
+    // Only start watching once the real numbers (cached or freshly loaded)
+    // are in place, so the animation never plays with placeholder data.
+    _heroStatsObserveStarted = true;
+    const heroStatsEl = document.querySelector('.hero-stats');
+    if (heroStatsEl) statObs.observe(heroStatsEl);
+  }
 }
 (function() {
   const yearsExpEl = document.getElementById('heroYearsExp');
   if (yearsExpEl) yearsExpEl.textContent = '0+';
-  updateYearsExpTarget();
 })();
 function animateCount(el, target, suffix='') {
   let start = 0;
@@ -6588,12 +6605,12 @@ const statObs = new IntersectionObserver((entries) => {
       document.querySelectorAll('[data-target]').forEach(el => {
         animateCount(el, parseInt(el.getAttribute('data-target')));
       });
+      _heroStatsAnimated = true;
       statObs.disconnect();
     }
   });
 }, { threshold: 0.6, rootMargin: '0px 0px -15% 0px' });
-const heroStats = document.querySelector('.hero-stats');
-if (heroStats) statObs.observe(heroStats);
+// Observing starts from renderHeroStats() once real data is ready — see above.
 
 // ===== PROFILE IMAGE UPLOAD (persists in localStorage) =====
 const avatarInput = document.getElementById('avatarInput');
