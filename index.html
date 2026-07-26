@@ -2074,7 +2074,7 @@ iframe.skiptranslate { display: none !important; }
   position: relative;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 10px;
   margin-bottom: 16px;
 }
@@ -2124,7 +2124,7 @@ iframe.skiptranslate { display: none !important; }
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 10px;
 }
 .trust-chip {
@@ -2143,7 +2143,8 @@ iframe.skiptranslate { display: none !important; }
 .trust-chip svg { width: 14px; height: 14px; color: var(--cyan); flex-shrink: 0; }
 @media (max-width: 700px) {
   .trust-bar-edit-btn { position: static; transform: none; }
-  .trust-bar-head { flex-direction: column; gap: 8px; }
+  .trust-bar-head { flex-direction: column; gap: 8px; justify-content: center; }
+  .trust-bar-chips { justify-content: center; }
 }
 @media (max-width: 560px) {
   .trust-chip { font-size: 11.5px; padding: 6px 12px; }
