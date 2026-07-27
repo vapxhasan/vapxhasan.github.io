@@ -1302,6 +1302,41 @@ iframe.skiptranslate { display: none !important; }
 }
 .svc-card-outer:hover .svc-tool-chip { border-color: rgba(59,130,246,0.35); background: rgba(59,130,246,0.1); }
 
+.svc-divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; opacity: .9; }
+
+.svc-features-more {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: max-height .5s cubic-bezier(.4,0,.2,1), opacity .4s ease;
+}
+.svc-features-more.expanded { opacity: 1; margin-top: 8px; }
+
+.svc-view-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-top: 12px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cyan);
+  cursor: pointer;
+  transition: gap .25s ease, opacity .2s ease;
+}
+.svc-view-toggle:hover { gap: 9px; opacity: .85; }
+.svc-view-toggle svg { width: 12px; height: 12px; transition: transform .35s ease; }
+.svc-view-toggle.expanded svg { transform: rotate(90deg); }
+
+.svc-bestfor-row { font-size: 12.5px; color: var(--white); opacity: .82; line-height: 1.7; }
+.svc-bestfor-row .dot { color: var(--cyan); opacity: .6; margin: 0 7px; font-weight: 700; }
+
 .svc-cta {
   margin-top: auto;
   display: inline-flex;
@@ -1343,6 +1378,7 @@ iframe.skiptranslate { display: none !important; }
 @media (prefers-reduced-motion: reduce) {
   .svc-card-outer::before { animation: none !important; }
   .svc-card-outer, .svc-card, .svc-icon-wrap, .svc-cta, .svc-cta svg, .svc-tool-chip { transition: none !important; }
+  .svc-features-more, .svc-view-toggle svg { transition: none !important; }
 }
 @media (max-width: 600px) {
   .services-grid { gap: 18px; }
@@ -5582,7 +5618,7 @@ body, body *, body *::before, body *::after {
 <div class="blog-modal-overlay" id="svcModal">
   <div class="blog-modal">
     <div class="blog-modal-title" id="svcModalTitle">✨ Add Service</div>
-    <div class="blog-modal-sub">Showcase a service you offer, with deliverables and tools</div>
+    <div class="blog-modal-sub">Showcase a service you offer, with premium features and target clients</div>
     <label class="blog-modal-label">ICON</label>
     <select class="blog-modal-field" id="svcIconInput">
       <option value="video">🎬 Video Editing</option>
@@ -5600,12 +5636,14 @@ body, body *, body *::before, body *::after {
     <input class="blog-modal-field" id="svcTitleInput" placeholder="e.g. Social Media Management" type="text">
     <label class="blog-modal-label">DESCRIPTION</label>
     <textarea class="blog-modal-field" id="svcDescInput" rows="3" placeholder="What this service covers and who it's for..."></textarea>
-    <label class="blog-modal-label">DELIVERABLES</label>
+    <label class="blog-modal-label">WHAT'S INCLUDED — CORE FEATURES (first 4 shown on the card)</label>
     <div id="svcDeliverablesList"></div>
-    <button type="button" class="svc-modal-add-row-btn" id="svcAddDeliverableBtn">＋ Add Deliverable</button>
-    <label class="blog-modal-label">TOOLS USED</label>
+    <button type="button" class="svc-modal-add-row-btn" id="svcAddDeliverableBtn">＋ Add Feature</button>
+    <label class="blog-modal-label">ADDITIONAL FEATURES (revealed via "View All Features")</label>
     <div id="svcToolsList"></div>
-    <button type="button" class="svc-modal-add-row-btn" id="svcAddToolBtn">＋ Add Tool</button>
+    <button type="button" class="svc-modal-add-row-btn" id="svcAddToolBtn">＋ Add Feature</button>
+    <label class="blog-modal-label">BEST FOR (comma-separated, e.g. Startups, Agencies, Creators)</label>
+    <input class="blog-modal-field" id="svcBestForInput" placeholder="e.g. Startups, Agencies, Creators" type="text">
     <label class="blog-modal-label" style="display:flex;align-items:center;gap:8px;cursor:pointer;">
       <input type="checkbox" id="svcFeaturedInput" style="width:auto;"> MARK AS FEATURED SERVICE
     </label>
@@ -6383,14 +6421,38 @@ const SVC_CHECK_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor
 const SVC_ARROW_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
 
 let services = [
-  { featured: true, icon: 'video', title: 'Professional Video Editing', desc: 'Professional edits for YouTube, Reels, TikTok, ads, and corporate videos. Dynamic pacing, motion graphics, captions, and color grading that make viewers stay.', deliverables: ['Fully edited video, optimized per platform', 'Color-graded & sound-mixed footage', 'Custom captions & motion graphics'], tools: ['Premiere Pro', 'After Effects', 'DaVinci Resolve'], cta: 'Video Editing' },
-  { featured: false, icon: 'ai-video', title: 'AI Video Generation', desc: 'Transform scripts and ideas into stunning AI-generated video content for marketing, education, or entertainment — without expensive production budgets.', deliverables: ['Publish-ready AI-generated video clips', 'Script-to-video storyboard', 'Multiple style & resolution variants'], tools: ['Sora', 'Runway', 'Kling', 'Pika'], cta: 'AI Video Generation' },
-  { featured: false, icon: 'ai-audio', title: 'AI Audio Generation', desc: 'Custom AI voiceovers, background music, sound effects, and full audio tracks — perfect for videos, podcasts, ads, and content creators on any budget.', deliverables: ['Custom AI voiceover track', 'Background music & SFX bed', 'Podcast-ready mixed audio file'], tools: ['ElevenLabs', 'Suno', 'Udio'], cta: 'AI Audio Generation' },
-  { featured: false, icon: 'ai-image', title: 'AI Image Generation', desc: 'High-quality AI-generated visuals for ads, products, concepts, and campaigns. Cinematic, editorial, or commercial — any style, delivered fast.', deliverables: ['High-resolution campaign visuals', 'Multiple concept variations', 'Print & web-ready file formats'], tools: ['Midjourney', 'Stable Diffusion', 'Firefly', 'Ideogram'], cta: 'AI Image Generation' },
-  { featured: false, icon: 'automation', title: 'AI Automation', desc: 'Build smart workflows that run your content, marketing, and operations on autopilot. Save 20+ hours per week and scale without hiring more people.', deliverables: ['End-to-end automated workflow', 'Integration across your existing tools', 'Documentation & handover walkthrough'], tools: ['Make.com', 'Zapier', 'n8n'], cta: 'AI Automation' },
-  { featured: false, icon: 'prompt', title: 'Prompt Engineering', desc: 'Crafting optimized, production-ready prompts for ChatGPT, Midjourney, Claude, DALL·E, and more. Unlock the full potential of any AI model for your workflow.', deliverables: ['Production-ready prompt library', 'Model-specific optimization notes', 'Testing & iteration report'], tools: ['ChatGPT', 'Midjourney', 'Claude', 'DALL·E'], cta: 'Prompt Engineering' },
-  { featured: false, icon: 'design', title: 'Graphic Design', desc: 'Brand identities, social media kits, thumbnails, posters, and UI assets that stop the scroll and communicate your value instantly. Every pixel is intentional.', deliverables: ['Brand identity asset pack', 'Social media kit & templates', 'Print-ready & web-ready files'], tools: ['Photoshop', 'Illustrator', 'Figma'], cta: 'Graphic Design' },
-  { featured: false, icon: 'marketing', title: 'Digital Marketing', desc: 'Strategy, content calendars, ad creatives, and growth systems for social media. Turn followers into customers with data-driven, AI-assisted marketing.', deliverables: ['Content calendar & strategy doc', 'Ready-to-run ad creative set', 'Performance report & recommendations'], tools: ['Meta Ads', 'SEO Tools', 'Analytics'], cta: 'Digital Marketing' }
+  { featured: true, icon: 'video', title: 'Professional Video Editing', desc: 'Transform raw footage into cinematic, high-retention videos that strengthen your brand, capture attention, and maximize audience engagement across every platform.',
+    features: ['Platform-optimized edits for YouTube, Instagram & TikTok', 'Cinematic color grading for a polished, premium look', 'Dynamic pacing engineered to maximize watch time', 'Custom motion graphics, titles & branded captions'],
+    moreFeatures: ['Multi-camera sync & seamless scene transitions', 'Professional sound design & audio mixing', 'Thumbnail-ready frame selection for stronger click-through', 'Story-driven structuring built to hold attention', 'Every aspect ratio delivered — 16:9, 9:16, 1:1', 'Brand-consistent intro & outro templates', 'Fast turnaround with revision rounds included', 'Organized, ready-to-publish file delivery'],
+    bestFor: ['Content Creators', 'YouTubers', 'Businesses', 'Brands'], cta: 'Video Editing' },
+  { featured: false, icon: 'ai-video', title: 'AI Video Generation', desc: 'Turn a single idea into scroll-stopping video content in a fraction of the time and cost of a traditional production — without sacrificing visual quality.',
+    features: ['Script-to-video production, no cameras or studio needed', 'Multiple visual styles, from cinematic to animated', 'Rapid turnaround for time-sensitive campaigns', 'Scalable output for high-volume publishing schedules'],
+    moreFeatures: ['Consistent characters & scenes across every clip', 'Multi-language voice and visual localization', 'A/B-ready variants built for ad testing', 'Seamless blending with live-action footage', 'Platform-specific resolution & format exports', 'Storyboard-first workflow for accurate direction', 'Revision rounds to refine tone and pacing', 'Full commercial usage rights on every asset'],
+    bestFor: ['Startups', 'E-commerce Brands', 'Marketing Agencies', 'SaaS Companies'], cta: 'AI Video Generation' },
+  { featured: false, icon: 'ai-audio', title: 'AI Audio Generation', desc: 'Give every video, podcast, and campaign a professional voice and sound identity — without studio time, voice talent fees, or production delays.',
+    features: ['Natural AI voiceovers in multiple languages & tones', 'Custom background scoring matched to your brand mood', 'Podcast-ready mixing, mastering & noise-free output', 'Layered sound effects for cinematic impact'],
+    moreFeatures: ['Consistent voice cloning for ongoing narration', 'Multi-track mixing across dialogue, music & effects', 'Loudness-standard mastering for streaming platforms', 'Emotion-matched tone direction on request', 'Royalty-free, commercially licensed music beds', 'Fast revisions on pacing & delivery', 'Multiple export formats, including broadcast-ready', 'Precise sync to video timing & cuts'],
+    bestFor: ['Podcasters', 'Content Creators', 'Educators', 'Coaches'], cta: 'AI Audio Generation' },
+  { featured: false, icon: 'ai-image', title: 'AI Image Generation', desc: 'Produce campaign-ready visuals for products, ads, and brand storytelling in hours instead of weeks — with the polish clients expect from premium studios.',
+    features: ['Photorealistic product & lifestyle visuals for campaigns', 'Multiple creative concepts delivered per brief', 'Print, web & social-optimized file formats', 'Consistent brand style applied across every asset'],
+    moreFeatures: ['Concept iteration based on real-time feedback', 'Custom art direction matched to brand guidelines', 'Batch generation for large catalogs & campaigns', 'Background removal & compositing for e-commerce', 'High-resolution files ready for large-format print', 'Style-matched variations for A/B ad testing', 'Commercial licensing included on final assets', 'Fast turnaround for time-sensitive launches'],
+    bestFor: ['E-commerce Brands', 'Advertisers', 'Product Companies', 'Creators'], cta: 'AI Image Generation' },
+  { featured: false, icon: 'automation', title: 'AI Automation', desc: 'Eliminate repetitive work and connect your tools into intelligent systems that run your business around the clock — so your team can focus on growth.',
+    features: ['End-to-end workflow automation across your existing tools', 'Custom integrations that eliminate manual data entry', 'AI-powered decision logic for smarter operations', 'Full documentation & handover for long-term ownership'],
+    moreFeatures: ['Automated lead capture & CRM synchronization', 'Scheduled reporting & real-time dashboards', 'Built-in error handling & workflow monitoring', 'Scalable systems that grow with your business', 'API integrations across marketing, sales & ops', 'Testing & quality assurance before go-live', 'Support through the first optimization cycle', 'Proven to save 15-20+ hours every week'],
+    bestFor: ['Startups', 'Agencies', 'SaaS Companies', 'Growing Businesses'], cta: 'AI Automation' },
+  { featured: false, icon: 'prompt', title: 'Prompt Engineering', desc: 'Unlock consistent, high-quality output from any AI model with prompt systems engineered for accuracy, creativity, and repeatable business results.',
+    features: ['Production-ready prompt libraries built for your use case', 'Model-specific optimization for consistent, reliable output', 'Structured frameworks for repeatable, scalable results', 'Testing & refinement across multiple iterations'],
+    moreFeatures: ['Custom prompt chains for complex, multi-step tasks', 'Style & tone calibration for brand consistency', 'Documentation built for internal team adoption', 'Cross-model compatibility — text, image & voice', 'Output quality benchmarking & scoring', 'Workflow integration guidance for your existing tools', 'Ongoing optimization as models update', 'Training session for your internal team'],
+    bestFor: ['SaaS Companies', 'Agencies', 'Startups', 'AI-Driven Teams'], cta: 'Prompt Engineering' },
+  { featured: false, icon: 'design', title: 'Graphic Design', desc: 'Build a visual identity that commands attention and communicates credibility instantly — every asset designed with intention, never with templates.',
+    features: ['Distinctive brand identity systems built to scale', 'Social media kits designed for consistent engagement', 'Print & digital-ready files for every use case', 'Thumbnail & ad creatives built to convert'],
+    moreFeatures: ['Logo suite & full brand guideline documentation', 'Packaging & product visual design', 'Presentation & pitch deck design', 'Editable source files for future updates', 'Multiple concept directions per project', 'Unlimited revision rounds on final concepts', 'One consistent design system across every platform', 'Fast turnaround for time-sensitive campaigns'],
+    bestFor: ['Startups', 'Personal Brands', 'Agencies', 'E-commerce Brands'], cta: 'Graphic Design' },
+  { featured: false, icon: 'marketing', title: 'Digital Marketing', desc: 'Turn your audience into paying customers with data-driven strategy, high-converting creative, and growth systems built to scale — not guesswork.',
+    features: ['Full-funnel strategy tailored to your growth goals', 'High-converting ad creative built for performance', 'Content calendars aligned with business objectives', 'Performance reporting with clear, actionable insights'],
+    moreFeatures: ['Audience research & competitor analysis', 'Paid ad campaign setup & optimization', 'SEO-informed content strategy', 'Email & retention marketing systems', 'Landing page & funnel optimization', 'A/B testing across creative & copy', 'Monthly performance reviews & strategy adjustments', 'Consistent branding across Meta, Google & TikTok'],
+    bestFor: ['Businesses', 'E-commerce Brands', 'Startups', 'Marketing Teams'], cta: 'Digital Marketing' }
 ];
 let editingServiceIndex = null;
 
@@ -6413,16 +6475,24 @@ function renderServices() {
           <div class="svc-icon-wrap">${svcIconSvg(s.icon)}</div>
           <div class="svc-title">${escHtmlWhy(s.title)}</div>
           <div class="svc-desc">${escHtmlWhy(s.desc)}</div>
-          ${(s.deliverables && s.deliverables.length) ? `
-          <div class="svc-section-label">Deliverables</div>
+          ${(s.features && s.features.length) ? `
+          <hr class="svc-divider">
+          <div class="svc-section-label">What's Included</div>
           <div class="svc-deliverables">
-            ${s.deliverables.map(d => `<div class="svc-deliverable-item">${SVC_CHECK_SVG} ${escHtmlWhy(d)}</div>`).join('')}
-          </div>` : ''}
-          ${(s.tools && s.tools.length) ? `
-          <div class="svc-section-label">Tools Used</div>
-          <div class="svc-tools">
-            ${s.tools.map(t => `<span class="svc-tool-chip">${escHtmlWhy(t)}</span>`).join('')}
-          </div>` : ''}
+            ${s.features.map(d => `<div class="svc-deliverable-item">${SVC_CHECK_SVG} ${escHtmlWhy(d)}</div>`).join('')}
+          </div>
+          ${(s.moreFeatures && s.moreFeatures.length) ? `
+          <div class="svc-features-more" id="svcMore${i}">
+            ${s.moreFeatures.map(d => `<div class="svc-deliverable-item">${SVC_CHECK_SVG} ${escHtmlWhy(d)}</div>`).join('')}
+          </div>
+          <button type="button" class="svc-view-toggle" id="svcToggle${i}" aria-expanded="false" onclick="svcToggleFeatures(${i})">
+            <span id="svcToggleLabel${i}">View All Features</span> ${SVC_ARROW_SVG}
+          </button>` : ''}` : ''}
+          ${(s.bestFor && s.bestFor.length) ? `
+          <hr class="svc-divider">
+          <div class="svc-section-label">Best For</div>
+          <div class="svc-bestfor-row">${s.bestFor.map(b => escHtmlWhy(b)).join('<span class="dot">•</span>')}</div>` : ''}
+          <hr class="svc-divider">
           <button type="button" class="svc-cta" aria-label="Explore ${escHtmlWhy(s.title)} service" onclick="svcExploreService('${escHtmlWhy(s.cta || s.title).replace(/'/g, "\\'")}')">Explore Service ${SVC_ARROW_SVG}</button>
           ${isAdmin ? `
           <div class="svc-admin-row">
@@ -6436,6 +6506,34 @@ function renderServices() {
         </div>
       </div>
     </div>`).join('');
+}
+
+function svcToggleFeatures(i) {
+  const more = document.getElementById('svcMore' + i);
+  const btn = document.getElementById('svcToggle' + i);
+  const label = document.getElementById('svcToggleLabel' + i);
+  if (!more || !btn || !label) return;
+  const isOpen = more.classList.contains('expanded');
+  if (isOpen) {
+    more.style.maxHeight = more.scrollHeight + 'px';
+    requestAnimationFrame(() => { more.style.maxHeight = '0px'; });
+    more.classList.remove('expanded');
+    btn.classList.remove('expanded');
+    label.textContent = 'View All Features';
+    btn.setAttribute('aria-expanded', 'false');
+  } else {
+    more.classList.add('expanded');
+    btn.classList.add('expanded');
+    more.style.maxHeight = more.scrollHeight + 'px';
+    label.textContent = 'Show Less';
+    btn.setAttribute('aria-expanded', 'true');
+    more.addEventListener('transitionend', function onEnd(e) {
+      if (e.propertyName === 'max-height' && more.classList.contains('expanded')) {
+        more.style.maxHeight = 'none';
+      }
+      more.removeEventListener('transitionend', onEnd);
+    });
+  }
 }
 
 async function moveService(i, dir) {
@@ -6481,6 +6579,7 @@ function openServiceModalFn() {
   document.getElementById('svcDescInput').value = '';
   svcResetListRows('svcDeliverablesList', []);
   svcResetListRows('svcToolsList', []);
+  document.getElementById('svcBestForInput').value = '';
   document.getElementById('svcFeaturedInput').checked = false;
   document.getElementById('svcModal').classList.add('open');
 }
@@ -6494,8 +6593,9 @@ function openEditService(i) {
   document.getElementById('svcIconInput').value = SVC_ICONS[s.icon] ? s.icon : 'star';
   document.getElementById('svcTitleInput').value = s.title || '';
   document.getElementById('svcDescInput').value = s.desc || '';
-  svcResetListRows('svcDeliverablesList', s.deliverables || []);
-  svcResetListRows('svcToolsList', s.tools || []);
+  svcResetListRows('svcDeliverablesList', s.features || s.deliverables || []);
+  svcResetListRows('svcToolsList', s.moreFeatures || s.tools || []);
+  document.getElementById('svcBestForInput').value = (s.bestFor || []).join(', ');
   document.getElementById('svcFeaturedInput').checked = !!s.featured;
   document.getElementById('svcModal').classList.add('open');
 }
@@ -6505,14 +6605,15 @@ async function saveService() {
   const icon = document.getElementById('svcIconInput').value || 'star';
   const title = document.getElementById('svcTitleInput').value.trim();
   const desc = document.getElementById('svcDescInput').value.trim();
-  const deliverables = svcReadListRows('svcDeliverablesList');
-  const tools = svcReadListRows('svcToolsList');
+  const features = svcReadListRows('svcDeliverablesList');
+  const moreFeatures = svcReadListRows('svcToolsList');
+  const bestFor = document.getElementById('svcBestForInput').value.split(',').map(x => x.trim()).filter(Boolean);
   const featured = document.getElementById('svcFeaturedInput').checked;
   if (!title || !desc) { alert('Please fill in both the title and the description!'); return; }
   const btn = document.getElementById('svcSaveBtn');
   const orig = btn.textContent;
   btn.textContent = 'Saving...'; btn.disabled = true;
-  const item = { icon, title, desc, deliverables, tools, featured, cta: title };
+  const item = { icon, title, desc, features, moreFeatures, bestFor, featured, cta: title };
   if (editingServiceIndex !== null) {
     item.cta = services[editingServiceIndex].cta || title;
     services[editingServiceIndex] = item;
