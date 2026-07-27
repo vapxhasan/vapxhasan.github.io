@@ -4624,6 +4624,7 @@ body, body *, body *::before, body *::after {
         <span class="pay-badge-label">Payoneer</span>
         <span class="pay-badge-label">Elevate Pay</span>
         <span class="pay-badge-label">PrioPay</span>
+        <span class="pay-badge-label">PayPal (Xoom)</span>
       </div>
       <div class="pay-badge-note">Payment details shared securely once we've agreed on your project.</div>
       <div style="text-align:center;">
@@ -4719,6 +4720,7 @@ body, body *, body *::before, body *::after {
             <option value="Payoneer">Payoneer</option>
             <option value="Elevate Pay">Elevate Pay</option>
             <option value="PrioPay">PrioPay</option>
+            <option value="PayPal (via Xoom)">PayPal (via Xoom)</option>
             <option value="Wise">Wise</option>
             <option value="Fiverr / Upwork Escrow">Fiverr / Upwork Escrow</option>
             <option value="Custom">Other</option>
@@ -5257,6 +5259,10 @@ body, body *, body *::before, body *::after {
         <div class="pm-method-card" id="pmCard-bankwire">
           <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(59,130,246,0.12);color:#3b82f6;">B</span><span class="pm-method-name">Bank Wire Transfer</span></div>
           <div class="pm-method-desc">Contact me directly and I'll share the SWIFT bank wire details.</div>
+        </div>
+        <div class="pm-method-card" id="pmCard-paypalxoom">
+          <div class="pm-method-head"><span class="pm-method-icon" style="background:rgba(0,69,124,0.12);color:#0070ba;">P</span><span class="pm-method-name">PayPal (via Xoom)</span></div>
+          <div class="pm-method-desc">Pay with your PayPal balance or card — it's sent directly to my bKash wallet or IBBL bank account through Xoom. Ask and I'll email the full step-by-step guide.</div>
         </div>
       </div>
       <div class="pm-secure-note"><svg class="icon-inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14px" height="14px" style="flex-shrink:0;"><use href="#ic2"></use></svg> After paying, please send a quick screenshot on <a href="#" onclick="closePaymentModal();toggleWaWidget();return false;" style="color:var(--cyan);">WhatsApp</a> or email so I can confirm right away.</div>
@@ -6098,6 +6104,7 @@ body, body *, body *::before, body *::after {
         <button type="button" class="footer-pay-chip" style="--chip-accent:#FF4800;" onclick="openPaymentModalFor('payoneer')">Payoneer</button>
         <button type="button" class="footer-pay-chip" style="--chip-accent:#0EA5A4;" onclick="openPaymentModalFor('elevate')">Elevate Pay</button>
         <button type="button" class="footer-pay-chip" style="--chip-accent:#6366F1;" onclick="openPaymentModalFor('priopay')">PrioPay</button>
+        <button type="button" class="footer-pay-chip" style="--chip-accent:#00457C;" onclick="openPaymentModalFor('paypalxoom')">PayPal (Xoom)</button>
       </div>
     </div>
     <div class="footer-bottom">
@@ -6202,7 +6209,7 @@ if (sg) skillObserver.observe(sg);
 let faqs = [
   { q: 'How long does it take to complete a project?', a: "It depends on scope, but most projects are delivered within 2–7 business days. Rush delivery is available. I'll give you a clear timeline after reviewing your brief before any work starts." },
   { q: 'Do you offer revisions?', a: 'Yes. Standard packages include 2–3 revision rounds. I aim to nail the brief in the first delivery, but revisions are part of a healthy creative process — your satisfaction is the goal.' },
-  { q: 'What payment methods do you accept?', a: 'I accept payments through Fiverr, Upwork, and direct bank transfer, along with bKash, Nagad, Rocket, Payoneer, Elevate Pay, and PrioPay. Pricing is project-based and agreed upfront — no hidden fees.' },
+  { q: 'What payment methods do you accept?', a: 'I accept payments through Fiverr, Upwork, and direct bank transfer, along with bKash, Nagad, Rocket, Payoneer, Elevate Pay, PrioPay, and PayPal via Xoom (sent directly to my bKash or IBBL bank account). Pricing is project-based and agreed upfront — no hidden fees.' },
   { q: 'Can I see examples of your previous work?', a: 'Absolutely! The portfolio section above shows selected projects. I can also share additional, niche-specific samples relevant to your industry during our initial conversation. Just ask!' },
   { q: 'Do you work with international clients?', a: "Yes, 100%. I work with clients from the US, UK, Europe, Middle East, Canada, and Australia. I'm fluent in English and communicate clearly across time zones. Remote-first is my default." },
   { q: 'What AI tools do you use?', a: 'I work with the best tools in each category: Midjourney, DALL·E, Stable Diffusion for images; Sora, Runway, Kling for video; ElevenLabs, Suno for audio; ChatGPT, Claude for automation; Make.com, Zapier, n8n for workflows.' },
@@ -6808,6 +6815,12 @@ function buildPaymentInstructionsBlock(method) {
     payoneer: 'hasanur.rahman.editor@gmail.com',
     elevate:  'hasanur.rahman.editor@gmail.com',
     priopay:  'Account Holder: Md. Hasanur Rahman\nAccount Number: 111056266971\nCurrency: USD\nType: CHECKING\nBank: Regent Bank\nRouting Number: 103913434\nAddress: 7136 S. Yale Ave., Suite 100, Tulsa, OK 74136, USA',
+    // PayPal has no direct business account here, so payments route through Xoom
+    // (a PayPal service) straight into the bKash wallet or IBBL bank account below.
+    // Update these two objects if the receiving bKash number or bank details ever change —
+    // the auto-reply email pulls from here automatically.
+    paypalXoomBkash: { mobile: '+8801521731046', firstName: 'Hasanur', lastName: 'Rahman' },
+    paypalXoomBank:  { bankName: 'Islami Bank Bangladesh PLC', accountName: 'MD HASANUR RAHMAN', accountNumber: '20503696700143208', branch: 'Panchbibi Branch, Joypurhat, Bangladesh' },
   };
   const bkash      = PAYMENT_DATA.bkash;
   const nagad      = PAYMENT_DATA.nagad;
@@ -6836,6 +6849,61 @@ function buildPaymentInstructionsBlock(method) {
     PrioPay:  multiLineRow('PrioPay (USD Account)', priopay),
   };
 
+  // Compact one-line teaser used only inside the "show everything" catch-all block below —
+  // the full numbered walkthrough is returned on its own when PayPal/Xoom is the selected method.
+  const paypalTeaserRow = row('PayPal (via Xoom)', 'Reply and I\'ll send the full step-by-step guide');
+
+  const px = PAYMENT_DATA.paypalXoomBkash;
+  const pb = PAYMENT_DATA.paypalXoomBank;
+  const pxStep = (n, title, body) =>
+    `<tr><td style="padding:10px 0 4px;">` +
+      `<div style="font-size:13px;font-weight:700;color:#e5e9f0;margin-bottom:4px;">` +
+        `<span style="display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;background:#2563EB;color:#fff;font-size:11px;font-weight:800;margin-right:8px;">${n}</span>${title}` +
+      `</div>` +
+      `<div style="font-size:12.5px;color:#94a3b8;line-height:19px;padding-left:28px;">${body}</div>` +
+    `</td></tr>`;
+
+  function buildPaypalXoomBlock() {
+    const stepsHtml =
+      pxStep(1, 'Access Xoom', 'Go to <span style="color:#e5e9f0;">xoom.com</span> or open the Xoom app, then log in using your PayPal credentials.') +
+      pxStep(2, 'Enter the transaction details', 'Select <b style="color:#e5e9f0;">Bangladesh</b> as the receiver country and enter the amount in USD — Xoom will show the BDT equivalent automatically.') +
+      pxStep(3, 'Choose a receiving method', 'For bKash: select <b style="color:#e5e9f0;">Mobile Wallet → bKash</b>. For a bank deposit: select <b style="color:#e5e9f0;">Bank Deposit → Islami Bank Bangladesh PLC</b>.') +
+      pxStep(4, 'Enter my recipient details', 'Use the bKash or bank information below, depending on the method you chose in Step 3.') +
+      pxStep(5, 'Pay & confirm', 'Choose your funding source — PayPal balance, linked bank account, or debit/credit card — review the details, then confirm the transfer.');
+
+    const recipientHtml =
+      `<div style="margin-top:6px;padding:12px 14px;background:rgba(226,26,26,0.06);border:1px solid rgba(226,26,26,0.18);border-radius:8px;margin-bottom:10px;">` +
+        `<div style="font-size:11.5px;font-weight:800;letter-spacing:.4px;color:#e21a1a;margin-bottom:8px;">📱 IF PAYING TO bKash</div>` +
+        `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">` +
+          row('Mobile Number', px.mobile) + row('Account Type', 'Personal Wallet') + row('First Name', px.firstName) + row('Last Name', px.lastName) +
+        `</table>` +
+      `</div>` +
+      `<div style="padding:12px 14px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.18);border-radius:8px;">` +
+        `<div style="font-size:11.5px;font-weight:800;letter-spacing:.4px;color:#3b82f6;margin-bottom:8px;">🏦 IF PAYING TO IBBL BANK</div>` +
+        `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">` +
+          row('Bank Name', pb.bankName) + row('Account Name', pb.accountName) + row('Account Number', pb.accountNumber) + row('Branch', pb.branch) +
+        `</table>` +
+      `</div>`;
+
+    const timingHtml =
+      `<div style="margin-top:12px;padding:10px 12px;background:rgba(255,255,255,0.02);border:1px solid #232b3d;border-radius:8px;font-size:12px;color:#94a3b8;line-height:18px;">` +
+        `⏱️ <b style="color:#e5e9f0;">bKash:</b> usually instant, within minutes &nbsp;·&nbsp; <b style="color:#e5e9f0;">IBBL Bank:</b> instant to a few hours &nbsp;·&nbsp; Fees are typically low or zero when funded via PayPal balance or a linked bank account.` +
+      `</div>`;
+
+    return (
+      '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0b0f1e;border:1px solid #232b3d;border-radius:10px;margin:16px 0;">' +
+        '<tr><td style="padding:18px 18px 16px;">' +
+          '<div style="font-size:13px;color:#6b7488;margin-bottom:2px;">💳 How to Pay via PayPal (using Xoom)</div>' +
+          '<div style="font-size:12px;color:#94a3b8;line-height:18px;margin-bottom:6px;">You can pay using your PayPal balance, or a debit/credit card, sent directly to my bKash wallet or Islami Bank Bangladesh (IBBL) account through Xoom, a PayPal service.</div>' +
+          `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">${stepsHtml}</table>` +
+          `<div style="margin-top:10px;">${recipientHtml}</div>` +
+          timingHtml +
+          '<div style="margin-top:12px;font-size:11.5px;line-height:16px;color:#f59e0b;">⚠️ I will never call or message asking for your PayPal, bKash, or bank OTP/PIN. After sending payment, please share a quick screenshot on WhatsApp or reply to this email so I can confirm right away.</div>' +
+        '</td></tr>' +
+      '</table>'
+    );
+  }
+
   let rowsHtml = '';
   let heading  = 'Payment Details';
   const m = (method || '').toLowerCase();
@@ -6846,10 +6914,11 @@ function buildPaymentInstructionsBlock(method) {
   else if (m === 'payoneer')         rowsHtml = rows.Payoneer;
   else if (m === 'elevate pay')      rowsHtml = rows.Elevate;
   else if (m === 'priopay')          rowsHtml = rows.PrioPay;
+  else if (m.includes('paypal') || m.includes('xoom')) return buildPaypalXoomBlock();
   else {
     // No preference selected (or a custom/unrecognized value) — show every option
     // so the client can pick whichever works for them.
-    rowsHtml = rows.bKash + rows.Nagad + rows.Rocket + rows.Bank + rows.Payoneer + rows.Elevate + rows.PrioPay;
+    rowsHtml = rows.bKash + rows.Nagad + rows.Rocket + rows.Bank + rows.Payoneer + rows.Elevate + rows.PrioPay + paypalTeaserRow;
     heading  = 'Payment Options';
   }
 
@@ -7274,7 +7343,7 @@ function openPaymentModal() {
 // + scrolls to that method's card so the account/number is easy to spot.
 const PM_METHOD_REGION = {
   bkash: 'bd', nagad: 'bd', rocket: 'bd', banktransfer: 'bd',
-  payoneer: 'intl', elevate: 'intl', priopay: 'intl', bankwire: 'intl'
+  payoneer: 'intl', elevate: 'intl', priopay: 'intl', bankwire: 'intl', paypalxoom: 'intl'
 };
 function openPaymentModalFor(method) {
   const region = PM_METHOD_REGION[method] || 'bd';
