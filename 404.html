@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Page not found | Hasanur Rahman</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0B1120">
+<link rel="icon" type="image/png" href="/favicon.png">
+<script>
+  /* apply the visitor's saved theme before first paint (same key as the main site) */
+  (function () {
+    try {
+      var t = localStorage.getItem('themeMode');
+      if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<style>
+  :root{--bg:#0B1120;--card:#111A2E;--line:rgba(148,163,184,.18);--text:#F8FAFC;--muted:#A9B6CB;--blue:#2563EB;--blue2:#3B82F6;--glow:rgba(37,99,235,.28)}
+  :root[data-theme="light"]{--bg:#F8FAFC;--card:#FFFFFF;--line:rgba(15,23,42,.12);--text:#0A0E1A;--muted:#475569;--glow:rgba(37,99,235,.16)}
+  *{box-sizing:border-box;margin:0}
+  html,body{height:100%}
+  body{
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:radial-gradient(900px 480px at 50% -10%,var(--glow),transparent 70%),var(--bg);
+    color:var(--text);display:flex;align-items:center;justify-content:center;
+    padding:max(24px,env(safe-area-inset-top)) 20px max(24px,env(safe-area-inset-bottom));
+    -webkit-font-smoothing:antialiased;
+  }
+  main{width:100%;max-width:520px;text-align:center}
+  .brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-weight:700;letter-spacing:-.01em;margin-bottom:36px}
+  .mark{width:34px;height:34px;border-radius:10px;object-fit:cover;display:grid;place-items:center;font-size:14px;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue2))}
+  .code{font-size:clamp(84px,24vw,128px);font-weight:800;line-height:1;letter-spacing:-.05em;
+    background:linear-gradient(135deg,var(--blue2),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+  h1{font-size:clamp(22px,5.4vw,28px);font-weight:700;letter-spacing:-.02em;margin:14px 0 10px}
+  p{color:var(--muted);line-height:1.65;font-size:16px;max-width:420px;margin:0 auto}
+  .actions{display:flex;flex-direction:column;gap:10px;margin:30px auto 0;max-width:340px}
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 20px;border-radius:12px;font-size:15px;font-weight:600;text-decoration:none;transition:transform .2s,box-shadow .2s,border-color .2s}
+  .btn-primary{background:linear-gradient(135deg,var(--blue),var(--blue2));color:#fff;box-shadow:0 8px 24px var(--glow)}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{color:var(--text);border:1px solid var(--line);background:var(--card)}
+  .btn-ghost:hover{border-color:var(--blue2)}
+  .btn:focus-visible{outline:2px solid var(--blue2);outline-offset:3px}
+  .links{margin-top:28px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;font-size:14px}
+  .links a{color:var(--muted);text-decoration:none}
+  .links a:hover{color:var(--text)}
+  @media (min-width:520px){.actions{flex-direction:row;max-width:none;justify-content:center}.btn{min-width:170px}}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <a class="brand" href="/" aria-label="Hasanur Rahman, home"><img class="mark" src="/logo.png" alt="" width="34" height="34" onerror="this.outerHTML='<span class=&quot;mark&quot;>HR</span>'"><span>Hasanur Rahman</span></a>
+  <div class="code" aria-hidden="true">404</div>
+  <h1>This page doesn’t exist</h1>
+  <p>The link may be outdated or mistyped. You can head back to the homepage or look at recent work.</p>
+  <div class="actions">
+    <a class="btn btn-primary" href="/">Back to Home</a>
+    <a class="btn btn-ghost" href="/#portfolio">View My Work</a>
+  </div>
+  <nav class="links" aria-label="Quick links">
+    <a href="/#services">Services</a>
+    <a href="/#pricing">Pricing</a>
+    <a href="/#contact">Get a Free Quote</a>
+  </nav>
+</main>
+</body>
+</html>

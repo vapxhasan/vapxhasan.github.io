@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>You’re offline | Hasanur Rahman</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0B1120">
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem('themeMode');
+      if (t !== 'light' && t !== 'dark') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    } catch (e) {}
+  })();
+</script>
+<style>
+  :root{--bg:#0B1120;--card:#111A2E;--line:rgba(148,163,184,.18);--text:#F8FAFC;--muted:#A9B6CB;--blue:#2563EB;--blue2:#3B82F6;--glow:rgba(37,99,235,.28);--ok:#22C55E}
+  :root[data-theme="light"]{--bg:#F8FAFC;--card:#FFFFFF;--line:rgba(15,23,42,.12);--text:#0A0E1A;--muted:#475569;--glow:rgba(37,99,235,.16)}
+  *{box-sizing:border-box;margin:0}
+  html,body{height:100%}
+  body{
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:radial-gradient(900px 480px at 50% -10%,var(--glow),transparent 70%),var(--bg);
+    color:var(--text);display:flex;align-items:center;justify-content:center;
+    padding:max(24px,env(safe-area-inset-top)) 20px max(24px,env(safe-area-inset-bottom));
+    -webkit-font-smoothing:antialiased;
+  }
+  main{width:100%;max-width:460px;text-align:center}
+  .icon{width:84px;height:84px;margin:0 auto 26px;border-radius:24px;display:grid;place-items:center;background:var(--card);border:1px solid var(--line);color:var(--blue2);box-shadow:0 12px 32px var(--glow)}
+  .icon svg{width:40px;height:40px}
+  h1{font-size:clamp(23px,5.6vw,29px);font-weight:700;letter-spacing:-.02em;margin-bottom:10px}
+  p{color:var(--muted);line-height:1.65;font-size:16px}
+  .tips{list-style:none;padding:0;margin:24px auto 0;max-width:340px;text-align:left;display:grid;gap:10px;font-size:14.5px;color:var(--muted)}
+  .tips li{display:flex;gap:10px;align-items:flex-start;line-height:1.5}
+  .tips li::before{content:"";flex:0 0 6px;height:6px;border-radius:50%;background:var(--blue2);margin-top:8px}
+  .btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;max-width:340px;min-height:50px;margin:30px auto 0;border:0;border-radius:12px;font:inherit;font-size:15px;font-weight:600;cursor:pointer;color:#fff;background:linear-gradient(135deg,var(--blue),var(--blue2));box-shadow:0 8px 24px var(--glow);transition:transform .2s}
+  .btn:hover{transform:translateY(-2px)}
+  .btn:focus-visible{outline:2px solid var(--blue2);outline-offset:3px}
+  .btn[disabled]{opacity:.7;cursor:progress;transform:none}
+  .status{margin-top:16px;font-size:13.5px;color:var(--muted);min-height:20px}
+  .status.ok{color:var(--ok)}
+  .spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:s .8s linear infinite;display:none}
+  .btn.busy .spin{display:inline-block}
+  @keyframes s{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion:reduce){*{animation-duration:2s!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <div class="icon" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.8a15 15 0 0 1 20 0"/><path d="M5.5 12.4a10 10 0 0 1 13 0"/><path d="M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r=".6" fill="currentColor"/><path d="M3 3l18 18"/></svg>
+  </div>
+  <h1>You’re offline</h1>
+  <p>We couldn’t reach the website. Please check your internet connection and try again.</p>
+  <ul class="tips">
+    <li>Turn Wi-Fi or mobile data on, or switch networks</li>
+    <li>Make sure airplane mode is off</li>
+    <li>This page reloads automatically once you’re back online</li>
+  </ul>
+  <button class="btn" id="retry" type="button"><span class="spin" aria-hidden="true"></span><span id="retryText">Try again</span></button>
+  <div class="status" id="status" role="status" aria-live="polite"></div>
+</main>
+<script>
+(function () {
+  var btn = document.getElementById('retry'), txt = document.getElementById('retryText'), st = document.getElementById('status');
+  function goHome() { location.replace(location.pathname === '/offline.html' ? '/' : location.href); }
+  function check() {
+    btn.disabled = true; btn.classList.add('busy'); txt.textContent = 'Checking…'; st.className = 'status'; st.textContent = '';
+    var c = new AbortController(), t = setTimeout(function () { c.abort(); }, 7000);
+    /* real reachability test: bypass cache, ask the server */
+    fetch('/favicon.png?ping=' + Date.now(), { cache: 'no-store', signal: c.signal })
+      .then(function (r) { clearTimeout(t); if (!r.ok) throw 0; st.className = 'status ok'; st.textContent = 'Connected. Reloading…'; setTimeout(goHome, 400); })
+      .catch(function () { clearTimeout(t); btn.disabled = false; btn.classList.remove('busy'); txt.textContent = 'Try again'; st.textContent = 'Still no connection. Please try again in a moment.'; });
+  }
+  btn.addEventListener('click', check);
+  window.addEventListener('online', check);
+})();
+</script>
+</body>
+</html>
