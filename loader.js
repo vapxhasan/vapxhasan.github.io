@@ -1,6 +1,6 @@
 /* Loading screen + slow/failed-load handling.
    Put in <head> as a normal (non-deferred) script so it appears before the page body.
-   - Fast loads: nothing flashes (screen only appears if loading takes > 300 ms).
+   - Fast loads: nothing flashes (screen only appears if loading takes > 1.5 s).
    - Slow loads: friendly message after 8 s, Retry button after 20 s.
    - No internet at start: clear message + automatic retry when the connection returns.
    - Failsafe: the screen always disappears, so a visitor is never stuck behind it. */
@@ -42,7 +42,7 @@
 
   var msg = el.querySelector('#plMsg'), btn = el.querySelector('#plBtn');
   var logo = el.querySelector('#plMark img');
-  if (logo) logo.addEventListener('error', function () { el.querySelector('#plMark').textContent = 'HR'; });   // fallback if logo.png is missing
+  if (logo) logo.addEventListener('error', function () { el.querySelector('#plMark').textContent = 'HR'; });
   btn.addEventListener('click', function () { location.reload(); });
 
   function say(text, withBtn) { msg.textContent = text; btn.classList.toggle('show', !!withBtn); }
@@ -50,7 +50,7 @@
 
   function hide() {
     if (done) return; done = true;
-    var wait = shown ? Math.max(0, 450 - (Date.now() - startedAt - 300)) : 0;   // avoid a blink if it only just appeared
+    var wait = shown ? Math.max(0, 450 - (Date.now() - startedAt - 300)) : 0;
     setTimeout(function () {
       el.classList.add('out'); el.classList.remove('on');
       setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); if (css.parentNode) css.parentNode.removeChild(css); }, 500);
@@ -59,7 +59,7 @@
   window.__sitePreloader = { hide: hide };
 
   /* Appear only if loading takes a moment */
-  setTimeout(show, 300);
+  setTimeout(show, 1500);
 
   /* Offline right now */
   function offlineCheck() {
@@ -74,9 +74,9 @@
   setTimeout(function () { if (!done && navigator.onLine !== false) { show(); say('Taking longer than usual. Your connection seems slow…', false); } }, 8000);
   setTimeout(function () { if (!done && navigator.onLine !== false) { show(); say('Still loading. You can wait or reload the page.', true); } }, 20000);
 
-  /* Done */
-  window.addEventListener('load', hide);
-  if (document.readyState === 'complete') hide();
+  /* Hide as soon as the page structure is ready (not on 'load') */
+  if (document.readyState === 'interactive' || document.readyState === 'complete') hide();
+  else document.addEventListener('DOMContentLoaded', hide);
   /* Failsafe: never keep a visitor behind the loading screen */
-  setTimeout(hide, 30000);
+  setTimeout(hide, 4000);
 })();
